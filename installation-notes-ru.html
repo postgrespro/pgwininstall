@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=windows-1251"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 4.4.3.2 (Windows)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2015-06-26T15:24:19.334000000"/>
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="00:00:00">
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2015-06-26T14:27:11.861000000">
+	<meta name="created" content="2015-06-26T11:55:00.456000000">
+	<meta name="changed" content="2015-06-26T14:20:23.526000000">
+	<meta name="created" content="2015-06-26T11:55:00.456000000">
+	<meta name="changed" content="2015-06-26T14:05:23.630000000">
+	<meta name="created" content="2015-06-26T11:55:00.456000000">
+	<meta name="changed" content="2015-06-26T14:05:23.630000000">
+	<meta name="created" content="2015-06-26T11:55:00.456000000">
+	<meta name="changed" content="2015-06-26T13:31:45.549000000">
+	<meta name="created" content="2015-06-26T11:55:00.456000000">
+	<meta name="changed" content="2015-06-26T12:52:33.285000000">
+	<meta name="created" content="2015-06-26T11:55:00.456000000">
+	<meta name="changed" content="2015-06-26T11:56:06.422000000">
+	<style type="text/css">
+		h2.cjk { font-family: "SimSun" }
+		h2.ctl { font-family: "Mangal" }
+		h3.cjk { font-family: "SimSun" }
+		h3.ctl { font-family: "Mangal" }
+	</style>
+</head>
+<body lang="ru-RU" dir="ltr">
+<h1>Установка <span lang="en-US">PosgreSQL </span>для <span lang="en-US">Windows</span></h1>
+<h2 class="western">Замечания по установке</h2>
+<h3 class="western">Поддерживаемые операционные системы</h3>
+<p>Данная версия <span lang="en-US">PostgreSQL </span>сервера может
+быть установлена на компьютеры с ОС <span lang="en-US">Windows XP SP3
+</span>и выше. 64-разрядная версия <span lang="en-US">PosgreSQL
+</span>сервера может быть установлена только на 64 разрядную версию
+<span lang="en-US">Windows.</span></p>
+<h3 class="western">Параметры установки</h3>
+<p>Вначале предлагается задать параметры установки сервера. Можно
+выбрать компоненты, которые будут установлены.</p>
+<p>Если обнаружено, что <span lang="en-US">PostgreSQL </span>сервер
+уже установлен, то предлагается остановить сервер и обновить его. При
+этом все соединения с сервером будут отключены. Для определения
+существования сервера используются данные о предыдущих установках из
+реестра, поэтому, если Вы ранее запускали сервер нестандартно, он
+может остаться не обнаруженным.</p>
+<p>При установке Вы можете задать путь для установки исполняемых
+файлов севера и путь к каталогу, в котором будут храниться данные.
+Если по указанному пути уже находятся данные, то будут использоваться
+они, запрос параметров сервера и инициализации базы данных
+проводиться не будет.</p>
+<p>В процессе установки предлагается ввести параметры сервера &mdash;
+номер порта, имя супер пользователя, пароль и другие. Рекомендуем
+вводить имя пользователя и пароль только латинскими буквами. Пароль
+можно оставить и пустым.</p>
+<p>Также предлагается провести некоторую оптимизацию параметров
+сервера исходя из установленной оперативной памяти (если ее больше
+1<span lang="en-US">Gb)</span>. Параметры сохраняются в файл
+<span lang="en-US">postgresql.conf, </span>который находится в папке
+с данными. Оптимизируются 2 параметра: shared_buffers и work_mem.
+Потом Вы можете самостоятельно изменять эти и другие параметры в
+зависимости от условий эксплуатации сервера.</p>
+<p>После установки, сервер запускается и становится готовым к работе.
+<span lang="ru-RU">Перезагрузка компьютера не требуется.</span></p>
+<h3 class="western">Учетная запись сервиса в <span lang="en-US">Windows</span></h3>
+<p>Для запуска сервера используется специальная встроенная учетная
+запись <span lang="en-US">Windows: 'NT AUTHORITY\NetworkService'.
+</span><span lang="ru-RU">Запуск службы </span><span lang="en-US">Postgresql-9.4</span>
+<span lang="ru-RU">от другого пользователя можно настроить после
+установки, например, через программу &laquo;Управление компьютером&raquo;
+в </span><span lang="en-US">Windows</span><span lang="ru-RU">.</span></p>
+<h3 class="western">Параметры командной строки</h3>
+<p>Программа установки может быть запущена с параметрами командной
+строки:</p>
+<p>Можно задать путь для установки сервера:</p>
+<p>/<span lang="en-US">D=Path</span></p>
+<p>Установка без внешнего интерфейса (<span lang="en-US">silent
+install). </span>Этот параметр должен быть именно заглавной буквой <span lang="en-US">S</span>:</p>
+<p>/<span lang="en-US">S </span>
+</p>
+<p>Параметры установки могут быть переданы в <span lang="en-US">INI
+</span>файле:</p>
+<p>/<span lang="en-US">init=</span>Имя_файла.<span lang="en-US">ini</span></p>
+<h3 class="western">Формат <span lang="en-US">INI </span>файла с
+параметрами установки</h3>
+<p>Параметры записываются в секцию <span lang="en-US">[options], </span>эт<span lang="ru-RU">а
+строка</span> может быть первой в <span lang="en-US">INI </span>файле.
+<span lang="ru-RU">Далее указываются параметры сервера. Если параметр
+отсутствует, то используются значение по умолчанию.</span></p>
+<p>Могут быть указаны следующие параметры:</p>
+<ul>
+	<li/>
+<p>InstallDir = <span lang="ru-RU">Путь для установки сервера</span></p>
+	<li/>
+<p>DataDir = <span lang="ru-RU">Путь к данным</span></p>
+	<li/>
+<p>Port = Номер порта</p>
+	<li/>
+<p>SuperUser = Имя пользователя (лучше вводить латинскими
+	буквами)</p>
+	<li/>
+<p>Password=Пароль (лучше вводить латинскими буквами)</p>
+	<li/>
+<p lang="en-US">noExtConnections = 1 &ndash; <span lang="ru-RU">запрещать
+	внешние подключения к серверу</span></p>
+	<li/>
+<p>Сoding = Кодовая страница</p>
+	<li/>
+<p lang="en-US">Locale = <span lang="ru-RU">Локаль</span></p>
+	<li/>
+<p><span lang="en-US">P</span>gadmin=no &mdash; не
+	устанавливать <span lang="en-US">PgAdmin</span></p>
+	<li/>
+<p><span lang="en-US">V</span>credist=no &mdash; не
+	устанавливать <span lang="en-US">Visual C++ Redistributable Package</span></p>
+	<li/>
+<p><span lang="en-US">P</span>gserver<span lang="en-US">=no &ndash;
+	</span><span lang="ru-RU">не устанавливать сервер</span></p>
+</ul>
+<h3 class="western">Ярлыки программ</h3>
+<p>После установки для сервера создаются ярлыки, которыми можно
+воспользоваться с помощью кнопки Пуск (если она есть в Вашей ОС).</p>
+<ul>
+	<li/>
+<p>SQL Shell (psql) &mdash; <span lang="ru-RU">основное,
+	&laquo;родное&raquo; консольное средство управления сервером и
+	выполнения запосов.</span></p>
+	<li/>
+<p>Reload Configuration &mdash; перезагрузить конфигурацию
+	сервера из файлов конфигурации. Следует отметить, что для некоторых
+	параметров требуется перезагрузка сервера.</p>
+	<li/>
+<p>Restart Server &mdash; остановить и запустить сервер
+	заново. Все активные соединения с сервером будут закрыты.</p>
+	<li/>
+<p>Stop Server &mdash; остановить сервер. Все активные
+	соединения с сервером будут закрыты.</p>
+	<li/>
+<p>Start Server &mdash; запустить сервер.</p>
+</ul>
+<p><span lang="ru-RU">Если Вы установили средство </span><span lang="en-US">pgAdmin,
+</span><span lang="ru-RU">то для него будут созданы свои ярлыки для
+запуска.</span></p>
+<h3 class="western">Удаление сервера</h3>
+<p>Для удаления сервера выберите ярлык <span lang="en-US">Uninstall
+</span><span lang="ru-RU">или можно использовать панель управления
+</span><span lang="en-US">Windows. </span><span lang="ru-RU">При
+удалении сервер останавливается, все активные соединения с сервером
+будут закрыты. Папка с данными не удаляется. Перезагрузка компьютера
+не требуется.</span></p>
+<p align="center">Подготовлено <a href="http://postgrespro.ru/">Postgres
+Профессиоальный</a> 
+</p>
+</body>
+</html>

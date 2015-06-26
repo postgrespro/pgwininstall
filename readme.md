@@ -1,0 +1,1 @@
+PostrgreSQL install script for NSIS

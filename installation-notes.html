@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=windows-1251"/>
+	<title>Welcome</title>
+	<meta name="generator" content="LibreOffice 4.4.3.2 (Windows)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2015-06-26T15:24:14.383000000"/>
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2015-06-26T15:20:40.357000000">
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2015-06-26T14:48:49.331000000">
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2015-06-26T14:46:59.585000000">
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2015-06-26T14:46:59.585000000">
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="00:00:00">
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2015-06-26T14:41:40.018000000">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<style type="text/css">
+		h2.cjk { font-family: "SimSun" }
+		h2.ctl { font-family: "Mangal" }
+		h3.cjk { font-family: "SimSun" }
+		h3.ctl { font-family: "Mangal" }
+	</style>
+</head>
+<body lang="en-US" dir="ltr">
+<h1 align="center">PostgreSQL 9.4</h1>
+<h2 class="western" align="center">Installation Notes</h2>
+<p>Welcome to the PostgreSQL 9.4 Installation Wizard.</p>
+<h3 class="western">Legal Bits</h3>
+<p>First the boring legal stuff. The software bundled together in
+this package is released under a number of different Open Source
+licences. By using any component of this installation package, you
+agree to abide by the terms and conditions of it&rsquo;s licence.</p>
+<p>The PostgreSQL Server, pgAdmin and the installer itself are
+released under the PostgreSQL License.</p>
+<p>This product includes software developed by the OpenSSL Project
+for use in the OpenSSL Toolkit. (http://www.openssl.org/)</p>
+<h3 class="western">Supported Operating Systems</h3>
+<p>This Windows installer can run on a Windows XP SP3 and above.</p>
+<h3 class="western">Procedural Languages</h3>
+<p>The procedural languages pl/Perl, pl/Python and pl/Tcl are
+included in this distribution of PostgreSQL. The server has been
+built using the LanguagePack community distributions of those
+language interpreters. To use any of the these languages from within
+PostgreSQL, download and install the appropriate interpreters and
+ensure they are included in the PATH variable under which the
+database server will be started. The versions used are shown below -
+newer minor (bugfix) releases may also work, but have not been
+tested:</p>
+<ul>
+	<li/>
+<p style="margin-bottom: 0cm">Perl 5.16 
+	</p>
+	<li/>
+<p style="margin-bottom: 0cm">Python 3.3 
+	</p>
+	<li/>
+<p>Tcl 8.5 
+	</p>
+</ul>
+<p>The current pl/Python is dynamically linked with Python's shared
+library in the LanguagePack installers. Some distributions of Python
+interpreters (including ActivePython) on Linux do not carry a dynamic
+library of Python. Such interpreters would no longer be functional
+with pl/Python.We strongly recommend the users to use LanguagePack
+installers for pl/Perl, pl/Python and pl/Tcl.</p>
+<h3 class="western">Windows Service Account</h3>
+<p><span lang="en-US">T</span>he special 'NT
+AUTHORITY\NetworkService' account is used. 
+</p>
+<h3 class="western">Command line options</h3>
+<p>Path to install directory:</p>
+<p>/D=Path</p>
+<p>Silent install:</p>
+<p>/S</p>
+<p>Ini file with install options:</p>
+<p>/init=File_name.ini</p>
+<h3 class="western">INI file format</h3>
+<p>In the section [options] can be that's options:</p>
+<ul>
+	<li/>
+<p>InstallDir = <span lang="en-US">Path to install server</span></p>
+	<li/>
+<p>DataDir = <span lang="en-US">Path to data folder</span></p>
+	<li/>
+<p>Port = <span lang="en-US">port number</span></p>
+	<li/>
+<p>SuperUser = user name</p>
+	<li/>
+<p>Password=user's password</p>
+	<li/>
+<p>noExtConnections = 1 &ndash; don't allow external
+	connections</p>
+	<li/>
+<p>Сoding = ...</p>
+	<li/>
+<p>Locale = Locale</p>
+	<li/>
+<p><span lang="en-US">P</span>gadmin=no &mdash; <span lang="en-US">don't
+	install pgAdmin</span></p>
+	<li/>
+<p><span lang="en-US">V</span>credist=no &mdash; <span lang="en-US">don't
+	install Visual C++ Redistributable Package</span></p>
+	<li/>
+<p><span lang="en-US">P</span>gserver<span lang="en-US">=no &ndash;
+	don't install PosgreSQL server</span></p>
+</ul>
+<p align="center">Assembled by <a href="http://postgrespro.ru/">Postgres
+Professional</a> 
+</p>
+</body>
+</html>
