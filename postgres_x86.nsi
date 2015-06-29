@@ -6,7 +6,7 @@
 ;внес изменения в файл Russian.nsh:
 ;!insertmacro LANGFILE "Russian" = "Русский" = ;"Russkij"
 ;!insertmacro LANGFILE "Czech" = "Cestina" =
-!define PG_64bit
+;!define PG_64bit
 
 !ifdef PG_64bit
 !include "postgres64.nsh"
@@ -128,6 +128,9 @@ Var needOptimiztion
 Var rButton1
 Var rButton2
 
+; set env variables
+Var checkBoxEnvVar
+Var isEnvVar
 /*
 !include x64.nsh
 And use this if:
@@ -747,7 +750,7 @@ Section "PostgreSQL Server" sec1
 
         ${endif}
 
-        nsExec::ExecToStack /TIMEOUT=1000 'setx path "%path%;$INSTDIR\bin"'
+        ;nsExec::ExecToStack /TIMEOUT=1000 'setx path "%path%;$INSTDIR\bin"'
 
         ;Push "$INSTDIR\bin"
         ;Call AddToPath
@@ -756,6 +759,21 @@ Section "PostgreSQL Server" sec1
         ;ExecWait '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres' $0
         ;DetailPrint "psql.exe return $0"
 
+      
+        ;GetFullPathName /SHORT $0 "$INSTDIR\bin"
+
+        ${if} $isEnvVar == ${BST_CHECKED}
+              
+              WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATA" "$DATA_DIR"
+              WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATABASE" "postgres"
+              WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGUSER" "$UserName_text"
+              WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGPORT" "$TextPort_text"
+              WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
+
+
+        ${endif}
+        AddToPath::AddToPath "$INSTDIR\bin"
+        Pop $0 ; or "error"
 
 
         ;run server
@@ -778,23 +796,65 @@ Section "PostgreSQL Server" sec1
 
 SectionEnd
 
+;Section "Create environment variables" secVar
+;SectionEnd
+
+
+
+
 Section "PgAdmin III" sec2
 
 ; проблема в том, что готовой сборки PgAdmin III 64bit нет, нужен второй Visual C++ Redistributable Packages на 32 bit
 !ifdef PG_64bit
         GetTempFileName $1
 	File /oname=$1 vcredist_x86.exe
-	ExecWait "$1  /passive /norestart" $0
+	;ExecWait "$1  /passive /norestart" $0
+	DetailPrint "Install Visual C++ Redistributable Packages 32 bit ..."
+        nsExec::ExecToStack /TIMEOUT=60000 '"$1"  /passive /norestart'
+        pop $0
+        Pop $2 # printed text, up to ${NSIS_MAX_STRLEN}
         DetailPrint "Visual C++ Redistributable Packages 32 bit return $0"
         Delete $1
 !endif
 	GetTempFileName $0
 	File /oname=$0 pgadmin3.msi
-        ExecWait '"msiexec" /i "$0"'
+        DetailPrint "Install pgAdmin ..."
+
+        nsExec::ExecToStack /TIMEOUT=60000 '"msiexec" /i  "$0" /passive /norestart'
+        pop $1
+        Pop $2 # printed text, up to ${NSIS_MAX_STRLEN}
+        DetailPrint "pgAdmin setup return  $1"
+        ;ExecWait '"msiexec" /i  "$0" /passive'
         Delete $0
 
 
 SectionEnd
+
+
+Section "ODBC drivers" secDrv
+        GetTempFileName $1
+	File /oname=$1 psqlodbc-setup.exe
+
+        ;ExecWait "$1  /S" $0
+        ;DetailPrint "Psql odbc setup return $0"
+        DetailPrint "Psql ODBC drivers setup ..."
+
+        nsExec::ExecToStack /TIMEOUT=60000 '"$1" /S'
+        pop $0
+        Pop $2 # printed text, up to ${NSIS_MAX_STRLEN}
+        DetailPrint "Psql odbc setup return  $0"
+        ${if} $0 != 0
+                DetailPrint "Output: $2"
+                ;MessageBox MB_OK "Create adminpack error: $1"
+                MessageBox MB_OK|MB_ICONSTOP "Error setup ODBC drivers: $2"
+
+        ${endif}
+
+        
+        Delete $1
+
+SectionEnd
+
 /*
 SectionGroup "Клиентские драйверы"
 Section "ODBC" sec_odbc
@@ -841,6 +901,8 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${Sec2} $(DESC_Sec2)
     ;!insertmacro MUI_DESCRIPTION_TEXT ${Sec3} $(DESC_Sec3)
     ;!insertmacro MUI_DESCRIPTION_TEXT ${Sec4} $(DESC_Sec4)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecDrv} $(DESC_SecDrv)
+    
 
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -923,6 +985,9 @@ Section "Uninstall"
         ; Remove install dir from PATH
          ;Push "$INSTDIR\bin"
          ;Call un.RemoveFromPath
+        AddToPath::RemoveFromPath "$INSTDIR\bin"
+        Pop $0 ; or "error"
+
 
    ;${else}
           MessageBox MB_OK|MB_ICONINFORMATION "$(UNINSTALL_END)$DATA_DIR" ;debug
@@ -1111,6 +1176,8 @@ Function getServerDataFromDlg
         ${NSD_GetText} $TextPort $TextPort_text
 
         ${NSD_GetText} $Locale $Locale_text
+        
+        ${NSD_GetState} $checkBoxEnvVar $isEnvVar
         ;${NSD_GetText} $Coding $Coding_text
 
 FunctionEnd
@@ -1528,6 +1595,11 @@ ${NSD_CB_AddString} $Coding "WIN874"
 
 	${NSD_CreatePassword} 62u 88u 100u 12u $Pass2_text
 	Pop $Pass2
+
+	;env vars
+	${NSD_CreateCheckBox} 62u 120u 100% 12u "$(DLG_ENVVAR)"
+	Pop $checkBoxEnvVar
+	${NSD_SetState} $checkBoxEnvVar $isEnvVar
 	
         GetFunctionAddress $0 getServerDataFromDlg
 	nsDialogs::OnBack $0
@@ -1754,6 +1826,7 @@ Function .onInit
         StrCpy $Branding_text "${PG_DEF_BRANDING}"
         
         StrCpy $checkNoLocal_state ${BST_CHECKED}
+        StrCpy $isEnvVar ${BST_UNCHECKED} ;${BST_CHECKED}
 
 
         ;StrCpy $Locale_text "$(DEF_LOCALE_NAME)" ;почему -то всегда по русски
@@ -1854,6 +1927,18 @@ Function .onInit
 	        IntOp $3 $3 & ${SECTION_OFF}
          	SectionSetFlags ${sec1} $3
         ${endif}
+        ReadINIStr $1 $0 options odbc
+        ${if} "$1" == "no"
+        	SectionGetFlags ${secDrv} $3
+	        IntOp $3 $3 & ${SECTION_OFF}
+         	SectionSetFlags ${secDrv} $3
+        ${endif}
+        ReadINIStr $1 $0 options envvar
+        ${if} "$1" != ""
+              StrCpy $isEnvVar $1
+        ${endif}
+
+        ;$isEnvVar
 
         /*ReadINIStr $1 $0 options serviceaccount
         ${if} "$1" != ""

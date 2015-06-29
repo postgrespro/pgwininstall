@@ -18,6 +18,9 @@
   LangString DESC_Sec2 ${LANG_ENGLISH} "Install pgAdmin tools on this computer."
   LangString DESC_Sec2 ${LANG_RUSSIAN} "Установка pgAdmin для управления сервером"
 
+  LangString DESC_SecDrv ${LANG_ENGLISH} "Install PostgreSQL ODBC drivers."
+  LangString DESC_SecDrv ${LANG_RUSSIAN} "Установить PostgreSQL ODBC драйверы"
+
 
   LangString DESC_Sec1dir ${LANG_ENGLISH} "Please specify the directory where PostgreSQL will be insalled."
   LangString DESC_Sec1die ${LANG_RUSSIAN} "Пожалуйста, задайте папку для установки PostgreSQL."
@@ -96,6 +99,10 @@ The parameters are written to the file $DATA_DIR\postgresql.conf"
   LangString DLG_OPT1 ${LANG_RUSSIAN} "Можно провести оптимизацию производительности сервера исходя из объема установленной памяти $AllMem Mb. \
 Cерверу будет выделено больше оперативной памяти. \
 Параметры будут записаны в файл $DATA_DIR\postgresql.conf"
+
+  LangString DLG_ENVVAR ${LANG_ENGLISH} "Set up environment variables"
+  LangString DLG_ENVVAR ${LANG_RUSSIAN} "Настроить переменные среды"
+
 
 
   LangString DLG_OPT2 ${LANG_ENGLISH} "Make optimizations"
