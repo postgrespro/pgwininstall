@@ -6,7 +6,7 @@
 ;внес изменения в файл Russian.nsh:
 ;!insertmacro LANGFILE "Russian" = "Русский" = ;"Russkij"
 ;!insertmacro LANGFILE "Czech" = "Cestina" =
-;!define PG_64bit
+!define PG_64bit
 
 !ifdef PG_64bit
 !include "postgres64.nsh"
@@ -805,19 +805,22 @@ SectionEnd
 Section "PgAdmin III" sec2
 
 ; проблема в том, что готовой сборки PgAdmin III 64bit нет, нужен второй Visual C++ Redistributable Packages на 32 bit
-!ifdef PG_64bit
-        GetTempFileName $1
-	File /oname=$1 vcredist_x86.exe
-	;ExecWait "$1  /passive /norestart" $0
-	DetailPrint "Install Visual C++ Redistributable Packages 32 bit ..."
-        nsExec::ExecToStack /TIMEOUT=60000 '"$1"  /passive /norestart'
-        pop $0
-        Pop $2 # printed text, up to ${NSIS_MAX_STRLEN}
-        DetailPrint "Visual C++ Redistributable Packages 32 bit return $0"
-        Delete $1
-!endif
+;!ifdef PG_64bit
+        ;GetTempFileName $1
+	;File /oname=$1 vcredist_x86.exe
+	;DetailPrint "Install Visual C++ Redistributable Packages 32 bit ..."
+        ;nsExec::ExecToStack /TIMEOUT=60000 '"$1"  /passive /norestart'
+        ;pop $0
+        ;Pop $2 # printed text, up to ${NSIS_MAX_STRLEN}
+        ;DetailPrint "Visual C++ Redistributable Packages 32 bit return $0"
+        ;Delete $1
+;!endif
 	GetTempFileName $0
+!ifdef PG_64bit
+	File /oname=$0 pgadmin3-64.msi
+!else
 	File /oname=$0 pgadmin3.msi
+!endif
         DetailPrint "Install pgAdmin ..."
 
         nsExec::ExecToStack /TIMEOUT=60000 '"msiexec" /i  "$0" /passive /norestart'
