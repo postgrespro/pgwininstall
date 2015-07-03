@@ -7,11 +7,23 @@
 ;!insertmacro LANGFILE "Russian" = "Русский" = ;"Russkij"
 ;!insertmacro LANGFILE "Czech" = "Cestina" =
 !define PG_64bit
+!define PG_BETA
 
 !ifdef PG_64bit
+
+!ifdef PG_BETA
+!include "postgres64a.nsh"
+!else
 !include "postgres64.nsh"
+!endif
+
+!else
+!ifdef PG_BETA
+!include "postgres32a.nsh"
 !else
 !include "postgres32.nsh"
+!endif
+
 !endif
 
 !define PG_EDB 
