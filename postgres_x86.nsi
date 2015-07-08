@@ -6,7 +6,8 @@
 ;внес изменения в файл Russian.nsh:
 ;!insertmacro LANGFILE "Russian" = "Русский" = ;"Russkij"
 ;!insertmacro LANGFILE "Czech" = "Cestina" =
-!define PG_64bit
+
+;!define PG_64bit
 !define PG_BETA
 
 !ifdef PG_64bit
@@ -71,7 +72,8 @@
 ;--------------------------------
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${PRODUCT_NAME}_${PG_DEF_VERSION_SHORT}_${PG_INS_SUFFIX}"
+;OutFile "${PRODUCT_NAME}_${PG_DEF_VERSION_SHORT}_${PG_INS_SUFFIX}"
+OutFile "${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
 
 !ifdef PG_64bit
 InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}\${PG_DEF_VERSION_SHORT}"
@@ -166,7 +168,8 @@ ${EndIf}
   !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\win-install.ico"
   !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
   !define MUI_WELCOMEFINISHPAGE_BITMAP "265px-African_Bush_Elephant.bmp"
-  !define MUI_UNWELCOMEFINISHPAGE_BITMAP "64985_slon_druzya_devochka-1024x787.bmp"
+  ;!define MUI_UNWELCOMEFINISHPAGE_BITMAP "64985_slon_druzya_devochka-1024x787.bmp"
+  !define MUI_UNWELCOMEFINISHPAGE_BITMAP "265px-African_Bush_Elephant.bmp"
 
 
   !define MUI_ABORTWARNING
@@ -177,7 +180,7 @@ ${EndIf}
 
 
    !insertmacro MUI_PAGE_WELCOME
-  ;!insertmacro MUI_PAGE_LICENSE "License.txt" ComponentShow
+   !insertmacro MUI_PAGE_LICENSE "License.txt" 
 
 
 
@@ -289,6 +292,9 @@ Section "PostgreSQL Server" sec1
         File  "/oname=$INSTDIR\doc\installation-notes.html" "installation-notes.html"
         File  "/oname=$INSTDIR\doc\installation-notes-ru.html" "installation-notes-ru.html"
 
+        File "license.txt"
+        File "3rd_party_licenses.txt"
+        
         CreateDirectory "$INSTDIR\scripts"
         
         File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
@@ -450,7 +456,7 @@ Section "PostgreSQL Server" sec1
     "$INSTDIR\doc\postgresql\html\release.html" \
     "$INSTDIR\doc\pg-help.ico" "0"
 
-    ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Documentation\pgAdmin documentation (English).lnk" "$INSTDIR\pgAdmin III\docs\en_US\pgadmin3.chm"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Documentation\License.lnk" "$INSTDIR\license.txt"
 
 
     ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\bin\pg_ctl.exe" '-D "$DATA_DIR" reload'  "" "" "" "" "Reload PostgreSQL configuration"
@@ -950,6 +956,8 @@ Section "Uninstall"
 
 
         Delete "$INSTDIR\Uninstall.exe"
+        Delete "$INSTDIR\license.txt"
+        Delete "$INSTDIR\3rd_party_licenses.txt"
 
         RMDir /r "$INSTDIR\bin"
         RMDir /r "$INSTDIR\doc"
