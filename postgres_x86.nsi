@@ -1,7 +1,7 @@
 ; PostgeSQL install Script
 ; Written by Victor Spirin for Postgres Professional, Postgrespro.ru
 ; used plugins: AccessControl, UserMgr,
-; AddToPath plugin created Victor Spirin for this project
+; and AddToPath plugin created Victor Spirin for this project
 
 ;use next 2 defines for control of PG version
 ;!define PG_64bit
