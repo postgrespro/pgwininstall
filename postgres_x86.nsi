@@ -1,17 +1,14 @@
-;Unicode fALSE
-;NSIS Modern User Interface
-;PostgeSQL install Script
-;Written by Victor Spirin for Postgrespro.ru
-;used plugins: AccessControl, UserMgr
-;внес изменения в файл Russian.nsh:
-;!insertmacro LANGFILE "Russian" = "Русский" = ;"Russkij"
-;!insertmacro LANGFILE "Czech" = "Cestina" =
+; PostgeSQL install Script
+; Written by Victor Spirin for Postgres Professional, Postgrespro.ru
+; used plugins: AccessControl, UserMgr,
+; AddToPath plugin created Victor Spirin for this project
 
+;use next 2 defines for control of PG version
 ;!define PG_64bit
 ;!define PG_BETA
 
+; PostgreSQL defines
 !ifdef PG_64bit
-
 !ifdef PG_BETA
 !include "postgres64a.nsh"
 !else
@@ -27,52 +24,27 @@
 
 !endif
 
-!define PG_EDB 
-;!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
-;!define PRODUCT_UNINST_ROOT_KEY "HKLM"
-
-; Adempiere defines
-;!define SOURCE_FILE_DIR "..\..\AdempiereFiles"
-;!define INSTALLER_SOURCE_DIR "."
-;!define OUT_DIR ${SOURCE_FILE_DIR}
-
-; JDK defines
-;!define JDK_DEFAULT_DIR "$PROGRAMFILES\Java"
-;!define JDK_INSTALLER "java6.exe"
-
-; PostgreSQL defines
+;!define PG_EDB
 ;--------------------------------
 ;Include Modern UI
+!include "MUI2.nsh"
+!include "logiclib.nsh"
 
-  !include "MUI2.nsh"
-  !include "logiclib.nsh"
-
-;!include "FileFunc.nsh"
 !include "WordFunc.nsh"
 !include "TextFunc.nsh"
-; !insertmacro Locate
-; ${FILEFUNC_VERBOSE} 4   # all verbosity
-;!include "StrFunc.nsh"
-
 !include "StrRep.nsh"
-
-;!include "StrFunc.nsh"
 
 !include "ReplaceInFile.nsh"
 !include "common_macro.nsh"
 !include "Utf8Converter.nsh"
 !include "x64.nsh"
 ;!include "StrStrAdvFunc.nsh"
-!include "add_to_path.nsh"
 
- !insertmacro VersionCompare
-
-
+!insertmacro VersionCompare
 
 ;--------------------------------
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-;OutFile "${PRODUCT_NAME}_${PG_DEF_VERSION_SHORT}_${PG_INS_SUFFIX}"
 OutFile "${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
 
 !ifdef PG_64bit
@@ -82,29 +54,28 @@ InstallDir "$PROGRAMFILES32\${PRODUCT_NAME}\${PG_DEF_VERSION_SHORT}"
 !endif
 BrandingText "PostgresPRO.ru"
 
-
 ;Get installation folder from registry if available
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 
 ;ShowInstDetails show
 ;ShowUnInstDetails show
+
 ;Request application privileges for Windows Vista
 RequestExecutionLevel admin
 
-;Var pgRegKey ;"SOFTWARE\PostgreSQL\Installations\postgresql-9.4"
 Var Dialog
 Var Label
 Var Label2
 Var TextPort
 Var checkNoLocal
 Var Locale
-Var Coding
+;Var Coding
 Var UserName
 Var Pass1
 Var Pass2
 
 Var DATA_DIR  ;path to data
-Var ADMIN_DIR ;path to pgAdmin
+;Var ADMIN_DIR ;path to pgAdmin
 
 Var TextPort_text
 Var IsTextPortInIni
@@ -130,7 +101,7 @@ VAR PG_OLD_DIR      ; Directory of an installed PG (Empty string if no PG)
 Var tempFileName
 Var isDataDirExist
 
- Var StartMenuFolder
+Var StartMenuFolder
 Var  tempVar
 	;Var PORT
 	;Var ADMINNAME
@@ -145,16 +116,6 @@ Var rButton2
 ; set env variables
 Var checkBoxEnvVar
 Var isEnvVar
-/*
-!include x64.nsh
-And use this if:
-
-${If} ${RunningX64}
-    # 64 bit code
-${Else}
-    # 32 bit code
-${EndIf}
-*/
 
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
  !define MUI_COMPONENTSPAGE_SMALLDESC
@@ -167,9 +128,9 @@ ${EndIf}
   !define MUI_HEADERIMAGE_BITMAP "pp_header.bmp" ; optional
   !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\win-install.ico"
   !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
-  !define MUI_WELCOMEFINISHPAGE_BITMAP "265px-African_Bush_Elephant.bmp"
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "Elephant.bmp"
   ;!define MUI_UNWELCOMEFINISHPAGE_BITMAP "64985_slon_druzya_devochka-1024x787.bmp"
-  !define MUI_UNWELCOMEFINISHPAGE_BITMAP "265px-African_Bush_Elephant.bmp"
+  !define MUI_UNWELCOMEFINISHPAGE_BITMAP "Elephant.bmp"
 
 
   !define MUI_ABORTWARNING
@@ -199,12 +160,6 @@ ${EndIf}
   PageExEnd
 
   Page custom ChecExistDataDir
-
-  ;PageEx directory
-  ; PageCallbacks dirPreAdmin
-  ; DirVar $ADMIN_DIR
-  ; DirText "$(dirAdminDesc)" "Каталог для установки pgAdmin III" "Обзор"
-  ;PageExEnd
 
 
 Page custom nsDialogServer nsDialogsServerPageLeave
@@ -253,18 +208,16 @@ Section "PostgreSQL Server" sec1
 
 
 
-        ;MessageBox MB_OK $TextPort_text
-        ;Abort
 
 !ifdef PG_EDB
-       ;переключаем вывод консольных приложений на английский, так как есть проблемы с отображением
+       ;switch console to english
        StrCpy $R0 C
        System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("LANG", R0).r0'
 !endif
 
 
         ${if} $PG_OLD_DIR != "" ;exist PG install
-		MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop ;"Вы не ввели пароль!$\n$\nПодтверждаете установку без пароля?"
+		MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
 		noyetStop:
   		       Return
 		doitStop:
@@ -301,13 +254,6 @@ Section "PostgreSQL Server" sec1
         File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
         
 
-;!ifdef PG_64bit
-;        File /r ".\pgsql64\*.*"
-;!else
-;        File /r ".\pgsql\*.*"
-;!endif
-
-        
         ;Store installation folder
         WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" $INSTDIR
   
@@ -316,7 +262,7 @@ Section "PostgreSQL Server" sec1
 
 
         ; write uninstall strings
-        ;лучше использовать PG_DEF_BRANDING вместо $StartMenuFolder? а имя $StartMenuFolder не запрашивать
+        ;some secret comment on russian: лучше использовать PG_DEF_BRANDING вместо $StartMenuFolder? а имя $StartMenuFolder не запрашивать
         WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "InstallLocation" "$INSTDIR"
         WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "DisplayName" "$StartMenuFolder"
         WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
@@ -382,15 +328,11 @@ Section "PostgreSQL Server" sec1
 
     ${if} ${FileExists} "$INSTDIR\scripts\runpgsql.bat"
            CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\scripts\runpgsql.bat" "" "$INSTDIR\scripts\pg-psql.ico" "0" "" "" "PostgreSQL command line utility"
-           ; хотел бюы set NT_CONSOLE_PROPS for shortcut font Lucida Console
-           ;You can set that in the registry under "HKEY_CURRENT_USER\Console", the value is "FaceName". If you are creating a desktop shortcut, 'IShellLink' along with 'IShellLinkDataList' will allow you to specify that in a NT_CONSOLE_PROPS structure.
-           ;C:_Program Files_Far_Far.exe
-           ;"C:_Program Files_PostgreSQL_9.5_scripts_runpgsql.bat"
     ${else}
            CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\bin\psql.exe" "-h localhost -U $UserName_text -d postgres -p $TextPort_text" "" "" "" "" "PostgreSQL command line utility"
     ${endif}
 
-
+    ; set font Lucida Console for shortcut psql
     ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
     ${if} $0 == ""
           WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Lucida Console"
@@ -403,25 +345,19 @@ Section "PostgreSQL Server" sec1
 
     ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\pgAdmin III.lnk" "$INSTDIR\bin\pgAdmin3.exe" "" "" "" "" "" "PostgreSQL administration utility"
 
-
-    ;C:\Windows\system32\cscript.exe //NoLogo "C:/Program Files (x86)/PostgreSQL/9.4\scripts\serverctl.vbs" reload wait
-    ;iRet = DoCmd("""C:/Program Files (x86)/PostgreSQL/9.4\bin\pg_ctl.exe"" -D ""C:\Program Files (x86)\PostgreSQL\9.4\data"" reload")
-
-
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\scripts\reload.bat" ""  "" "" "" "" "Reload PostgreSQL configuration"
 
+    ;run as administrator
     push "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk"
     call ShellLinkSetRunAs
     pop $0
-    ;DetailPrint HR=$0
-
 
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Restart Server.lnk" "$INSTDIR\scripts\restart.bat" ""  "" "" "" "" "Restart PostgreSQL server"
-
+    ;run as administrator
     push "$SMPROGRAMS\$StartMenuFolder\Restart Server.lnk"
     call ShellLinkSetRunAs
     pop $0
-    ;DetailPrint HR=$0
+
 
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Stop Server.lnk" "$INSTDIR\scripts\stop.bat" ""  "" "" "" "" "Stop PostgreSQL server"
     push "$SMPROGRAMS\$StartMenuFolder\Stop Server.lnk"
@@ -437,7 +373,6 @@ Section "PostgreSQL Server" sec1
     ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\License.lnk" "$INSTDIR\license.txt"
 
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
-
 
     ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Documentation\License.lnk" "$INSTDIR\license.txt"
 
@@ -463,56 +398,8 @@ Section "PostgreSQL Server" sec1
     "$INSTDIR\doc\pg-help.ico" "0"
 
 
-
-    ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\bin\pg_ctl.exe" '-D "$DATA_DIR" reload'  "" "" "" "" "Reload PostgreSQL configuration"
-
   !insertmacro MUI_STARTMENU_WRITE_END
 
-
-        ;AccessControl::GrantOnFile "$INSTDIR" "(BU)" "FullAccess" ; ;GenericWrite
-        ;Pop $0 ;"ok" or "error" + error details
-        
-        ;;;AccessControl::GrantOnFile "$INSTDIR" "$ServiceAccount_text" "FullAccess"
-        ;;;Pop $0 ;"ok" or "error" + error details
-        ;;;AccessControl::GrantOnFile "$INSTDIR" "$loggedInUser" "FullAccess" ;"GenericRead + GenericExecute" ;GenericWrite
-        ;;;Pop $0 ;"ok" or "error" + error details
-
-        ;AccessControl::GetCurrentUserName
-        ;Pop $Username ; or "error"
-        ;MessageBox MB_OK "AccessControl::GetCurrentUserName: $Username"
-        
-        ;AccessControl::GrantOnFile [/NOINHERIT] <filename> <trustee> <permissions>
-        ;AccessControl::SetFileOwner \ ;ok work
-    ;"$INSTDIR\bin\readme.txt" "$ServiceAccount_text"
-
-    ;ok work
-    ;System::Call "advapi32::GetUserName(t .r0, *i ${NSIS_MAX_STRLEN} r1) i.r2"
-    ;MessageBox MB_OK "User name: $0 | Number of characters: $1 | Return value (OK if non-zero): $2"
-    
-    ;check plugin
-    ;MessageBox MB_OK $loggedInUser
-
-        ;create data folder
-        ;...
-
-        /*${If} ${FileExists} "$DATA_DIR\*.*"
-              ; file is a directory
-              ;MessageBox MB_OK|MB_ICONINFORMATION "Папка для данных $DATA_DIR уже существуют!"
-              DetailPrint "Папка для данных $DATA_DIR уже существуют!"
-              ;надо бы номер порта из настроек взять
-              
-              StrCpy $isDataDirExist 1
-        ${ElseIf} ${FileExists} "$DATA_DIR"
-                 ; file is a file - error ?
-                 ;MessageBox MB_OK|MB_ICONINFORMATION "Файл с именем $DATA_DIR уже существуют! Не могу создать папку!"
-                 DetailPrint "Файл с именем $DATA_DIR уже существуют! Не могу создать папку!"
-        ${Else}
-           ; file is neither a file or a directory (i.e. it doesn't exist)
-           CreateDirectory "$DATA_DIR"
-
-        ${EndIf} */
-        
-        
    ; Create data dir begin
    ${if} $isDataDirExist == 0
         CreateDirectory "$DATA_DIR"
@@ -527,12 +414,8 @@ Section "PostgreSQL Server" sec1
 
         AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess" ;GenericWrite
         Pop $0 ;"ok" or "error" + error details
-
-
-        ;cacls C:\OWS\DB\*.* /G Пользователи:F
         
         ;ExecWait 'cacls "$INSTDIR" /E /G "$ServiceAccount_text:R"' $0
-        ;DetailPrint "some program returned $0"
 
         StrCpy $tempVar ""
         ${if} "$Pass1_text" != ""
@@ -542,9 +425,8 @@ Section "PostgreSQL Server" sec1
                 ;ClearErrors
                 FileOpen $R0 $tempFileName w
                 ;IfErrors erroropenfile
-                ;need utf-8 проблема с паролем русскими буквами - в psql не проходят, в pgAdmin проходят
+                ;need utf-8, but not ascii password don't work in psql
                 ${AnsiToUtf8} $Pass1_text $0
-                ;FileWrite $R0 $Pass1_text
                 FileWrite $R0 $0
                 FileClose $R0
                 ;DetailPrint "Save password to $tempFileName"
@@ -552,16 +434,8 @@ Section "PostgreSQL Server" sec1
         ${endif}
 
 
-;if strLocale = "DEFAULT" Then
-;    iRet = DoCmd("""" & strInstallDir & "\bin\initdb.exe"" --pwfile """ & strInitdbPass & """ --encoding=UTF-8 -A md5 -U " & strUsername & " -D """ & strDataDir & """")
-;Else
-;    iRet = DoCmd("""" & strInstallDir & "\bin\initdb.exe"" --pwfile """ & strInitdbPass & """ --locale=""" & strLocale & """ --encoding=UTF-8 -A md5 -U " & strUsername & " -D """ & strDataDir & """")
-;End If
-
 
      DetailPrint "Database initialization ..."
-     ;initdb запускается от имени текущего пользователя, а не от админитсратора, нужны права на папку с данными
-     ;$loggedInUser с доменом не проходит, $loggedInUserShort проходит. надо тестировать со входом через домен
      AccessControl::GetCurrentUserName
      Pop $0 ; or "error"
      AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
@@ -570,7 +444,6 @@ Section "PostgreSQL Server" sec1
      ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
 
         ; Initialise the database cluster, and set the appropriate permissions/ownership
-        ;nsExec::ExecToStack '"$INSTDIR\bin\initdb.exe" --pwfile "$tempFileName"
         nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR"'
@@ -592,16 +465,12 @@ Section "PostgreSQL Server" sec1
         ${else}
                DetailPrint "Database initialization OK"
         ${endif}
-
-        ;--locale=
-         ;Delete the password file
+        ;Delete the password file
         ${if} "$Pass1_text" != ""
                 ${If} ${FileExists} "$tempFileName"
                       Delete "$tempFileName"
                 ${EndIf}
         ${EndIf}
-
-
 
    ${endif}
    ; Create data dir end
@@ -616,9 +485,6 @@ Section "PostgreSQL Server" sec1
               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#log_destination = 'stderr'" "log_destination = 'stderr'"
               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#logging_collector = off" "logging_collector = on"
               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#log_line_prefix = ''" "log_line_prefix = '%t '"
-        ;${else}
-                ;ConfigWrite do not use, need replace comment string
-                ;${ConfigWrite} "$DATA_DIR\postgresql.conf" "port = " $TextPort_text $R0
                 
               ${if} $needOptimiztion == "1"
                     
@@ -652,10 +518,6 @@ Section "PostgreSQL Server" sec1
                DetailPrint "Service registration OK"
         ${endif}
 
-        ;call for NT AUTHORITY\NetworkService without password
-        ;ExecWait '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w' $0
-        ;DetailPrint "pg_ctl.exe register return $0"
-        
 
         ;Write the DisplayName manually
         WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "DisplayName" "$ServiceID_text - PostgreSQL Server ${PG_DEF_VERSION_SHORT}"
@@ -669,29 +531,10 @@ Section "PostgreSQL Server" sec1
         Pop $0 ;"ok" or "error" + error details
 
 
-        ;ExecWait 'CMD "$INSTDIR\bin\pg_ctl.exe" start -D "$DATA_DIR" -w /C' $0
-
-
-        ;ExecWait '"$INSTDIR\bin\pg_ctl.exe" start -D "$DATA_DIR"' $0
-        ;DetailPrint "pg_ctl.exe start return $0"
-
-        ;AccessControl::GrantOnFile "$DATA_DIR\bin" "$loggedInUser" "GenericRead + GenericExecute" ;GenericWrite
-        ;Pop $0 ;"ok" or "error" + error details
-
-        ;на всякий случай даем права
-        ;AccessControl::GrantOnFile "$INSTDIR" "(BU)" "FullAccess" ; ;GenericWrite
-        ;Pop $0 ;"ok" or "error" + error details
-
-        ;;;AccessControl::GrantOnFile "$INSTDIR" "$ServiceAccount_text" "FullAccess"
-        ;;;Pop $0 ;"ok" or "error" + error details
-        ;;;AccessControl::GrantOnFile "$INSTDIR" "$loggedInUser" "FullAccess" ;"GenericRead + GenericExecute" ;GenericWrite
-        ;;;Pop $0 ;"ok" or "error" + error details
 
         AccessControl::GrantOnFile "$INSTDIR" "$ServiceAccount_text" "GenericRead + GenericExecute"
         Pop $0 ;"ok" or "error" + error details
-        /*AccessControl::GrantOnFile "$INSTDIR" "$loggedInUser" "FullAccess" ;"GenericRead + GenericExecute" ;GenericWrite
-        Pop $0 ;"ok" or "error" + error details
-        */
+
 
         AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$ServiceAccount_text" "FullAccess"
         Pop $0 ;"ok" or "error" + error details
@@ -706,8 +549,7 @@ Section "PostgreSQL Server" sec1
 
         DetailPrint "Start server service..."
         Sleep 1000 ;на всякий случай, если регистрация сервера асинхронна
-        ;nsExec::ExecToStack '"$INSTDIR\bin\pg_ctl.exe" start -D "$DATA_DIR" -w' ;start is running by cmd, service run needing
-        ;nsExec::ExecToStack '"$INSTDIR\bin\pg_ctl.exe" runservice -D "$DATA_DIR" -w' ;error code 1063
+
         nsExec::ExecToStack /TIMEOUT=60000 'sc start "$ServiceID_text"'
         Pop $0 # return value/error/timeout
         Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
@@ -720,32 +562,6 @@ Section "PostgreSQL Server" sec1
                DetailPrint "Start service OK"
         ${endif}
         
-        ;ExecWait 'cscript //NoLogo "$INSTDIR\bin\startserver.vbs" "$ServiceID_text"' $0
-        ;DetailPrint "startserver.vbs return $0"
-
-        ;ExecWait 'cscript //NoLogo "$INSTDIR\bin\loadmodules.vbs" "$UserName_text" "$Pass1_text" "$INSTDIR" "$DATA_DIR" "$TextPort_text" ' $0
-        ;DetailPrint "loadmodules.vbs return $0"
-
-
-        ;Sleep 3000
-        ;после этого остатется висеть окно, если закрыть, то сервер останавливается
-        ;попробовать restart и sc
-        ;exitcode = start_postmaster(); -p PATH-TO-POSTGRES    normally not necessary
-
-        ;ExecWait 'sc start "$ServiceID_text"' $0
-        ;DetailPrint "sc start return $0"
-
-        ;sc start PostgreSQL
-        ;"C:\Program Files\PostgreSQL\9.5\bin\pg_ctl.exe" start -D "C:\Program Files\PostgreSQL\9.5\data" -w
-        ;"C:\Program Files\PostgreSQL\9.5\bin\pg_ctl.exe" unregister -N "postgresql-9.5" -
-
-        ;временно - пока не разобрался, запрашивает пароль
-        ;ExecWait '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres' $0
-        ;DetailPrint "psql.exe return $0"
-        
-        ;ReadEnvStr $R1 "PGPASSWORD"
-        ;MessageBox MB_OK "Set PGPASSWORD: $R1"
-
         ${if} $isDataDirExist == 0
               ;send password to Environment Variable PGPASSWORD
               ${if} "$Pass1_text" != ""
@@ -755,11 +571,8 @@ Section "PostgreSQL Server" sec1
 
 
               DetailPrint "Create adminpack ..."
-              Sleep 5000 ;бывает сообщение об ошибке: ВАЖНО:  система баз данных запускается
+              Sleep 5000 ;some russian comment: бывает сообщение об ошибке: ВАЖНО:  система баз данных запускается
 
-!ifdef PG_EDB
-!else
-!endif
               
               nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres'
               pop $0
@@ -781,17 +594,6 @@ Section "PostgreSQL Server" sec1
 
         ${endif}
 
-        ;nsExec::ExecToStack /TIMEOUT=1000 'setx path "%path%;$INSTDIR\bin"'
-
-        ;Push "$INSTDIR\bin"
-        ;Call AddToPath
-        ;${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR\bin"
-        
-        ;ExecWait '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres' $0
-        ;DetailPrint "psql.exe return $0"
-
-      
-        ;GetFullPathName /SHORT $0 "$INSTDIR\bin"
 
         ${if} $isEnvVar == ${BST_CHECKED}
               
@@ -805,49 +607,16 @@ Section "PostgreSQL Server" sec1
         ${endif}
 
         DetailPrint "Set PATH variable ..."
+        ;it's my plugin
         AddToPath::AddToPath "$INSTDIR\bin"
         Pop $0 ; or "error"
 
 
-        ;run server
-        ;initdb -U postgres --pwfile=pf -A md5 -E UTF8 --locale=Russian_Russia -D C:\PostgreSQL\data
-
-        ;pg_ctl register -N PostgreSQL -U postgres -P pwd -D C:\PostgreSQL\data -S auto
-        ;sc start PostgreSQL
-        
-        ;pathman /as c:\PostgreSQL\bin
-        ;...
-        ;create database;
-
-
-        ;AccessControl::GrantOnFile "$INSTDIR\bin" "$ServiceAccount_text" "GenericRead + GenericExecute" ;"FullAccess"
-        ;Pop $0 ;"ok" or "error" + error details
-
-
-
-
-
 SectionEnd
-
-;Section "Create environment variables" secVar
-;SectionEnd
-
-
 
 
 Section "PgAdmin III" sec2
 
-; проблема в том, что готовой сборки PgAdmin III 64bit нет, нужен второй Visual C++ Redistributable Packages на 32 bit
-;!ifdef PG_64bit
-        ;GetTempFileName $1
-	;File /oname=$1 vcredist_x86.exe
-	;DetailPrint "Install Visual C++ Redistributable Packages 32 bit ..."
-        ;nsExec::ExecToStack /TIMEOUT=60000 '"$1"  /passive /norestart'
-        ;pop $0
-        ;Pop $2 # printed text, up to ${NSIS_MAX_STRLEN}
-        ;DetailPrint "Visual C++ Redistributable Packages 32 bit return $0"
-        ;Delete $1
-;!endif
 	GetTempFileName $0
 !ifdef PG_64bit
 	File /oname=$0 pgadmin3-64.msi
@@ -860,7 +629,6 @@ Section "PgAdmin III" sec2
         pop $1
         Pop $2 # printed text, up to ${NSIS_MAX_STRLEN}
         DetailPrint "pgAdmin setup return  $1"
-        ;ExecWait '"msiexec" /i  "$0" /passive'
         Delete $0
 
 
@@ -871,8 +639,6 @@ Section "ODBC drivers" secDrv
         GetTempFileName $1
 	File /oname=$1 psqlodbc-setup.exe
 
-        ;ExecWait "$1  /S" $0
-        ;DetailPrint "Psql odbc setup return $0"
         DetailPrint "Psql ODBC drivers setup ..."
 
         nsExec::ExecToStack /TIMEOUT=60000 '"$1" /S'
@@ -881,7 +647,6 @@ Section "ODBC drivers" secDrv
         DetailPrint "Psql odbc setup return  $0"
         ${if} $0 != 0
                 DetailPrint "Output: $2"
-                ;MessageBox MB_OK "Create adminpack error: $1"
                 MessageBox MB_OK|MB_ICONSTOP "Error setup ODBC drivers: $2"
 
         ${endif}
@@ -890,28 +655,6 @@ Section "ODBC drivers" secDrv
         Delete $1
 
 SectionEnd
-
-/*
-SectionGroup "Клиентские драйверы"
-Section "ODBC" sec_odbc
-SectionEnd
-Section "JAVA" sec_java
-SectionEnd
-Section "DotNet" sec_dotnet
-SectionEnd
-
-SectionGroupEnd
-*/
-
-
-
-Function ComponentShow
-
-
-    SectionSetText ${sec1} "12345";$(Name_Sec1)
-
-
-FunctionEnd
 
 
 
@@ -947,8 +690,6 @@ FunctionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
-   ;${if} ${SectionIsSelected} sec1
-        ;stop service  pg_ctl stop    [-W] [-t SECS] [-D DATADIR] [-s] [-m SHUTDOWN-MODE]
         
         Call un.ChecExistInstall
         DetailPrint "Stop the server ..."
@@ -1029,9 +770,7 @@ Section "Uninstall"
          Pop $0 ; or "error"
 
 
-   ;${else}
           MessageBox MB_OK|MB_ICONINFORMATION "$(UNINSTALL_END)$DATA_DIR" ;debug
-   ;${endif}
 
 SectionEnd
 
@@ -1045,12 +784,7 @@ Function ChecExistInstall
          
   ReadRegStr $1 HKLM "${PG_REG_KEY}" "Version"
 
-  ;MessageBox MB_ICONEXCLAMATION|MB_OK ": $1"
-  ${if} $1 != "" ;we have ibstall
-  
-        ;$INSTDIR
-          ;Var DATA_DIR
-          ;Var ADMIN_DIR
+  ${if} $1 != "" ;we have install
 
         ;get exist options
         ReadRegStr $PG_OLD_VERSION HKLM "${PG_REG_KEY}" "Version"
@@ -1064,7 +798,7 @@ Function ChecExistInstall
 
     	StrCpy $PG_OLD_DIR $INSTDIR
     ${endif}
-    ;ReadRegStr $1 HKLM ${PG_REG_SERVICE_KEY} "C:\Program Files\PostgreSQL\9.2\data"
+
     ReadRegDWORD $1 HKLM "${PG_REG_SERVICE_KEY}" "Port"
     ${if} $1 != "" ;we have install
         StrCpy $TextPort_text $1
@@ -1083,7 +817,6 @@ Function ChecExistInstall
                  ${endif}
 
                  ReadRegDWORD $3 HKLM "SOFTWARE\PostgreSQL\Services\$1" "Port"
-                 ;MessageBox MB_OK "SOFTWARE\PostgreSQL\Services\$1: $3"
                  ${if} $3 >= $2
                        IntOp $2 $3 + 1
                  ${endif}
@@ -1186,7 +919,6 @@ Function un.ChecExistInstall
         ;get exist options
         ReadRegStr $PG_OLD_VERSION HKLM "${PG_REG_KEY}" "Version"
 
-        ;ReadRegStr $INSTDIR HKLM ${PG_REG_KEY} "Base Directory"
         ReadRegStr $0 HKLM "${PG_REG_KEY}" "Base Directory"
         ${if} $0! = ""
               StrCpy $INSTDIR $0
@@ -1200,6 +932,7 @@ Function un.ChecExistInstall
     	ReadRegStr $Branding_text HKLM "${PG_REG_KEY}" "Branding"
     	
     ${endif}
+    ;${StrRep} '$0' '===' '=' ''
 
 
 FunctionEnd
@@ -1253,16 +986,6 @@ Function nsDialogsServerPageLeave
 	${EndIf}
 
 
-
-
-
-
-
-;ЖVar UserName_text
-
-	;MessageBox MB_OK|MB_ICONINFORMATION "Enered Locale_text: $Locale_text"
-
-
 FunctionEnd
 
 ;say that PG is exist
@@ -1274,7 +997,7 @@ Function nsDialogServerExist
         Abort
   ${endif}
   !insertmacro MUI_HEADER_TEXT $(SERVER_EXIST_TITLE) ""
-  ;SERVER_EXIST_TEXT1
+
   nsDialogs::Create 1018
   Pop $Dialog
   ${If} $Dialog == error
@@ -1295,14 +1018,8 @@ Function ChecExistDataDir
 
 
   ${If} ${FileExists} "$DATA_DIR\*.*"
-        ;DetailPrint "Папка для данных $DATA_DIR уже существуют!"
-        ;надо бы номер порта из настроек взять
-
         StrCpy $isDataDirExist 1
   ${ElseIf} ${FileExists} "$DATA_DIR"
-        ; file is a file - error ?
-        ;MessageBox MB_OK|MB_ICONINFORMATION "Файл с именем $DATA_DIR уже существуют! Не могу создать папку!"
-        ;DetailPrint "Файл с именем $DATA_DIR уже существуют! Не могу создать папку!"
         StrCpy $isDataDirExist -1
   ${Else}
         StrCpy $isDataDirExist 0
@@ -1317,6 +1034,7 @@ Function ChecExistDataDir
          StrCpy $isDataDirExist 0
          Abort
         ${EndIf}
+
         ;порт может быть записан по разному, ConfigRead не интеллектуален
         ${StrRep} '$0' '$R0' '=' ''
         ${StrRep} '$1' '$0' ' ' ''
@@ -1341,7 +1059,8 @@ Function ChecExistDataDir
 
   
   !insertmacro MUI_HEADER_TEXT $(DATADIR_EXIST_TITLE) ""
-  ;SERVER_EXIST_TEXT1
+  
+  
   nsDialogs::Create 1018
   Pop $Dialog
   ${If} $Dialog == error
@@ -1369,30 +1088,6 @@ Function nsDialogServer
         Abort
   ${endif}
 
-
-  ;${if} $PG_OLD_DIR != "" ;exist PG install
-  ;      Abort
-  ;${endif}
-
-  ;check existing install
- ;Call  ChecExistInstall
-  ; Check if another PostgreSQL is installed
-  ;EnumRegKey $1 HKLM SOFTWARE\PostgreSQL\Installations\ "0"
-
-  ;${if} $1 != ""
-  ;      ReadRegStr $PG_OLD_VERSION HKLM "SOFTWARE\PostgreSQL\Installations\$1" "Version"
-  ;  	ReadRegStr $PG_OLD_DIR HKLM "SOFTWARE\PostgreSQL\Installations\$1" "Base Directory"
-    	; if installed version is < 8.3 then abort
-   ; 	${VersionCompare} $PG_OLD_VERSION "8.3" $0
-;		${if} $0 == "2"
-;		    MessageBox MB_ICONEXCLAMATION|MB_OK  $(LocS_PostgresOld)
-;		 	Abort
-;		${endif}
-;		MessageBox MB_OKCANCEL|MB_ICONQUESTION "PostgreSQL $PG_OLD_VERSION is already installed on this computer. This installation will be used for ADempiere." IDOK pg_ok
-;		Abort "Installation aborted!"
-  ;      pg_ok:
-
-   ;   ${endif}
 
 
 	!insertmacro MUI_HEADER_TEXT $(SERVER_SET_TITLE) $(SERVER_SET_SUBTITLE)
@@ -1556,12 +1251,9 @@ ${NSD_CB_AddString} $Locale "Zulu, South Africa"
 	${NSD_CB_SelectString} $Locale $Locale_text
 
 
-;MessageBox MB_OK "Locale_text= $Locale_text"
-
-
+ ;use always UTF-8
   ;при задании кодировки могут появиться несовместимые с локалью варианты и initdb выдает ошибку
   ;UTF-8 всем подходит, используем всегда эту кодировку
-
 /*
 	${NSD_CreateLabel} 0 40u 60u 12u "Кодировка:"
 	Pop $Label2
@@ -1681,8 +1373,6 @@ Function getFreeMemory
 	 Pop $0 # HWND
 
 	 Push $4
-
-
 	 ;MessageBox MB_OK "Total physical memory: $4 bytes"
 
 FunctionEnd
@@ -1691,8 +1381,6 @@ FunctionEnd
 
 Function makeOptimization
 
-       ;StrCpy $R0 C
-       ;System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("LANG", R0).r0'
 
         Call getFreeMemory
         Pop $AllMem ;get all mem
@@ -1709,14 +1397,6 @@ Function makeOptimization
 
 
 	;2 options set: shared_buffers and work_mem
-	;проверять из набора:
-        ; для проверки надо переводить в блоки по 8192
-
-        ;StrCpy $binExe "C:\Program Files\PostgreSQL\9.5\bin\postgres.exe"
-
-
-        ;;;StrCpy $INSTDIR "C:\Program Files\PostgreSQL\9.5"
-        
 	;1024MB = 131072 = 1073741824
 	;768MB = 98304 = 805306368
 	;512MB = 65536 = 536870912
@@ -1747,8 +1427,6 @@ Function makeOptimization
 	${endif}
 
 	;MessageBox MB_OK "No optimiztions!"
-
-
 
 FunctionEnd
 
@@ -1809,42 +1487,14 @@ Function nsDialogsOptimizationPageLeave
                 StrCpy $needOptimiztion "0"
          ${endif}
 
-         
-
-
 FunctionEnd
 
 
 
-
-
-
-
-
-
-;!define LOCALE_ILANGUAGE '0x1' ;System Language Resource ID
-;!define LOCALE_SLANGUAGE '0x2' ;System Language & Country [Cool]
-;!define LOCALE_SABBREVLANGNAME '0x3' ;System abbreviated language
-;!define LOCALE_SNATIVELANGNAME '0x4' ;System native language name [Cool]
-;!define LOCALE_ICOUNTRY '0x5' ;System country code
-;!define LOCALE_SCOUNTRY '0x6' ;System Country
-;!define LOCALE_SABBREVCTRYNAME '0x7' ;System abbreviated country name
-;!define LOCALE_SNATIVECTRYNAME '0x8' ;System native country name [Cool]
-;!define LOCALE_IDEFAULTLANGUAGE '0x9' ;System default language ID
-;!define LOCALE_IDEFAULTCOUNTRY  '0xA' ;System default country code
-;!define LOCALE_IDEFAULTCODEPAGE '0xB' ;System default oem code page
-
 Function .onInit
 
-;System::Call 'kernel32::GetSystemDefaultLangID() i .r0'
-;System::Call 'kernel32::GetLocaleInfoA(i 1024, i ${LOCALE_SNATIVECTRYNAME}, t .r2, i ${NSIS_MAX_STRLEN}) i r0'
-;System::Call 'kernel32::GetLocaleInfoA(i 1024, i ${LOCALE_SLANGUAGE}, t .r3, i ${NSIS_MAX_STRLEN}) i r0'
-;System::Call 'kernel32::GetLocaleInfoA(i 1024, i ${LOCALE_SABBREVCTRYNAME}, t .r3, i ${NSIS_MAX_STRLEN}) i r0'
 
-;MessageBox MB_OK|MB_ICONINFORMATION "Your System LANG Code is: $0. $\r$\nYour system language is: $1. $\r$\nYour system language is: $2. $\r$\nSystem Locale INFO: $3."
-
-
- 	!insertmacro MUI_LANGDLL_DISPLAY ;выбор языка
+!insertmacro MUI_LANGDLL_DISPLAY ;select language
 !ifdef PG_64bit
    ${IfNot} ${RunningX64}
      MessageBox MB_OK|MB_ICONSTOP "This version can be installed only on 64-bit Windows!"
@@ -1867,10 +1517,6 @@ Function .onInit
         
         StrCpy $checkNoLocal_state ${BST_CHECKED}
         StrCpy $isEnvVar ${BST_UNCHECKED} ;${BST_CHECKED}
-
-
-        ;StrCpy $Locale_text "$(DEF_LOCALE_NAME)" ;почему -то всегда по русски
-        ;MessageBox MB_OK "$Locale_text $(DEF_LOCALE_NAME) $(DLG_OPT3)"
         
         StrCpy $Coding_text "UTF8" ;"UTF-8"
         
@@ -1881,7 +1527,6 @@ Function .onInit
         StrCpy $loggedInUser  "$0\$1"
         
         StrCpy $loggedInUserShort "$1"
-        ;MessageBox MB_OK "$loggedInUser,  $loggedInUserShort"
 
         ;AccessControl::GetCurrentUserName
         ;Pop $0 ; or "error"
@@ -1978,32 +1623,16 @@ Function .onInit
               StrCpy $isEnvVar $1
         ${endif}
 
-        ;$isEnvVar
-
-        /*ReadINIStr $1 $0 options serviceaccount
-        ${if} "$1" != ""
-	      StrCpy $ServiceAccount_text "$1"
-        ${endif}
-        */
-        # set section 'test' as selected and read-only
-
-        ;IntOp $0 ${SF_SELECTED} | ${SF_RO}
-        ;SectionSetFlags ${test_section_id} $0
 
 
 FunctionEnd
 
-Function .onSelChange
-;MessageBox MB_OK|MB_ICONINFORMATION $(Name_Sec1)
-FunctionEnd
 
 Function func1 
 
   ${if} $PG_OLD_DIR != "" ;exist PG install
         Abort
   ${endif}
-
-  ;StrCpy $DATA_DIR "$INSTDIR\data"
  
 	SectionGetFlags ${sec1} $2
  
@@ -2022,9 +1651,3 @@ Function dirPre
 
 FunctionEnd
 
-;Function dirPreAdmin
-;StrCpy $ADMIN_DIR "$INSTDIR\pgAdmin III"
-;  ${Unless} ${SectionIsSelected} ${sec2}
-;    Abort
-;  ${EndUnless}
-;FunctionEnd
