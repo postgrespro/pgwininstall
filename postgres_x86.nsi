@@ -8,7 +8,7 @@
 ;!insertmacro LANGFILE "Czech" = "Cestina" =
 
 ;!define PG_64bit
-!define PG_BETA
+;!define PG_BETA
 
 !ifdef PG_64bit
 
@@ -433,7 +433,13 @@ Section "PostgreSQL Server" sec1
     call ShellLinkSetRunAs
     pop $0
 
+
+    ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\License.lnk" "$INSTDIR\license.txt"
+
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
+
+
+    ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Documentation\License.lnk" "$INSTDIR\license.txt"
 
     !insertmacro CreateInternetShortcut \
     "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes" \
@@ -456,7 +462,6 @@ Section "PostgreSQL Server" sec1
     "$INSTDIR\doc\postgresql\html\release.html" \
     "$INSTDIR\doc\pg-help.ico" "0"
 
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Documentation\License.lnk" "$INSTDIR\license.txt"
 
 
     ;CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\bin\pg_ctl.exe" '-D "$DATA_DIR" reload'  "" "" "" "" "Reload PostgreSQL configuration"
@@ -566,7 +571,7 @@ Section "PostgreSQL Server" sec1
 
         ; Initialise the database cluster, and set the appropriate permissions/ownership
         ;nsExec::ExecToStack '"$INSTDIR\bin\initdb.exe" --pwfile "$tempFileName"
-        nsExec::ExecToStack '"$INSTDIR\bin\initdb.exe" $tempVar \
+        nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR"'
      ${else}
@@ -579,10 +584,13 @@ Section "PostgreSQL Server" sec1
         
         pop $0
         Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-        DetailPrint "initdb.exe return $0"
+        
         ${if} $0 != 0
+              DetailPrint "initdb.exe return $0"
               DetailPrint "Output: $1"
               Sleep 5000
+        ${else}
+               DetailPrint "Database initialization OK"
         ${endif}
 
         ;--locale=
@@ -632,13 +640,16 @@ Section "PostgreSQL Server" sec1
 
 
         DetailPrint "Service $ServiceID_text registration ..."
-        nsExec::ExecToStack '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
+        nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
         Pop $0 # return value/error/timeout
         Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-        DetailPrint "pg_ctl.exe register return $0"
+        
         ${if} $0 != 0
+              DetailPrint "pg_ctl.exe register return $0"
               DetailPrint "Output: $1"
               Sleep 5000
+        ${else}
+               DetailPrint "Service registration OK"
         ${endif}
 
         ;call for NT AUTHORITY\NetworkService without password
@@ -697,13 +708,16 @@ Section "PostgreSQL Server" sec1
         Sleep 1000 ;на всякий случай, если регистрация сервера асинхронна
         ;nsExec::ExecToStack '"$INSTDIR\bin\pg_ctl.exe" start -D "$DATA_DIR" -w' ;start is running by cmd, service run needing
         ;nsExec::ExecToStack '"$INSTDIR\bin\pg_ctl.exe" runservice -D "$DATA_DIR" -w' ;error code 1063
-        nsExec::ExecToStack 'sc start "$ServiceID_text"'
+        nsExec::ExecToStack /TIMEOUT=60000 'sc start "$ServiceID_text"'
         Pop $0 # return value/error/timeout
         Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-        DetailPrint "Start service return $0"
+        
         ${if} $0 != 0
-                DetailPrint "Output: $1"
-                Sleep 5000
+              DetailPrint "Start service return $0"
+              DetailPrint "Output: $1"
+              Sleep 5000
+        ${else}
+               DetailPrint "Start service OK"
         ${endif}
         
         ;ExecWait 'cscript //NoLogo "$INSTDIR\bin\startserver.vbs" "$ServiceID_text"' $0
@@ -750,15 +764,14 @@ Section "PostgreSQL Server" sec1
               nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres'
               pop $0
               Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-              DetailPrint "Create adminpack return $0"
+              
               ${if} $0 != 0
+                    DetailPrint "Create adminpack return $0"
                     DetailPrint "Output: $1"
                     ;MessageBox MB_OK "Create adminpack error: $1"
                     MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
-                    
-                    
-              
-
+              ${else}
+                     DetailPrint "Create adminpack OK"
               ${endif}
 
               ${if} "$Pass1_text" != ""
@@ -790,6 +803,8 @@ Section "PostgreSQL Server" sec1
 
 
         ${endif}
+
+        DetailPrint "Set PATH variable ..."
         AddToPath::AddToPath "$INSTDIR\bin"
         Pop $0 ; or "error"
 
@@ -989,6 +1004,7 @@ Section "Uninstall"
                 Delete "$SMPROGRAMS\$StartMenuFolder\Stop Server.lnk"
                 Delete "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk"
 
+                ; Delete "$SMPROGRAMS\$StartMenuFolder\License.lnk"
 
                 RMDir /r "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
@@ -1008,8 +1024,9 @@ Section "Uninstall"
         ; Remove install dir from PATH
          ;Push "$INSTDIR\bin"
          ;Call un.RemoveFromPath
-        AddToPath::RemoveFromPath "$INSTDIR\bin"
-        Pop $0 ; or "error"
+         DetailPrint "Set PATH variable ..."
+         AddToPath::RemoveFromPath "$INSTDIR\bin"
+         Pop $0 ; or "error"
 
 
    ;${else}
