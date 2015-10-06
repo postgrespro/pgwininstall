@@ -188,13 +188,13 @@ IF "%ARCH%" == "X86" (>>src\tools\msvc\config.pl ECHO	python  ^=^> undef, )
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 perl src\tools\msvc\build.pl || GOTO :ERROR
-:BUILD_PG
 IF "%ARCH%" == "X86" SET PERL5LIB=C:\Perl\lib;src\tools\msvc
 IF "%ARCH%" == "X64" SET PERL5LIB=C:\Perl64\lib;src\tools\msvc
 rm -rf c:\pg\distr_%ARCH%_%PGVER%\postgresql
 MKDIR "c:\pg\distr_%ARCH%_%PGVER%\postgresql"
 CD "c:\pg\postgresql\postgresql-%PGVER%\src\tools\msvc"
 cp -v c:/pg/libintl/lib/*.dll c:\pg\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+cp -v c:/pg/iconv/lib/*.dll c:\pg\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
 perl install.pl c:\pg\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 cp -v c:/pg/libintl/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
 cp -v c:/pg/iconv/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
