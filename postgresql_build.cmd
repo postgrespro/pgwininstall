@@ -11,10 +11,8 @@ SET PGVER=9.4.4
 
 REM SET ARCH: X86 or X64
 SET ARCH=X64
-REM Set your msys arch (32, 64)
-SET MSYS_ARCH=64
 
-SET PATH=%PATH%;C:\Program Files\7-Zip;C:\msys%MSYS_ARCH%\usr\bin
+SET PATH=%PATH%;C:\Program Files\7-Zip;C:\msys32\usr\bin
 IF "%ARCH%" == "X86" SET PATH=C:\Perl\Bin;%PATH%
 IF "%ARCH%" == "X64" SET PATH=C:\Perl64\Bin;%PATH%
 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
