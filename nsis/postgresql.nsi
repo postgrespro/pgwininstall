@@ -23,7 +23,7 @@
 ;--------------------------------
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${PRODUCT_NAME}_${%PG_DEF_VERSION%}_${PG_INS_SUFFIX}"
+OutFile "${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
 
 !ifdef PG_64bit
   InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}\${PG_DEF_VERSION_SHORT}"
