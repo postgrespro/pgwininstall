@@ -1,7 +1,7 @@
 REM Required
 REM 1. NSIS
-REM 2. UsrMgr Plugin for NSIS
-REM 3. AccessControl Plugin for NSIS
+REM 2. UsrMgr Plugin for NSIS http://nsis.sourceforge.net/UserMgr_plug-in
+REM 3. AccessControl Plugin for NSIS http://nsis.sourceforge.net/AccessControl_plug-in
 REM 4. Visual Studio 2010 Redistibutable (x86, x64) [Place it to nsis directory]
 REM 5. PostgreSQL and PgAdmin3 binaries
 
