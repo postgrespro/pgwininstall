@@ -490,8 +490,9 @@ Section "PostgreSQL Server" sec1
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
   ${endif}
 
-  StrCmp $nls "YES" 0 +3
-    RMDir /r "$INSTDIR\share\"
+  ${if} $nls != "YES"
+    RMDir /r "$INSTDIR\share\locale"
+  ${endif}
 
   DetailPrint "Set PATH variable ..."
   ;it's my plugin
