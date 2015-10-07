@@ -8,7 +8,6 @@
   LangString BROWSE_BUTTON ${LANG_ENGLISH} "Browse ..."
   LangString BROWSE_BUTTON ${LANG_RUSSIAN} "Обзор ..."
 
-
   LangString DESC_SecMS ${LANG_ENGLISH} "Install run-time components that are required to run C++ applications."
   LangString DESC_SecMS ${LANG_RUSSIAN} "Компоненты среды выполнения, необходимые для выполнения приложений."
 
