@@ -20,7 +20,7 @@ CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :
 pacman --noconfirm --sync flex bison tar wget patch
 
 REM GOTO LAST BUILD
-GOTO :BUILD_ALL
+GOTO :BUILD_PGADMIN
 
 :BUILD_ALL
 MKDIR "c:\pg\download"
@@ -234,6 +234,12 @@ cp -va c:/pg/wxwidgets/wxWidgets-3*/include c:\pg\wxwidgets\include  || GOTO :ER
 :BUILD_PGADMIN
 CD "c:\pg\download"
 wget --no-check-certificate -c https://ftp.postgresql.org/pub/pgadmin3/release/v1.20.0/src/pgadmin3-1.20.0.tar.gz -O pgadmin3-1.20.0.tar.gz
+
+rem Install Sphinx
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+pip install sphinx
+
 rm -rf "c:\pg\pgadmin"
 MKDIR "c:\pg\pgadmin"
 tar xf pgadmin3-1.20.0.tar.gz -C "c:\pg\pgadmin"

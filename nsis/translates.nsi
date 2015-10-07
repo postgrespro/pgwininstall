@@ -19,7 +19,7 @@
   LangString DESC_PgAdmin ${LANG_RUSSIAN} "Установка pgAdmin для управления сервером."
 
   LangString DESC_Sec1dir ${LANG_ENGLISH} "Please specify the directory where PostgreSQL will be installed."
-  LangString DESC_Sec1die ${LANG_RUSSIAN} "Пожалуйста, задайте папку для установки PostgreSQL."
+  LangString DESC_Sec1die ${LANG_RUSSIAN} "Пожалуйста, задайте директорию для установки PostgreSQL."
 
   LangString SERVER_SET_TITLE ${LANG_ENGLISH} "Server options"
   LangString SERVER_SET_TITLE ${LANG_RUSSIAN} "Параметры сервера"
@@ -31,22 +31,22 @@
   LangString SERVER_EXIST_TITLE ${LANG_RUSSIAN} "Уже имеется установка сервера"
 
   LangString SERVER_EXIST_TEXT1 ${LANG_ENGLISH} "An existing PostgresSQL installation has been found at "
-  LangString SERVER_EXIST_TEXT1 ${LANG_RUSSIAN} "Найдена установка сервера PostgresSQL в папке "
+  LangString SERVER_EXIST_TEXT1 ${LANG_RUSSIAN} "Найдена установка сервера PostgresSQL в директории "
 
   LangString SERVER_EXIST_TEXT2 ${LANG_ENGLISH} "This instalation will be upgraded.$\n$\nIn order to upgrade, we may need to restart the server. "
   LangString SERVER_EXIST_TEXT2 ${LANG_RUSSIAN} "Эта установка будет обновлена.$\n$\nВо время обновления потребуется перезапуск службы сервера. "
 
   LangString DATADIR_EXIST_TITLE ${LANG_ENGLISH} "Existing data directory"
-  LangString DATADIR_EXIST_TITLE ${LANG_RUSSIAN} "Уже имеется папка с данными"
+  LangString DATADIR_EXIST_TITLE ${LANG_RUSSIAN} "Уже имеется директория с данными"
 
   LangString DATADIR_EXIST_TEXT1 ${LANG_ENGLISH} "An existing data directory installation has been found at $DATA_DIR , port $TextPort_text . This directory will be used for this installation."
-  LangString DATADIR_EXIST_TEXT1 ${LANG_RUSSIAN} "Уже имеется папка с данными $DATA_DIR , порт $TextPort_text . Эта папка будет использована для этой установки сервера."
+  LangString DATADIR_EXIST_TEXT1 ${LANG_RUSSIAN} "Уже имеется директория с данными $DATA_DIR , порт $TextPort_text . Эта директория будет использована для этой установки сервера."
 
   LangString DATADIR_EXIST_ERROR1 ${LANG_ENGLISH} "An existing file with name $DATA_DIR has been found. Can not create directory with this name."
-  LangString DATADIR_EXIST_ERROR1 ${LANG_RUSSIAN} "Эта папка и ее конфигурация будет использована для этой установки сервера."
+  LangString DATADIR_EXIST_ERROR1 ${LANG_RUSSIAN} "Эта директория и ее конфигурация будет использована для этой установки сервера."
 
   LangString UNINSTALL_END ${LANG_ENGLISH} "Uninstallation has been ended.$\n$\nThe data directory has not been removed: "
-  LangString UNINSTALL_END ${LANG_RUSSIAN} "Удаление PostgreSQL сервера окончено. $\n$\nПапка с данными не удалена: "
+  LangString UNINSTALL_END ${LANG_RUSSIAN} "Удаление PostgreSQL сервера окончено. $\n$\Директория с данными не удалена: "
 
 
   LangString MESS_PASS1 ${LANG_ENGLISH} "Passwords Do Not Match!"
