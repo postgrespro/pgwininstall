@@ -1,111 +1,111 @@
 
-  LangString DATADIR_MESS ${LANG_ENGLISH} "Please select a directory under which to store your data."
-  LangString DATADIR_MESS ${LANG_RUSSIAN} "Р‘Р°Р·С‹ РґР°РЅРЅС‹С… Р±СѓРґСѓС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹ РІ СЃР»РµРґСѓСЋС‰РёР№ РєР°С‚Р°Р»РѕРі."
+  LangString DATADIR_MESS ${LANG_ENGLISH} "Please select a directory under which to store your data"
+  LangString DATADIR_MESS ${LANG_RUSSIAN} "Базы данных будут установлены в следующий каталог"
 
-  LangString DATADIR_TITLE ${LANG_ENGLISH} "Data directory."
-  LangString DATADIR_TITLE ${LANG_RUSSIAN} "РљР°С‚Р°Р»РѕРі РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё Р±Р°Р· РґР°РЅРЅС‹С…."
+  LangString DATADIR_TITLE ${LANG_ENGLISH} "Data directory"
+  LangString DATADIR_TITLE ${LANG_RUSSIAN} "Каталог для установки баз данных"
 
   LangString BROWSE_BUTTON ${LANG_ENGLISH} "Browse ..."
-  LangString BROWSE_BUTTON ${LANG_RUSSIAN} "РћР±Р·РѕСЂ ..."
+  LangString BROWSE_BUTTON ${LANG_RUSSIAN} "Обзор ..."
 
-  LangString DESC_SecMS ${LANG_ENGLISH} "Install run-time components that are required to run C++ applications."
-  LangString DESC_SecMS ${LANG_RUSSIAN} "РљРѕРјРїРѕРЅРµРЅС‚С‹ СЃСЂРµРґС‹ РІС‹РїРѕР»РЅРµРЅРёСЏ, РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ РїСЂРёР»РѕР¶РµРЅРёР№."
+  LangString DESC_SecMS ${LANG_ENGLISH} "Install run-time components that are required to run C++ applications"
+  LangString DESC_SecMS ${LANG_RUSSIAN} "Компоненты среды выполнения, необходимые для выполнения приложений"
 
-  LangString DESC_Sec1 ${LANG_ENGLISH} "Install PostgreSQL server on this computer."
-  LangString DESC_Sec1 ${LANG_RUSSIAN} "РЈСЃС‚Р°РЅРѕРІРєР° СЃРµСЂРІРµСЂР° PostgreSQL РЅР° СЌС‚РѕС‚ РєРѕРјРїСЊСЋС‚РµСЂ"
+  LangString DESC_Sec1 ${LANG_ENGLISH} "Install PostgreSQL server on this computer"
+  LangString DESC_Sec1 ${LANG_RUSSIAN} "Установка сервера PostgreSQL на этот компьютер"
 
-  LangString DESC_PgAdmin ${LANG_ENGLISH} "Install pgAdmin tools on this computer."
-  LangString DESC_PgAdmin ${LANG_RUSSIAN} "РЈСЃС‚Р°РЅРѕРІРєР° pgAdmin РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ СЃРµСЂРІРµСЂРѕРј."
+  LangString DESC_PgAdmin ${LANG_ENGLISH} "Install pgAdmin tools on this computer"
+  LangString DESC_PgAdmin ${LANG_RUSSIAN} "Установка pgAdmin для управления сервером"
 
-  LangString DESC_Sec1dir ${LANG_ENGLISH} "Please specify the directory where PostgreSQL will be installed."
-  LangString DESC_Sec1die ${LANG_RUSSIAN} "РџРѕР¶Р°Р»СѓР№СЃС‚Р°, Р·Р°РґР°Р№С‚Рµ РґРёСЂРµРєС‚РѕСЂРёСЋ РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё PostgreSQL."
+  LangString DESC_Sec1dir ${LANG_ENGLISH} "Please specify the directory where PostgreSQL will be installed"
+  LangString DESC_Sec1die ${LANG_RUSSIAN} "Пожалуйста, задайте директорию для установки PostgreSQL"
 
   LangString SERVER_SET_TITLE ${LANG_ENGLISH} "Server options"
-  LangString SERVER_SET_TITLE ${LANG_RUSSIAN} "РџР°СЂР°РјРµС‚СЂС‹ СЃРµСЂРІРµСЂР°"
+  LangString SERVER_SET_TITLE ${LANG_RUSSIAN} "Параметры сервера"
 
-  LangString SERVER_SET_SUBTITLE ${LANG_ENGLISH} "Please specify options of server."
-  LangString SERVER_SET_SUBTITLE ${LANG_RUSSIAN} "РџРѕР¶Р°Р»СѓР№СЃС‚Р°, Р·Р°РґР°Р№С‚Рµ РїР°СЂР°РјРµС‚СЂС‹ СЃРµСЂРІРµСЂР°."
+  LangString SERVER_SET_SUBTITLE ${LANG_ENGLISH} "Please specify options of server"
+  LangString SERVER_SET_SUBTITLE ${LANG_RUSSIAN} "Пожалуйста, задайте параметры сервера"
 
   LangString SERVER_EXIST_TITLE ${LANG_ENGLISH} "Existing installation"
-  LangString SERVER_EXIST_TITLE ${LANG_RUSSIAN} "РЈР¶Рµ РёРјРµРµС‚СЃСЏ СѓСЃС‚Р°РЅРѕРІРєР° СЃРµСЂРІРµСЂР°"
+  LangString SERVER_EXIST_TITLE ${LANG_RUSSIAN} "Уже имеется установка сервера"
 
   LangString SERVER_EXIST_TEXT1 ${LANG_ENGLISH} "An existing PostgresSQL installation has been found at "
-  LangString SERVER_EXIST_TEXT1 ${LANG_RUSSIAN} "РќР°Р№РґРµРЅР° СѓСЃС‚Р°РЅРѕРІРєР° СЃРµСЂРІРµСЂР° PostgresSQL РІ РґРёСЂРµРєС‚РѕСЂРёРё "
+  LangString SERVER_EXIST_TEXT1 ${LANG_RUSSIAN} "Найдена установка сервера PostgresSQL в директории "
 
-  LangString SERVER_EXIST_TEXT2 ${LANG_ENGLISH} "This instalation will be upgraded.$\n$\nIn order to upgrade, we may need to restart the server. "
-  LangString SERVER_EXIST_TEXT2 ${LANG_RUSSIAN} "Р­С‚Р° СѓСЃС‚Р°РЅРѕРІРєР° Р±СѓРґРµС‚ РѕР±РЅРѕРІР»РµРЅР°.$\n$\nР’Рѕ РІСЂРµРјСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ РїРµСЂРµР·Р°РїСѓСЃРє СЃР»СѓР¶Р±С‹ СЃРµСЂРІРµСЂР°. "
+  LangString SERVER_EXIST_TEXT2 ${LANG_ENGLISH} "This instalation will be upgraded.$\n$\nIn order to upgrade, we may need to restart the server "
+  LangString SERVER_EXIST_TEXT2 ${LANG_RUSSIAN} "Эта установка будет обновлена.$\n$\nВо время обновления потребуется перезапуск службы сервера "
 
   LangString DATADIR_EXIST_TITLE ${LANG_ENGLISH} "Existing data directory"
-  LangString DATADIR_EXIST_TITLE ${LANG_RUSSIAN} "РЈР¶Рµ РёРјРµРµС‚СЃСЏ РґРёСЂРµРєС‚РѕСЂРёСЏ СЃ РґР°РЅРЅС‹РјРё"
+  LangString DATADIR_EXIST_TITLE ${LANG_RUSSIAN} "Уже имеется директория с данными"
 
   LangString DATADIR_EXIST_TEXT1 ${LANG_ENGLISH} "An existing data directory installation has been found at $DATA_DIR , port $TextPort_text . This directory will be used for this installation."
-  LangString DATADIR_EXIST_TEXT1 ${LANG_RUSSIAN} "РЈР¶Рµ РёРјРµРµС‚СЃСЏ РґРёСЂРµРєС‚РѕСЂРёСЏ СЃ РґР°РЅРЅС‹РјРё $DATA_DIR , РїРѕСЂС‚ $TextPort_text . Р­С‚Р° РґРёСЂРµРєС‚РѕСЂРёСЏ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°РЅР° РґР»СЏ СЌС‚РѕР№ СѓСЃС‚Р°РЅРѕРІРєРё СЃРµСЂРІРµСЂР°."
+  LangString DATADIR_EXIST_TEXT1 ${LANG_RUSSIAN} "Уже имеется директория с данными $DATA_DIR , порт $TextPort_text . Эта директория будет использована для этой установки сервера."
 
-  LangString DATADIR_EXIST_ERROR1 ${LANG_ENGLISH} "An existing file with name $DATA_DIR has been found. Can not create directory with this name."
-  LangString DATADIR_EXIST_ERROR1 ${LANG_RUSSIAN} "Р­С‚Р° РґРёСЂРµРєС‚РѕСЂРёСЏ Рё РµРµ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°РЅР° РґР»СЏ СЌС‚РѕР№ СѓСЃС‚Р°РЅРѕРІРєРё СЃРµСЂРІРµСЂР°."
+  LangString DATADIR_EXIST_ERROR1 ${LANG_ENGLISH} "An existing file with name $DATA_DIR has been found. Can not create directory with this name"
+  LangString DATADIR_EXIST_ERROR1 ${LANG_RUSSIAN} "Эта директория и ее конфигурация будет использована для этой установки сервера"
 
-  LangString UNINSTALL_END ${LANG_ENGLISH} "Uninstallation has been ended.$\n$\nThe data directory has not been removed: "
-  LangString UNINSTALL_END ${LANG_RUSSIAN} "РЈРґР°Р»РµРЅРёРµ PostgreSQL СЃРµСЂРІРµСЂР° РѕРєРѕРЅС‡РµРЅРѕ. $\n$\Р”РёСЂРµРєС‚РѕСЂРёСЏ СЃ РґР°РЅРЅС‹РјРё РЅРµ СѓРґР°Р»РµРЅР°: "
+  LangString UNINSTALL_END ${LANG_ENGLISH} "Uninstallation has been ended.$\n$\nPerhaps you need to restart your computer as service '$ServiceID_text' exists.$\n$\nThe data directory has not been removed: "
+  LangString UNINSTALL_END ${LANG_RUSSIAN} "Удаление PostgreSQL сервера окончено.$\n$\nВозможно, вам нужно будет перезагрузить компьютер, если сервис '$ServiceID_text' существует.$\n$\nДиректория с данными не удалена: "
 
 
   LangString MESS_PASS1 ${LANG_ENGLISH} "Passwords Do Not Match!"
-  LangString MESS_PASS1 ${LANG_RUSSIAN} "Р’РІРµРґРµРЅРЅС‹Рµ РїР°СЂРѕР»СЊ Рё РїРѕРґС‚РІС‚РµСЂР¶РґРµРЅРёРµ СЂР°Р·Р»РёС‡Р°СЋС‚СЃСЏ!"
+  LangString MESS_PASS1 ${LANG_RUSSIAN} "Введенные пароль и подтвтерждение различаются!"
 
   LangString MESS_PASS2 ${LANG_ENGLISH} "You do not enter a password! Do you confirm the installation without a password?"
-  LangString MESS_PASS2 ${LANG_RUSSIAN} "Р’С‹ РЅРµ РІРІРµР»Рё РїР°СЂРѕР»СЊ!$\n$\nРџРѕРґС‚РІРµСЂР¶РґР°РµС‚Рµ СѓСЃС‚Р°РЅРѕРІРєСѓ Р±РµР· РїР°СЂРѕР»СЏ?"
+  LangString MESS_PASS2 ${LANG_RUSSIAN} "Вы не ввели пароль!$\n$\nПодтверждаете установку без пароля?"
 
   LangString MESS_PASS3 ${LANG_ENGLISH} "You entered the password with non-Latin characters. Do you wish use that password?"
-  LangString MESS_PASS3 ${LANG_RUSSIAN} "Р’С‹ РёСЃРїРѕР»СЊР·РѕРІР°Р»Рё РІ РїР°СЂРѕР»Рµ РЅРµР»Р°С‚РёРЅСЃРєРёРµ СЃРёРјРІРѕР»С‹. Р­С‚Рѕ РјРѕР¶РµС‚ РІС‹Р·РІР°С‚СЊ  \
-   РїСЂРѕР±Р»РµРјС‹ СЃ РІРІРѕРґРѕРј РїР°СЂРѕР»СЏ! РџСЂРѕРґРѕР»Р¶РёС‚СЊ"
+  LangString MESS_PASS3 ${LANG_RUSSIAN} "Вы использовали в пароле нелатинские символы. Это может вызвать  \
+   проблемы с вводом пароля! Продолжить"
 
 
   LangString DLG_PORT ${LANG_ENGLISH} "Port:"
-  LangString DLG_PORT ${LANG_RUSSIAN} "РџРѕСЂС‚:"
+  LangString DLG_PORT ${LANG_RUSSIAN} "Порт:"
 
   LangString DLG_ADR1 ${LANG_ENGLISH} "Addresses:"
-  LangString DLG_ADR1 ${LANG_RUSSIAN} "РђРґСЂРµСЃР°:"
+  LangString DLG_ADR1 ${LANG_RUSSIAN} "Адреса:"
 
   LangString DLG_ADR2 ${LANG_ENGLISH} "Allow connections from any IP address:"
-  LangString DLG_ADR2 ${LANG_RUSSIAN} "РџРѕРґРґРµСЂР¶РёРІР°С‚СЊ РїРѕРґСЃРѕРµРґРёРЅРµРЅРёСЏ СЃ Р»СЋР±С‹С… IP Р°РґСЂРµСЃРѕРІ."
+  LangString DLG_ADR2 ${LANG_RUSSIAN} "Поддерживать подсоединения с любых IP адресов:"
 
   LangString DLG_LOCALE ${LANG_ENGLISH} "Locale:"
-  LangString DLG_LOCALE ${LANG_RUSSIAN} "Р›РѕРєР°Р»СЊ:"
+  LangString DLG_LOCALE ${LANG_RUSSIAN} "Локаль:"
 
   LangString DLG_SUPERUSER ${LANG_ENGLISH} "Super user:"
-  LangString DLG_SUPERUSER ${LANG_RUSSIAN} "РЎСѓРїРµСЂ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ:"
+  LangString DLG_SUPERUSER ${LANG_RUSSIAN} "Супер пользователь:"
 
   LangString DLG_PASS1 ${LANG_ENGLISH} "Password:"
-  LangString DLG_PASS1 ${LANG_RUSSIAN} "РџР°СЂРѕР»СЊ:"
+  LangString DLG_PASS1 ${LANG_RUSSIAN} "Пароль:"
 
   LangString DLG_PASS2 ${LANG_ENGLISH} "Confirm:"
-  LangString DLG_PASS2 ${LANG_RUSSIAN} "РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ:"
+  LangString DLG_PASS2 ${LANG_RUSSIAN} "Подтверждение:"
 
   LangString DLG_OPT1 ${LANG_ENGLISH} "It is possible to optimize server performance based on the amount of memory installed $AllMem Mb. \
 The server will allocate more memory. \
 The parameters are written to the file $DATA_DIR\postgresql.conf"
 
-  LangString DLG_OPT1 ${LANG_RUSSIAN} "РњРѕР¶РЅРѕ РїСЂРѕРІРµСЃС‚Рё РѕРїС‚РёРјРёР·Р°С†РёСЋ РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё СЃРµСЂРІРµСЂР° РёСЃС…РѕРґСЏ РёР· РѕР±СЉРµРјР° СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅРѕР№ РїР°РјСЏС‚Рё $AllMem Mb. \
-CРµСЂРІРµСЂСѓ Р±СѓРґРµС‚ РІС‹РґРµР»РµРЅРѕ Р±РѕР»СЊС€Рµ РѕРїРµСЂР°С‚РёРІРЅРѕР№ РїР°РјСЏС‚Рё. \
-РџР°СЂР°РјРµС‚СЂС‹ Р±СѓРґСѓС‚ Р·Р°РїРёСЃР°РЅС‹ РІ С„Р°Р№Р» $DATA_DIR\postgresql.conf"
+  LangString DLG_OPT1 ${LANG_RUSSIAN} "Можно провести оптимизацию производительности сервера исходя из объема установленной памяти $AllMem Mb. \
+Cерверу будет выделено больше оперативной памяти. \
+Параметры будут записаны в файл $DATA_DIR\postgresql.conf"
 
   LangString DLG_ENVVAR ${LANG_ENGLISH} "Set up environment variables"
-  LangString DLG_ENVVAR ${LANG_RUSSIAN} "РќР°СЃС‚СЂРѕРёС‚СЊ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃСЂРµРґС‹"
+  LangString DLG_ENVVAR ${LANG_RUSSIAN} "Настроить переменные среды"
 
 
 
   LangString DLG_OPT2 ${LANG_ENGLISH} "Make optimizations"
-  LangString DLG_OPT2 ${LANG_RUSSIAN} "РџСЂРѕРІРµСЃС‚Рё РѕРїС‚РёРјРёР·Р°С†РёСЋ РїР°СЂР°РјРµС‚СЂРѕРІ"
+  LangString DLG_OPT2 ${LANG_RUSSIAN} "Провести оптимизацию параметров"
 
   LangString DLG_OPT3 ${LANG_ENGLISH} "Use default settings"
-  LangString DLG_OPT3 ${LANG_RUSSIAN} "РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ"
+  LangString DLG_OPT3 ${LANG_RUSSIAN} "Использовать параметры по умолчанию"
 
   LangString DEF_LOCALE_NAME ${LANG_ENGLISH} "Default"
-  LangString DEF_LOCALE_NAME ${LANG_RUSSIAN} "РќР°СЃС‚СЂРѕР№РєР° РћРЎ"
+  LangString DEF_LOCALE_NAME ${LANG_RUSSIAN} "Настройка ОС"
 
 
 
   LangString MESS_STOP_SERVER ${LANG_ENGLISH} "In order to upgrade, we may need to restart the server!$\n$\nContinue?"
-  LangString MESS_STOP_SERVER ${LANG_RUSSIAN} "Р’Рѕ РІСЂРµРјСЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ РїРµСЂРµР·Р°РїСѓСЃРє СЃР»СѓР¶Р±С‹ СЃРµСЂРІРµСЂР°!$\n$\nРџСЂРѕРґРѕР»Р¶РёС‚СЊ?"
+  LangString MESS_STOP_SERVER ${LANG_RUSSIAN} "Во время обновления потребуется перезапуск службы сервера!$\n$\nПродолжить?"
 
   LangString MESS_ERROR_SERVER ${LANG_ENGLISH} "An error occurred while initializing the server! Perhaps Server service failed to start."
-  LangString MESS_ERROR_SERVER ${LANG_RUSSIAN} "Р’РѕР·РЅРёРєР»Р° РѕС€РёР±РєР° РїСЂРё РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃРµСЂРІРµСЂР°! Р’РѕР·РјРѕР¶РЅРѕ СЃР»СѓР¶Р±Р° СЃРµСЂРІРµСЂР° РЅРµ СЃРјРѕРіР»Р° Р·Р°РїСѓСЃС‚РёС‚СЊСЃСЏ."
+  LangString MESS_ERROR_SERVER ${LANG_RUSSIAN} "Возникла ошибка при инициализации сервера! Возможно служба сервера не смогла запуститься."

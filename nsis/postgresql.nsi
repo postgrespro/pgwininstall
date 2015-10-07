@@ -49,7 +49,7 @@ OutFile "${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
   InstallDir "$PROGRAMFILES32\${PRODUCT_NAME}\${PG_DEF_VERSION_SHORT}"
 !endif
 
-BrandingText "PostgresPro.ru"
+BrandingText "Postgres Professional"
 
 ;Get installation folder from registry if available
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -243,7 +243,7 @@ Section "PostgreSQL Server" sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 'echo off$\r$\nchcp 1251$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
@@ -286,7 +286,7 @@ Section "PostgreSQL Server" sec1
   ; set font Lucida Console for shortcut psql
   ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
   ${if} $0 == ""
-    WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Lucida Console"
+    WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Consolas"
     WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontWeight" "400"
     WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontSize" "917504"
     WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontFamily" "54"
@@ -457,6 +457,7 @@ Section "PostgreSQL Server" sec1
   Sleep 1000
 
   nsExec::ExecToStack /TIMEOUT=60000 'sc start "$ServiceID_text"'
+  Sleep 5000
   Pop $0 # return value/error/timeout
   Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
