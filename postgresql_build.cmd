@@ -10,7 +10,7 @@ REM SET POSTGRESQL VERSION
 SET PGVER=9.4.4
 
 REM SET ARCH: X86 or X64
-SET ARCH=X86
+SET ARCH=X64
 
 SET PATH=%PATH%;C:\Program Files\7-Zip;C:\msys32\usr\bin
 IF "%ARCH%" == "X86" SET PATH=C:\Perl\Bin;%PATH%
@@ -138,8 +138,8 @@ cp -v out32dll/libeay32.lib "c:\pg\openssl\lib\VC\libeay32MD.lib" || GOTO :ERROR
 
 :BUILD_LIBINTL
 CD "c:\pg\download"
-wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-0.19.4.tar.gz -O gettext-0.19.4.tar.gz 
-wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/gettext-0.19.4.patch -O gettext-0.19.4.patch 
+wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-0.19.4.tar.gz -O gettext-0.19.4.tar.gz
+wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/gettext-0.19.4.patch -O gettext-0.19.4.patch
 rm -rf "c:\pg\libintl"
 MKDIR "c:\pg\libintl"
 tar xf gettext-0.19.4.tar.gz -C "c:\pg\libintl"
@@ -177,8 +177,8 @@ CD "c:\pg\postgresql\postgresql-%PGVER%"
 >>src\tools\msvc\config.pl ECHO	tcl     ^=^> undef,
 IF "%ARCH%" == "X64" (>>src\tools\msvc\config.pl ECHO	perl    ^=^> 'C:\Perl64',   )
 IF "%ARCH%" == "X86" (>>src\tools\msvc\config.pl ECHO	perl    ^=^> 'C:\Perl',     )
-IF "%ARCH%" == "X64" (>>src\tools\msvc\config.pl ECHO	python  ^=^> 'C:\Python27', )
-IF "%ARCH%" == "X86" (>>src\tools\msvc\config.pl ECHO	python  ^=^> undef, )
+IF "%ARCH%" == "X64" (>>src\tools\msvc\config.pl ECHO	python  ^=^> 'C:\Python27x64', )
+IF "%ARCH%" == "X86" (>>src\tools\msvc\config.pl ECHO	python  ^=^> 'C:\Python27x86', )
 >>src\tools\msvc\config.pl ECHO	openssl ^=^> 'c:\pg\openssl',
 >>src\tools\msvc\config.pl ECHO	uuid    ^=^> 'c:\pg\uuid',
 >>src\tools\msvc\config.pl ECHO	xml     ^=^> 'c:\pg\libxml2',
@@ -258,6 +258,7 @@ cp -va pgadmin/Release*/*.exe "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO 
 cp -va i18n "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
 cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
 cp -va c:/pg/wxwidgets/lib/vc_*dll/*.dll  "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
+
 
 GOTO :DONE
 

@@ -1,9 +1,9 @@
 PostrgreSQL install script for NSIS
-Written by Victor Spirin for Postgres Professional, Postgrespro.com
+Postgres Professional, Postgrespro.ru
 
-Main file of project is postgres_x86.nsi
+Main file of project is postgresql.nsi
 
-Was use plugins: AccessControl, UserMgr
+Plugins to use: AccessControl, UserMgr
 
 AddToPath plugin included in this project in AddToPath directory
 

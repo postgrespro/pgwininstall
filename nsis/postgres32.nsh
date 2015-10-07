@@ -2,7 +2,7 @@
 !define PRODUCT_NAME "PostgreSQL"
 !define PRODUCT_VERSION "9.4 (x86)"
 !define PRODUCT_PUBLISHER "Postgres Professional Russia"
-!define PRODUCT_WEB_SITE "http://http://postgrespro.ru"
+!define PRODUCT_WEB_SITE "http://postgrespro.ru"
 !define PRODUCT_DIR_REGKEY "Software\PostgresPro\PostgreSQL\9.4"
 
 !define PG_REG_KEY "SOFTWARE\PostgreSQL\Installations\postgresql-9.4"
@@ -17,7 +17,5 @@
 !define PG_DEF_VERSION_SHORT "9.4"
 !define PG_DEF_BRANDING "PostgreSQL 9.4 (x86)"
 
-;!define DEF_LOCALE_NAME "Настройка ОС"
-
 !define PG_INS_SUFFIX "32bit_Setup.exe"
-!define PG_INS_SOURCE_DIR ".\pgsql.vc\*.*"
+!define PG_INS_SOURCE_DIR "C:\pg\distr_X86_9.4.4\postgresql\*.*"
