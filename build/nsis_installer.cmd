@@ -68,7 +68,7 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_DEF_BRANDING %PG_DEF_BRANDING%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
-IF %POSTGRES_ARCHITECTURE% == "x64" >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
+IF %POSTGRES_ARCHITECTURE% == "x64" (>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit)
 
 REM PgAdmin3 Section
 SET PRODUCT_NAME=PgAdmin3
