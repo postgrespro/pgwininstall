@@ -3,16 +3,16 @@
 !define PRODUCT_VERSION "9.4 (x86)"
 !define PRODUCT_PUBLISHER "Postgres Professional Russia"
 !define PRODUCT_WEB_SITE "http://postgrespro.ru"
-!define PRODUCT_DIR_REGKEY "Software\PostgresPro\PostgreSQL\9.4"
+!define PRODUCT_DIR_REGKEY "SOFTWARE\PostgresPro\x86\PostgreSQL\9.4"
 
-!define PG_REG_KEY "SOFTWARE\PostgreSQL\Installations\postgresql-9.4"
-!define PG_REG_SERVICE_KEY "SOFTWARE\PostgreSQL\Services\postgresql-9.4"
+!define PG_REG_KEY "SOFTWARE\PostgreSQL\x86\Installations\postgresql-9.4"
+!define PG_REG_SERVICE_KEY "SOFTWARE\PostgreSQL\x86\Services\postgresql-9.4"
 
 !define PG_DEF_PORT "5432"
 !define PG_DEF_SUPERUSER "postgres"
 !define PG_DEF_SERVICEACCOUNT "NT AUTHORITY\NetworkService"
 
-!define PG_DEF_SERVICEID "postgresql-9.4"
+!define PG_DEF_SERVICEID "postgresql-x86-9.4"
 !define PG_DEF_VERSION "9.4.4"
 !define PG_DEF_VERSION_SHORT "9.4"
 !define PG_DEF_BRANDING "PostgreSQL 9.4 (x86)"
