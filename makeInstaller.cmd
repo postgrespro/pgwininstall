@@ -21,6 +21,6 @@ REM ----------------------------------------------------------------------------
 
 REM Just run that script and installer will appear in the nsis directory
 
-cd c:\pgwininstall\nsis
+CD c:\pgwininstall\nsis
 makensis postgresql.nsi
 makensis pgadmin.nsi
