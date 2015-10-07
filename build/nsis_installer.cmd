@@ -23,7 +23,7 @@ SET DEFAULT_USER=postgres
 SET PRODUCT_NAME=PostgreSQL
 SET PG_DEF_VERSION_SHORT=9.4
 SET PG_DEF_VERSION=9.4.4
-SET PG_ARCH=x64
+SET PG_ARCH=X64
 
 SET PRODUCT_PUBLISHER="Postgres Professional Russia"
 SET COMPANY_NAME=PostgresPro
@@ -63,7 +63,7 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_DEF_BRANDING %PG_DEF_BRANDING%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
-IF %PG_ARCH% == "x64" (
+IF "%PG_ARCH%" == "X64" (
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
 )
 
@@ -86,7 +86,7 @@ SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%PG_ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_DEF_BRANDING %ADMIN_DEF_BRANDING%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SUFFIX %ADMIN_INS_SUFFIX%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SOURCE_DIR %ADMIN_INS_SOURCE_DIR%
-IF %PG_ARCH% == "x64" (
+IF "%PG_ARCH%" == "X64" (
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
 )
 
