@@ -1,14 +1,20 @@
-# Script for build PostgreSQL for Windows.
+## NSIS
 
-## Depends
-* .NET 4.0
-* MICROSOFT SDK 7.1
-* ACTIVE PERL <= 5.14
-* PYTHON 2.7
+Directory contains the files needed for the installer 
+
+## Build
+
+Directory contains the various build scripts
+
+### Build depends:
+* .Net 4.0
+* Microsoft SDK 7.1
+* Active Perl =< 5.14
+* Python 2.7
 * MSYS2
 * 7Zip
+* NSIS and some plugins.
 
-## Build binaries
-```
-postgresql_build.cmd
-```
+## Patches
+
+Directory contains the patches needed to build PostgreSQL
