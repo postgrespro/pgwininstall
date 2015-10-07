@@ -21,6 +21,71 @@ REM ----------------------------------------------------------------------------
 
 REM Just run that script and installer will appear in the nsis directory
 
+REM Set NSIS PostgreSQL Variables
+SET DEFAULT_PORT=5432
+SET DEFAULT_USER=postgres
+
+SET PRODUCT_NAME=PostgreSQL
+SET PG_MAJOR=9.4
+SET PG_FULL=9.4.4
+SET POSTGRES_ARCHITECTURE=x64
+
+SET PRODUCT_PUBLISHER="Postgres Professional Russia"
+SET COMPANY_NAME=PostgresPro
+SET PRODUCT_WEB_SITE="http://postgrespro.ru"
+
+SET PRODUCT_VERSION="%PG_MAJOR% (%POSTGRES_ARCHITECTURE%)"
+SET PRODUCT_DIR_REGKEY="SOFTWARE\%COMPANY_NAME%\%POSTGRES_ARCHITECTURE%\%PRODUCT_NAME%\%PG_MAJOR%"
+SET PG_REG_KEY="SOFTWARE\%COMPANY_NAME%\%POSTGRES_ARCHITECTURE%\%PRODUCT_NAME%\%PG_MAJOR%\Installations\postgresql-%PG_MAJOR%"
+SET PG_REG_SERVICE_KEY="SOFTWARE\%COMPANY_NAME%\%POSTGRES_ARCHITECTURE%\%PRODUCT_NAME%\%PG_MAJOR%\Services\postgresql-%PG_MAJOR%"
+SET PG_DEF_PORT="%DEFAULT_PORT%"
+SET PG_DEF_SUPERUSER="%DEFAULT_USER%"
+SET PG_DEF_SERVICEACCOUNT="NT AUTHORITY\NetworkService"
+SET PG_DEF_SERVICEID="postgresql-%POSTGRES_ARCHITECTURE%-%PG_MAJOR%"
+SET PG_DEF_VERSION_SHORT="%PG_MAJOR%"
+SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_MAJOR% (%POSTGRES_ARCHITECTURE%)"
+SET PG_INS_SUFFIX="%POSTGRES_ARCHITECTURE%bit_Setup.exe"
+SET PG_INS_SOURCE_DIR="C:\pg\distr_%POSTGRES_ARCHITECTURE%_%PG_FULL%\postgresql\*.*"
+
+>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PRODUCT_VERSION %PRODUCT_VERSION%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PRODUCT_PUBLISHER %PRODUCT_PUBLISHER%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PRODUCT_WEB_SITE %PRODUCT_WEB_SITE%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PRODUCT_DIR_REGKEY %PRODUCT_DIR_REGKEY%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_REG_KEY %PG_REG_KEY%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_REG_SERVICE_KEY %PG_REG_SERVICE_KEY%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_DEF_PORT %PG_DEF_PORT%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_DEF_SUPERUSER %PG_DEF_SUPERUSER%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_DEF_SERVICEACCOUNT %PG_DEF_SERVICEACCOUNT%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_DEF_SERVICEID %PG_DEF_SERVICEID%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_DEF_VERSION %PG_DEF_VERSION%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_DEF_VERSION_SHORT %PG_DEF_VERSION_SHORT%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_DEF_BRANDING %PG_DEF_BRANDING%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
+>>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
+IF %POSTGRES_ARCHITECTURE% == "x64" >>c:\pgwininstall\nsis\postgres.def.nsh ECHO !define PG_64bit
+
+REM PgAdmin3 Section
+SET PRODUCT_NAME=PgAdmin3
+SET PGADMIN_VERSION=1.20
+SET ADMIN_DEF_BRANDING="%PRODUCT_NAME% %PGADMIN_VERSION%"
+SET ADMIN_DEF_VERSION="%PGADMIN_VERSION%"
+SET PRODUCT_DIR_REGKEY="Software\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%"
+SET ADMIN_REG_KEY="SOFTWARE\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%\Installations\"
+SET ADMIN_INS_SUFFIX="%POSTGRES_ARCHITECTURE%bit_Setup.exe"
+SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%POSTGRES_ARCHITECTURE%_%PG_FULL%\pgadmin\*.*"
+>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define PRODUCT_VERSION "%PGADMIN_VERSION%"
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define PRODUCT_PUBLISHER %PRODUCT_PUBLISHER%
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define PRODUCT_WEB_SITE %PRODUCT_WEB_SITE%
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define PRODUCT_DIR_REGKEY %PRODUCT_DIR_REGKEY%
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define ADMIN_REG_KEY %ADMIN_REG_KEY%
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define ADMIN_DEF_VERSION %ADMIN_DEF_VERSION%
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define ADMIN_DEF_BRANDING %ADMIN_DEF_BRANDING%
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define ADMIN_INS_SUFFIX %ADMIN_INS_SUFFIX%
+>>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define ADMIN_INS_SOURCE_DIR %ADMIN_INS_SOURCE_DIR%
+IF %POSTGRES_ARCHITECTURE% == "x64" >>c:\pgwininstall\nsis\pgadmin.def.nsh ECHO !define Admin64
+
 CD c:\pgwininstall\nsis
 makensis postgresql.nsi
 makensis pgadmin.nsi

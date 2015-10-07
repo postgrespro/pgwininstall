@@ -3,25 +3,7 @@
 ; used plugins: AccessControl, UserMgr,
 ; and AddToPath plugin was created by Victor Spirin for this project
 
-;use next 2 defines for control of PG version
-;!define PG_64bit
-;!define PG_BETA
-!define PG_64bit
-
-; PostgreSQL defines
-!ifdef PG_64bit
-  !ifdef PG_BETA
-    !include "postgres64a.nsh"
-  !else
-    !include "postgres64.nsh"
-  !endif
-!else
-  !ifdef PG_BETA
-    !include "postgres32a.nsh"
-  !else
-    !include "postgres32.nsh"
-  !endif
-!endif
+!include "postgres.def.nsh"
 
 ;--------------------------------
 ;Include Modern UI
@@ -112,6 +94,8 @@ Var rButton2
 Var checkBoxEnvVar
 Var isEnvVar
 
+Var nls
+
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
@@ -180,6 +164,10 @@ Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
   Delete $1
+SectionEnd
+
+Section "Natural Language Support" secNls
+  StrCpy $nls "YES"
 SectionEnd
 
 Section "PostgreSQL Server" sec1
@@ -501,6 +489,9 @@ Section "PostgreSQL Server" sec1
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGPORT" "$TextPort_text"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
   ${endif}
+
+  StrCmp $nls "YES" 0 +3
+    RMDir /r "$INSTDIR\share\"
 
   DetailPrint "Set PATH variable ..."
   ;it's my plugin
@@ -1225,6 +1216,12 @@ Function .onInit
     IntOp $3 $3 & ${SECTION_OFF}
     SectionSetFlags ${sec1} $3
   ${endif}
+  ReadINIStr $1 $0 options nls
+  ${if} "$1" == "no"
+    SectionGetFlags ${secNls} $3
+    IntOp $3 $3 & ${SECTION_OFF}
+    SectionSetFlags ${secNls} $3
+  ${endIf}
   ReadINIStr $1 $0 options envvar
   ${if} "$1" != ""
     StrCpy $isEnvVar $1
