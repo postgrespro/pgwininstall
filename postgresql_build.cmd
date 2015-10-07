@@ -257,7 +257,7 @@ MKDIR "c:\pg\distr_%ARCH%_%PGVER%\pgadmin" "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\b
 cp -va pgadmin/Release*/*.exe "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
 cp -va i18n "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
 cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
-cp -va c:/pg/wxwidgets/lib/vc_*dll/*.dll  "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
+cp -va c:/pg/wxwidgets/lib/vc_dll/*.dll  "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
 
 
 GOTO :DONE
