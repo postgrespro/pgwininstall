@@ -9,17 +9,12 @@ REM Set your NSIS installation directory
 SET NSIS_PATH="C:\Program Files (x86)\NSIS"
 REM Add NSIS to your PATH
 SET PATH=%PATH%;%NSIS_PATH%
-REM Also, you need to make defines if you use x64 version of PostgreSQL
-REM You need to uncomment this line: ;!define PG_64bit
 
 REM ----------------------------------------------------------------------------
-REM Assume, you have your PostgreSQL and PgAdmin3 build in C:\pg\distr_X86_9.4.4
+REM Assume, you have your PostgreSQL and PgAdmin3 build in C:\pg\distr_X.._9.4...
 REM For PostgreSQL you have 'postgresql' directory and
 REM for PgAdmin3 you have 'pgadmin' directory
-REM So you don't need to define PG_64bit in 'postgresql.nsi'
 REM ----------------------------------------------------------------------------
-
-REM Just run that script and installer will appear in the nsis directory
 
 REM Set NSIS PostgreSQL Variables
 SET DEFAULT_PORT=5432
@@ -28,23 +23,23 @@ SET DEFAULT_USER=postgres
 SET PRODUCT_NAME=PostgreSQL
 SET PG_DEF_VERSION_SHORT=9.4
 SET PG_DEF_VERSION=9.4.4
-SET POSTGRES_ARCHITECTURE=x64
+SET PG_ARCH=x64
 
 SET PRODUCT_PUBLISHER="Postgres Professional Russia"
 SET COMPANY_NAME=PostgresPro
 SET PRODUCT_WEB_SITE="http://postgrespro.ru"
 
-SET PRODUCT_VERSION="%PG_DEF_VERSION_SHORT% (%POSTGRES_ARCHITECTURE%)"
-SET PRODUCT_DIR_REGKEY="SOFTWARE\%COMPANY_NAME%\%POSTGRES_ARCHITECTURE%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%"
-SET PG_REG_KEY="SOFTWARE\%COMPANY_NAME%\%POSTGRES_ARCHITECTURE%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Installations\postgresql-%PG_DEF_VERSION_SHORT%"
-SET PG_REG_SERVICE_KEY="SOFTWARE\%COMPANY_NAME%\%POSTGRES_ARCHITECTURE%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Services\postgresql-%PG_DEF_VERSION_SHORT%"
+SET PRODUCT_VERSION="%PG_DEF_VERSION_SHORT% (%PG_ARCH%)"
+SET PRODUCT_DIR_REGKEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%"
+SET PG_REG_KEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Installations\postgresql-%PG_DEF_VERSION_SHORT%"
+SET PG_REG_SERVICE_KEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Services\postgresql-%PG_DEF_VERSION_SHORT%"
 SET PG_DEF_PORT="%DEFAULT_PORT%"
 SET PG_DEF_SUPERUSER="%DEFAULT_USER%"
 SET PG_DEF_SERVICEACCOUNT="NT AUTHORITY\NetworkService"
-SET PG_DEF_SERVICEID="postgresql-%POSTGRES_ARCHITECTURE%-%PG_DEF_VERSION_SHORT%"
-SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_DEF_VERSION_SHORT% (%POSTGRES_ARCHITECTURE%)"
-SET PG_INS_SUFFIX="%POSTGRES_ARCHITECTURE%bit_Setup.exe"
-SET PG_INS_SOURCE_DIR="C:\pg\distr_%POSTGRES_ARCHITECTURE%_%PG_DEF_VERSION%\postgresql\*.*"
+SET PG_DEF_SERVICEID="postgresql-%PG_ARCH%-%PG_DEF_VERSION_SHORT%"
+SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_DEF_VERSION_SHORT% (%PG_ARCH%)"
+SET PG_INS_SUFFIX="%PG_ARCH%bit_Setup.exe"
+SET PG_INS_SOURCE_DIR="C:\pg\distr_%PG_ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
 
 
 SET NSIS_RES_DIR=%~dp0
@@ -52,7 +47,7 @@ SET NSIS_RES_DIR=%NSIS_RES_DIR:~0,-1%
 SET NSIS_RES_DIR=%NSIS_RES_DIR%\..\nsis
 
 REM PostgreSQL Section
->%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
+>%NSIS_RES_DIR%\postgres.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_VERSION %PRODUCT_VERSION%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_PUBLISHER %PRODUCT_PUBLISHER%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_WEB_SITE %PRODUCT_WEB_SITE%
@@ -68,7 +63,9 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_DEF_BRANDING %PG_DEF_BRANDING%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
-IF %POSTGRES_ARCHITECTURE% == "x64" (>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit)
+IF %PG_ARCH% == "x64" (
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
+)
 
 REM PgAdmin3 Section
 SET PRODUCT_NAME=PgAdmin3
@@ -77,9 +74,9 @@ SET ADMIN_DEF_BRANDING="%PRODUCT_NAME% %PGADMIN_VERSION%"
 SET ADMIN_DEF_VERSION="%PGADMIN_VERSION%"
 SET PRODUCT_DIR_REGKEY="Software\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%"
 SET ADMIN_REG_KEY="SOFTWARE\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%\Installations\"
-SET ADMIN_INS_SUFFIX="%POSTGRES_ARCHITECTURE%bit_Setup.exe"
-SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%POSTGRES_ARCHITECTURE%_%PG_DEF_VERSION%\pgadmin\*.*"
->%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
+SET ADMIN_INS_SUFFIX="%PG_ARCH%bit_Setup.exe"
+SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%PG_ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
+>%NSIS_RES_DIR%\pgadmin.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define PRODUCT_VERSION "%PGADMIN_VERSION%"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define PRODUCT_PUBLISHER %PRODUCT_PUBLISHER%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define PRODUCT_WEB_SITE %PRODUCT_WEB_SITE%
@@ -89,7 +86,9 @@ SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%POSTGRES_ARCHITECTURE%_%PG_DEF_VERSION%\p
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_DEF_BRANDING %ADMIN_DEF_BRANDING%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SUFFIX %ADMIN_INS_SUFFIX%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SOURCE_DIR %ADMIN_INS_SOURCE_DIR%
-IF %POSTGRES_ARCHITECTURE% == "x64" >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
+IF %PG_ARCH% == "x64" (
+>>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
+)
 
 CD %NSIS_RES_DIR% || GOTO :ERROR
 makensis postgresql.nsi || GOTO :ERROR
