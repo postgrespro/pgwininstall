@@ -515,6 +515,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 !insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
 !insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
+!!insertmacro MUI_DESCRIPTION_TEXT ${SecNls} $(DESC_Nls)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------
 ;Uninstaller Section
