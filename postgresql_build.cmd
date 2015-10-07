@@ -123,7 +123,7 @@ MKDIR "c:\pg\openssl"
 tar xf openssl-1.0.2d.tar.gz -C "c:\pg\openssl"
 CD "c:\pg\openssl\openssl-*"
 IF "%ARCH%" == "X86" perl Configure VC-WIN32 no-asm || GOTO :ERROR
-IF "%ARCH%" == "X64" perl Configure VC-WIN64A || GOTO :ERROR
+IF "%ARCH%" == "X64" perl Configure VC-WIN64A no-asm || GOTO :ERROR
 IF "%ARCH%" == "X86" call ms\do_ms
 IF "%ARCH%" == "X64" call ms\do_win64a.bat
 nmake -f ms\ntdll.mak || GOTO :ERROR
