@@ -2,16 +2,7 @@
 ; Written by Postgres Professional, Postgrespro.ru
 ; Author: at the late night, Alexey Slaykovsky
 
-;use next 2 defines for control of PG version
-;!define PG_64bit
-!define Admin64
-
-; PostgreSQL defines
-!ifdef Admin64
-  !include "pgadmin64.nsh"
-!else
-  !include "pgadmin32.nsh"
-!endif
+!include "pgadmin.def.nsh"
 
 ;--------------------------------
 ;Include Modern UI
