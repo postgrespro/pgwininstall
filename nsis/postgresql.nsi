@@ -94,8 +94,6 @@ Var rButton2
 Var checkBoxEnvVar
 Var isEnvVar
 
-Var nls
-
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
@@ -164,10 +162,6 @@ Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
   Delete $1
-SectionEnd
-
-Section "Natural Language Support" secNls
-  StrCpy $nls "YES"
 SectionEnd
 
 Section "PostgreSQL Server" sec1
@@ -488,10 +482,6 @@ Section "PostgreSQL Server" sec1
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGUSER" "$UserName_text"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGPORT" "$TextPort_text"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
-  ${endif}
-
-  ${if} $nls != "YES"
-    RMDir /r "$INSTDIR\share\locale"
   ${endif}
 
   DetailPrint "Set PATH variable ..."
@@ -1212,18 +1202,14 @@ Function .onInit
     IntOp $3 $3 & ${SECTION_OFF}
     SectionSetFlags ${secMS} $3
   ${endif}
+ 
   ReadINIStr $1 $0 options pgserver
   ${if} "$1" == "no"
     SectionGetFlags ${sec1} $3
     IntOp $3 $3 & ${SECTION_OFF}
     SectionSetFlags ${sec1} $3
   ${endif}
-  ReadINIStr $1 $0 options nls
-  ${if} "$1" == "no"
-    SectionGetFlags ${secNls} $3
-    IntOp $3 $3 & ${SECTION_OFF}
-    SectionSetFlags ${secNls} $3
-  ${endIf}
+  
   ReadINIStr $1 $0 options envvar
   ${if} "$1" != ""
     StrCpy $isEnvVar $1
