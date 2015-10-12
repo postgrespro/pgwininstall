@@ -1,0 +1,22 @@
+diff --git a/src/backend/postmaster/syslogger.c b/src/backend/postmaster/syslogger.c
+index 34c7acf..dca5428 100644
+--- a/src/backend/postmaster/syslogger.c
++++ b/src/backend/postmaster/syslogger.c
+@@ -231,6 +231,17 @@ SysLoggerMain(int argc, char *argv[])
+ #endif
+ 
+ 	/*
++	 * Close the shared memory handle as the syslogger doesn't need to
++	 * attach to it.  For EXEC_BACKEND case, the shared memory handle
++	 * is inherited by all postmaster child processes irrespective of
++	 * whether they need it or not.
++	 */
++#ifdef EXEC_BACKEND
++	if (!CloseHandle(UsedShmemSegID))
++		elog(LOG, "could not close handle to shared memory: error code %lu", GetLastError());
++#endif
++
++	/*
+ 	 * Properly accept or ignore signals the postmaster might send us
+ 	 *
+ 	 * Note: we ignore all termination signals, and instead exit only when all

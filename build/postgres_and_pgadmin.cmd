@@ -162,6 +162,16 @@ rm -rf "c:\pg\postgresql"
 MKDIR "c:\pg\postgresql"
 tar xf postgresql-%PGVER%.tar.bz2 -C "c:\pg\postgresql"
 CD "c:\pg\postgresql\postgresql-%PGVER%"
+
+wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/postgresql/%PGVER%/series -O patch_series_%PGVER%.patch
+IF EXIST patch_series_%PGVER%.patch (
+	FOR /f "tokens=*" %%A in (patch_series_%PGVER%.patch) do (
+		SET PATCH_FILE=%%A
+		wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/postgresql/%PGVER%/%PATCH_FILE% -O %PATCH_FILE%
+		patch -p1 < %PATCH_FILE%
+    )
+)
+
 >src\tools\msvc\config.pl  ECHO use strict;
 >>src\tools\msvc\config.pl ECHO use warnings;
 >>src\tools\msvc\config.pl ECHO our $config = {
