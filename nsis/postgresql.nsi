@@ -96,8 +96,6 @@ Var isEnvVar
 
 ; Set 'install service' variable
 Var service
-; Set 'add to path' variable
-Var path
 
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
 !define MUI_COMPONENTSPAGE_SMALLDESC
@@ -153,9 +151,16 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
+
+;--------------------------------
+;Languages
+!insertmacro MUI_LANGUAGE "English" ;first language is the default language
+!insertmacro MUI_LANGUAGE "Russian"
+
+!include translates.nsi
+
 ;--------------------------------
 ;Installer Sections
-
 Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
@@ -168,15 +173,11 @@ Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   Delete $1
 SectionEnd
 
-Section "Add to PATH" secPATH
-  StrCpy $path "YES"
-SectionEnd
-
-Section "PostgreSQL Service" secService
+Section $(ServiceString) secService
   StrCpy $service "YES"
 SectionEnd
 
-Section "PostgreSQL" sec1
+Section $(PostgreSQLString) sec1
   ${if} $service == "YES"
     ${if} $PG_OLD_DIR != "" ;exist PG install
       MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
@@ -313,7 +314,7 @@ Section "PostgreSQL" sec1
     push "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk"
     call ShellLinkSetRunAs
     pop $0
-  
+
   ${endIf}
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
@@ -505,33 +506,8 @@ Section "PostgreSQL" sec1
       WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
     ${endif}
   ${endIf}
-  ${if} $path == "YES"
-    DetailPrint "Set PATH variable ..."
-    ;it's my plugin
-    AddToPath::AddToPath "$INSTDIR\bin"
-    Pop $0 ; or "error"
-  ${endIf}
 SectionEnd
 
-;--------------------------------
-;Descriptions
-
-;--------------------------------
-;Languages
-
-!insertmacro MUI_LANGUAGE "English" ;first language is the default language
-!insertmacro MUI_LANGUAGE "Russian"
-
-!include translates.nsi
-
-;Language strings
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-!insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
-!insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
-!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
-!insertmacro MUI_DESCRIPTION_TEXT ${SecPATH} $(DESC_SecPATH)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-;--------------------------------
 ;Uninstaller Section
 Section "Uninstall"
   Call un.ChecExistInstall
@@ -588,12 +564,19 @@ Section "Uninstall"
   ; Remove install dir from PATH
   ;Push "$INSTDIR\bin"
   ;Call un.RemoveFromPath
-  DetailPrint "Set PATH variable ..."
-  AddToPath::RemoveFromPath "$INSTDIR\bin"
   Pop $0 ; or "error"
 
   MessageBox MB_OK|MB_ICONINFORMATION "$(UNINSTALL_END)$DATA_DIR" ;debug
 SectionEnd
+
+;--------------------------------
+;Descriptions
+;Language strings
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+!insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
+!insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
+!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;check existing install
 ;if exist then get install options to vars
@@ -1226,7 +1209,7 @@ Function .onInit
     IntOp $3 $3 & ${SECTION_OFF}
     SectionSetFlags ${secMS} $3
   ${endif}
-  
+
   ReadINIStr $1 $0 options service
   ${if} "$1" == "no"
     SectionGetFlags ${secService} $3
@@ -1237,23 +1220,13 @@ Function .onInit
     StrCpy $service "YES"
   ${endif}
 
-  ReadINIStr $1 $0 options path
-  ${if} "$1" == "no"
-    SectionGetFlags ${secPATH} $3
-    IntOp $3 $3 & ${SECTION_OFF}
-    SectionSetFlags ${secPATH} $3
-  ${endif}
-  ${if} "$1" == "yes"
-    StrCpy $path "YES"
-  ${endif}
- 
    ReadINIStr $1 $0 options pgserver
   ${if} "$1" == "no"
     SectionGetFlags ${sec1} $3
     IntOp $3 $3 & ${SECTION_OFF}
     SectionSetFlags ${sec1} $3
   ${endif}
-  
+
   ReadINIStr $1 $0 options envvar
   ${if} "$1" != ""
     StrCpy $isEnvVar $1
