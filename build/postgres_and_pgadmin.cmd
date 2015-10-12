@@ -7,7 +7,7 @@ REM 5. MSYS2
 REM 6. 7Z
 
 REM SET POSTGRESQL VERSION
-SET PGVER=9.4.4
+SET PGVER=9.4.5
 
 REM SET ARCH: X86 or X64
 SET ARCH=X64
@@ -212,7 +212,8 @@ cp -v c:/pg/libxml2/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOT
 cp -v c:/pg/libxslt/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
 cp -v c:/pg/openssl/lib/VC/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
 cp -v c:/pg/zlib/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
-
+IF "%ARCH%" == "X86" cp -v c:/Perl/bin/perl514.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
+IF "%ARCH%" == "X64" cp -v c:/Perl64/bin/perl514.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
 
 :BUILD_LIBSSH2
 CD "c:\pg\download"
