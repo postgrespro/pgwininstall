@@ -11,8 +11,11 @@
   LangString DESC_SecMS ${LANG_ENGLISH} "Install run-time components that are required to run C++ applications"
   LangString DESC_SecMS ${LANG_RUSSIAN} "Компоненты среды выполнения, необходимые для выполнения приложений"
 
-  LangString DESC_SecMS ${LANG_ENGLISH} "Install Natural Language Support (localization)"
-  LangString DESC_SecMS ${LANG_RUSSIAN} "Установка NLS (локализации)"
+  LangString DESC_SecService ${LANG_ENGLISH} "Initialise DB and register service"
+  LangString DESC_SecService ${LANG_RUSSIAN} "Инициализировать БД и загеристировать сервис"
+
+  LangString DESC_SecPATH ${LANG_ENGLISH} "Add binaries to PATH"
+  LangString DESC_SecPATH ${LANG_RUSSIAN} "Добавить исполняемые файлы в PATH"
 
   LangString DESC_Sec1 ${LANG_ENGLISH} "Install PostgreSQL server on this computer"
   LangString DESC_Sec1 ${LANG_RUSSIAN} "Установка сервера PostgreSQL на этот компьютер"
