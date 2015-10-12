@@ -1,3 +1,8 @@
+LangString ServiceString ${LANG_ENGLISH} "Setup PostgreSQL as a Service"
+LangString ServiceString ${LANG_RUSSIAN} "Установить PostgreSQL как сервис"
+
+LangString PostgreSQLString ${LANG_ENGLISH} "Install PostgreSQL client utils"
+LangString PostgreSQLString ${LANG_RUSSIAN} "Установка клиентских библиотек и приложений PostgreSQL"
 
   LangString DATADIR_MESS ${LANG_ENGLISH} "Please select a directory under which to store your data"
   LangString DATADIR_MESS ${LANG_RUSSIAN} "Базы данных будут установлены в следующий каталог"
@@ -11,8 +16,8 @@
   LangString DESC_SecMS ${LANG_ENGLISH} "Install run-time components that are required to run C++ applications"
   LangString DESC_SecMS ${LANG_RUSSIAN} "Компоненты среды выполнения, необходимые для выполнения приложений"
 
-  LangString DESC_SecMS ${LANG_ENGLISH} "Install Natural Language Support (localization)"
-  LangString DESC_SecMS ${LANG_RUSSIAN} "Установка NLS (локализации)"
+  LangString DESC_SecService ${LANG_ENGLISH} "Initialise DB and register service"
+  LangString DESC_SecService ${LANG_RUSSIAN} "Инициализировать БД и загеристировать сервис"
 
   LangString DESC_Sec1 ${LANG_ENGLISH} "Install PostgreSQL server on this computer"
   LangString DESC_Sec1 ${LANG_RUSSIAN} "Установка сервера PostgreSQL на этот компьютер"

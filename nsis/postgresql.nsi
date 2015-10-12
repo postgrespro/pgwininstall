@@ -7,8 +7,8 @@
 
 ;--------------------------------
 ;Include Modern UI
-!include "MUI2.nsh"
-!include "logiclib.nsh"
+!include MUI2.nsh
+!include LogicLib.nsh
 
 !include "WordFunc.nsh"
 !include "TextFunc.nsh"
@@ -94,6 +94,9 @@ Var rButton2
 Var checkBoxEnvVar
 Var isEnvVar
 
+; Set 'install service' variable
+Var service
+
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
@@ -136,7 +139,6 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 
 ;Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
-;PRODUCT_DIR_REGKEY "Software\PostgresPro\PostgreSQL\9.5"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_DIR_REGKEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 !define MUI_PAGE_CUSTOMFUNCTION_PRE dirPre
@@ -149,9 +151,16 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
+
+;--------------------------------
+;Languages
+!insertmacro MUI_LANGUAGE "English" ;first language is the default language
+!insertmacro MUI_LANGUAGE "Russian"
+
+!include translates.nsi
+
 ;--------------------------------
 ;Installer Sections
-
 Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
@@ -164,26 +173,32 @@ Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   Delete $1
 SectionEnd
 
-Section "PostgreSQL Server" sec1
-  ${if} $PG_OLD_DIR != "" ;exist PG install
-    MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
-    noyetStop:
-    Return
-    doitStop: ;stop server
-    DetailPrint "Stop the server ..."
-    ${if} $DATA_DIR != ""
-      nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast -w'
-      pop $0
-      DetailPrint "pg_ctl.exe stop return $0"
+Section $(ServiceString) secService
+  StrCpy $service "YES"
+SectionEnd
+
+Section $(PostgreSQLString) sec1
+  ${if} $service == "YES"
+    ${if} $PG_OLD_DIR != "" ;exist PG install
+      MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
+      noyetStop:
+      Return
+      doitStop: ;stop server
+      DetailPrint "Stop the server ..."
+      ${if} $DATA_DIR != ""
+        nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast -w'
+        pop $0
+        DetailPrint "pg_ctl.exe stop return $0"
+      ${endif}
+      ;unregister
+      DetailPrint "Unregister the service ..."
+      ${if} $ServiceID_text != ""
+        nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" unregister -N "$ServiceID_text"'
+        pop $0
+        DetailPrint "pg_ctl.exe unregister return $0"
+      ${endif}
     ${endif}
-    ;unregister
-    DetailPrint "Unregister the service ..."
-    ${if} $ServiceID_text != ""
-      nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" unregister -N "$ServiceID_text"'
-      pop $0
-      DetailPrint "pg_ctl.exe unregister return $0"
-    ${endif}
-  ${endif}
+  ${endIf}
 
   SetOutPath "$INSTDIR"
 
@@ -194,10 +209,12 @@ Section "PostgreSQL Server" sec1
   File "License.txt"
   File "3rd_party_licenses.txt"
 
-  CreateDirectory "$INSTDIR\scripts"
 
-  File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
-  File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
+  ${if} $service == "YES"
+    CreateDirectory "$INSTDIR\scripts"
+    File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
+    File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
+  ${endIf}
 
   ;Store installation folder
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" $INSTDIR
@@ -217,85 +234,88 @@ Section "PostgreSQL Server" sec1
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "UrlInfoAbout" "http://www.postgresql.org/"
 
   ClearErrors
-  FileOpen $0 $INSTDIR\scripts\reload.bat w
-  IfErrors creatBatErr
-  FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\pg_ctl.exe" reload -D "$DATA_DIR"$\r$\npause'
-  FileClose $0
-  creatBatErr:
-  ClearErrors
-  FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
-  IfErrors creatBatErr2
-  FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
-  FileClose $0
+  ${if} $service == "YES"
+    FileOpen $0 $INSTDIR\scripts\reload.bat w
+    IfErrors creatBatErr
+    FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\pg_ctl.exe" reload -D "$DATA_DIR"$\r$\npause'
+    FileClose $0
+    creatBatErr:
+    ClearErrors
+    FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
+    IfErrors creatBatErr2
+    FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+    FileClose $0
 
-  creatBatErr2:
-  ClearErrors
-  FileOpen $0 $INSTDIR\scripts\restart.bat w
-  IfErrors creatBatErr3
-  FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast $\r$\nsc start "$ServiceID_text" $\r$\npause'
-  FileClose $0
+    creatBatErr2:
+    ClearErrors
+    FileOpen $0 $INSTDIR\scripts\restart.bat w
+    IfErrors creatBatErr3
+    FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast $\r$\nsc start "$ServiceID_text" $\r$\npause'
+    FileClose $0
 
-  creatBatErr3:
-  ClearErrors
-  FileOpen $0 $INSTDIR\scripts\stop.bat w
-  IfErrors creatBatErr4
-  FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast $\r$\npause'
-  FileClose $0
+    creatBatErr3:
+    ClearErrors
+    FileOpen $0 $INSTDIR\scripts\stop.bat w
+    IfErrors creatBatErr4
+    FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast $\r$\npause'
+    FileClose $0
 
-  creatBatErr4:
-  ClearErrors
-  FileOpen $0 $INSTDIR\scripts\start.bat w
-  IfErrors creatBatErr5
-  FileWrite $0 'echo off$\r$\nsc start "$ServiceID_text" $\r$\npause'
-  FileClose $0
+    creatBatErr4:
+    ClearErrors
+    FileOpen $0 $INSTDIR\scripts\start.bat w
+    IfErrors creatBatErr5
+    FileWrite $0 'echo off$\r$\nsc start "$ServiceID_text" $\r$\npause'
+    FileClose $0
 
-  creatBatErr5:
-  ;for all users
-  SetShellVarContext all
-
+    creatBatErr5:
+    ;for all users
+    SetShellVarContext all
+  ${endIf}
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 
   ;Create shortcuts
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
-  ${if} ${FileExists} "$INSTDIR\scripts\runpgsql.bat"
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\scripts\runpgsql.bat" "" "$INSTDIR\scripts\pg-psql.ico" "0" "" "" "PostgreSQL command line utility"
-  ${else}
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\bin\psql.exe" "-h localhost -U $UserName_text -d postgres -p $TextPort_text" "" "" "" "" "PostgreSQL command line utility"
-  ${endif}
+  ${if} $service == "YES"
+    ${if} ${FileExists} "$INSTDIR\scripts\runpgsql.bat"
+      CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\scripts\runpgsql.bat" "" "$INSTDIR\scripts\pg-psql.ico" "0" "" "" "PostgreSQL command line utility"
+    ${else}
+      CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\bin\psql.exe" "-h localhost -U $UserName_text -d postgres -p $TextPort_text" "" "" "" "" "PostgreSQL command line utility"
+    ${endif}
 
-  ; set font Lucida Console for shortcut psql
-  ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
-  ${if} $0 == ""
-    WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Consolas"
-    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontWeight" "400"
-    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontSize" "917504"
-    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontFamily" "54"
-  ${endif}
+    ; set font Lucida Console for shortcut psql
+    ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
+    ${if} $0 == ""
+      WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Consolas"
+      WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontWeight" "400"
+      WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontSize" "917504"
+      WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontFamily" "54"
+    ${endif}
 
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\scripts\reload.bat" ""  "" "" "" "" "Reload PostgreSQL configuration"
-  ;run as administrator
-  push "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk"
-  call ShellLinkSetRunAs
-  pop $0
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\scripts\reload.bat" ""  "" "" "" "" "Reload PostgreSQL configuration"
+    ;run as administrator
+    push "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk"
+    call ShellLinkSetRunAs
+    pop $0
 
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Restart Server.lnk" "$INSTDIR\scripts\restart.bat" ""  "" "" "" "" "Restart PostgreSQL server"
-  ;run as administrator
-  push "$SMPROGRAMS\$StartMenuFolder\Restart Server.lnk"
-  call ShellLinkSetRunAs
-  pop $0
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Restart Server.lnk" "$INSTDIR\scripts\restart.bat" ""  "" "" "" "" "Restart PostgreSQL server"
+    ;run as administrator
+    push "$SMPROGRAMS\$StartMenuFolder\Restart Server.lnk"
+    call ShellLinkSetRunAs
+    pop $0
 
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Stop Server.lnk" "$INSTDIR\scripts\stop.bat" ""  "" "" "" "" "Stop PostgreSQL server"
-  push "$SMPROGRAMS\$StartMenuFolder\Stop Server.lnk"
-  call ShellLinkSetRunAs
-  pop $0
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Stop Server.lnk" "$INSTDIR\scripts\stop.bat" ""  "" "" "" "" "Stop PostgreSQL server"
+    push "$SMPROGRAMS\$StartMenuFolder\Stop Server.lnk"
+    call ShellLinkSetRunAs
+    pop $0
 
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk" "$INSTDIR\scripts\start.bat" ""  "" "" "" "" "Start PostgreSQL server"
-  push "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk"
-  call ShellLinkSetRunAs
-  pop $0
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk" "$INSTDIR\scripts\start.bat" ""  "" "" "" "" "Start PostgreSQL server"
+    push "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk"
+    call ShellLinkSetRunAs
+    pop $0
 
+  ${endIf}
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
   !insertmacro CreateInternetShortcut \
@@ -319,195 +339,175 @@ Section "PostgreSQL Server" sec1
     "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro MUI_STARTMENU_WRITE_END
-  ; Create data dir begin
-  ${if} $isDataDirExist == 0
-    CreateDirectory "$DATA_DIR"
-    ;AccessControl::GrantOnFile "$DATA_DIR" "(BU)" "FullAccess" ;GenericWrite
-    ;Pop $0 ;"ok" or "error" + error details
 
-    ;;;AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"
-    ;;;Pop $0 ;"ok" or "error" + error details
-    ;;;AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
-    ;;;Pop $0 ;"ok" or "error" + error details
-    AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess"
-    Pop $0
+  ${if} $service == "YES"
+    ; Create data dir begin
+    ${if} $isDataDirExist == 0
+      CreateDirectory "$DATA_DIR"
+      ;AccessControl::GrantOnFile "$DATA_DIR" "(BU)" "FullAccess" ;GenericWrite
+      ;Pop $0 ;"ok" or "error" + error details
 
-    StrCpy $tempVar ""
-    ${if} "$Pass1_text" != ""
-      GetTempFileName $tempFileName "$INSTDIR\bin"
-      FileOpen $R0 $tempFileName w
-      ${AnsiToUtf8} $Pass1_text $0
-      FileWrite $R0 $0
-      FileClose $R0
-      StrCpy $tempVar ' --pwfile "$tempFileName"  -A md5 '
+      ;;;AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"
+      ;;;Pop $0 ;"ok" or "error" + error details
+      ;;;AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
+      ;;;Pop $0 ;"ok" or "error" + error details
+      AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess"
+      Pop $0
+
+      StrCpy $tempVar ""
+      ${if} "$Pass1_text" != ""
+        GetTempFileName $tempFileName "$INSTDIR\bin"
+        FileOpen $R0 $tempFileName w
+        ${AnsiToUtf8} $Pass1_text $0
+        FileWrite $R0 $0
+        FileClose $R0
+        StrCpy $tempVar ' --pwfile "$tempFileName"  -A md5 '
+      ${endif}
+      DetailPrint "Database initialization ..."
+      AccessControl::GetCurrentUserName
+      Pop $0 ; or "error"
+      AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
+      Pop $0 ;"ok" or "error" + error details
+      ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
+        ; Initialise the database cluster, and set the appropriate permissions/ownership
+        nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+          --encoding=$Coding_text -U "$UserName_text" \
+          -D "$DATA_DIR"'
+      ${else}
+        nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+          --locale="$Locale_text" \
+          -U "$UserName_text" \
+          -D "$DATA_DIR"'
+      ${endif}
+      pop $0
+      Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
+
+      ${if} $0 != 0
+        DetailPrint "initdb.exe return $0"
+        DetailPrint "Output: $1"
+        Sleep 5000
+      ${else}
+        DetailPrint "Database initialization OK"
+      ${endif}
+      ;Delete the password file
+      ${if} "$Pass1_text" != ""
+        ${If} ${FileExists} "$tempFileName"
+          Delete "$tempFileName"
+        ${EndIf}
+      ${EndIf}
     ${endif}
-    DetailPrint "Database initialization ..."
-    AccessControl::GetCurrentUserName
-    Pop $0 ; or "error"
-    AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
-    Pop $0 ;"ok" or "error" + error details
-    ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
-      ; Initialise the database cluster, and set the appropriate permissions/ownership
-      nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --encoding=$Coding_text -U "$UserName_text" \
-        -D "$DATA_DIR"'
-    ${else}
-      nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --locale="$Locale_text" \
-        -U "$UserName_text" \
-        -D "$DATA_DIR"'
-    ${endif}
-    pop $0
+    ; Create data dir end
+    ${if} $isDataDirExist == 0
+      ${if} $checkNoLocal_state == ${BST_CHECKED}
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
+      ${else}
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = 'localhost'"
+      ${EndIf}
+      !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#port = 5432" "port = $TextPort_text"
+      !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#log_destination = 'stderr'" "log_destination = 'stderr'"
+      !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#logging_collector = off" "logging_collector = on"
+      !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#log_line_prefix = ''" "log_line_prefix = '%t '"
+
+      ${if} $needOptimiztion == "1"
+        ${if} $shared_buffers != ""
+          ${ConfigWrite} "$DATA_DIR\postgresql.conf" "shared_buffers = " "$shared_buffers$\t$\t# min 128kB" $R0
+        ${endif}
+        ${if} $work_mem != ""
+          ;#work_mem = 4MB				# min 64kB
+          !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#work_mem = 4MB" "work_mem = $work_mem"
+        ${endif}
+      ${endif}
+    ${EndIf}
+
+    Call WriteInstallOptions
+    DetailPrint "Service $ServiceID_text registration ..."
+    nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
+    Pop $0 # return value/error/timeout
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
     ${if} $0 != 0
-      DetailPrint "initdb.exe return $0"
+      DetailPrint "pg_ctl.exe register return $0"
       DetailPrint "Output: $1"
       Sleep 5000
     ${else}
-      DetailPrint "Database initialization OK"
-    ${endif}
-    ;Delete the password file
-    ${if} "$Pass1_text" != ""
-      ${If} ${FileExists} "$tempFileName"
-        Delete "$tempFileName"
-      ${EndIf}
-    ${EndIf}
-  ${endif}
-  ; Create data dir end
-  ${if} $isDataDirExist == 0
-    ${if} $checkNoLocal_state == ${BST_CHECKED}
-      !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
-    ${else}
-      !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = 'localhost'"
-    ${EndIf}
-    !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#port = 5432" "port = $TextPort_text"
-    !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#log_destination = 'stderr'" "log_destination = 'stderr'"
-    !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#logging_collector = off" "logging_collector = on"
-    !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#log_line_prefix = ''" "log_line_prefix = '%t '"
-
-    ${if} $needOptimiztion == "1"
-      ${if} $shared_buffers != ""
-        ${ConfigWrite} "$DATA_DIR\postgresql.conf" "shared_buffers = " "$shared_buffers$\t$\t# min 128kB" $R0
-      ${endif}
-      ${if} $work_mem != ""
-        ;#work_mem = 4MB				# min 64kB
-        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#work_mem = 4MB" "work_mem = $work_mem"
-      ${endif}
-    ${endif}
-  ${EndIf}
-
-  Call WriteInstallOptions
-  DetailPrint "Service $ServiceID_text registration ..."
-  nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
-  Pop $0 # return value/error/timeout
-  Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-
-  ${if} $0 != 0
-    DetailPrint "pg_ctl.exe register return $0"
-    DetailPrint "Output: $1"
-    Sleep 5000
-  ${else}
-    DetailPrint "Service registration OK"
-  ${endif}
-
-  ;Write the DisplayName manually
-  WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "DisplayName" "$ServiceID_text - PostgreSQL Server ${PG_DEF_VERSION_SHORT}"
-  WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "Description" "Provides relational database storage."
-
-  AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"
-  Pop $0 ;"ok" or "error" + error details
-  AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
-  Pop $0 ;"ok" or "error" + error details
-  AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess" ;GenericWrite
-  Pop $0 ;"ok" or "error" + error details
-
-  AccessControl::GrantOnFile "$INSTDIR" "$ServiceAccount_text" "GenericRead + GenericExecute"
-  Pop $0 ;"ok" or "error" + error details
-
-  AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$ServiceAccount_text" "FullAccess"
-  Pop $0 ;"ok" or "error" + error details
-  AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUser" "FullAccess" ;"GenericRead + GenericExecute" ;GenericWrite
-  Pop $0 ;"ok" or "error" + error details
-  AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUserShort" "FullAccess" ;GenericWrite
-  Pop $0 ;"ok" or "error" + error details
-
-  AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
-  Pop $0 ;"ok" or "error" + error details
-
-  DetailPrint "Start server service..."
-  Sleep 1000
-
-  nsExec::ExecToStack /TIMEOUT=60000 'sc start "$ServiceID_text"'
-  Sleep 5000
-  Pop $0 # return value/error/timeout
-  Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-
-  ${if} $0 != 0
-    DetailPrint "Start service return $0"
-    DetailPrint "Output: $1"
-    Sleep 5000
-  ${else}
-    DetailPrint "Start service OK"
-  ${endif}
-
-  ${if} $isDataDirExist == 0
-    ;send password to Environment Variable PGPASSWORD
-    ${if} "$Pass1_text" != ""
-      StrCpy $R0 $Pass1_text
-      System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
+      DetailPrint "Service registration OK"
     ${endif}
 
-    DetailPrint "Create adminpack ..."
+    ;Write the DisplayName manually
+    WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "DisplayName" "$ServiceID_text - PostgreSQL Server ${PG_DEF_VERSION_SHORT}"
+    WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "Description" "Provides relational database storage."
+
+    AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"
+    Pop $0 ;"ok" or "error" + error details
+    AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
+    Pop $0 ;"ok" or "error" + error details
+    AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess" ;GenericWrite
+    Pop $0 ;"ok" or "error" + error details
+
+    AccessControl::GrantOnFile "$INSTDIR" "$ServiceAccount_text" "GenericRead + GenericExecute"
+    Pop $0 ;"ok" or "error" + error details
+
+    AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$ServiceAccount_text" "FullAccess"
+    Pop $0 ;"ok" or "error" + error details
+    AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUser" "FullAccess" ;"GenericRead + GenericExecute" ;GenericWrite
+    Pop $0 ;"ok" or "error" + error details
+    AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUserShort" "FullAccess" ;GenericWrite
+    Pop $0 ;"ok" or "error" + error details
+
+    AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
+    Pop $0 ;"ok" or "error" + error details
+
+    DetailPrint "Start server service..."
+    Sleep 1000
+
+    nsExec::ExecToStack /TIMEOUT=60000 'sc start "$ServiceID_text"'
     Sleep 5000
-    nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres'
-    pop $0
+    Pop $0 # return value/error/timeout
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-    ${if} $0 != 0
-      DetailPrint "Create adminpack return $0"
-      DetailPrint "Output: $1"
-      ;MessageBox MB_OK "Create adminpack error: $1"
-      MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
-    ${else}
-      DetailPrint "Create adminpack OK"
-    ${endif}
-    ${if} "$Pass1_text" != ""
-      StrCpy $R0 ""
-      System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
-    ${endif}
-  ${endif}
-  ${if} $isEnvVar == ${BST_CHECKED}
-    WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATA" "$DATA_DIR"
-    WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATABASE" "postgres"
-    WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGUSER" "$UserName_text"
-    WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGPORT" "$TextPort_text"
-    WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
-  ${endif}
 
-  DetailPrint "Set PATH variable ..."
-  ;it's my plugin
-  AddToPath::AddToPath "$INSTDIR\bin"
-  Pop $0 ; or "error"
+    ${if} $0 != 0
+      DetailPrint "Start service return $0"
+      DetailPrint "Output: $1"
+      Sleep 5000
+    ${else}
+      DetailPrint "Start service OK"
+    ${endif}
+
+    ${if} $isDataDirExist == 0
+      ;send password to Environment Variable PGPASSWORD
+      ${if} "$Pass1_text" != ""
+        StrCpy $R0 $Pass1_text
+        System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
+      ${endif}
+
+      DetailPrint "Create adminpack ..."
+      Sleep 5000
+      nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres'
+      pop $0
+      Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
+      ${if} $0 != 0
+        DetailPrint "Create adminpack return $0"
+        DetailPrint "Output: $1"
+        ;MessageBox MB_OK "Create adminpack error: $1"
+        MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
+      ${else}
+        DetailPrint "Create adminpack OK"
+      ${endif}
+      ${if} "$Pass1_text" != ""
+        StrCpy $R0 ""
+        System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
+      ${endif}
+    ${endif}
+    ${if} $isEnvVar == ${BST_CHECKED}
+      WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATA" "$DATA_DIR"
+      WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATABASE" "postgres"
+      WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGUSER" "$UserName_text"
+      WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGPORT" "$TextPort_text"
+      WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
+    ${endif}
+  ${endIf}
 SectionEnd
 
-;--------------------------------
-;Descriptions
-
-;--------------------------------
-;Languages
-
-!insertmacro MUI_LANGUAGE "English" ;first language is the default language
-!insertmacro MUI_LANGUAGE "Russian"
-
-!include translates.nsi
-
-;Language strings
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-!insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
-!insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
-!insertmacro MUI_DESCRIPTION_TEXT ${SecNls} $(DESC_Nls)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-;--------------------------------
 ;Uninstaller Section
 Section "Uninstall"
   Call un.ChecExistInstall
@@ -564,12 +564,19 @@ Section "Uninstall"
   ; Remove install dir from PATH
   ;Push "$INSTDIR\bin"
   ;Call un.RemoveFromPath
-  DetailPrint "Set PATH variable ..."
-  AddToPath::RemoveFromPath "$INSTDIR\bin"
   Pop $0 ; or "error"
 
   MessageBox MB_OK|MB_ICONINFORMATION "$(UNINSTALL_END)$DATA_DIR" ;debug
 SectionEnd
+
+;--------------------------------
+;Descriptions
+;Language strings
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+!insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
+!insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
+!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;check existing install
 ;if exist then get install options to vars
@@ -1202,14 +1209,24 @@ Function .onInit
     IntOp $3 $3 & ${SECTION_OFF}
     SectionSetFlags ${secMS} $3
   ${endif}
- 
-  ReadINIStr $1 $0 options pgserver
+
+  ReadINIStr $1 $0 options service
+  ${if} "$1" == "no"
+    SectionGetFlags ${secService} $3
+    IntOp $3 $3 & ${SECTION_OFF}
+    SectionSetFlags ${secService} $3
+  ${endif}
+   ${if} "$1" == "yes"
+    StrCpy $service "YES"
+  ${endif}
+
+   ReadINIStr $1 $0 options pgserver
   ${if} "$1" == "no"
     SectionGetFlags ${sec1} $3
     IntOp $3 $3 & ${SECTION_OFF}
     SectionSetFlags ${sec1} $3
   ${endif}
-  
+
   ReadINIStr $1 $0 options envvar
   ${if} "$1" != ""
     StrCpy $isEnvVar $1
