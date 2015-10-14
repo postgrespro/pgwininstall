@@ -7,8 +7,19 @@ REM 5. PostgreSQL and PgAdmin3 binaries
 
 REM Set your NSIS installation directory
 SET NSIS_PATH="C:\Program Files (x86)\NSIS"
-REM Add NSIS to your PATH
-SET PATH=%PATH%;%NSIS_PATH%
+REM Set your Msys2 installation directory
+SET MSYS2_PATH="C:\msys2\usr\bin"
+REM Add NSIS and MSYS2 to your PATH
+SET PATH=%PATH%;%NSIS_PATH%;%MSYS2_PATH%
+
+REM Download VC Redistibutable packages
+rm -rf "c:\pg\vc"
+MKDIR "c:\pg\vc"
+wget https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vc\vcredist_x86.exe"
+wget https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vc\vcredist_x64.exe"
+
+REM Make directory for installers
+MKDIR "c:\pg\installers"
 
 REM ----------------------------------------------------------------------------
 REM Assume, you have your PostgreSQL and PgAdmin3 build in C:\pg\distr_X.._9.4...

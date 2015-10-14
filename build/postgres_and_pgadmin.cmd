@@ -210,6 +210,8 @@ cp -v c:/pg/libxml2/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOT
 cp -v c:/pg/libxslt/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
 cp -v c:/pg/openssl/lib/VC/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
 cp -v c:/pg/zlib/lib/*.dll "c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin" || GOTO :ERROR
+REM Make ZIP of binaries
+7z a "c:\pg\installers\postgresql-%ARCH%-%PGVER%.zip" "c:\pg\distr_%ARCH%_%PGVER%\postgresql"
 
 :BUILD_LIBSSH2
 CD "c:\pg\download"
@@ -265,6 +267,7 @@ cp -va pgadmin/Release*/*.exe "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO 
 cp -va i18n "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
 cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
 cp -va c:/pg/wxwidgets/lib/vc_dll/*.dll  "c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin"  || GOTO :ERROR
+7z a "c:\pg\installers\pgAdmin3-%ARCH%-%PGVER%.zip" "c:\pg\distr_%ARCH%_%PGVER%\pgadmin"
 
 
 GOTO :DONE
