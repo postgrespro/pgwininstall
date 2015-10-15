@@ -164,9 +164,9 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
-    File /oname=$1 "c:\pg\vc\vcredist_x64.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x64.exe"
   !else
-    File /oname=$1 "c:\pg\vc\vcredist_x86.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x86.exe"
   !endif
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
