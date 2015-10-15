@@ -1,22 +1,8 @@
-REM Required
-REM 1. NSIS
-REM 2. UsrMgr Plugin for NSIS
-REM 3. AccessControl Plugin for NSIS
-REM 4. Visual Studio 2010 Redistibutable (x86, x64) [Place it to nsis directory]
-REM 5. PostgreSQL and PgAdmin3 binaries
-
-REM Set your NSIS installation directory
-SET NSIS_PATH="C:\Program Files (x86)\NSIS"
-REM Set your Msys2 installation directory
-SET MSYS2_PATH="C:\msys2\usr\bin"
-REM Add NSIS and MSYS2 to your PATH
-SET PATH=%PATH%;%NSIS_PATH%;%MSYS2_PATH%
-
 REM Download VC Redistibutable packages
-rm -rf "c:\pg\vc"
-MKDIR "c:\pg\vc"
-wget https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vc\vcredist_x86.exe"
-wget https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vc\vcredist_x64.exe"
+rm -rf "c:\pg\vcredist"
+MKDIR "c:\pg\vcredist"
+wget https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe"
+wget https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x64.exe"
 
 REM Make directory for installers
 MKDIR "c:\pg\installers"
@@ -32,10 +18,6 @@ SET DEFAULT_PORT=5432
 SET DEFAULT_USER=postgres
 
 SET PRODUCT_NAME=PostgreSQL
-SET PG_DEF_VERSION_SHORT=9.4
-SET PG_DEF_VERSION=9.4.5
-SET PG_ARCH=X64
-
 SET PRODUCT_PUBLISHER="Postgres Professional Russia"
 SET COMPANY_NAME=PostgresPro
 SET PRODUCT_WEB_SITE="http://postgrespro.ru"
@@ -80,7 +62,6 @@ IF "%PG_ARCH%" == "X64" (
 
 REM PgAdmin3 Section
 SET PRODUCT_NAME=PgAdmin3
-SET PGADMIN_VERSION=1.20
 SET ADMIN_DEF_BRANDING="%PRODUCT_NAME% %PGADMIN_VERSION%"
 SET ADMIN_DEF_VERSION="%PGADMIN_VERSION%"
 SET PRODUCT_DIR_REGKEY="Software\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%"
