@@ -167,7 +167,7 @@ IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
 FOR /F %%I IN (series) do (
 	ECHO %%I
 	wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/postgresql/%PGVER%/%%I -O %%I
-	patch -p1 < %%%I || GOTO :ERROR
+	patch -p1 < %%I || GOTO :ERROR
 )
 :DONE_POSTGRESQL_PATCH
 >src\tools\msvc\config.pl  ECHO use strict;
