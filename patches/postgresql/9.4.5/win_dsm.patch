@@ -1,0 +1,16 @@
+diff --git a/src/backend/storage/ipc/dsm_impl.c b/src/backend/storage/ipc/dsm_impl.c
+new file mode 100644
+index 921f029..417048e
+*** a/src/backend/storage/ipc/dsm_impl.c
+--- b/src/backend/storage/ipc/dsm_impl.c
+*************** dsm_impl_windows(dsm_op op, dsm_handle h
+*** 689,694 ****
+--- 689,696 ----
+  		if (!hmap)
+  		{
+  			_dosmaperr(GetLastError());
++ 			if (errno == EACCES)
++ 				return false;
+  			ereport(elevel,
+  					(errcode_for_dynamic_shared_memory(),
+  				  errmsg("could not create shared memory segment \"%s\": %m",
