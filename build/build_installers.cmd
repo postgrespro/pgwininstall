@@ -34,8 +34,8 @@ MKDIR "c:\pg\installers"
 
 
 
-call %BUILD_SCRIPTS_DIR%\nsis_installer.cmd || GOTO :ERROR
-call %BUILD_SCRIPTS_DIR%\make_zip.cmd || GOTO :ERROR
+call %BUILD_SCRIPTS_DIR%\helpers\nsis_installer.cmd || GOTO :ERROR
+call %BUILD_SCRIPTS_DIR%\helpers\make_zip.cmd || GOTO :ERROR
 
 GOTO :DONE
 

@@ -37,7 +37,7 @@ SET PG_INS_SOURCE_DIR="C:\pg\distr_%PG_ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
 
 SET NSIS_RES_DIR=%~dp0
 SET NSIS_RES_DIR=%NSIS_RES_DIR:~0,-1%
-SET NSIS_RES_DIR=%NSIS_RES_DIR%\..\nsis
+SET NSIS_RES_DIR=%NSIS_RES_DIR%\..\..\nsis
 
 REM PostgreSQL Section
 >%NSIS_RES_DIR%\postgres.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
