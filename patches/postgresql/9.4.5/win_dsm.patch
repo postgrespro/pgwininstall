@@ -1,16 +1,21 @@
 diff --git a/src/backend/storage/ipc/dsm_impl.c b/src/backend/storage/ipc/dsm_impl.c
-new file mode 100644
-index 921f029..417048e
-*** a/src/backend/storage/ipc/dsm_impl.c
---- b/src/backend/storage/ipc/dsm_impl.c
-*************** dsm_impl_windows(dsm_op op, dsm_handle h
-*** 689,694 ****
---- 689,696 ----
-  		if (!hmap)
-  		{
-  			_dosmaperr(GetLastError());
-+ 			if (errno == EACCES)
-+ 				return false;
-  			ereport(elevel,
-  					(errcode_for_dynamic_shared_memory(),
-  				  errmsg("could not create shared memory segment \"%s\": %m",
+index 921f029..55335bf 100644
+--- a/src/backend/storage/ipc/dsm_impl.c
++++ b/src/backend/storage/ipc/dsm_impl.c
+@@ -68,6 +68,7 @@
+ #include "utils/guc.h"
+ #include "utils/memutils.h"
+ #include "postmaster/postmaster.h"
++#include "miscadmin.h"
+
+ #ifdef USE_DSM_POSIX
+ static bool dsm_impl_posix(dsm_op op, dsm_handle handle, Size request_size,
+@@ -631,7 +632,7 @@ dsm_impl_windows(dsm_op op, dsm_handle handle, Size request_size,
+ 	 * similar to main shared memory. We can change here once issue mentioned
+ 	 * in GetSharedMemName is resolved.
+ 	 */
+-	snprintf(name, 64, "%s.%u", SEGMENT_NAME_PREFIX, handle);
++	snprintf(name, 64, "%s.%d.%u", SEGMENT_NAME_PREFIX, PostmasterPid, handle);
+ 
+ 	/*
+ 	 * Handle teardown cases.  Since Windows automatically destroys the object
