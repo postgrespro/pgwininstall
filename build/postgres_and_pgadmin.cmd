@@ -35,7 +35,7 @@ rm -rf c:\pg\postgresql
 MKDIR c:\pg\postgresql
 tar xf postgresql-%PGVER%.tar.bz2 -C c:\pg\postgresql
 CD c:\pg\postgresql\postgresql-%PGVER%
-cp -va c:/pgwininstall/patches/postgresql/series .
+cp -va c:/pgwininstall/patches/postgresql/%PGVER%/series .
 IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
 FOR /F %%I IN (series) do (
 	ECHO %%I
