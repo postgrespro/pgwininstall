@@ -1,0 +1,18 @@
+Fix for: connection to database failed: Unix-domain socket path "/build/buildd-postgresql-9.3_9.3~beta1-1-i386-mHjRUH/postgresql-9.3-9.3~beta1/build/contrib/pg_upgrade/.s.PGSQL.50432" is too long (maximum 107 bytes)
+
+See also: http://lists.debian.org/debian-wb-team/2013/05/msg00015.html
+
+--- a/contrib/pg_upgrade/option.c
++++ b/contrib/pg_upgrade/option.c
+@@ -422,6 +422,11 @@ get_sock_dir(ClusterInfo *cluster, bool
+ 			cluster->sockdir = pg_malloc(MAXPGPATH);
+ 			if (!getcwd(cluster->sockdir, MAXPGPATH))
+ 				pg_fatal("cannot find current directory\n");
++#ifndef UNIX_PATH_MAX
++#define UNIX_PATH_MAX 108
++#endif
++			if (strlen(cluster->sockdir) > UNIX_PATH_MAX - sizeof(".s.PGSQL.50432"))
++				strcpy(cluster->sockdir, "/tmp"); /* fall back to tmp */
+ 		}
+ 		else
+ 		{

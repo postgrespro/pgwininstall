@@ -6,6 +6,9 @@ REM 4. PYTHON 2.7
 REM 5. MSYS2
 REM 6. 7Z
 
+REM Set 1C build (YES or NO)
+SET ONEC=YES
+
 REM SET POSTGRESQL VERSION
 SET PGVER=9.4.5
 
@@ -19,14 +22,25 @@ CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :
 
 pacman --noconfirm --sync flex bison tar wget patch
 
-REM GOTO LAST BUILD
+SET DOWNLOADS_DIR=c:\pg\downloads
+MKDIR %DOWNLOADS_DIR%
+SET DEPENDENCIES_DIR=c:\pg\dependencies
+
+IF EXIST %DOWNLOADS_DIR%\deps_%ARCH%.zip (
+  7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o%DEPENDENCIES_DIR%
+  REM GOTO LAST BUILD
+  GOTO :BUILD_ALL
+) ELSE (
+  GOTO :ERROR
+)
+
+REM 7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o %DEPENDENCIES_DIR% || GOTO :ERROR
+
+REM GO TO LAST BUILD
 GOTO :BUILD_ALL
 
 :BUILD_ALL
-SET DOWNLOADS_DIR=c:\pg\downloads
-MKDIR %DOWNLOADS_DIR%
 
-SET DEPENDENCIES_DIR=c:\pg\dependencies
 
 :BUILD_POSTGRESQL
 CD %DOWNLOADS_DIR%
@@ -35,6 +49,17 @@ rm -rf c:\pg\postgresql
 MKDIR c:\pg\postgresql
 tar xf postgresql-%PGVER%.tar.bz2 -C c:\pg\postgresql
 CD c:\pg\postgresql\postgresql-%PGVER%
+
+IF %ONEC% == YES (
+  cp -va c:/pgwininstall/patches/postgresql/%PGVER%/series.for1c .
+  IF NOT EXIST series.for1c GOTO :ERROR
+  FOR /F %%I IN (series.for1c) DO (
+    ECHO %%I
+    cp -va c:/pgwininstall/patches/postgresql/%PGVER%/%%I .
+    patch -p1 < %%I || GOTO :ERROR
+  )
+)
+
 cp -va c:/pgwininstall/patches/postgresql/%PGVER%/series .
 IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
 FOR /F %%I IN (series) do (
@@ -68,6 +93,14 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO	python  ^=^> 'C:\Python27x86',
 >>src\tools\msvc\config.pl ECHO	zlib    ^=^> '%DEPENDENCIES_DIR%\zlib'
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
+IF %ONEC% == YES (
+  REM Copy icu libs into postgres
+  REM cp -va %DEPENDENCIES_DIR%\icu
+  mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in
+  cp -va %DEPENDENCIES_DIR%/icu/include/* src\include\
+  cp -va %DEPENDENCIES_DIR%/icu/lib/*     .
+)
+
 perl src\tools\msvc\build.pl || GOTO :ERROR
 IF %ARCH% == X86 SET PERL5LIB=C:\Perl\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=C:\Perl64\lib;src\tools\msvc
@@ -83,7 +116,7 @@ cp -v %DEPENDENCIES_DIR%/libxml2/lib/*.dll    c:\pg\distr_%ARCH%_%PGVER%\postgre
 cp -v %DEPENDENCIES_DIR%/libxslt/lib/*.dll    c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -v %DEPENDENCIES_DIR%/openssl/lib/VC/*.dll c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -v %DEPENDENCIES_DIR%/zlib/lib/*.dll       c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-
+IF %ONEC% == YES cp -va %DEPENDENCIES_DIR%/icu/bin/*.dll c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 :BUILD_PGADMIN
 CD %DOWNLOADS_DIR%
@@ -122,5 +155,6 @@ PAUSE
 EXIT /b %errorlevel%
 
 :DONE
+rm -rf %DEPENDENCIES_DIR%/*
 ECHO Done.
 PAUSE

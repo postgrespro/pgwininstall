@@ -1,0 +1,9 @@
+--- a/HISTORY
++++ b/HISTORY
+@@ -3,3 +3,6 @@
+ 
+ Distribution file sets include release notes for their version and preceding
+ versions.  Visit the file doc/src/sgml/html/release.html in an HTML browser.
++
++On Debian systems, the release notes are contained in the postgresql-doc-*
++packages, located in /usr/share/doc/postgresql-doc-*/html/release.html.
