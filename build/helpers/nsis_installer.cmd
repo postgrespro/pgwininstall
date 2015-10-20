@@ -1,12 +1,3 @@
-REM Download VC Redistibutable packages
-rm -rf "c:\pg\vcredist"
-MKDIR "c:\pg\vcredist"
-wget --no-check-certificate https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe"
-wget --no-check-certificate https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x64.exe"
-
-REM Make directory for installers
-MKDIR "c:\pg\installers"
-
 REM ----------------------------------------------------------------------------
 REM Assume, you have your PostgreSQL and PgAdmin3 build in C:\pg\distr_X.._9.4...
 REM For PostgreSQL you have 'postgresql' directory and
@@ -17,23 +8,33 @@ REM Set NSIS PostgreSQL Variables
 SET DEFAULT_PORT=5432
 SET DEFAULT_USER=postgres
 
-SET PRODUCT_NAME=PostgreSQL
 SET PRODUCT_PUBLISHER="Postgres Professional Russia"
 SET COMPANY_NAME=PostgresPro
 SET PRODUCT_WEB_SITE="http://postgrespro.ru"
 
-SET PRODUCT_VERSION="%PG_DEF_VERSION_SHORT% (%PG_ARCH%)"
-SET PRODUCT_DIR_REGKEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%"
-SET PG_REG_KEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Installations\postgresql-%PG_DEF_VERSION_SHORT%"
-SET PG_REG_SERVICE_KEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Services\postgresql-%PG_DEF_VERSION_SHORT%"
+IF %ONEC% == YES (
+  SET PRODUCT_NAME=PostgresPro 1C
+  SET PG_DEF_SERVICEID="postgrespro-1C-${PRODUCT_VERSION}"
+  SET PG_INS_SUFFIX="%PG_ARCH%bit_1C_Setup.exe"
+  SET PG_REG_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Installations\postgresql-${PRODUCT_VERSION}"
+  SET PG_REG_SERVICE_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Services\postgresql-${PRODUCT_VERSION}"
+  SET PRODUCT_DIR_REGKEY="Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}"
+  SET PRODUCT_VERSION="%PG_DEF_VERSION_SHORT%"
+) ELSE (
+  SET PRODUCT_NAME=PostgreSQL
+  SET PG_DEF_SERVICEID="postgresql-%PG_ARCH%-%PG_DEF_VERSION_SHORT%"
+  SET PG_INS_SUFFIX="%PG_ARCH%bit_Setup.exe"
+  SET PG_REG_KEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Installations\postgresql-%PG_DEF_VERSION_SHORT%"
+  SET PG_REG_SERVICE_KEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%\Services\postgresql-%PG_DEF_VERSION_SHORT%"
+  SET PRODUCT_DIR_REGKEY="SOFTWARE\%COMPANY_NAME%\%PG_ARCH%\%PRODUCT_NAME%\%PG_DEF_VERSION_SHORT%"
+  SET PRODUCT_VERSION="%PG_DEF_VERSION_SHORT% (%PG_ARCH%)"
+)
+
 SET PG_DEF_PORT="%DEFAULT_PORT%"
 SET PG_DEF_SUPERUSER="%DEFAULT_USER%"
 SET PG_DEF_SERVICEACCOUNT="NT AUTHORITY\NetworkService"
-SET PG_DEF_SERVICEID="postgresql-%PG_ARCH%-%PG_DEF_VERSION_SHORT%"
 SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_DEF_VERSION_SHORT% (%PG_ARCH%)"
-SET PG_INS_SUFFIX="%PG_ARCH%bit_Setup.exe"
 SET PG_INS_SOURCE_DIR="C:\pg\distr_%PG_ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
-
 
 SET NSIS_RES_DIR=%~dp0
 SET NSIS_RES_DIR=%NSIS_RES_DIR:~0,-1%
@@ -57,7 +58,7 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
 IF "%PG_ARCH%" == "X64" (
->>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
+  >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
 )
 
 REM PgAdmin3 Section
@@ -79,7 +80,7 @@ SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%PG_ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SUFFIX %ADMIN_INS_SUFFIX%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SOURCE_DIR %ADMIN_INS_SOURCE_DIR%
 IF "%PG_ARCH%" == "X64" (
->>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
+  >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
 )
 
 CD %NSIS_RES_DIR% || GOTO :ERROR

@@ -15,8 +15,12 @@ SET ZPATH="C:\Program Files\7-Zip"
 REM Add NSIS and MSYS2 to your PATH
 SET PATH=%PATH%;%NSIS_PATH%;%MSYS2_PATH%;%ZPATH%
 
+REM Set build for 1C (YES or NO)
+SET ONEC=YES
+
 SET PG_DEF_VERSION_SHORT=9.4
-SET PG_DEF_VERSION=9.4.5
+SET PATCH_VERSION=5
+SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
 SET PGADMIN_VERSION=1.20
 SET PG_ARCH=X64
 
@@ -31,8 +35,6 @@ wget https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE65
 
 REM Make directory for installers
 MKDIR "c:\pg\installers"
-
-
 
 call %BUILD_SCRIPTS_DIR%\helpers\nsis_installer.cmd || GOTO :ERROR
 call %BUILD_SCRIPTS_DIR%\helpers\make_zip.cmd || GOTO :ERROR

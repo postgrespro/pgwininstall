@@ -106,8 +106,8 @@ Cерверу будет выделено больше оперативной памяти. \
 
 
 
-  LangString MESS_STOP_SERVER ${LANG_ENGLISH} "In order to upgrade, we may need to restart the server!$\n$\nContinue?"
-  LangString MESS_STOP_SERVER ${LANG_RUSSIAN} "Во время обновления потребуется перезапуск службы сервера!$\n$\nПродолжить?"
+  LangString MESS_STOP_SERVER ${LANG_ENGLISH} "Previous installation was found.$\n$\nIn order to upgrade the service needs to restart!$\n$\nContinue?"
+  LangString MESS_STOP_SERVER ${LANG_RUSSIAN} "Обнаружена предыдущая инсталляция.$\n$\nДля того, чтобы обновиться, потребуется перезапустить сервис.$\n$\nПродолжить?"
 
   LangString MESS_ERROR_SERVER ${LANG_ENGLISH} "An error occurred while initializing the server! Perhaps Server service failed to start."
   LangString MESS_ERROR_SERVER ${LANG_RUSSIAN} "Возникла ошибка при инициализации сервера! Возможно служба сервера не смогла запуститься."

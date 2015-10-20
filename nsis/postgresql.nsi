@@ -178,7 +178,7 @@ Section $(PostgreSQLString) sec1
     MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
     noyetStop:
     Return
-    doitStop: ;stop server
+    doitStop:
     DetailPrint "Stop the server ..."
     ${if} $DATA_DIR != ""
       nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast -w'
@@ -579,7 +579,7 @@ Function ChecExistInstall
     ReadRegStr $UserName_text HKLM "${PG_REG_KEY}" "Super User"
     ReadRegStr $Branding_text HKLM "${PG_REG_KEY}" "Branding"
 
-    StrCpy $PG_OLD_DIR INSTDIR
+    StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
 
   ReadRegDWORD $1 HKLM "${PG_REG_SERVICE_KEY}" "Port"

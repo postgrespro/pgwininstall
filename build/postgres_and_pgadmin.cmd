@@ -31,10 +31,9 @@ IF EXIST %DOWNLOADS_DIR%\deps_%ARCH%.zip (
   REM GOTO LAST BUILD
   GOTO :BUILD_ALL
 ) ELSE (
+  ECHO "You need to build dependencies first!"
   GOTO :ERROR
 )
-
-REM 7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o %DEPENDENCIES_DIR% || GOTO :ERROR
 
 REM GO TO LAST BUILD
 GOTO :BUILD_ALL
@@ -94,8 +93,6 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO	python  ^=^> 'C:\Python27x86',
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 IF %ONEC% == YES (
-  REM Copy icu libs into postgres
-  REM cp -va %DEPENDENCIES_DIR%\icu
   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in
   cp -va %DEPENDENCIES_DIR%/icu/include/* src\include\
   cp -va %DEPENDENCIES_DIR%/icu/lib/*     .
@@ -109,6 +106,7 @@ MKDIR c:\pg\distr_%ARCH%_%PGVER%\postgresql
 CD c:\pg\postgresql\postgresql-%PGVER%\src\tools\msvc
 cp -v %DEPENDENCIES_DIR%/libintl/lib/*.dll  c:\pg\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
 cp -v %DEPENDENCIES_DIR%/iconv/lib/*.dll    c:\pg\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+
 perl install.pl c:\pg\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 cp -v %DEPENDENCIES_DIR%/libintl/lib/*.dll    c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -v %DEPENDENCIES_DIR%/iconv/lib/*.dll      c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
@@ -117,6 +115,7 @@ cp -v %DEPENDENCIES_DIR%/libxslt/lib/*.dll    c:\pg\distr_%ARCH%_%PGVER%\postgre
 cp -v %DEPENDENCIES_DIR%/openssl/lib/VC/*.dll c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -v %DEPENDENCIES_DIR%/zlib/lib/*.dll       c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 IF %ONEC% == YES cp -va %DEPENDENCIES_DIR%/icu/bin/*.dll c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+
 
 :BUILD_PGADMIN
 CD %DOWNLOADS_DIR%
