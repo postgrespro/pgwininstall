@@ -13,7 +13,7 @@ Directory contains the various build scripts
 * Python 2.7
 * MSYS2
 * 7Zip
-* NSIS and [AccessControl plugin](http://nsis.sourceforge.net/AccessControl_plug-in) and [UserMgr plugin](http://nsis.sourceforge.net/UserMgr_plug-in)
+* NSIS
 
 ## Patches
 
