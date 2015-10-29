@@ -26,6 +26,7 @@ REM GOTO LAST BUILD
 GOTO :BUILD_ALL
 
 :BUILD_ALL
+
 :BUILD_ICONV
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz -O libiconv-1.14.tar.gz
@@ -233,7 +234,6 @@ rm -rf %DOWNLOADS_DIR%/icu*
 
 
 GOTO :DONE
-
 
 :ERROR
 ECHO Failed with error #%errorlevel%.
