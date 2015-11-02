@@ -256,6 +256,7 @@ MKDIR %DEPENDENCIES_DIR%\geos %DEPENDENCIES_DIR%\geos\lib %DEPENDENCIES_DIR%\geo
 cp -va src/*.dll %DEPENDENCIES_DIR%\geos\lib || GOTO :ERROR
 cp -va src/*.lib %DEPENDENCIES_DIR%\geos\lib || GOTO :ERROR
 cp -va src/*.pdb %DEPENDENCIES_DIR%\geos\lib || GOTO :ERROR
+7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_DIR%\geos
 
 :BUILD_PROJ
 CD %DOWNLOADS_DIR%
@@ -267,6 +268,7 @@ MKDIR %DEPENDENCIES_DIR%\proj %DEPENDENCIES_DIR%\proj\lib %DEPENDENCIES_DIR%\pro
 cp -va src/*.dll %DEPENDENCIES_DIR%\proj\lib || GOTO :ERROR
 cp -va src/*.lib %DEPENDENCIES_DIR%\proj\lib || GOTO :ERROR
 cp -va src/*.pdb %DEPENDENCIES_DIR%\proj\lib || GOTO :ERROR
+7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_DIR%\proj
 
 :BUILD_GDAL
 CD %DOWNLOADS_DIR%
@@ -278,6 +280,7 @@ IF %ARCH% == X64 nmake -f makefile.vc MSVC_VER=1600 WIN64=YES || GOTO :ERROR
 MKDIR %DEPENDENCIES_DIR%\gdal %DEPENDENCIES_DIR%\gdal\lib %DEPENDENCIES_DIR%\gdal\include
 cp -va *.dll %DEPENDENCIES_DIR%\gdal\lib || GOTO :ERROR
 cp -va *.lib %DEPENDENCIES_DIR%\gdal\lib || GOTO :ERROR
+7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_DIR%\gdal
 
 :BUILD_JSONC
 CD %DOWNLOADS_DIR%
@@ -291,7 +294,7 @@ IF %ARCH% == X64 msbuild json-c.vcxproj /p:Configuration="Release" /p:Platform=x
 MKDIR %DEPENDENCIES_DIR%\json-c %DEPENDENCIES_DIR%\json-c\lib %DEPENDENCIES_DIR%\jcon-c\include
 IF %ARCH% == X64 cp -va x64/Release/*.dll %DEPENDENCIES_DIR%\json-c\lib || GOTO :ERROR
 IF %ARCH% == X86 cp -va win32/Release/*.dll %DEPENDENCIES_DIR%\json-c\lib || GOTO :ERROR
-
+7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_DIR%\json-c
 
 GOTO :DONE
 

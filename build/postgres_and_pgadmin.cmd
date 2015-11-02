@@ -22,9 +22,10 @@ CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :
 
 pacman --noconfirm --sync flex bison tar wget patch
 
-SET DOWNLOADS_DIR=c:\pg\downloads
+SET BUILD_DIR=%BUILD_DIR%
+SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 MKDIR %DOWNLOADS_DIR%
-SET DEPENDENCIES_DIR=c:\pg\dependencies
+SET DEPENDENCIES_DIR=%BUILD_DIR%\dependencies
 
 IF EXIST %DOWNLOADS_DIR%\deps_%ARCH%.zip (
   7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o%DEPENDENCIES_DIR%
@@ -44,10 +45,10 @@ GOTO :BUILD_ALL
 :BUILD_POSTGRESQL
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2 -O postgresql-%PGVER%.tar.bz2
-rm -rf c:\pg\postgresql
-MKDIR c:\pg\postgresql
-tar xf postgresql-%PGVER%.tar.bz2 -C c:\pg\postgresql
-CD c:\pg\postgresql\postgresql-%PGVER%
+rm -rf %BUILD_DIR%\postgresql
+MKDIR %BUILD_DIR%\postgresql
+tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql
+CD %BUILD_DIR%\postgresql\postgresql-%PGVER%
 
 IF %ONEC% == YES (
   cp -va c:/pgwininstall/patches/postgresql/%PGVER%/series.for1c .
@@ -101,33 +102,34 @@ IF %ONEC% == YES (
 perl src\tools\msvc\build.pl || GOTO :ERROR
 IF %ARCH% == X86 SET PERL5LIB=C:\Perl\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=C:\Perl64\lib;src\tools\msvc
-rm -rf c:\pg\distr_%ARCH%_%PGVER%\postgresql
-MKDIR c:\pg\distr_%ARCH%_%PGVER%\postgresql
-CD c:\pg\postgresql\postgresql-%PGVER%\src\tools\msvc
-cp -v %DEPENDENCIES_DIR%/libintl/lib/*.dll  c:\pg\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
-cp -v %DEPENDENCIES_DIR%/iconv/lib/*.dll    c:\pg\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
+MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
+CD %BUILD_DIR%\postgresql\postgresql-%PGVER%\src\tools\msvc
+cp -v %DEPENDENCIES_DIR%/libintl/lib/*.dll  %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+cp -v %DEPENDENCIES_DIR%/iconv/lib/*.dll    %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
 
-perl install.pl c:\pg\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
-cp -v %DEPENDENCIES_DIR%/libintl/lib/*.dll    c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_DIR%/iconv/lib/*.dll      c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_DIR%/libxml2/lib/*.dll    c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_DIR%/libxslt/lib/*.dll    c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_DIR%/openssl/lib/VC/*.dll c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_DIR%/zlib/lib/*.dll       c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-IF %ONEC% == YES cp -va %DEPENDENCIES_DIR%/icu/bin/*.dll c:\pg\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
+cp -v %DEPENDENCIES_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -v %DEPENDENCIES_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -v %DEPENDENCIES_DIR%/libxml2/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -v %DEPENDENCIES_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -v %DEPENDENCIES_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -v %DEPENDENCIES_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+IF %ONEC% == YES cp -va %DEPENDENCIES_DIR%/icu/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 
 
 :BUILD_PGADMIN
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://ftp.postgresql.org/pub/pgadmin3/release/v1.20.0/src/pgadmin3-1.20.0.tar.gz -O pgadmin3-1.20.0.tar.gz
-rm -rf c:\pg\pgadmin
-MKDIR c:\pg\pgadmin
-tar xf pgadmin3-1.20.0.tar.gz -C c:\pg\pgadmin
-CD c:\pg\pgadmin\pgadmin3-*
+rm -rf %BUILD_DIR%\pgadmin
+MKDIR %BUILD_DIR%\pgadmin
+tar xf pgadmin3-1.20.0.tar.gz -C %BUILD_DIR%\pgadmin
+CD %BUILD_DIR%\pgadmin\pgadmin3-*
 SET OPENSSL=%DEPENDENCIES_DIR%\openssl
 SET WXWIN=%DEPENDENCIES_DIR%\wxwidgets
 SET PGBUILD=%DEPENDENCIES_DIR%
-SET PGDIR=c:\pg\distr_%ARCH%_%PGVER%\postgresql
+SET PGDIR=%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 SET PROJECTDIR=
 cp -a %DEPENDENCIES_DIR%/libssh2/include/* pgadmin\include\libssh2 || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' xtra\png2c\png2c.vcxproj
@@ -138,12 +140,12 @@ IF %ARCH% == X64 msbuild xtra/png2c/png2c.vcxproj /p:Configuration="Release (3.0
 cp -va xtra pgadmin || GOTO :ERROR
 IF %ARCH% == X86 msbuild pgadmin/pgAdmin3.vcxproj /p:Configuration="Release (3.0)"
 IF %ARCH% == X64 msbuild pgadmin/pgAdmin3.vcxproj /p:Configuration="Release (3.0)" /p:Platform=x64 || echo todo fix
-rm -rf c:\pg\distr_%ARCH%_%PGVER%\pgadmin
-MKDIR c:\pg\distr_%ARCH%_%PGVER%\pgadmin c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin c:\pg\distr_%ARCH%_%PGVER%\pgadmin\lib
-cp -va pgadmin/Release*/*.exe c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
+rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin
+MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\lib
+cp -va pgadmin/Release*/*.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
 cp -va i18n c:/pg/distr_%ARCH%_%PGVER%/pgadmin/bin  || GOTO :ERROR
-cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
-cp -va %DEPENDENCIES_DIR%/wxwidgets/lib/vc_dll/*.dll  c:\pg\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
+cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
+cp -va %DEPENDENCIES_DIR%/wxwidgets/lib/vc_dll/*.dll  %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
 
 
 GOTO :DONE
