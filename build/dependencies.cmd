@@ -22,6 +22,20 @@ MKDIR c:\pg\downloads
 SET DEPENDENCIES_DIR=c:\pg\dependencies
 SET DOWNLOADS_DIR=c:\pg\downloads
 
+REM LIBRARY VERSIONS
+SET GEOS_VER=3.4.2
+SET PROJ_VER=4.6.1
+SET GDAL_VER=1.6.3
+SET JSONC_VER=1757a31750134577faf80b91d0cf6f98d3918e6c
+SET ICONV_VER=1.14
+SET XSLT_VER=1.1.28
+SET ZLIB_VER=1.2.8
+SET XML_VER=2.7.3
+SET OPENSSL_VER=1.0.2d
+SET GETTEXT_VER=0.19.4
+SET LIBSSH2_VER=1.4.3
+SET WXWIDGETS_VER=3.0.2
+
 REM GOTO LAST BUILD
 GOTO :BUILD_ALL
 
@@ -29,14 +43,14 @@ GOTO :BUILD_ALL
 
 :BUILD_ICONV
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz -O libiconv-1.14.tar.gz
-wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/libiconv-1.14.patch -O libiconv-1.14.patch
+wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/libiconv-%ICONV_VER%.patch -O libiconv-%ICONV_VER%.patch
 rm -rf %DEPENDENCIES_DIR%\iconv
 MKDIR %DEPENDENCIES_DIR%\iconv
-tar xf libiconv-1.14.tar.gz -C %DOWNLOADS_DIR% || GOTO :ERROR
-CD %DOWNLOADS_DIR%\libiconv-1.14*
-cp -v %DOWNLOADS_DIR%\libiconv-1.14.patch .
-patch -p0 < libiconv-1.14.patch || GOTO :ERROR
+tar xf libiconv-%ICONV_VER%.tar.gz -C %DOWNLOADS_DIR% || GOTO :ERROR
+CD %DOWNLOADS_DIR%\libiconv-%ICONV_VER%*
+cp -v %DOWNLOADS_DIR%\libiconv-%ICONV_VER%.patch .
+patch -p0 < libiconv-%ICONV_VER%.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
 IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release || GOTO :ERROR
 cp -av include %DEPENDENCIES_DIR%\iconv || GOTO :ERROR
@@ -55,10 +69,10 @@ rm -rf %DOWNLOADS_DIR%/libiconv-1.14*
 
 :BUILD_ZLIB
 CD %DOWNLOADS_DIR%
-wget -c http://zlib.net/zlib-1.2.8.tar.gz -O zlib-1.2.8.tar.gz
+wget -c http://zlib.net/zlib-%ZLIB_VER%.tar.gz -O zlib-%ZLIB_VER%.tar.gz
 rm -rf "%DEPENDENCIES_DIR%\zlib
 MKDIR "%DEPENDENCIES_DIR%\zlib
-tar xf zlib-1.2.8.tar.gz -C %DOWNLOADS_DIR%
+tar xf zlib-%ZLIB_VER%.tar.gz -C %DOWNLOADS_DIR%
 CD %DOWNLOADS_DIR%\zlib*
 nmake -f win32/Makefile.msc || GOTO :ERROR
 MKDIR %DEPENDENCIES_DIR%\zlib\lib %DEPENDENCIES_DIR%\zlib\include
@@ -95,10 +109,10 @@ rm -rf %DOWNLOADS_DIR%/ossp_uuid*
 
 :BUILD_XML
 CD %DOWNLOADS_DIR%
-wget -c ftp://xmlsoft.org/libxml2/libxml2-2.7.3.tar.gz -O libxml2-2.7.3.tar.gz
+wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
 rm -rf %DEPENDENCIES_DIR%\libxml2
 MKDIR %DEPENDENCIES_DIR%\libxml2
-tar xf libxml2-2.7.3.tar.gz -C %DOWNLOADS_DIR%
+tar xf libxml2-%XML_VER%.tar.gz -C %DOWNLOADS_DIR%
 CD %DOWNLOADS_DIR%\libxml2-*\win32
 cscript configure.js compiler=msvc include=%DEPENDENCIES_DIR%\iconv\include lib=%DEPENDENCIES_DIR%\iconv\lib
 sed -i /NOWIN98/d Makefile.msvc
@@ -114,10 +128,10 @@ rm -rf %DOWNLOADS_DIR%/libxml2-*
 
 :BUILD_XSLT
 CD %DOWNLOADS_DIR%
-wget -c ftp://xmlsoft.org/libxslt/libxslt-1.1.28.tar.gz -O libxslt-1.1.28.tar.gz
+wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
 rm -rf %DEPENDENCIES_DIR%\libxslt
 MKDIR %DEPENDENCIES_DIR%\libxslt
-tar xf libxslt-1.1.28.tar.gz -C %DOWNLOADS_DIR%
+tar xf libxslt-%XSLT_VER%.tar.gz -C %DOWNLOADS_DIR%
 CD %DOWNLOADS_DIR%\libxslt-*\win32
 cscript configure.js compiler=msvc zlib=yes iconv=yes include=%DEPENDENCIES_DIR%\iconv\include;%DEPENDENCIES_DIR%\libxml2\include;%DEPENDENCIES_DIR%\zlib\include lib=%DEPENDENCIES_DIR%\iconv\lib;%DEPENDENCIES_DIR%\libxml2\lib;%DEPENDENCIES_DIR%\zlib\lib
 sed -i /NOWIN98/d Makefile.msvc
@@ -133,10 +147,10 @@ rm -rf %DOWNLOADS_DIR%/libxslt-*
 
 :BUILD_OPENSSL
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://www.openssl.org/source/openssl-1.0.2d.tar.gz -O openssl-1.0.2d.tar.gz
+wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
 rm -rf %DEPENDENCIES_DIR%\openssl
 MKDIR %DEPENDENCIES_DIR%\openssl
-tar xf openssl-1.0.2d.tar.gz -C %DOWNLOADS_DIR%
+tar xf openssl-%OPENSSL_VER%.tar.gz -C %DOWNLOADS_DIR%
 CD %DOWNLOADS_DIR%\openssl-*
 IF %ARCH% == X86 perl Configure VC-WIN32 no-asm   || GOTO :ERROR
 IF %ARCH% == X64 perl Configure VC-WIN64A no-asm  || GOTO :ERROR
@@ -154,15 +168,15 @@ CD %DOWNLOADS_DIR%
 rm -rf %DOWNLOADS_DIR%/openssl-*
 7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_DIR%\openssl
 
-:BUILD_LIBINTL
+:BUILD_GETTEXT
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-0.19.4.tar.gz -O gettext-0.19.4.tar.gz
+wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
 rm -rf %DEPENDENCIES_DIR%\libintl
 MKDIR %DEPENDENCIES_DIR%\libintl
-tar xf gettext-0.19.4.tar.gz -C %DOWNLOADS_DIR%
+tar xf gettext-%GETTEXT_VER%.tar.gz -C %DOWNLOADS_DIR%
 CD  %DOWNLOADS_DIR%\gettext-*
-cp -v c:/pgwininstall/patches/gettext-0.19.4.patch .
-patch -p0 < gettext-0.19.4.patch || GOTO :ERROR
+cp -v c:/pgwininstall/patches/gettext-%GETTEXT_VER%.patch .
+patch -p0 < gettext-%GETTEXT_VER%.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libintl.vcxproj /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
 IF %ARCH% == X86 msbuild libintl.vcxproj /p:Configuration=Release || GOTO :ERROR
 MKDIR %DEPENDENCIES_DIR%\libintl\lib %DEPENDENCIES_DIR%\libintl\include
@@ -178,10 +192,10 @@ rm -rf %DOWNLOADS_DIR%/gettext-*
 
 :BUILD_LIBSSH2
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-1.4.3.tar.gz -O libssh2-1.4.3.tar.gz
+wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-%LIBSSH2_VER%.tar.gz -O libssh2-%LIBSSH2_VER%.tar.gz
 rm -rf %DEPENDENCIES_DIR%\libssh2
 MKDIR %DEPENDENCIES_DIR%\libssh2
-tar xf libssh2-1.4.3.tar.gz -C %DOWNLOADS_DIR%
+tar xf libssh2-%LIBSSH2_VER%.tar.gz -C %DOWNLOADS_DIR%
 cp -va %DOWNLOADS_DIR%/libssh2-*/include %DEPENDENCIES_DIR%\libssh2\include  || GOTO :ERROR
 cp -va %DOWNLOADS_DIR%/libssh2-*/win32/libssh2_config.h %DEPENDENCIES_DIR%\libssh2\include  || GOTO :ERROR
 CD %DOWNLOADS_DIR%
@@ -191,10 +205,10 @@ rm -rf %DOWNLOADS_DIR%/libssh2-*
 
 :BUILD_WXWIDGETS
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/3.0.2/wxWidgets-3.0.2.tar.bz2 -O wxWidgets-3.0.2.tar.bz2
+wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/%WXWIDGETS_VER%/wxWidgets-%WXWIDGETS_VER%.tar.bz2 -O wxWidgets-%WXWIDGETS_VER%.tar.bz2
 rm -rf %DEPENDENCIES_DIR%\wxwidgets
 MKDIR %DEPENDENCIES_DIR%\wxwidgets
-tar xf wxWidgets-3.0.2.tar.bz2 -C %DOWNLOADS_DIR%
+tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DOWNLOADS_DIR%
 CD %DOWNLOADS_DIR%\wxWidgets-*
 IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /p:Configuration="Release" || GOTO :ERROR
 IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /p:Configuration="DLL Release" || GOTO :ERROR
@@ -231,6 +245,52 @@ cp -va %DOWNLOADS_DIR%\icu\include %DEPENDENCIES_DIR%\icu\include || GOTO :ERROR
 CD %DOWNLOADS_DIR%
 rm -rf %DOWNLOADS_DIR%/icu*
 7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_DIR%\icu
+
+:BUILD_GEOS
+CD %DOWNLOADS_DIR%
+wget --no-check-certificate -c http://download.osgeo.org/geos/geos-%GEOS_VER%.tar.bz2 -O geos-%GEOS_VER%.tar.bz2
+tar xf geos-%GEOS_VER%.tar.bz2 -C %DOWNLOADS_DIR%
+CD %DOWNLOADS_DIR%\geos-%GEOS_VER%
+nmake -f makefile.vc || GOTO :ERROR
+MKDIR %DEPENDENCIES_DIR%\geos %DEPENDENCIES_DIR%\geos\lib %DEPENDENCIES_DIR%\geos\include
+cp -va src/*.dll %DEPENDENCIES_DIR%\geos\lib || GOTO :ERROR
+cp -va src/*.lib %DEPENDENCIES_DIR%\geos\lib || GOTO :ERROR
+cp -va src/*.pdb %DEPENDENCIES_DIR%\geos\lib || GOTO :ERROR
+
+:BUILD_PROJ
+CD %DOWNLOADS_DIR%
+wget --no-check-certificate -c http://download.osgeo.org/proj/proj-%PROJ_VER%.tar.gz -O proj-%PROJ_VER%.tar.gz
+tar xf proj-%PROJ_VER%.tar.gz -C %DOWNLOADS_DIR%
+CD %DOWNLOADS_DIR%\proj-%PROJ_VER%
+nmake -f makefile.vc || GOTO :ERROR
+MKDIR %DEPENDENCIES_DIR%\proj %DEPENDENCIES_DIR%\proj\lib %DEPENDENCIES_DIR%\proj\include
+cp -va src/*.dll %DEPENDENCIES_DIR%\proj\lib || GOTO :ERROR
+cp -va src/*.lib %DEPENDENCIES_DIR%\proj\lib || GOTO :ERROR
+cp -va src/*.pdb %DEPENDENCIES_DIR%\proj\lib || GOTO :ERROR
+
+:BUILD_GDAL
+CD %DOWNLOADS_DIR%
+wget --no-check-certificate -c http://download.osgeo.org/gdal/gdal-%GDAL_VER%.tar.gz -O gdal-%GDAL_VER%.tar.gz
+tar xf gdal-%GDAL_VER%.tar.gz -C %DOWNLOADS_DIR%
+CD %DOWNLOADS_DIR%\gdal-%GDAL_VER%
+IF %ARCH% == X86 nmake -f makefile.vc MSVC_VER=1600 || GOTO :ERROR
+IF %ARCH% == X64 nmake -f makefile.vc MSVC_VER=1600 WIN64=YES || GOTO :ERROR
+MKDIR %DEPENDENCIES_DIR%\gdal %DEPENDENCIES_DIR%\gdal\lib %DEPENDENCIES_DIR%\gdal\include
+cp -va *.dll %DEPENDENCIES_DIR%\gdal\lib || GOTO :ERROR
+cp -va *.lib %DEPENDENCIES_DIR%\gdal\lib || GOTO :ERROR
+
+:BUILD_JSONC
+CD %DOWNLOADS_DIR%
+wget --no-check-certificate -c https://github.com/json-c/json-c/archive/%JSONC_VER%.zip -O json-c-%JSONC_VER%.zip
+7z x json-c-%JSONC_VER%.zip -o%DOWNLOADS_DIR%
+CD json-c-%JSONC_VER%
+patch -p1 -V existing < c:\pgwininstall\patches\json-c.patch
+cp c:/pg/json-c.vcxproj .
+IF %ARCH% == X86 msbuild json-c.vcxproj /p:Configuration="Release"
+IF %ARCH% == X64 msbuild json-c.vcxproj /p:Configuration="Release" /p:Platform=x64
+MKDIR %DEPENDENCIES_DIR%\json-c %DEPENDENCIES_DIR%\json-c\lib %DEPENDENCIES_DIR%\jcon-c\include
+IF %ARCH% == X64 cp -va x64/Release/*.dll %DEPENDENCIES_DIR%\json-c\lib || GOTO :ERROR
+IF %ARCH% == X86 cp -va win32/Release/*.dll %DEPENDENCIES_DIR%\json-c\lib || GOTO :ERROR
 
 
 GOTO :DONE
