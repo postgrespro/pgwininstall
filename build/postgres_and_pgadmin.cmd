@@ -22,7 +22,7 @@ CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :
 
 pacman --noconfirm --sync flex bison tar wget patch
 
-SET BUILD_DIR=%BUILD_DIR%
+SET BUILD_DIR=c:\pg
 SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 MKDIR %DOWNLOADS_DIR%
 SET DEPENDENCIES_DIR=%BUILD_DIR%\dependencies
