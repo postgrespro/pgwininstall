@@ -6,6 +6,9 @@ REM 4. PYTHON 2.7
 REM 5. MSYS2
 REM 6. 7Z
 
+REM If you have already built dependencies archive this must be set YES
+SET HAVE_DEPS_ZIP=NO
+
 REM Set 1C build (YES or NO)
 SET ONEC=NO
 
@@ -14,6 +17,10 @@ SET PGVER=9.4.5
 
 REM SET ARCH: X86 or X64
 SET ARCH=X64
+
+REM Magic to set root directory of those scripts
+@echo off&setlocal
+FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 
 SET PATH=%PATH%;C:\Program Files\7-Zip;C:\msys32\usr\bin
 IF %ARCH% == X86 SET PATH=C:\Perl\Bin;%PATH%
@@ -27,20 +34,21 @@ SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 MKDIR %DOWNLOADS_DIR%
 SET DEPENDENCIES_DIR=%BUILD_DIR%\dependencies
 
-IF EXIST %DOWNLOADS_DIR%\deps_%ARCH%.zip (
-  7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o%DEPENDENCIES_DIR%
-  REM GOTO LAST BUILD
-  GOTO :BUILD_ALL
+IF %HAVE_DEPS_ZIP%==YES (
+  IF EXIST %DOWNLOADS_DIR%\deps_%ARCH%.zip (
+    7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o%DEPENDENCIES_DIR% -y
+    REM Go to last build
+    GOTO :BUILD_ALL
+  ) ELSE (
+    ECHO "You need to build dependencies first!"
+  )
 ) ELSE (
   ECHO "You need to build dependencies first!"
-  GOTO :ERROR
+  REM Go to last build
+  GOTO :BUILD_ALL
 )
 
-REM GO TO LAST BUILD
-GOTO :BUILD_ALL
-
 :BUILD_ALL
-
 
 :BUILD_POSTGRESQL
 CD %DOWNLOADS_DIR%
@@ -51,46 +59,46 @@ tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql
 CD %BUILD_DIR%\postgresql\postgresql-%PGVER%
 
 IF %ONEC% == YES (
-  cp -va c:/pgwininstall/patches/postgresql/%PGVER%/series.for1c .
+  cp -va %ROOT%/patches/postgresql/%PGVER%/series.for1c .
   IF NOT EXIST series.for1c GOTO :ERROR
   FOR /F %%I IN (series.for1c) DO (
     ECHO %%I
-    cp -va c:/pgwininstall/patches/postgresql/%PGVER%/%%I .
+    cp -va %ROOT%/patches/postgresql/%PGVER%/%%I .
     patch -p1 < %%I || GOTO :ERROR
   )
 )
 
-cp -va c:/pgwininstall/patches/postgresql/%PGVER%/series .
+cp -va %ROOT%/patches/postgresql/%PGVER%/series .
 IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
 FOR /F %%I IN (series) do (
-	ECHO %%I
-	cp -va c:/pgwininstall/patches/postgresql/%PGVER%/%%I .
-	patch -p1 < %%I || GOTO :ERROR
+  ECHO %%I
+  cp -va %ROOT%/patches/postgresql/%PGVER%/%%I .
+  patch -p1 < %%I || GOTO :ERROR
 )
 :DONE_POSTGRESQL_PATCH
 >src\tools\msvc\config.pl  ECHO use strict;
 >>src\tools\msvc\config.pl ECHO use warnings;
 >>src\tools\msvc\config.pl ECHO our $config = {
->>src\tools\msvc\config.pl ECHO	asserts ^=^> 0^,    ^# --enable-cassert
->>src\tools\msvc\config.pl ECHO	^# integer_datetimes^=^>1,
->>src\tools\msvc\config.pl ECHO	^# float4byval^=^>1,
->>src\tools\msvc\config.pl ECHO	^# float8byval^=^>0,
->>src\tools\msvc\config.pl ECHO	^# blocksize ^=^> 8,
->>src\tools\msvc\config.pl ECHO	^# wal_blocksize ^=^> 8,
->>src\tools\msvc\config.pl ECHO	^# wal_segsize ^=^> 16,
->>src\tools\msvc\config.pl ECHO	ldap    ^=^> 1,
->>src\tools\msvc\config.pl ECHO	nls     ^=^> '%DEPENDENCIES_DIR%\libintl',
->>src\tools\msvc\config.pl ECHO	tcl     ^=^> undef,
-IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO	perl    ^=^> 'C:\Perl64',   )
-IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO	perl    ^=^> 'C:\Perl',     )
-IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO	python  ^=^> 'C:\Python27x64', )
-IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO	python  ^=^> 'C:\Python27x86', )
->>src\tools\msvc\config.pl ECHO	openssl ^=^> '%DEPENDENCIES_DIR%\openssl',
->>src\tools\msvc\config.pl ECHO	uuid    ^=^> '%DEPENDENCIES_DIR%\uuid',
->>src\tools\msvc\config.pl ECHO	xml     ^=^> '%DEPENDENCIES_DIR%\libxml2',
->>src\tools\msvc\config.pl ECHO	xslt    ^=^> '%DEPENDENCIES_DIR%\libxslt',
->>src\tools\msvc\config.pl ECHO	iconv   ^=^> '%DEPENDENCIES_DIR%\iconv',
->>src\tools\msvc\config.pl ECHO	zlib    ^=^> '%DEPENDENCIES_DIR%\zlib'
+>>src\tools\msvc\config.pl ECHO asserts ^=^> 0^,    ^# --enable-cassert
+>>src\tools\msvc\config.pl ECHO ^# integer_datetimes^=^>1,
+>>src\tools\msvc\config.pl ECHO ^# float4byval^=^>1,
+>>src\tools\msvc\config.pl ECHO ^# float8byval^=^>0,
+>>src\tools\msvc\config.pl ECHO ^# blocksize ^=^> 8,
+>>src\tools\msvc\config.pl ECHO ^# wal_blocksize ^=^> 8,
+>>src\tools\msvc\config.pl ECHO ^# wal_segsize ^=^> 16,
+>>src\tools\msvc\config.pl ECHO ldap    ^=^> 1,
+>>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_DIR%\libintl',
+>>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
+IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> 'C:\Perl64',   )
+IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> 'C:\Perl',     )
+IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO python  ^=^> 'C:\Python27x64', )
+IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> 'C:\Python27x86', )
+>>src\tools\msvc\config.pl ECHO openssl ^=^> '%DEPENDENCIES_DIR%\openssl',
+>>src\tools\msvc\config.pl ECHO uuid    ^=^> '%DEPENDENCIES_DIR%\uuid',
+>>src\tools\msvc\config.pl ECHO xml     ^=^> '%DEPENDENCIES_DIR%\libxml2',
+>>src\tools\msvc\config.pl ECHO xslt    ^=^> '%DEPENDENCIES_DIR%\libxslt',
+>>src\tools\msvc\config.pl ECHO iconv   ^=^> '%DEPENDENCIES_DIR%\iconv',
+>>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_DIR%\zlib'
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 IF %ONEC% == YES (
@@ -116,6 +124,16 @@ cp -v %DEPENDENCIES_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\p
 cp -v %DEPENDENCIES_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -v %DEPENDENCIES_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 IF %ONEC% == YES cp -va %DEPENDENCIES_DIR%/icu/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+
+REM Copy libraries headers to "include" directory for a God sake
+cp -va %DEPENDENCIES_DIR%/libintl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+cp -va %DEPENDENCIES_DIR%/iconv/include/*    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+cp -va %DEPENDENCIES_DIR%/libxml2/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+cp -va %DEPENDENCIES_DIR%/libxslt/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+cp -va %DEPENDENCIES_DIR%/openssl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+cp -va %DEPENDENCIES_DIR%/zlib/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+cp -va %DEPENDENCIES_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+
 7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 
 
@@ -156,6 +174,5 @@ PAUSE
 EXIT /b %errorlevel%
 
 :DONE
-rm -rf %DEPENDENCIES_DIR%/*
 ECHO Done.
 PAUSE
