@@ -6,9 +6,6 @@ REM 4. PYTHON 2.7
 REM 5. MSYS2
 REM 6. 7Z
 
-REM If you have already built dependencies archive this must be set YES
-SET HAVE_DEPS_ZIP=NO
-
 REM Set 1C build (YES or NO)
 SET ONEC=NO
 
@@ -34,18 +31,13 @@ SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 MKDIR %DOWNLOADS_DIR%
 SET DEPENDENCIES_DIR=%BUILD_DIR%\dependencies
 
-IF %HAVE_DEPS_ZIP%==YES (
-  IF EXIST %DOWNLOADS_DIR%\deps_%ARCH%.zip (
-    7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o%DEPENDENCIES_DIR% -y
-    REM Go to last build
-    GOTO :BUILD_ALL
-  ) ELSE (
-    ECHO "You need to build dependencies first!"
-  )
-) ELSE (
-  ECHO "You need to build dependencies first!"
+IF EXIST %DOWNLOADS_DIR%\deps_%ARCH%.zip (
+  7z x %DOWNLOADS_DIR%\deps_%ARCH%.zip -o%DEPENDENCIES_DIR% -y
   REM Go to last build
   GOTO :BUILD_ALL
+) ELSE (
+  ECHO "You need to build dependencies first!"
+  EXIT /B 1 || GOTO :ERROR
 )
 
 :BUILD_ALL
