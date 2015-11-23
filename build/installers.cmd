@@ -20,7 +20,13 @@ SET ONEC=NO
 
 SET PG_DEF_VERSION_SHORT=9.4
 SET PATCH_VERSION=5
-SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
+
+ECHO %PATCH_VERSION% | FINDSTR /xr "[1-9][0-9]* 0" > nul && (
+  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
+) || (
+  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%%PATCH_VERSION%
+)
+
 SET PGADMIN_VERSION=1.20
 SET PG_ARCH=X64
 
@@ -30,8 +36,8 @@ SET BUILD_SCRIPTS_DIR=%BUILD_SCRIPTS_DIR:~0,-1%
 REM Download VC Redistibutable packages
 rm -rf "c:\pg\vcredist"
 MKDIR "c:\pg\vcredist"
-wget https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe" || GOTO :ERROR
-wget https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x64.exe" || GOTO :ERROR
+wget -c https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe" || GOTO :ERROR
+wget -c https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x64.exe" || GOTO :ERROR
 
 REM Make directory for installers
 MKDIR "c:\pg\installers"
