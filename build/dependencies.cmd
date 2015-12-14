@@ -1,53 +1,16 @@
-REM What you need:
-REM 1. Windows 7.1 SDK
-REM 2. .NET 4.0
-REM 3. Msys2
-REM 4. 7zip
-
-REM SET ARCH: X86 or X64
-SET ARCH=X64
-
-REM Magic to set root directory of those scripts
-@echo off&setlocal
-FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
-
-SET PATH=%PATH%;C:\Program Files\7-Zip;C:\msys32\usr\bin
-IF %ARCH% == X86 SET PATH=C:\Perl\Bin;%PATH%
-IF %ARCH% == X64 SET PATH=C:\Perl64\Bin;%PATH%
-CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
-
-pacman --noconfirm --sync flex bison tar wget patch
-
-MKDIR c:\pg
-MKDIR c:\pg\dependencies
-MKDIR c:\pg\dependencies_src
-MKDIR c:\pg\downloads
-
-SET DEPENDENCIES_SRC_DIR=c:\pg\dependencies_src
-SET DEPENDENCIES_BIN_DIR=c:\pg\dependencies
-SET DOWNLOADS_DIR=c:\pg\downloads
-
-REM LIBRARY VERSIONS
-SET GEOS_VER=3.4.2
-SET PROJ_VER=4.6.1
-SET GDAL_VER=1.6.3
-SET JSONC_VER=1757a31750134577faf80b91d0cf6f98d3918e6c
-SET ICONV_VER=1.14
-SET XSLT_VER=1.1.28
-SET ZLIB_VER=1.2.8
-SET XML_VER=2.7.3
-SET OPENSSL_VER=1.0.2d
-SET GETTEXT_VER=0.19.4
-SET LIBSSH2_VER=1.4.3
-SET WXWIDGETS_VER=3.0.2
-
 REM GOTO LAST BUILD
 GOTO :BUILD_ALL
 
 :BUILD_ALL
+MKDIR %BUILD_DIR%
+MKDIR %DEPENDENCIES_BIN_DIR%
+rm -rf %DEPENDENCIES_SRC_DIR%
+MKDIR %DEPENDENCIES_SRC_DIR%
+MKDIR %DOWNLOADS_DIR%
 
 
 :BUILD_ICONV
+TITLE Building iconv...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
 wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/libiconv-%ICONV_VER%.patch -O libiconv-%ICONV_VER%.patch
@@ -73,6 +36,7 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_ZLIB
+TITLE Building zlib...
 CD %DOWNLOADS_DIR%
 wget -c http://zlib.net/zlib-%ZLIB_VER%.tar.gz -O zlib-%ZLIB_VER%.tar.gz
 rm -rf "%DEPENDENCIES_BIN_DIR%\zlib
@@ -90,6 +54,7 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_UUID
+TITLE Building uuid...
 CD %DOWNLOADS_DIR%
 wget -c http://netcologne.dl.sourceforge.net/project/osspuuidwin32/src/ossp_uuid_1.6.2_win32_source_120608.7z -O ossp_uuid_1.6.2_win32_source_120608.7z
 rm -rf %DEPENDENCIES_BIN_DIR%\uuid
@@ -100,8 +65,8 @@ IF %ARCH% == X64 sed -i 's/Win32/x64/g' ossp_uuid.sln || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' ossp_uuid\ossp_uuid.vcxproj || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' example\example.vcxproj || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' uuid_cli\uuid_cli.vcxproj || GOTO :ERROR
-IF %ARCH% == X64 msbuild ossp_uuid.sln /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
-IF %ARCH% == X86 msbuild ossp_uuid.sln /p:Configuration=Release || GOTO :ERROR
+IF %ARCH% == X64 msbuild ossp_uuid.sln /m /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
+IF %ARCH% == X86 msbuild ossp_uuid.sln /m /p:Configuration=Release || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\uuid\lib
 cp -av include %DEPENDENCIES_BIN_DIR%\uuid || GOTO :ERROR
 IF %ARCH% == X64 cp -av x64\Release\ossp_uuid.lib %DEPENDENCIES_BIN_DIR%\uuid\lib\uuid.lib || GOTO :ERROR
@@ -111,6 +76,7 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_XML
+TITLE Building xml...
 CD %DOWNLOADS_DIR%
 wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxml2
@@ -129,6 +95,7 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_XSLT
+TITLE Building xslt...
 CD %DOWNLOADS_DIR%
 wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxslt
@@ -147,11 +114,12 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_OPENSSL
+TITLE Building OpenSSL...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\openssl
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl
-tar xf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar zxf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR%
 CD %DEPENDENCIES_SRC_DIR%\openssl-*
 IF %ARCH% == X86 perl Configure VC-WIN32 no-asm   || GOTO :ERROR
 IF %ARCH% == X64 perl Configure VC-WIN64A no-asm  || GOTO :ERROR
@@ -159,8 +127,9 @@ IF %ARCH% == X86 call ms\do_ms
 IF %ARCH% == X64 call ms\do_win64a.bat
 nmake -f ms\ntdll.mak || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl\lib
+MKDIR %DEPENDENCIES_BIN_DIR%\openssl\include
 cp -av out32dll/* %DEPENDENCIES_BIN_DIR%\openssl\lib || GOTO :ERROR
-cp -av include    %DEPENDENCIES_BIN_DIR%\openssl || GOTO :ERROR
+cp -av inc32/*    %DEPENDENCIES_BIN_DIR%\openssl\include || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl\lib\VC
 cp -av out32dll/*           %DEPENDENCIES_BIN_DIR%\openssl\lib\VC || GOTO :ERROR
 cp -v out32dll/ssleay32.lib %DEPENDENCIES_BIN_DIR%\openssl\lib\VC\ssleay32MD.lib || GOTO :ERROR
@@ -170,6 +139,7 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_GETTEXT
+TITLE Building gettext...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libintl
@@ -178,8 +148,8 @@ tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD  %DEPENDENCIES_SRC_DIR%\gettext-*
 cp -v %ROOT%/patches/gettext-%GETTEXT_VER%.patch .
 patch -f -p0 < gettext-%GETTEXT_VER%.patch || GOTO :ERROR
-IF %ARCH% == X64 msbuild libintl.vcxproj /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
-IF %ARCH% == X86 msbuild libintl.vcxproj /p:Configuration=Release || GOTO :ERROR
+IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
+IF %ARCH% == X86 msbuild libintl.vcxproj /m /p:Configuration=Release || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl\lib %DEPENDENCIES_BIN_DIR%\libintl\include
 cp -v Release*/*.dll  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR
 cp -v Release*/*.lib  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR
@@ -191,6 +161,7 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_LIBSSH2
+TITLE Building libssh2...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-%LIBSSH2_VER%.tar.gz -O libssh2-%LIBSSH2_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libssh2
@@ -203,16 +174,17 @@ CD %DOWNLOADS_DIR%
 
 
 :BUILD_WXWIDGETS
+TITLE Building wxWidgets...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/%WXWIDGETS_VER%/wxWidgets-%WXWIDGETS_VER%.tar.bz2 -O wxWidgets-%WXWIDGETS_VER%.tar.bz2
 rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
 tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
-IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /p:Configuration="Release" || GOTO :ERROR
-IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /p:Configuration="DLL Release" || GOTO :ERROR
-IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /p:Configuration="Release" /p:Platform=x64 || GOTO :ERROR
-IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /p:Configuration="DLL Release" /p:Platform=x64 || GOTO :ERROR
+IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" || GOTO :ERROR
+IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" || GOTO :ERROR
+IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:Platform=x64 || GOTO :ERROR
+IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/lib      %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
 IF %ARCH% == X64 (
   mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*dll   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_dll  || GOTO :ERROR
@@ -223,14 +195,15 @@ cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/include  %DEPENDENCIES_BIN_DIR%\wxwid
 
 
 :BUILD_ICU
+TITLE Building icu...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip
 rm -rf %DEPENDENCIES_BIN_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
 7z x icu4c-56_1-src.zip -o%DEPENDENCIES_SRC_DIR% -y
 CD %DEPENDENCIES_SRC_DIR%\icu
-IF %ARCH% == X86 msbuild source\allinone\allinone.sln /p:Configuration="Release" || GOTO :ERROR
-IF %ARCH% == X64 msbuild source\allinone\allinone.sln /p:Configuration="Release" /p:Platform=x64 || GOTO :ERROR
+IF %ARCH% == X86 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" || GOTO :ERROR
+IF %ARCH% == X64 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=x64 || GOTO :ERROR
 IF %ARCH% == X64 (
   cp -va %DEPENDENCIES_SRC_DIR%\icu\bin64 %DEPENDENCIES_BIN_DIR%\icu\bin || GOTO :ERROR
   cp -va %DEPENDENCIES_SRC_DIR%\icu\lib64 %DEPENDENCIES_BIN_DIR%\icu\lib || GOTO :ERROR

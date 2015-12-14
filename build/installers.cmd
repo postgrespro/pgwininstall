@@ -6,34 +6,11 @@ REM 4. Visual Studio 2010 Redistibutable (x86, x64) [Place it to nsis directory]
 REM 5. PostgreSQL and PgAdmin3 binaries
 REM 6. 7z for making ZIP files
 
-REM Set your NSIS installation directory
-SET NSIS_PATH="C:\Program Files (x86)\NSIS"
-REM Set your Msys2 installation directory
-SET MSYS2_PATH="C:\msys32\usr\bin"
-REM Set your 7z path
-SET ZPATH="C:\Program Files\7-Zip"
-REM Add NSIS and MSYS2 to your PATH
-SET PATH=%PATH%;%NSIS_PATH%;%MSYS2_PATH%;%ZPATH%
-
-REM Set build for 1C (YES or NO)
-SET ONEC=NO
-
-SET PG_DEF_VERSION_SHORT=9.4
-SET PATCH_VERSION=5
-
-ECHO %PATCH_VERSION% | FINDSTR /xr "[1-9][0-9]* 0" > nul && (
-  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
-) || (
-  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%%PATCH_VERSION%
-)
-
-SET PGADMIN_VERSION=1.20
-SET PG_ARCH=X64
-
 SET BUILD_SCRIPTS_DIR=%~dp0
 SET BUILD_SCRIPTS_DIR=%BUILD_SCRIPTS_DIR:~0,-1%
 
 REM Download VC Redistibutable packages
+TITLE Downloading VC Redistibutable packages
 MKDIR "c:\pg\vcredist"
 wget -c https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe" || GOTO :ERROR
 wget -c https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x64.exe" || GOTO :ERROR
@@ -41,7 +18,9 @@ wget -c https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3D
 REM Make directory for installers
 MKDIR "c:\pg\installers"
 
+TITLE Making NSIS installers
 call %BUILD_SCRIPTS_DIR%\helpers\nsis_installer.cmd || GOTO :ERROR
+TITLE Making Zip archives
 call %BUILD_SCRIPTS_DIR%\helpers\make_zip.cmd || GOTO :ERROR
 
 GOTO :DONE
