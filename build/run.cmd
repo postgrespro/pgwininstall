@@ -47,8 +47,8 @@ REM As we use Msys2 for build we need to install useful packages we will use
 pacman --noconfirm --sync flex bison tar wget patch git
 
 REM Set PostgreSQL version
-SET PG_DEF_VERSION_SHORT=9.4
-SET PATCH_VERSION=5
+SET PG_DEF_VERSION_SHORT=9.5
+SET PATCH_VERSION=0
 ECHO %PATCH_VERSION% | grep "^[0-9]." > nul && (
   SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
 ) || (
