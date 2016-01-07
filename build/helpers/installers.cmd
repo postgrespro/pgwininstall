@@ -6,9 +6,6 @@ REM 4. Visual Studio 2010 Redistibutable (x86, x64) [Place it to nsis directory]
 REM 5. PostgreSQL and PgAdmin3 binaries
 REM 6. 7z for making ZIP files
 
-SET BUILD_SCRIPTS_DIR=%~dp0
-SET BUILD_SCRIPTS_DIR=%BUILD_SCRIPTS_DIR:~0,-1%
-
 REM Download VC Redistibutable packages
 TITLE Downloading VC Redistibutable packages
 MKDIR "c:\pg\vcredist"
@@ -19,9 +16,9 @@ REM Make directory for installers
 MKDIR "c:\pg\installers"
 
 TITLE Making NSIS installers
-call %BUILD_SCRIPTS_DIR%\helpers\nsis_installer.cmd || GOTO :ERROR
+call %ROOT%\build\helpers\nsis_installer.cmd || GOTO :ERROR
 TITLE Making Zip archives
-call %BUILD_SCRIPTS_DIR%\helpers\make_zip.cmd || GOTO :ERROR
+call %ROOT%\build\helpers\make_zip.cmd || GOTO :ERROR
 
 GOTO :DONE
 

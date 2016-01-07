@@ -1,3 +1,5 @@
+@ECHO OFF
+
 REM What you need to build PostgreSQL
 REM 1. .Net 4.0
 REM 2. Microsoft Windows SDK 7.1
@@ -6,12 +8,22 @@ REM 4. Python 2.7
 REM 5. MSYS2
 REM 6. 7z
 
-IF "%~1"=="" (
+IF "%~1" == "1" GOTO :OK
+IF "%~1" == "2" GOTO :OK
+IF "%~1" == "3" GOTO :OK
+IF "%~1" == "all" GOTO :OK
+SET USG=1
+IF DEFINED USG (
   ECHO Usage:
-  ECHO run.cmd args: dependencies,postgres,installers
+  ECHO run.cmd [args: 1,2,3, all]
+  ECHO 1: Build dependencies
+  ECHO 2: Build PostgreSQL and PgAdmin3
+  ECHO 3: Build installers
   PAUSE
   EXIT /b 1
 )
+
+:OK
 
 REM Set build architecture: X86 or X64
 SET ARCH=X64
@@ -23,9 +35,9 @@ SET PERL32_BIN=%PERL32_PATH%\bin
 SET PERL64_BIN=%PERL64_PATH%\bin
 SET PYTHON32_PATH=C:\Python27x86
 SET PYTHON64_PATH=C:\Python27x64
-SET ZIP_PATH=C:\Program Files\7-Zip
+SET ZIP_PATH=C:\Program Files\7-Zip;C:\Program Files(x86)\7-Zip
 SET NSIS_PATH=C:\Program Files (x86)\NSIS
-SET MSYS2_PATH=C:\msys32\usr\bin
+SET MSYS2_PATH=C:\msys32\usr\bin;C:\msys64\usr\bin
 SET PATH=%PATH%;%ZIP_PATH%;%MSYS2_PATH%;%NSIS_PATH%
 IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
 IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
@@ -77,17 +89,27 @@ SET WXWIDGETS_VER=3.0.2
 REM Let's use MP for nmake for parallel build
 SET CL=/MP
 
-IF "%~1"=="dependencies" (
+IF "%~1"=="1" (
   TITLE Building dependencies
-  CALL %ROOT%\build\dependencies.cmd
+  CALL %ROOT%\build\helpers\dependencies.cmd
 )
 
-IF "%~1"=="postgres" (
+IF "%~1"=="2" (
   TITLE Building PostgreSQL
-  CALL %ROOT%\build\postgres_and_pgadmin.cmd
+  CALL %ROOT%\build\helpers\postgres_and_pgadmin.cmd
 )
 
-IF "%~1"=="installers" (
+IF "%~1"=="3" (
   TITLE Building installers
-  CALL %ROOT%\build\installers.cmd
+  CALL %ROOT%\build\helpers\installers.cmd
+)
+
+IF "%~1"=="all" (
+  TITLE Building all
+  TITLE Building dependencies
+  CALL %ROOT%\build\helpers\dependencies.cmd
+  TITLE Building PostgreSQL
+  CALL %ROOT%\build\helpers\postgres_and_pgadmin.cmd
+  TITLE Building installers
+  CALL %ROOT%\build\helpers\installers.cmd
 )
