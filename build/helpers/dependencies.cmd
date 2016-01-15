@@ -18,8 +18,6 @@ MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
-echo PlatformToolset
-echo %PlatformToolset%
 patch -f -p0 < libiconv.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
@@ -182,10 +180,20 @@ rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
 tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
-IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+
+IF %SDK% == SDK71 (
+  IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+)
+IF %SDK% == MSVC2013 (
+  IF %ARCH% == X86 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X86 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+)
+
 cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/lib      %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
 IF %ARCH% == X64 (
   mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*dll   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_dll  || GOTO :ERROR
