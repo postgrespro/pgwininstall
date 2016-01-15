@@ -48,7 +48,7 @@ SET ZLIB_VER=1.2.8
 SET XML_VER=2.7.3
 SET OPENSSL_VER=1.0.2e
 SET GETTEXT_VER=0.19.4
-SET LIBSSH2_VER=1.4.3
+SET LIBSSH2_VER=1.6.0
 SET WXWIDGETS_VER=3.0.2
 
 REM Path vars
@@ -67,13 +67,13 @@ IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
 IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
 
 IF %SDK% == SDK71 (
-  REDIST_YEAR=2010
-  SDK71 SET PlatformToolset=v100
+  SET REDIST_YEAR=2010
+  SET PlatformToolset=v100
   CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
 )
 
 IF %SDK% == MSVC2013 (
-  REDIST_YEAR=2010
+  SET REDIST_YEAR=2010
   SET PlatformToolset=v120
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" x86 || GOTO :ERROR
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" amd64 || GOTO :ERROR
