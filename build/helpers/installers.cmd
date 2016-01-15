@@ -9,8 +9,15 @@ REM 6. 7z for making ZIP files
 REM Download VC Redistibutable packages
 TITLE Downloading VC Redistibutable packages
 MKDIR "c:\pg\vcredist"
-wget -c https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe" || GOTO :ERROR
-wget -c https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x64.exe" || GOTO :ERROR
+IF %SDK% == "SDK71" (
+  wget -c https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe" || GOTO :ERROR
+  wget -c https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x64.exe" || GOTO :ERROR
+)
+
+if %SDK% == "MSVC2013" (
+  wget -c https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86.exe" || GOTO :ERROR
+  wget -c https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe -O "c:\pg\vcredist\vcredist_x86.exe" || GOTO :ERROR
+)
 
 REM Make directory for installers
 MKDIR "c:\pg\installers"
