@@ -45,8 +45,16 @@ SET ZIP_PATH=C:\Program Files\7-Zip;C:\Program Files (x86)\7-Zip
 SET NSIS_PATH=C:\Program Files (x86)\NSIS
 SET MSYS2_PATH=C:\msys32\usr\bin;C:\msys64\usr\bin
 SET PATH=%PATH%;%ZIP_PATH%;%MSYS2_PATH%;%NSIS_PATH%
+
 IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
 IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
+
+IF %SDK% == SDK71 (
+  SET REDIST_YEAR=2010
+)
+IF %SDK% == MSCV2013 (
+  SET REDIST_YEAR=2013
+)
 
 IF %SDK% == SDK71 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
 IF %SDK% == MSVC2013 (

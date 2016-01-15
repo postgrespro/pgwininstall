@@ -84,7 +84,7 @@ Var StartMenuFolder
 ;--------------------------------
 ;Installer Sections
 
-Section "Microsoft Visual C++ 2010 Redistibutable" secMS
+Section "Microsoft Visual C++ $(REDIST_YEAR) Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
     File /oname=$1 "c:\pg\vcredist\vcredist_x64.exe"
