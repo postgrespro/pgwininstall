@@ -81,10 +81,6 @@ REM Magic to set root directory of those scripts (Where Readme.md lies)
 FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 
 REM LIBRARY VERSIONS
-SET GEOS_VER=3.4.2
-SET PROJ_VER=4.6.1
-SET GDAL_VER=1.6.3
-SET JSONC_VER=1757a31750134577faf80b91d0cf6f98d3918e6c
 SET ICONV_VER=1.14
 SET XSLT_VER=1.1.28
 SET ZLIB_VER=1.2.8

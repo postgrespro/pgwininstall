@@ -13,7 +13,7 @@ MKDIR %DOWNLOADS_DIR%
 TITLE Building iconv...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\iconv
+rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
@@ -38,7 +38,7 @@ CD %DOWNLOADS_DIR%
 TITLE Building zlib...
 CD %DOWNLOADS_DIR%
 wget -c http://zlib.net/zlib-%ZLIB_VER%.tar.gz -O zlib-%ZLIB_VER%.tar.gz
-rm -rf "%DEPENDENCIES_BIN_DIR%\zlib
+rm -rf "%DEPENDENCIES_BIN_DIR%\zlib %DEPENDENCIES_SRC_DIR%\zlib*
 MKDIR "%DEPENDENCIES_BIN_DIR%\zlib
 tar xf zlib-%ZLIB_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\zlib*
@@ -56,7 +56,7 @@ CD %DOWNLOADS_DIR%
 TITLE Building uuid...
 CD %DOWNLOADS_DIR%
 wget -c http://netcologne.dl.sourceforge.net/project/osspuuidwin32/src/ossp_uuid_1.6.2_win32_source_120608.7z -O ossp_uuid_1.6.2_win32_source_120608.7z
-rm -rf %DEPENDENCIES_BIN_DIR%\uuid
+rm -rf %DEPENDENCIES_BIN_DIR%\uuid %DEPENDENCIES_SRC_DIR%\ossp_uuid
 MKDIR %DEPENDENCIES_BIN_DIR%\uuid
 7z x %DOWNLOADS_DIR%\ossp_uuid_1.6.2_win32_source_120608.7z -o%DEPENDENCIES_SRC_DIR%\ -y || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\ossp_uuid
@@ -78,7 +78,7 @@ CD %DOWNLOADS_DIR%
 TITLE Building xml...
 CD %DOWNLOADS_DIR%
 wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\libxml2
+rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
 tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libxml2-*\win32
@@ -97,7 +97,7 @@ CD %DOWNLOADS_DIR%
 TITLE Building xslt...
 CD %DOWNLOADS_DIR%
 wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\libxslt
+rm -rf %DEPENDENCIES_BIN_DIR%\libxslt %DEPENDENCIES_SRC_DIR%\libxslt-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxslt
 tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libxslt-*\win32
@@ -116,7 +116,7 @@ CD %DOWNLOADS_DIR%
 TITLE Building OpenSSL...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\openssl
+rm -rf %DEPENDENCIES_BIN_DIR%\openssl %DEPENDENCIES_SRC_DIR%\openssl-*
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl
 tar zxf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR%
 CD %DEPENDENCIES_SRC_DIR%\openssl-*
@@ -141,10 +141,10 @@ CD %DOWNLOADS_DIR%
 TITLE Building gettext...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\libintl
+rm -rf %DEPENDENCIES_BIN_DIR%\libintl %DEPENDENCIES_SRC_DIR%\gettext-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
 tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
-CD  %DEPENDENCIES_SRC_DIR%\gettext-*
+CD %DEPENDENCIES_SRC_DIR%\gettext-*
 cp -v %ROOT%/patches/gettext-%GETTEXT_VER%-%SDK%.patch gettext.patch
 patch -f -p0 < gettext.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
@@ -163,7 +163,7 @@ CD %DOWNLOADS_DIR%
 TITLE Building libssh2...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-%LIBSSH2_VER%.tar.gz -O libssh2-%LIBSSH2_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\libssh2
+rm -rf %DEPENDENCIES_BIN_DIR%\libssh2 %DEPENDENCIES_SRC_DIR%/libssh2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libssh2
 tar xf libssh2-%LIBSSH2_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/include %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
@@ -176,7 +176,7 @@ CD %DOWNLOADS_DIR%
 TITLE Building wxWidgets...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/%WXWIDGETS_VER%/wxWidgets-%WXWIDGETS_VER%.tar.bz2 -O wxWidgets-%WXWIDGETS_VER%.tar.bz2
-rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets
+rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
 tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
@@ -197,7 +197,7 @@ cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/include  %DEPENDENCIES_BIN_DIR%\wxwid
 TITLE Building icu...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip
-rm -rf %DEPENDENCIES_BIN_DIR%\icu
+rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
 7z x icu4c-56_1-src.zip -o%DEPENDENCIES_SRC_DIR% -y
 CD %DEPENDENCIES_SRC_DIR%\icu
@@ -214,60 +214,6 @@ cp -va %DEPENDENCIES_SRC_DIR%\icu\include %DEPENDENCIES_BIN_DIR%\icu\include || 
 CD %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\icu
 
-
-:BUILD_GEOS
-CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://download.osgeo.org/geos/geos-%GEOS_VER%.tar.bz2 -O geos-%GEOS_VER%.tar.bz2
-tar xf geos-%GEOS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR%
-CD %DEPENDENCIES_SRC_DIR%\geos-%GEOS_VER%
-nmake -f makefile.vc || GOTO :ERROR
-MKDIR %DEPENDENCIES_BIN_DIR%\geos %DEPENDENCIES_BIN_DIR%\geos\lib %DEPENDENCIES_BIN_DIR%\geos\include
-cp -va src/*.dll %DEPENDENCIES_BIN_DIR%\geos\lib || GOTO :ERROR
-cp -va src/*.lib %DEPENDENCIES_BIN_DIR%\geos\lib || GOTO :ERROR
-cp -va src/*.pdb %DEPENDENCIES_BIN_DIR%\geos\lib || GOTO :ERROR
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\geos
-
-
-:BUILD_PROJ
-CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://download.osgeo.org/proj/proj-%PROJ_VER%.tar.gz -O proj-%PROJ_VER%.tar.gz
-tar xf proj-%PROJ_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR%
-CD %DEPENDENCIES_SRC_DIR%\proj-%PROJ_VER%
-nmake -f makefile.vc || GOTO :ERROR
-MKDIR %DEPENDENCIES_BIN_DIR%\proj %DEPENDENCIES_BIN_DIR%\proj\lib %DEPENDENCIES_BIN_DIR%\proj\include
-cp -va src/*.dll %DEPENDENCIES_BIN_DIR%\proj\lib || GOTO :ERROR
-cp -va src/*.lib %DEPENDENCIES_BIN_DIR%\proj\lib || GOTO :ERROR
-cp -va src/*.pdb %DEPENDENCIES_BIN_DIR%\proj\lib || GOTO :ERROR
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\proj
-
-
-:BUILD_GDAL
-CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://download.osgeo.org/gdal/gdal-%GDAL_VER%.tar.gz -O gdal-%GDAL_VER%.tar.gz
-tar xf gdal-%GDAL_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR%
-CD %DEPENDENCIES_SRC_DIR%\gdal-%GDAL_VER%
-IF %ARCH% == X86 nmake -f makefile.vc MSVC_VER=1600 || GOTO :ERROR
-IF %ARCH% == X64 nmake -f makefile.vc MSVC_VER=1600 WIN64=YES || GOTO :ERROR
-MKDIR %DEPENDENCIES_BIN_DIR%\gdal %DEPENDENCIES_BIN_DIR%\gdal\lib %DEPENDENCIES_BIN_DIR%\gdal\include
-cp -va *.dll %DEPENDENCIES_BIN_DIR%\gdal\lib || GOTO :ERROR
-cp -va *.lib %DEPENDENCIES_BIN_DIR%\gdal\lib || GOTO :ERROR
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\gdal
-
-
-:BUILD_JSONC
-CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://github.com/json-c/json-c/archive/%JSONC_VER%.zip -O json-c-%JSONC_VER%.zip
-7z x json-c-%JSONC_VER%.zip -o%DEPENDENCIES_SRC_DIR%
-CD %DEPENDENCIES_SRC_DIR%\json-c-%JSONC_VER%
-patch -f -p1 -V existing < c:\pgwininstall\patches\json-c.patch
-cp c:/pg/json-c.vcxproj .
-IF %ARCH% == X86 msbuild json-c.vcxproj /p:Configuration="Release"
-IF %ARCH% == X64 msbuild json-c.vcxproj /p:Configuration="Release" /p:Platform=x64
-MKDIR %DEPENDENCIES_BIN_DIR%\json-c %DEPENDENCIES_BIN_DIR%\json-c\lib %DEPENDENCIES_BIN_DIR%\json-c\include
-IF %ARCH% == X64 cp -va x64/Release/*.dll   %DEPENDENCIES_BIN_DIR%\json-c\lib || GOTO :ERROR
-IF %ARCH% == X86 cp -va win32/Release/*.dll %DEPENDENCIES_BIN_DIR%\json-c\lib || GOTO :ERROR
-cp -va *.h %DEPENDENCIES_BIN_DIR%\json-c\include
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\json-c
 
 REM If everything is compiled OK go to DONE
 GOTO :DONE
