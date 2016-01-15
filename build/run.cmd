@@ -2,7 +2,7 @@
 
 REM What you need to build PostgreSQL
 REM 1. .Net 4.0
-REM 2. Microsoft Windows SDK 7.1
+REM 2. Microsoft Windows SDK 7.1, MSVC 2013 CE
 REM 3. Active Perl <= 5.14
 REM 4. Python 2.7
 REM 5. MSYS2
@@ -25,8 +25,8 @@ IF DEFINED USG (
 
 :OK
 
-REM Set compiler
-SET CC=SDK71
+REM Set SDK
+SET SDK=SDK71
 
 REM Set build architecture: X86 or X64
 SET ARCH=X64
@@ -45,7 +45,11 @@ SET PATH=%PATH%;%ZIP_PATH%;%MSYS2_PATH%;%NSIS_PATH%
 IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
 IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
 
-IF %CC% == SDK71 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
+IF %SDK% == SDK71 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
+IF %SDK% == MSVC2012 (
+  IF %ARCH% == X86 CALL "C:\Program Files\Microsoft Visual Studio 12.0\VC\vcvarsall" /x86
+  IF %ARCH% == X64 CALL "C:\Program Files\Microsoft Visual Studio 12.0\VC\vcvarsall" /x86_amd64
+)
 
 REM As we use Msys2 for build we need to install useful packages we will use
 pacman --noconfirm --sync flex bison tar wget patch git
