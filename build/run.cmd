@@ -72,7 +72,7 @@ REM Set ONE_C for 1C Patching
 SET ONE_C=NO
 
 REM Set PgAdmin3 Version
-SET PGADMIN_VERSION=1.20.0
+SET PGADMIN_VERSION=1.22.0
 
 REM Set useful directories paths so they're used in scripts
 SET BUILD_DIR=c:\pg
