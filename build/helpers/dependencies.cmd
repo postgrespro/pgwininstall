@@ -19,8 +19,8 @@ tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
 patch -f -p0 < libiconv.patch || GOTO :ERROR
-IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
-IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
+IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\iconv || GOTO :ERROR
 cp -av iconv.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
 cp -av config.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
@@ -147,8 +147,8 @@ tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\gettext-*
 cp -v %ROOT%/patches/gettext-%GETTEXT_VER%-%SDK%.patch gettext.patch
 patch -f -p0 < gettext.patch || GOTO :ERROR
-IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v120/v110/v100/v90  || GOTO :ERROR
-IF %ARCH% == X86 msbuild libintl.vcxproj /m /p:Configuration=Release /p:PlatformToolset=v120/v110/v100/v90  || GOTO :ERROR
+IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset%  || GOTO :ERROR
+IF %ARCH% == X86 msbuild libintl.vcxproj /m /p:Configuration=Release /p:PlatformToolset=%PlatformToolset%  || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl\lib %DEPENDENCIES_BIN_DIR%\libintl\include
 cp -v Release*/*.dll  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR
 cp -v Release*/*.lib  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR
@@ -180,10 +180,10 @@ rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
 tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
-IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
-IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
-IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
-IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
+IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/lib      %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
 IF %ARCH% == X64 (
   mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*dll   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_dll  || GOTO :ERROR
@@ -201,8 +201,8 @@ rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
 7z x icu4c-56_1-src.zip -o%DEPENDENCIES_SRC_DIR% -y
 CD %DEPENDENCIES_SRC_DIR%\icu
-IF %ARCH% == X86 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
-IF %ARCH% == X64 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
+IF %ARCH% == X86 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X64 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 (
   cp -va %DEPENDENCIES_SRC_DIR%\icu\bin64 %DEPENDENCIES_BIN_DIR%\icu\bin || GOTO :ERROR
   cp -va %DEPENDENCIES_SRC_DIR%\icu\lib64 %DEPENDENCIES_BIN_DIR%\icu\lib || GOTO :ERROR
