@@ -307,11 +307,11 @@ diff -ruN config.h origin/config.h
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'sig_atomic_t'. */
-+#define SIG_ATOMIC_T_SUFFIX 
++#define SIG_ATOMIC_T_SUFFIX
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'size_t'. */
-+#define SIZE_T_SUFFIX 
++#define SIZE_T_SUFFIX
 +
 +/* If using the C implementation of alloca, define if you know the
 +   direction of stack growth for your system; otherwise it will be
@@ -337,11 +337,11 @@ diff -ruN config.h origin/config.h
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'wchar_t'. */
-+#define WCHAR_T_SUFFIX 
++#define WCHAR_T_SUFFIX
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'wint_t'. */
-+#define WINT_T_SUFFIX 
++#define WINT_T_SUFFIX
 +
 +/* Define if the machine's byte ordering is little endian. */
 +#define WORDS_LITTLEENDIAN 1
@@ -392,7 +392,7 @@ diff -ruN config.h origin/config.h
 +/* Define to the equivalent of the C99 'restrict' keyword, or to
 +   nothing if this is not supported.  Do not define if restrict is
 +   supported directly.  */
-+#define restrict 
++#define restrict
 +/* Work around a bug in Sun C++: it does not support _Restrict, even
 +   though the corresponding Sun C compiler does, which causes
 +   "#define restrict _Restrict" in the previous line.  Perhaps some future
@@ -488,7 +488,7 @@ diff -ruN iconv.h origin/iconv.h
 +   have EILSEQ in a different header.  On these systems, define EILSEQ
 +   ourselves. */
 +#ifndef EILSEQ
-+#define EILSEQ 
++#define EILSEQ
 +#endif
 +
 +
@@ -754,7 +754,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    </PreBuildEvent>
 +    <ClCompile>
 +      <Optimization>Disabled</Optimization>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <MinimalRebuild>true</MinimalRebuild>
 +      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -784,7 +784,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    </Midl>
 +    <ClCompile>
 +      <Optimization>Disabled</Optimization>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <MinimalRebuild>true</MinimalRebuild>
 +      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -811,7 +811,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    <ClCompile>
 +      <Optimization>Full</Optimization>
 +      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 +      <PrecompiledHeader />
@@ -842,7 +842,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    <ClCompile>
 +      <Optimization>Full</Optimization>
 +      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 +      <PrecompiledHeader />
