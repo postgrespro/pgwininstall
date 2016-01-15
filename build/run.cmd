@@ -26,7 +26,7 @@ IF DEFINED USG (
 :OK
 
 REM Set SDK
-SET SDK=SDK71
+SET SDK=MSVC2013
 
 REM Set build architecture: X86 or X64
 SET ARCH=X64
@@ -46,7 +46,7 @@ IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
 IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
 
 IF %SDK% == SDK71 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
-IF %SDK% == MSVC2012 (
+IF %SDK% == MSVC2013 (
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" x86 || GOTO :ERROR
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" amd64 || GOTO :ERROR
 )
