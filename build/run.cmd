@@ -47,8 +47,8 @@ IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
 
 IF %SDK% == SDK71 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
 IF %SDK% == MSVC2012 (
-  IF %ARCH% == X86 CALL "C:\Program Files\Microsoft Visual Studio 12.0\VC\vcvarsall" /x86
-  IF %ARCH% == X64 CALL "C:\Program Files\Microsoft Visual Studio 12.0\VC\vcvarsall" /x86_amd64
+  IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" /x86 || GOTO :ERROR
+  IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" /x86_amd64 || GOTO :ERROR
 )
 
 REM As we use Msys2 for build we need to install useful packages we will use
