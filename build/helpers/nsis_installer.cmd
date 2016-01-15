@@ -80,7 +80,7 @@ SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_DEF_BRANDING %ADMIN_DEF_BRANDING%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SUFFIX %ADMIN_INS_SUFFIX%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SOURCE_DIR %ADMIN_INS_SOURCE_DIR%
->>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
+>>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
 IF "%ARCH%" == "X64" (
   >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
 )
