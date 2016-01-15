@@ -27,12 +27,11 @@ IF DEFINED USG (
 
 REM Set SDK
 SET SDK=MSVC2013
+IF SDK == SDK71 PlatformToolset=v100
+IF SDK == MSVC2013 PlatformToolset=v120
 
 REM Set build architecture: X86 or X64
 SET ARCH=X64
-
-IF SDK == SDK71 PlatformToolset=v100
-IF SDK == MSVC2013 PlatformToolset=v120
 
 REM Path vars
 SET PERL32_PATH=C:\Perl
