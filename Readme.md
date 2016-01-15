@@ -8,9 +8,9 @@ Directory contains the various build scripts
 
 ### Build depends:
 
-* Microsoft SDK 7.1 or Microsoft Visual Studio 2012
-* Active Perl =< 5.14
-* Python 2.7
+* Microsoft Visual Studio 2013 or Microsoft SDK 7.1
+* Active Perl
+* Python 2.7, 3.5
 * MSYS2
 * 7Zip
 * NSIS

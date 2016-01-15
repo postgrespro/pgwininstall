@@ -25,14 +25,31 @@ IF DEFINED USG (
 
 :OK
 
+REM Set PostgreSQL version
+SET PG_DEF_VERSION_SHORT=9.5
+SET PATCH_VERSION=0
+
+REM Set PgAdmin3 Version
+SET PGADMIN_VERSION=1.22.0
+
+REM Set ONE_C for 1C Patching
+SET ONE_C=NO
+
 REM Set SDK
 SET SDK=MSVC2013
 
-IF %SDK% == SDK71 SET PlatformToolset=v100
-IF %SDK% == MSVC2013 SET PlatformToolset=v120
-
 REM Set build architecture: X86 or X64
 SET ARCH=X64
+
+REM LIBRARY VERSIONS
+SET ICONV_VER=1.14
+SET XSLT_VER=1.1.28
+SET ZLIB_VER=1.2.8
+SET XML_VER=2.7.3
+SET OPENSSL_VER=1.0.2e
+SET GETTEXT_VER=0.19.4
+SET LIBSSH2_VER=1.4.3
+SET WXWIDGETS_VER=3.0.2
 
 REM Path vars
 SET PERL32_PATH=C:\Perl
@@ -50,14 +67,14 @@ IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
 IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
 
 IF %SDK% == SDK71 (
-  SET REDIST_YEAR=2010
-)
-IF %SDK% == MSCV2013 (
-  SET REDIST_YEAR=2013
+  REDIST_YEAR=2010
+  SDK71 SET PlatformToolset=v100
+  CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
 )
 
-IF %SDK% == SDK71 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
 IF %SDK% == MSVC2013 (
+  REDIST_YEAR=2010
+  SET PlatformToolset=v120
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" x86 || GOTO :ERROR
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" amd64 || GOTO :ERROR
 )
@@ -65,9 +82,6 @@ IF %SDK% == MSVC2013 (
 REM As we use Msys2 for build we need to install useful packages we will use
 pacman --noconfirm --sync flex bison tar wget patch git
 
-REM Set PostgreSQL version
-SET PG_DEF_VERSION_SHORT=9.5
-SET PATCH_VERSION=0
 ECHO %PATCH_VERSION% | grep "^[0-9]." > nul && (
   SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
 ) || (
@@ -75,12 +89,6 @@ ECHO %PATCH_VERSION% | grep "^[0-9]." > nul && (
 )
 
 SET PGVER=%PG_DEF_VERSION%
-
-REM Set ONE_C for 1C Patching
-SET ONE_C=NO
-
-REM Set PgAdmin3 Version
-SET PGADMIN_VERSION=1.22.0
 
 REM Set useful directories paths so they're used in scripts
 SET BUILD_DIR=c:\pg
@@ -90,16 +98,6 @@ SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 REM Magic to set root directory of those scripts (Where Readme.md lies)
 @echo off&setlocal
 FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
-
-REM LIBRARY VERSIONS
-SET ICONV_VER=1.14
-SET XSLT_VER=1.1.28
-SET ZLIB_VER=1.2.8
-SET XML_VER=2.7.3
-SET OPENSSL_VER=1.0.2e
-SET GETTEXT_VER=0.19.4
-SET LIBSSH2_VER=1.4.3
-SET WXWIDGETS_VER=3.0.2
 
 REM Let's use MP for nmake for parallel build
 SET CL=/MP
