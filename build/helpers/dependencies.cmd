@@ -19,8 +19,8 @@ tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
 patch -f -p0 < libiconv.patch || GOTO :ERROR
-IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
-IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release || GOTO :ERROR
+IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
+IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release /p:PlatformToolset=v120/v110/v100/v90 || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\iconv || GOTO :ERROR
 cp -av iconv.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
 cp -av config.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR

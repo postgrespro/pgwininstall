@@ -754,7 +754,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    </PreBuildEvent>
 +    <ClCompile>
 +      <Optimization>Disabled</Optimization>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <MinimalRebuild>true</MinimalRebuild>
 +      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -784,7 +784,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    </Midl>
 +    <ClCompile>
 +      <Optimization>Disabled</Optimization>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <MinimalRebuild>true</MinimalRebuild>
 +      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -811,7 +811,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    <ClCompile>
 +      <Optimization>Full</Optimization>
 +      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 +      <PrecompiledHeader />
@@ -842,7 +842,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +    <ClCompile>
 +      <Optimization>Full</Optimization>
 +      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-+      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories);%(WindowsSDK_IncludePath)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\lib;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBICONV;BUILDING_DLL;PIC;HAVE_CONFIG_H;ENABLE_RELOCATABLE=1;IN_LIBRARY;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 +      <PrecompiledHeader />
