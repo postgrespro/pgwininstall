@@ -13,13 +13,12 @@ MKDIR %DOWNLOADS_DIR%
 TITLE Building iconv...
 CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
-wget --no-check-certificate -c https://raw.githubusercontent.com/postgrespro/pgwininstall/master/patches/libiconv-%ICONV_VER%.patch -O libiconv-%ICONV_VER%.patch
 rm -rf %DEPENDENCIES_BIN_DIR%\iconv
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
-cp -v %DOWNLOADS_DIR%\libiconv-%ICONV_VER%.patch .
-patch -f -p0 < libiconv-%ICONV_VER%.patch || GOTO :ERROR
+cp -v %ROOT%/patches/libiconv-%ICONV_VER%-%CC%.patch libiconv.patch
+patch -f -p0 < libiconv.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
 IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\iconv || GOTO :ERROR
@@ -146,8 +145,8 @@ rm -rf %DEPENDENCIES_BIN_DIR%\libintl
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
 tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD  %DEPENDENCIES_SRC_DIR%\gettext-*
-cp -v %ROOT%/patches/gettext-%GETTEXT_VER%.patch .
-patch -f -p0 < gettext-%GETTEXT_VER%.patch || GOTO :ERROR
+cp -v %ROOT%/patches/gettext-%GETTEXT_VER%-%CC%.patch gettext.patch
+patch -f -p0 < gettext.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
 IF %ARCH% == X86 msbuild libintl.vcxproj /m /p:Configuration=Release || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl\lib %DEPENDENCIES_BIN_DIR%\libintl\include

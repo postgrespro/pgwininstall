@@ -25,6 +25,9 @@ IF DEFINED USG (
 
 :OK
 
+REM Set compiler
+SET CC=SDK71
+
 REM Set build architecture: X86 or X64
 SET ARCH=X64
 
@@ -41,7 +44,8 @@ SET MSYS2_PATH=C:\msys32\usr\bin;C:\msys64\usr\bin
 SET PATH=%PATH%;%ZIP_PATH%;%MSYS2_PATH%;%NSIS_PATH%
 IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
 IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
-CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
+
+IF %CC% == SDK71 CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
 
 REM As we use Msys2 for build we need to install useful packages we will use
 pacman --noconfirm --sync flex bison tar wget patch git
