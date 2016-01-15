@@ -27,8 +27,9 @@ IF DEFINED USG (
 
 REM Set SDK
 SET SDK=MSVC2013
-IF SDK == SDK71 SET PlatformToolset=v100
-IF SDK == MSVC2013 SET PlatformToolset=v120
+
+IF %SDK% == SDK71 SET PlatformToolset=v100
+IF %SDK% == MSVC2013 SET PlatformToolset=v120
 
 REM Set build architecture: X86 or X64
 SET ARCH=X64
