@@ -31,7 +31,7 @@ cp -av Release*/*.lib %DEPENDENCIES_BIN_DIR%\iconv\lib || GOTO :ERROR
 cp -av Release*/libiconv.lib %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.lib || GOTO :ERROR
 cp -av lib %DEPENDENCIES_BIN_DIR%\iconv\libiconv || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\iconv
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\iconv
 
 
 :BUILD_ZLIB
@@ -49,7 +49,7 @@ cp -v *.dll %DEPENDENCIES_BIN_DIR%\zlib\lib || GOTO :ERROR
 cp -v *.pdb %DEPENDENCIES_BIN_DIR%\zlib\lib || GOTO :ERROR
 cp -v *.h %DEPENDENCIES_BIN_DIR%\zlib\include || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\zlib -y
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zlib -y
 
 
 :BUILD_UUID
@@ -71,7 +71,7 @@ cp -av include %DEPENDENCIES_BIN_DIR%\uuid || GOTO :ERROR
 IF %ARCH% == X64 cp -av x64\Release\ossp_uuid.lib %DEPENDENCIES_BIN_DIR%\uuid\lib\uuid.lib || GOTO :ERROR
 IF %ARCH% == X86 cp -av Release\ossp_uuid.lib %DEPENDENCIES_BIN_DIR%\uuid\lib\uuid.lib || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\uuid -y
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\uuid -y
 
 
 :BUILD_XML
@@ -90,7 +90,7 @@ cp -av bin %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
 cp -av lib %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\libxml2 -y
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libxml2 -y
 
 
 :BUILD_XSLT
@@ -109,7 +109,7 @@ cp -av bin %DEPENDENCIES_BIN_DIR%\libxslt || GOTO :ERROR
 cp -av lib %DEPENDENCIES_BIN_DIR%\libxslt || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\libxslt || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\libxslt -y
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libxslt -y
 
 
 :BUILD_OPENSSL
@@ -134,7 +134,7 @@ cp -av out32dll/*           %DEPENDENCIES_BIN_DIR%\openssl\lib\VC || GOTO :ERROR
 cp -v out32dll/ssleay32.lib %DEPENDENCIES_BIN_DIR%\openssl\lib\VC\ssleay32MD.lib || GOTO :ERROR
 cp -v out32dll/libeay32.lib %DEPENDENCIES_BIN_DIR%\openssl\lib\VC\libeay32MD.lib || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\openssl -y
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\openssl -y
 
 
 :BUILD_GETTEXT
@@ -156,7 +156,7 @@ cp -v libintl.h       %DEPENDENCIES_BIN_DIR%\libintl\include\libintl.h || GOTO :
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl\bin
 >%DEPENDENCIES_BIN_DIR%\libintl\bin\msgfmt.cmd ECHO msgfmt %%^*
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\libintl -y
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libintl -y
 
 
 :BUILD_LIBSSH2
@@ -169,7 +169,7 @@ tar xf libssh2-%LIBSSH2_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/include %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/win32/libssh2_config.h %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\libssh2 -y
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libssh2 -y
 
 
 :BUILD_WXWIDGETS
@@ -200,7 +200,7 @@ IF %ARCH% == X64 (
   mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*lib   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_lib  || GOTO :ERROR
 )
 cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/include  %DEPENDENCIES_BIN_DIR%\wxwidgets\include  || GOTO :ERROR
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\wxwidgets
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\wxwidgets
 
 
 :BUILD_ICU
@@ -222,7 +222,7 @@ IF %ARCH% == X64 (
 )
 cp -va %DEPENDENCIES_SRC_DIR%\icu\include %DEPENDENCIES_BIN_DIR%\icu\include || GOTO :ERROR
 CD %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\deps_%ARCH%.zip %DEPENDENCIES_BIN_DIR%\icu
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\icu
 
 
 REM If everything is compiled OK go to DONE
