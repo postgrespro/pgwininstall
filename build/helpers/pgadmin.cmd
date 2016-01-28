@@ -74,14 +74,19 @@ SET WXWIN=%DEPENDENCIES_BIN_DIR%\wxwidgets
 SET PGBUILD=%DEPENDENCIES_BIN_DIR%
 SET PGDIR=%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 SET PROJECTDIR=
+
 cp -a %DEPENDENCIES_BIN_DIR%/libssh2/include/* pgadmin\include\libssh2 || GOTO :ERROR
+cp -v %ROOT%/patches/pgadmin/libssh2-%SDK%.patch libssh2.patch
+IF NOT EXIST libssh2.patch GOTO :DONE_PGADMIN_LIBSSH2_PATCH
+patch -f -p0 < libssh2.patch || GOTO :ERROR
+:DONE_PGADMIN_LIBSSH2_PATCH
+
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' xtra\png2c\png2c.vcxproj
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' pgadmin\pgAdmin3.vcxproj
 sed -i "/<Bscmake>/,/<\/Bscmake>/d" pgadmin\pgAdmin3.vcxproj
 IF %ARCH% == X86 msbuild xtra/png2c/png2c.vcxproj /m /p:Configuration="Release (3.0)" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 msbuild xtra/png2c/png2c.vcxproj /m /p:Configuration="Release (3.0)" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 cp -va xtra pgadmin || GOTO :ERROR
-IF %SDK% == MSVC2015 sed -i 's/ifdef _MSVC_VER/ifdef _MSVC_VER && _MSC_VER < 1900/g' pgadmin\include\libssh2\libssh2_config.h || GOTO :ERROR
 IF %ARCH% == X86 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (3.0)" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (3.0)" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin

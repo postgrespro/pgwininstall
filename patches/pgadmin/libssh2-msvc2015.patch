@@ -1,0 +1,12 @@
+diff -Naur ../libssh2-1.6.0-origin/win32/libssh2_config.h ./pgadmin/include/libssh2/libssh2_config.h
+--- ../libssh2-1.6.0-origin/win32/libssh2_config.h	2014-12-05 00:43:57.000000000 +0300
++++ ./win32/libssh2_config.h	2016-01-28 15:33:03.663269565 +0300
+@@ -23,7 +23,7 @@
+ #define HAVE_IOCTLSOCKET
+ #define HAVE_SELECT
+
+-#ifdef _MSC_VER
++#if (defined(_MSC_VER) && (_MSC_VER < 1900))
+ #define snprintf _snprintf
+ #if _MSC_VER < 1500
+ #define vsnprintf _vsnprintf
