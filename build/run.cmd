@@ -49,24 +49,24 @@ FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 
 IF "%~1"=="1" (
   TITLE Building dependencies
-  CALL %ROOT%\build\helpers\vars.cmd
+  CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\dependencies.cmd
 )
 
 IF "%~1"=="2" (
   TITLE Building PostgreSQL
-  CALL %ROOT%\build\helpers\vars.cmd
+  CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\postgres.cmd
 )
 
 IF "%~1"=="3" (
   TITLE Building PostgreSQL
-  CALL %ROOT%\build\helpers\vars.cmd
+  CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\pgadmin.cmd
 )
 
 IF "%~1"=="4" (
   TITLE Building installers
-  CALL %ROOT%\build\helpers\vars.cmd
+  CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\installers.cmd
 )
