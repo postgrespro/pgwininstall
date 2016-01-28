@@ -1,12 +1,21 @@
 CALL %ROOT%\build\helpers\setvars.cmd
 
-IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
-  7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
-  REM Go to last build
-  GOTO :BUILD_ALL
-) ELSE (
-  ECHO "You need to build dependencies first!"
-  EXIT /B 1 || GOTO :ERROR
+IF NOT EXIST %DEPENDENCIES_BIN_DIR% (
+  IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
+    7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
+  ) ELSE (
+    ECHO "You need to build PostgreSQL dependencies first!"
+    EXIT /B 1 || GOTO :ERROR
+  )
+)
+
+IF NOT EXIST %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql (
+  IF EXIST %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip (
+    7z x %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip -o%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql -y
+  ) ELSE (
+    ECHO "You need to build PostgreSQL first!"
+    EXIT /B 1 || GOTO :ERROR
+  )
 )
 
 :BUILD_ALL
