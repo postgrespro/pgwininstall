@@ -18,7 +18,7 @@ rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
-cp -v %ROOT%/patches/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
+cp -v %ROOT%/patches/libiconv/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
 patch -f -p0 < libiconv.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libiconv.vcxproj /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X86 msbuild libiconv.vcxproj /p:Configuration=Release /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
@@ -146,7 +146,7 @@ rm -rf %DEPENDENCIES_BIN_DIR%\libintl %DEPENDENCIES_SRC_DIR%\gettext-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
 tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\gettext-*
-cp -v %ROOT%/patches/gettext-%GETTEXT_VER%-%SDK%.patch gettext.patch
+cp -v %ROOT%/patches/gettext/gettext-%GETTEXT_VER%-%SDK%.patch gettext.patch
 patch -f -p0 < gettext.patch || GOTO :ERROR
 IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset%  || GOTO :ERROR
 IF %ARCH% == X86 msbuild libintl.vcxproj /m /p:Configuration=Release /p:PlatformToolset=%PlatformToolset%  || GOTO :ERROR

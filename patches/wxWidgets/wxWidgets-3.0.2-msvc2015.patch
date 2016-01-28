@@ -1,0 +1,42 @@
+diff -Naur ../wxWidgets-3.0.2-origin/include/wx/propgrid/advprops.h ./include/wx/propgrid/advprops.h
+--- ../wxWidgets-3.0.2-origin/include/wx/propgrid/advprops.h	2014-10-07 01:33:44.000000000 +0400
++++ ./include/wx/propgrid/advprops.h	2016-01-28 14:21:51.426777196 +0300
+@@ -450,7 +450,7 @@
+     wxDateTime GetDateValue() const
+     {
+         //return m_valueDateTime;
+-        return m_value;
++        return m_value.GetDateTime();
+     }
+ 
+     long GetDatePickerStyle() const
+diff -Naur ../wxWidgets-3.0.2-origin/src/tiff/libtiff/tif_config.h ./src/tiff/libtiff/tif_config.h
+--- ../wxWidgets-3.0.2-origin/src/tiff/libtiff/tif_config.h	2014-10-07 01:33:44.000000000 +0400
++++ ./src/tiff/libtiff/tif_config.h	2016-01-28 14:20:39.761739386 +0300
+@@ -364,8 +364,6 @@
+ /* Set the native cpu bit order */
+ #define HOST_FILLORDER FILLORDER_LSB2MSB
+ 
+-#define snprintf _snprintf
+-
+ /* Define to 1 if your processor stores words with the most significant byte
+    first (like Motorola and SPARC, unlike Intel and VAX). */
+ /* #undef WORDS_BIGENDIAN */
+diff -Naur ../wxWidgets-3.0.2-origin/src/zlib/gzguts.h ./src/zlib/gzguts.h
+--- ../wxWidgets-3.0.2-origin/src/zlib/gzguts.h	2014-10-07 01:33:44.000000000 +0400
++++ ./src/zlib/gzguts.h	2016-01-28 14:20:04.360723518 +0300
+@@ -95,14 +95,6 @@
+ #  endif
+ #endif
+ 
+-/* unlike snprintf (which is required in C99, yet still not supported by
+-   Microsoft more than a decade later!), _snprintf does not guarantee null
+-   termination of the result -- however this is only used in gzlib.c where
+-   the result is assured to fit in the space provided */
+-#ifdef _MSC_VER
+-#  define snprintf _snprintf
+-#endif
+-
+ #ifndef local
+ #  define local static
+ #endif

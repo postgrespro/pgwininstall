@@ -1,25 +1,19 @@
 CALL %ROOT%\build\helpers\setvars.cmd
 
-IF NOT EXIST %DEPENDENCIES_BIN_DIR% (
-  IF EXIST %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip (
-    7z x %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip -o%DEPENDENCIES_BIN_DIR% -y
-  ) ELSE (
-    IF EXIST %DOWNLOADS_DIR%\deps-MSVC2013-%ARCH%.zi(
-      7z x %DOWNLOADS_DIR%\deps-MSVC2013-%ARCH%.zip -o%DEPENDENCIES_BIN_DIR% -y
-    ) ELSE (
-      ECHO "You need to build PostgreSQL dependencies first!"
-      EXIT /B 1 || GOTO :ERROR
-    )
-  )
+rm -rf %DEPENDENCIES_BIN_DIR%
+IF EXIST %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip (
+  7z x %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip -o%DEPENDENCIES_BIN_DIR% -y
+) ELSE (
+  ECHO "You need to build PostgreSQL dependencies first!"
+  EXIT /B 1 || GOTO :ERROR
 )
 
-IF NOT EXIST %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql (
-  IF EXIST %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip (
-    7z x %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip -o%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql -y
-  ) ELSE (
-    ECHO "You need to build PostgreSQL first!"
-    EXIT /B 1 || GOTO :ERROR
-  )
+rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
+IF EXIST %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip (
+  7z x %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip -o%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql -y
+) ELSE (
+  ECHO "You need to build PostgreSQL first!"
+  EXIT /B 1 || GOTO :ERROR
 )
 
 :BUILD_ALL
@@ -32,6 +26,11 @@ rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
 tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
+
+cp -v %ROOT%/patches/wxWidgets/wxWidgets-%WXWIDGETS_VER%-%SDK%.patch wxWidgets.patch
+IF NOT EXIST wxWidgets.patch GOTO :DONE_WXWIDGETS_PATCH
+patch -f -p0 < wxWidgets.patch || GOTO :ERROR
+:DONE_WXWIDGETS_PATCH
 
 IF %SDK% == SDK71 (
   IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
