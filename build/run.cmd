@@ -35,13 +35,14 @@ REM Set PgAdmin3 Version
 SET PGADMIN_VERSION=1.22.0
 
 REM Set ONE_C for 1C Patching
-SET ONE_C=NO
+IF "%ONE_C%"=="" SET ONE_C=NO
 
 REM Set SDK
-SET SDK=MSVC2013
+REM Possible: SDK71, MSVC2013, MSVC2015
+IF "%SDK%"=="" SET SDK=SDK71
 
 REM Set build architecture: X86 or X64
-SET ARCH=X64
+IF "%ARCH%"=="" SET ARCH=X64
 
 IF "%~1"=="1" (
   TITLE Building dependencies
