@@ -1,9 +1,9 @@
 @ECHO OFF
 
 REM What you need to build PostgreSQL and PgAdmin
-REM 1. Microsoft Windows SDK 7.1, MSVC 2013-2013
+REM 1. Microsoft Windows SDK 7.1 and MSVC 2013-2013 for PgAdmin
 REM 2. Active Perl <= 5.14
-REM 3. Python 2.7
+REM 3. Python 2.7, 3.5
 REM 4. MSYS2
 REM 5. 7z
 

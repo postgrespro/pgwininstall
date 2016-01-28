@@ -8,7 +8,7 @@ Directory contains the various build scripts
 
 ### Build depends:
 
-* Microsoft Visual Studio 2013-2015 or Microsoft SDK 7.1
+* Microsoft SDK 7.1 for build PostgreSQL and Microsoft Visual Studio 2013-2015 for build PgAdmin
 * Active Perl
 * Python 2.7, 3.5
 * MSYS2
