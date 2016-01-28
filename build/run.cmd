@@ -11,16 +11,17 @@ IF "%~1" == "1" GOTO :OK
 IF "%~1" == "2" GOTO :OK
 IF "%~1" == "3" GOTO :OK
 IF "%~1" == "4" GOTO :OK
+IF "%~1" == "5" GOTO :OK
 
 SET USG=1
 
 IF DEFINED USG (
   ECHO Usage:
-  ECHO run.cmd [args: 1,2,3, all]
+  ECHO run.cmd [args: 1,2,3,4,5]
   ECHO 1: Build dependencies
   ECHO 2: Build PostgreSQL
-  ECHO 3: Build PgAdmin3
-  ECHO 4: Build installer PostgreSQL
+  ECHO 3: Build installer PostgreSQL
+  ECHO 4: Build PgAdmin3
   ECHO 5: Build installer PgAdmin3
   PAUSE
   EXIT /b 1
@@ -59,7 +60,7 @@ IF "%~1"=="2" (
 )
 
 IF "%~1"=="3" (
-  TITLE Building installers
+  TITLE Building PostgreSQL installer
   IF "%SDK%"=="" SET SDK=SDK71
   CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
 )
@@ -71,7 +72,7 @@ IF "%~1"=="4" (
 )
 
 IF "%~1"=="5" (
-  TITLE Building installers
+  TITLE Building PgAdmin installer
   IF "%SDK%"=="" SET SDK=MSVC2015
   CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd
 )
