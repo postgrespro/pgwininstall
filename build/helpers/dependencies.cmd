@@ -1,3 +1,5 @@
+CALL setvars.cmd
+
 REM GOTO LAST BUILD
 GOTO :BUILD_ALL
 
@@ -7,7 +9,6 @@ MKDIR %DEPENDENCIES_BIN_DIR%
 rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
-
 
 :BUILD_ICONV
 TITLE Building iconv...
@@ -170,45 +171,6 @@ cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/include %DEPENDENCIES_BIN_DIR%\libssh2\i
 cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/win32/libssh2_config.h %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
 CD %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libssh2 -y
-
-
-:BUILD_WXWIDGETS
-TITLE Building wxWidgets...
-CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/%WXWIDGETS_VER%/wxWidgets-%WXWIDGETS_VER%.tar.bz2 -O wxWidgets-%WXWIDGETS_VER%.tar.bz2
-rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
-MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
-tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
-CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
-
-IF %SDK% == SDK71 (
-  IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-)
-
-IF %SDK% == MSVC2013 (
-  IF %ARCH% == X86 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X86 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-)
-
-IF %SDK% == MSVC2015 (
-  IF %ARCH% == X86 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X86 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-  IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-)
-
-cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/lib      %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
-IF %ARCH% == X64 (
-  mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*dll   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_dll  || GOTO :ERROR
-  mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*lib   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_lib  || GOTO :ERROR
-)
-cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/include  %DEPENDENCIES_BIN_DIR%\wxwidgets\include  || GOTO :ERROR
-7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\wxwidgets
 
 
 :BUILD_ICU
