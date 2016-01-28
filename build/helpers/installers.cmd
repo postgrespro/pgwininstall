@@ -1,5 +1,3 @@
-CALL setvars.cmd
-
 REM Required
 REM 1. NSIS
 REM 2. UsrMgr Plugin for NSIS

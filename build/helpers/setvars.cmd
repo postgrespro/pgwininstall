@@ -61,8 +61,6 @@ SET DEPENDENCIES_BIN_DIR=%BUILD_DIR%\dependencies
 SET DEPS_ZIP=deps-%SDK%-%ARCH%.zip
 SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 REM Magic to set root directory of those scripts (Where Readme.md lies)
-@echo off&setlocal
-FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 
 REM Let's use MP for nmake for parallel build
 SET CL=/MP
