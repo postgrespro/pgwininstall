@@ -64,7 +64,7 @@ cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/include  %DEPENDENCIES_BIN_DIR%\wxwid
 :BUILD_PGADMIN
 TITLE Building PgAdmin3...
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://github.com/postgres/pgadmin3/archive/%PGADMIN_TAG%.zip pgadmin3-%PGADMIN_VERSION%.zip
+wget --no-check-certificate -c https://github.com/postgres/pgadmin3/archive/%PGADMIN_TAG%.zip -O pgadmin3-%PGADMIN_VERSION%.zip
 rm -rf %BUILD_DIR%\pgadmin
 MKDIR %BUILD_DIR%\pgadmin
 7z x pgadmin3-%PGADMIN_VERSION%.zip -o%BUILD_DIR%\pgadmin -y

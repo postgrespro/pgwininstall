@@ -1,3 +1,27 @@
+diff -Naur ../wxWidgets-3.0.2-origin/include/msvc/wx/setup.h ./include/msvc/wx/setup.h
+--- ../wxWidgets-3.0.2-origin/include/msvc/wx/setup.h	2014-10-07 01:33:44.000000000 +0400
++++ ./include/msvc/wx/setup.h	2016-01-28 15:07:14.383901620 +0300
+@@ -63,6 +63,8 @@
+         #define wxCOMPILER_PREFIX vc110
+     #elif _MSC_VER == 1800
+         #define wxCOMPILER_PREFIX vc120
++    #elif _MSC_VER == 1900
++        #define wxCOMPILER_PREFIX vc120
+     #else
+         #error "Unknown MSVC compiler version, please report to wx-dev."
+     #endif
+diff -Naur ../wxWidgets-3.0.2-origin/include/wx/compiler.h ./include/wx/compiler.h
+--- ../wxWidgets-3.0.2-origin/include/wx/compiler.h	2014-10-07 01:33:44.000000000 +0400
++++ ./include/wx/compiler.h	2016-01-28 15:08:49.480021805 +0300
+@@ -53,6 +53,8 @@
+ #   define __VISUALC11__
+ #elif __VISUALC__ < 1900
+ #   define __VISUALC12__
++#elif __VISUALC__ < 2000
++#   define __VISUALC14__
+ #else
+ #   pragma message("Please update wx/compiler.h to recognize this VC++ version")
+ #endif
 diff -Naur ../wxWidgets-3.0.2-origin/include/wx/propgrid/advprops.h ./include/wx/propgrid/advprops.h
 --- ../wxWidgets-3.0.2-origin/include/wx/propgrid/advprops.h	2014-10-07 01:33:44.000000000 +0400
 +++ ./include/wx/propgrid/advprops.h	2016-01-28 14:21:51.426777196 +0300

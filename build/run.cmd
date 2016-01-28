@@ -42,6 +42,8 @@ IF "%ONE_C%"=="" SET ONE_C=NO
 
 REM Set build architecture: X86 or X64
 IF "%ARCH%"=="" SET ARCH=X64
+IF "%ARCH%"=="x86" SET ARCH=X86
+IF "%ARCH%"=="x64" SET ARCH=X64
 
 @echo off&setlocal
 FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
@@ -49,14 +51,12 @@ FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 IF "%~1"=="1" (
   TITLE Building dependencies
   IF "%SDK%"=="" SET SDK=SDK71
-  REM SDK=MSVC2013
   CMD.EXE /C %ROOT%\build\helpers\dependencies.cmd
 )
 
 IF "%~1"=="2" (
   TITLE Building PostgreSQL
   IF "%SDK%"=="" SET SDK=SDK71
-  REM SDK=MSVC2013
   CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
 )
 
