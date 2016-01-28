@@ -10,7 +10,7 @@ IF EXIST %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip (
 
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 IF EXIST %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip (
-  7z x %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip -o%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql -y
+  7z x %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip -o%BUILD_DIR%\distr_%ARCH%_%PGVER% -y
 ) ELSE (
   ECHO "You need to build PostgreSQL first!"
   EXIT /B 1 || GOTO :ERROR
