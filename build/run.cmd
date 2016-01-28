@@ -20,7 +20,8 @@ IF DEFINED USG (
   ECHO 1: Build dependencies
   ECHO 2: Build PostgreSQL
   ECHO 3: Build PgAdmin3
-  ECHO 4: Build installers
+  ECHO 4: Build installer PostgreSQL
+  ECHO 5: Build installer PgAdmin3
   PAUSE
   EXIT /b 1
 )
@@ -58,13 +59,19 @@ IF "%~1"=="2" (
 )
 
 IF "%~1"=="3" (
+  TITLE Building installers
+  IF "%SDK%"=="" SET SDK=SDK71
+  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
+)
+
+IF "%~1"=="4" (
   TITLE Building PgAdmin
   IF "%SDK%"=="" SET SDK=MSVC2015
   CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd
 )
 
-IF "%~1"=="4" (
+IF "%~1"=="5" (
   TITLE Building installers
   IF "%SDK%"=="" SET SDK=MSVC2015
-  CMD.EXE /C %ROOT%\build\helpers\installers.cmd
+  CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd
 )

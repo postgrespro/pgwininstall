@@ -31,9 +31,9 @@ REM Make directory for installers
 MKDIR "c:\pg\installers"
 
 TITLE Making NSIS installers
-call %ROOT%\build\helpers\nsis_installer.cmd || GOTO :ERROR
+call %ROOT%\build\helpers\pgadmin_nsis_installer.cmd || GOTO :ERROR
 TITLE Making Zip archives
-call %ROOT%\build\helpers\make_zip.cmd || GOTO :ERROR
+call %ROOT%\build\helpers\pgadmin_make_zip.cmd || GOTO :ERROR
 
 GOTO :DONE
 
