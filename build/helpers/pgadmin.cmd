@@ -75,7 +75,7 @@ SET PGBUILD=%DEPENDENCIES_BIN_DIR%
 SET PGDIR=%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 SET PROJECTDIR=
 
-cp -a %DEPENDENCIES_BIN_DIR%/libssh2/include/* pgadmin\include\libssh2 || GOTO :ERROR
+cp -a %DEPENDENCIES_BIN_DIR%/libssh2/include/libssh2_config.h pgadmin\include\libssh2 || GOTO :ERROR
 cp -v %ROOT%/patches/pgadmin/libssh2-%SDK%.patch libssh2.patch
 IF NOT EXIST libssh2.patch GOTO :DONE_PGADMIN_LIBSSH2_PATCH
 patch -f -p0 < libssh2.patch || GOTO :ERROR
