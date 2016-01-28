@@ -37,10 +37,6 @@ SET PGADMIN_VERSION=1.22.0
 REM Set ONE_C for 1C Patching
 IF "%ONE_C%"=="" SET ONE_C=NO
 
-REM Set SDK
-REM Possible: SDK71, MSVC2013, MSVC2015
-IF "%SDK%"=="" SET SDK=SDK71
-
 REM Set build architecture: X86 or X64
 IF "%ARCH%"=="" SET ARCH=X64
 
@@ -49,24 +45,30 @@ FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 
 IF "%~1"=="1" (
   TITLE Building dependencies
+  IF "%SDK%"=="" SET SDK=SDK71
+  REM SDK=MSVC2013
   CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\dependencies.cmd
 )
 
 IF "%~1"=="2" (
   TITLE Building PostgreSQL
+  IF "%SDK%"=="" SET SDK=SDK71
+  REM SDK=MSVC2013
   CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\postgres.cmd
 )
 
 IF "%~1"=="3" (
-  TITLE Building PostgreSQL
+  TITLE Building PgAdmin
+  IF "%SDK%"=="" SET SDK=MSVC2015
   CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\pgadmin.cmd
 )
 
 IF "%~1"=="4" (
   TITLE Building installers
+  IF "%SDK%"=="" SET SDK=MSVC2015
   CALL %ROOT%\build\helpers\setvars.cmd
   CALL %ROOT%\build\helpers\installers.cmd
 )

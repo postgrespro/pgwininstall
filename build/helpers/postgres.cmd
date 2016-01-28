@@ -96,37 +96,6 @@ cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER
 
 7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 
-
-:BUILD_PGADMIN
-TITLE Building PgAdmin3...
-CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://ftp.postgresql.org/pub/pgadmin3/release/v%PGADMIN_VERSION%/src/pgadmin3-%PGADMIN_VERSION%.tar.gz -O pgadmin3-%PGADMIN_VERSION%.tar.gz
-rm -rf %BUILD_DIR%\pgadmin
-MKDIR %BUILD_DIR%\pgadmin
-tar xf pgadmin3-%PGADMIN_VERSION%.tar.gz -C %BUILD_DIR%\pgadmin
-CD %BUILD_DIR%\pgadmin\pgadmin3-*
-SET OPENSSL=%DEPENDENCIES_BIN_DIR%\openssl
-SET WXWIN=%DEPENDENCIES_BIN_DIR%\wxwidgets
-SET PGBUILD=%DEPENDENCIES_BIN_DIR%
-SET PGDIR=%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
-SET PROJECTDIR=
-cp -a %DEPENDENCIES_BIN_DIR%/libssh2/include/* pgadmin\include\libssh2 || GOTO :ERROR
-IF %ARCH% == X64 sed -i 's/Win32/x64/g' xtra\png2c\png2c.vcxproj
-IF %ARCH% == X64 sed -i 's/Win32/x64/g' pgadmin\pgAdmin3.vcxproj
-sed -i "/<Bscmake>/,/<\/Bscmake>/d" pgadmin\pgAdmin3.vcxproj
-IF %ARCH% == X86 msbuild xtra/png2c/png2c.vcxproj /m /p:Configuration="Release (3.0)" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-IF %ARCH% == X64 msbuild xtra/png2c/png2c.vcxproj /m /p:Configuration="Release (3.0)" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-cp -va xtra pgadmin || GOTO :ERROR
-IF %ARCH% == X86 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (3.0)" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-IF %ARCH% == X64 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (3.0)" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin
-MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\lib
-cp -va pgadmin/Release*/*.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
-cp -va i18n c:/pg/distr_%ARCH%_%PGVER%/pgadmin/bin  || GOTO :ERROR
-cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_dll/*.dll  %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
-
-
 GOTO :DONE
 
 :ERROR
