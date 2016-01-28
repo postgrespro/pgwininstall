@@ -35,6 +35,7 @@ SET PATCH_VERSION=0
 
 REM Set PgAdmin3 Version
 SET PGADMIN_VERSION=1.22.1
+SET PGADMIN_TAG=master
 
 REM Set ONE_C for 1C Patching
 IF "%ONE_C%"=="" SET ONE_C=NO
