@@ -47,28 +47,24 @@ IF "%~1"=="1" (
   TITLE Building dependencies
   IF "%SDK%"=="" SET SDK=SDK71
   REM SDK=MSVC2013
-  CALL %ROOT%\build\helpers\setvars.cmd
-  CALL %ROOT%\build\helpers\dependencies.cmd
+  CMD.EXE /C %ROOT%\build\helpers\dependencies.cmd
 )
 
 IF "%~1"=="2" (
   TITLE Building PostgreSQL
   IF "%SDK%"=="" SET SDK=SDK71
   REM SDK=MSVC2013
-  CALL %ROOT%\build\helpers\setvars.cmd
-  CALL %ROOT%\build\helpers\postgres.cmd
+  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
 )
 
 IF "%~1"=="3" (
   TITLE Building PgAdmin
   IF "%SDK%"=="" SET SDK=MSVC2015
-  CALL %ROOT%\build\helpers\setvars.cmd
-  CALL %ROOT%\build\helpers\pgadmin.cmd
+  CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd
 )
 
 IF "%~1"=="4" (
   TITLE Building installers
   IF "%SDK%"=="" SET SDK=MSVC2015
-  CALL %ROOT%\build\helpers\setvars.cmd
-  CALL %ROOT%\build\helpers\installers.cmd
+  CMD.EXE /C %ROOT%\build\helpers\installers.cmd
 )

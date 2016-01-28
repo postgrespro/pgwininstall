@@ -1,3 +1,5 @@
+CALL %ROOT%\build\helpers\setvars.cmd
+
 REM GOTO LAST BUILD
 GOTO :BUILD_ALL
 

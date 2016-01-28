@@ -1,3 +1,5 @@
+CALL %ROOT%\build\helpers\setvars.cmd
+
 IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
   7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
   REM Go to last build
