@@ -81,6 +81,7 @@ sed -i "/<Bscmake>/,/<\/Bscmake>/d" pgadmin\pgAdmin3.vcxproj
 IF %ARCH% == X86 msbuild xtra/png2c/png2c.vcxproj /m /p:Configuration="Release (3.0)" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 msbuild xtra/png2c/png2c.vcxproj /m /p:Configuration="Release (3.0)" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 cp -va xtra pgadmin || GOTO :ERROR
+IF %SDK% == MSVC2015 sed -i 's/ifdef _MSVC_VER/ifdef _MSVC_VER && _MSC_VER < 1900/g' pgadmin\include\libssh2\libssh2_config.h || GOTO :ERROR
 IF %ARCH% == X86 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (3.0)" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (3.0)" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin
