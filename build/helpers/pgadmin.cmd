@@ -1,11 +1,15 @@
 CALL %ROOT%\build\helpers\setvars.cmd
 
 IF NOT EXIST %DEPENDENCIES_BIN_DIR% (
-  IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
-    7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
+  IF EXIST %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip (
+    7z x %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip -o%DEPENDENCIES_BIN_DIR% -y
   ) ELSE (
-    ECHO "You need to build PostgreSQL dependencies first!"
-    EXIT /B 1 || GOTO :ERROR
+    IF EXIST %DOWNLOADS_DIR%\deps-MSVC2013-%ARCH%.zi(
+      7z x %DOWNLOADS_DIR%\deps-MSVC2013-%ARCH%.zip -o%DEPENDENCIES_BIN_DIR% -y
+    ) ELSE (
+      ECHO "You need to build PostgreSQL dependencies first!"
+      EXIT /B 1 || GOTO :ERROR
+    )
   )
 )
 
