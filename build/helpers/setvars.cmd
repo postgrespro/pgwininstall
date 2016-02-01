@@ -46,10 +46,10 @@ IF %SDK% == MSVC2015 (
 REM As we use Msys2 for build we need to install useful packages we will use
 pacman --noconfirm --sync flex bison tar wget patch git
 
-ECHO %PATCH_VERSION% | grep "^[0-9]." > nul && (
-  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
+ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
+  SET PG_DEF_VERSION=%PG_MAJOR_VERSION%.%PG_PATCH_VERSION%
 ) || (
-  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%%PATCH_VERSION%
+  SET PG_DEF_VERSION=%PG_MAJOR_VERSION%%PG_PATCH_VERSION%
 )
 
 SET PGVER=%PG_DEF_VERSION%
