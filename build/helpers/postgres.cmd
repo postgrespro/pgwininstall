@@ -14,7 +14,7 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
+wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql
