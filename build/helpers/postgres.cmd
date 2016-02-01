@@ -63,20 +63,22 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 >>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_BIN_DIR%\zlib'
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
+
 IF %ONE_C% == YES (
-  mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in
-  cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\
-  cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     .
+  mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
 )
+
+cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
 perl src\tools\msvc\build.pl || GOTO :ERROR
 IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
-CD %BUILD_DIR%\postgresql\postgresql-%PGVER%\src\tools\msvc
-cp -v %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll  %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll    %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
+cp -v %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll  %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
+cp -v %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll    %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
 
 perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 cp -v %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
