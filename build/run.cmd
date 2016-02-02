@@ -12,6 +12,7 @@ IF "%~1" == "2" GOTO :OK
 IF "%~1" == "3" GOTO :OK
 IF "%~1" == "4" GOTO :OK
 IF "%~1" == "5" GOTO :OK
+IF "%~1" == "6" GOTO :OK
 
 SET USG=1
 
@@ -23,6 +24,7 @@ IF DEFINED USG (
   ECHO 3: Build installer PostgreSQL
   ECHO 4: Build PgAdmin3
   ECHO 5: Build installer PgAdmin3
+  ECHO 6: Make PostgreSQL and PgAdmin3 archives
   PAUSE
   EXIT /b 1
 )
@@ -76,4 +78,9 @@ IF "%~1"=="5" (
   TITLE Building PgAdmin installer
   IF "%SDK%"=="" SET SDK=MSVC2015
   CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd
+)
+
+IF "%~1"=="6" (
+    TITLE Making Archives
+    CMD.EXE /C %ROOT%\build\helpers\make_zip.cmd
 )

@@ -84,12 +84,12 @@ Var StartMenuFolder
 ;--------------------------------
 ;Installer Sections
 
-Section "Microsoft Visual C++ $(REDIST_YEAR) Redistibutable" secMS
+Section "Microsoft Visual C++ 2015 Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
-    File /oname=$1 "c:\pg\vcredist\vcredist_x64.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x64_2015.exe"
   !else
-    File /oname=$1 "c:\pg\vcredist\vcredist_x86.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x86_2015.exe"
   !endif
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
