@@ -27,9 +27,9 @@ Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "c:\pg\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
 
 !ifdef PG_64bit
-  InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}\${PG_DEF_VERSION_SHORT}"
+  InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}\${PG_MAJOR_VERSION}"
 !else
-  InstallDir "$PROGRAMFILES32\${PRODUCT_NAME}\${PG_DEF_VERSION_SHORT}"
+  InstallDir "$PROGRAMFILES32\${PRODUCT_NAME}\${PG_MAJOR_VERSION}"
 !endif
 
 BrandingText "Postgres Professional"
@@ -423,7 +423,7 @@ Section $(PostgreSQLString) sec1
   ${endif}
 
   ;Write the DisplayName manually
-  WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "DisplayName" "$ServiceID_text - PostgreSQL Server ${PG_DEF_VERSION_SHORT}"
+  WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "DisplayName" "$ServiceID_text - PostgreSQL Server ${PG_MAJOR_VERSION}"
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "Description" "Provides relational database storage."
 
   AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"

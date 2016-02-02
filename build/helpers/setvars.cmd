@@ -46,13 +46,14 @@ IF %SDK% == MSVC2015 (
 REM As we use Msys2 for build we need to install useful packages we will use
 pacman --noconfirm --sync flex bison tar wget patch git
 
-ECHO %PATCH_VERSION% | grep "^[0-9]." > nul && (
-  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%.%PATCH_VERSION%
+ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
+  SET PG_DEF_VERSION=%PG_MAJOR_VERSION%.%PG_PATCH_VERSION%
 ) || (
-  SET PG_DEF_VERSION=%PG_DEF_VERSION_SHORT%%PATCH_VERSION%
+  SET PG_DEF_VERSION=%PG_MAJOR_VERSION%%PG_PATCH_VERSION%
 )
 
 SET PGVER=%PG_DEF_VERSION%
+IF "%PGURL%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
 
 REM Set useful directories paths so they're used in scripts
 SET BUILD_DIR=c:\pg

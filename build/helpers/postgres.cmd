@@ -14,11 +14,11 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2 -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
+wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql
-CD %BUILD_DIR%\postgresql\postgresql-%PGVER%
+CD %BUILD_DIR%\postgresql\*%PGVER%*
 
 IF %ONE_C% == YES (
   cp -va %ROOT%/patches/postgresql/%PGVER%/series.for1c .
@@ -63,38 +63,40 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 >>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_BIN_DIR%\zlib'
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
+
 IF %ONE_C% == YES (
-  mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in
-  cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\
-  cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     .
+  mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
 )
+
+cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
 perl src\tools\msvc\build.pl || GOTO :ERROR
 IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
-CD %BUILD_DIR%\postgresql\postgresql-%PGVER%\src\tools\msvc
-cp -v %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll  %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll    %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
+xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll  %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll    %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
 
 perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/libxml2/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -v %DEPENDENCIES_BIN_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-IF %ONE_C% == YES cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\libxml2\lib\*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\libxslt\lib\*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\openssl\lib\VC\*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\zlib\lib\*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\icu\bin\*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 REM Copy libraries headers to "include" directory for a God sake
-cp -va %DEPENDENCIES_BIN_DIR%/libintl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/iconv/include/*    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/libxml2/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/libxslt/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/openssl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/zlib/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\include\*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\include\*    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\libxml2\include\*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\libxslt\include\*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\openssl\include\*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\zlib\include\*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+xcopy /Y %DEPENDENCIES_BIN_DIR%\uuid\include\*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 
 7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 
