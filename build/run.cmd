@@ -13,6 +13,7 @@ IF "%~1" == "3" GOTO :OK
 IF "%~1" == "4" GOTO :OK
 IF "%~1" == "5" GOTO :OK
 IF "%~1" == "6" GOTO :OK
+IF "%~1" == "7" GOTO :OK
 
 SET USG=1
 
@@ -25,6 +26,7 @@ IF DEFINED USG (
   ECHO 4: Build PgAdmin3
   ECHO 5: Build installer PgAdmin3
   ECHO 6: Make PostgreSQL and PgAdmin3 archives
+  ECHO 7: Build pgbouncer
   PAUSE
   EXIT /b 1
 )
@@ -46,6 +48,9 @@ REM Set build architecture: X86 or X64
 IF "%ARCH%"=="" SET ARCH=X64
 IF "%ARCH%"=="x86" SET ARCH=X86
 IF "%ARCH%"=="x64" SET ARCH=X64
+
+REM Set PGBouner Version
+SET PGBOUNCER_VERSION=1.7
 
 @echo off&setlocal
 FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
@@ -83,4 +88,9 @@ IF "%~1"=="5" (
 IF "%~1"=="6" (
     TITLE Making Archives
     CMD.EXE /C %ROOT%\build\helpers\make_zip.cmd
+)
+
+IF "%~1"=="7" (
+    TITLE Build PGBouncer
+    CMD.EXE /C %ROOT%\build\helpers\pgbouncer.cmd
 )
