@@ -91,6 +91,7 @@ IF %ARCH% == X86 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (
 IF %ARCH% == X64 msbuild pgadmin/pgAdmin3.vcxproj /m /p:Configuration="Release (3.0)" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 REM Docs building is not working now
 REM Need to understand how to add sphinx-build to PATH
+SET PATH=%PATH%;%PYTHON64_PATH%;%PYTHON64_PATH%\Scripts
 REM msbuild docs/Docs.vcxproj /m /p:Configuration="All" /p:Platform="Win32" || GOTO :ERROR
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\lib
