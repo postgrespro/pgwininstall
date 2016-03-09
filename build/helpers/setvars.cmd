@@ -27,24 +27,31 @@ IF %SDK% == SDK71 (
   SET REDIST_YEAR=2010
   SET PlatformToolset=v100
   CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
+  ECHO ON
 )
 
 IF %SDK% == MSVC2013 (
   SET REDIST_YEAR=2013
   SET PlatformToolset=v120
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" x86 || GOTO :ERROR
+  ECHO ON
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" amd64 || GOTO :ERROR
+  ECHO ON
 )
 
 IF %SDK% == MSVC2015 (
   SET REDIST_YEAR=2015
   SET PlatformToolset=v140
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" x86 || GOTO :ERROR
+  ECHO ON
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" amd64 || GOTO :ERROR
+  ECHO ON
 )
 
 REM As we use Msys2 for build we need to install useful packages we will use
-pacman --noconfirm --sync flex bison tar wget patch git
+@ECHO "Current PATH is:"
+PATH
+pacman --noconfirm --sync --needed flex bison tar wget patch git
 
 ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
   SET PG_DEF_VERSION=%PG_MAJOR_VERSION%.%PG_PATCH_VERSION%
