@@ -51,9 +51,14 @@ IF %SDK% == MSVC2015 (
   IF %ARCH% == X86 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
   IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
   IF %ARCH% == X64 msbuild build\msw\wx_vc12.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  REM Upgrade hhp2cached project to VS2015
+  devenv utils\hhp2cached\hhp2cached_vc9.vcproj /Upgrade
+  IF %ARCH% == X86 msbuild utils\hhp2cached\hhp2cached_vc9.vcxproj /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X86 msbuild utils\hhp2cached\hhp2cached_vc9.vcxproj /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 )
 
-cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/lib      %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
+cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/lib   %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
+cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/utils  %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
 IF %ARCH% == X64 (
   mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*dll   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_dll  || GOTO :ERROR
   mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*lib   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_lib  || GOTO :ERROR
