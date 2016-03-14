@@ -20,12 +20,12 @@ IF EXIST %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip (
 
 :BUILD_WXWIDGETS
 TITLE Building wxWidgets...
-CD %DOWNLOADS_DIR%
+CD /D %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/%WXWIDGETS_VER%/wxWidgets-%WXWIDGETS_VER%.tar.bz2 -O wxWidgets-%WXWIDGETS_VER%.tar.bz2
 rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
 tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
-CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
+CD /D %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 
 cp -v %ROOT%/patches/wxWidgets/wxWidgets-%WXWIDGETS_VER%-%SDK%.patch wxWidgets.patch
 IF NOT EXIST wxWidgets.patch GOTO :DONE_WXWIDGETS_PATCH
@@ -68,12 +68,12 @@ cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/include  %DEPENDENCIES_BIN_DIR%\wxwid
 
 :BUILD_PGADMIN
 TITLE Building PgAdmin3...
-CD %DOWNLOADS_DIR%
+CD /D %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://github.com/postgres/pgadmin3/archive/%PGADMIN_TAG%.zip -O pgadmin3-%PGADMIN_VERSION%.zip
 rm -rf %BUILD_DIR%\pgadmin
 MKDIR %BUILD_DIR%\pgadmin
 7z x pgadmin3-%PGADMIN_VERSION%.zip -o%BUILD_DIR%\pgadmin -y
-CD %BUILD_DIR%\pgadmin\pgadmin3-*
+CD /D %BUILD_DIR%\pgadmin\pgadmin3-*
 SET OPENSSL=%DEPENDENCIES_BIN_DIR%\openssl
 SET WXWIN=%DEPENDENCIES_BIN_DIR%\wxwidgets
 SET PGBUILD=%DEPENDENCIES_BIN_DIR%

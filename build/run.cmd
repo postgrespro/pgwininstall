@@ -1,7 +1,7 @@
 @ECHO OFF
 
-REM What you need to build PostgreSQL and PgAdmin
-REM 1. Microsoft Windows SDK 7.1 and MSVC 2013-2013 for PgAdmin
+REM What do you need to build PostgreSQL and PgAdmin
+REM 1. Microsoft Windows SDK 7.1 and Visual Studio 2015 for PgAdmin
 REM 2. Active Perl <= 5.14
 REM 3. Python 2.7, 3.5
 REM 4. MSYS2
@@ -45,7 +45,7 @@ REM Set ONE_C for 1C Patching
 IF "%ONE_C%"=="" SET ONE_C=NO
 
 REM Set build architecture: X86 or X64
-IF "%ARCH%"=="" SET ARCH=X64
+IF "%ARCH%"=="" SET ARCH=X86
 IF "%ARCH%"=="x86" SET ARCH=X86
 IF "%ARCH%"=="x64" SET ARCH=X64
 

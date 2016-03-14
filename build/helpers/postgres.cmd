@@ -13,12 +13,12 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
-CD %DOWNLOADS_DIR%
+CD /D %DOWNLOADS_DIR%
 wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql
-CD %BUILD_DIR%\postgresql\*%PGVER%*
+CD /D %BUILD_DIR%\postgresql\*%PGVER%*
 
 IF %ONE_C% == YES (
   cp -va %ROOT%/patches/postgresql/%PGVER%/series.for1c .
@@ -79,9 +79,10 @@ rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
-REM That's really makes no sence for me...
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll  %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll    %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll	%BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll   %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
 
 perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR

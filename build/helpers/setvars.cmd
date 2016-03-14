@@ -3,7 +3,7 @@ SET ICONV_VER=1.14
 SET XSLT_VER=1.1.28
 SET ZLIB_VER=1.2.8
 SET XML_VER=2.7.3
-SET OPENSSL_VER=1.0.2f
+SET OPENSSL_VER=1.0.2g
 SET GETTEXT_VER=0.19.4
 SET LIBSSH2_VER=1.6.0
 SET WXWIDGETS_VER=3.0.2
@@ -27,24 +27,31 @@ IF %SDK% == SDK71 (
   SET REDIST_YEAR=2010
   SET PlatformToolset=v100
   CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
+  ECHO ON
 )
 
 IF %SDK% == MSVC2013 (
   SET REDIST_YEAR=2013
   SET PlatformToolset=v120
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" x86 || GOTO :ERROR
+  ECHO ON
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" amd64 || GOTO :ERROR
+  ECHO ON
 )
 
 IF %SDK% == MSVC2015 (
   SET REDIST_YEAR=2015
   SET PlatformToolset=v140
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" x86 || GOTO :ERROR
+  ECHO ON
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" amd64 || GOTO :ERROR
+  ECHO ON
 )
 
 REM As we use Msys2 for build we need to install useful packages we will use
-pacman --noconfirm --sync flex bison tar wget patch git
+@ECHO "Current PATH is:"
+PATH
+pacman --noconfirm --sync --needed flex bison tar wget patch git
 
 ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
   SET PG_DEF_VERSION=%PG_MAJOR_VERSION%.%PG_PATCH_VERSION%
