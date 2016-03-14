@@ -81,8 +81,9 @@ CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll  %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll    %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll	%BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll   %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%\libintl\lib\libintl.dll	%BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\libiconv.dll    %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.dll       %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
 
 perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
