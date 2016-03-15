@@ -8946,35 +8946,38 @@ index f96e9ee..e6d8250 100644
  /*
   * prototypes for plan/initsplan.c
   */
-diff --git a/src/test/regress/expected/create_index.out b/src/test/regress/expected/create_index.out
-index b72e65d..8ca0499 100644
---- a/src/test/regress/expected/create_index.out
-+++ b/src/test/regress/expected/create_index.out
-@@ -2763,18 +2763,12 @@ DROP TABLE onek_with_null;
- EXPLAIN (COSTS OFF)
- SELECT * FROM tenk1
-   WHERE thousand = 42 AND (tenthous = 1 OR tenthous = 3 OR tenthous = 42);
--                                                               QUERY PLAN
-------------------------------------------------------------------------------------------------------------------------------------------
-- Bitmap Heap Scan on tenk1
--   Recheck Cond: (((thousand = 42) AND (tenthous = 1)) OR ((thousand = 42) AND (tenthous = 3)) OR ((thousand = 42) AND (tenthous = 42)))
--   ->  BitmapOr
--         ->  Bitmap Index Scan on tenk1_thous_tenthous
--               Index Cond: ((thousand = 42) AND (tenthous = 1))
--         ->  Bitmap Index Scan on tenk1_thous_tenthous
--               Index Cond: ((thousand = 42) AND (tenthous = 3))
--         ->  Bitmap Index Scan on tenk1_thous_tenthous
--               Index Cond: ((thousand = 42) AND (tenthous = 42))
--(9 rows)
-+                           QUERY PLAN
-+-----------------------------------------------------------------
-+ Index Scan using tenk1_thous_tenthous on tenk1
-+   Index Cond: ((thousand = 42) AND (thousand = 42))
-+   Filter: ((tenthous = 1) OR (tenthous = 3) OR (tenthous = 42))
-+(3 rows)
 
- SELECT * FROM tenk1
-   WHERE thousand = 42 AND (tenthous = 1 OR tenthous = 3 OR tenthous = 42);
+  diff --git a/src/test/regress/expected/create_index.out b/src/test/regress/expected/create_index.out
+  index b72e65d..6bb4c97 100644
+  --- a/src/test/regress/expected/create_index.out
+  +++ b/src/test/regress/expected/create_index.out
+  @@ -2763,18 +2763,13 @@ DROP TABLE onek_with_null;
+   EXPLAIN (COSTS OFF)
+   SELECT * FROM tenk1
+     WHERE thousand = 42 AND (tenthous = 1 OR tenthous = 3 OR tenthous = 42);
+  -                                                               QUERY PLAN
+  ------------------------------------------------------------------------------------------------------------------------------------------
+  - Bitmap Heap Scan on tenk1
+  -   Recheck Cond: (((thousand = 42) AND (tenthous = 1)) OR ((thousand = 42) AND (tenthous = 3)) OR ((thousand = 42) AND (tenthous = 42)))
+  -   ->  BitmapOr
+  -         ->  Bitmap Index Scan on tenk1_thous_tenthous
+  -               Index Cond: ((thousand = 42) AND (tenthous = 1))
+  -         ->  Bitmap Index Scan on tenk1_thous_tenthous
+  -               Index Cond: ((thousand = 42) AND (tenthous = 3))
+  -         ->  Bitmap Index Scan on tenk1_thous_tenthous
+  -               Index Cond: ((thousand = 42) AND (tenthous = 42))
+  -(9 rows)
+  +
+  +                       QUERY PLAN
+  +--------------------------------------------------------------------------
+  + Index Scan using tenk1_thous_tenthous on tenk1
+  +    Index Cond: ((thousand = 42) AND (thousand = 42))
+  +    Filter: ((tenthous = 1) OR (tenthous = 3) OR (tenthous = 42))
+  +(3 rows)
+
+   SELECT * FROM tenk1
+     WHERE thousand = 42 AND (tenthous = 1 OR tenthous = 3 OR tenthous = 42);
+
 diff --git a/src/test/regress/expected/select.out b/src/test/regress/expected/select.out
 index c376523..185d177 100644
 --- a/src/test/regress/expected/select.out
