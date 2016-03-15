@@ -9142,10 +9142,10 @@ index b99fb13..582e5d6 100644
  -- Test ORDER BY options
  --
 
-diff --git a/src/tools/msvc/Mkvcbuild.pm b/src/tools/msvc/Mkvcbuild.pm
-index 21faa58..3aabd57 100644
+diff --git a/src/tools/msvc/Mkvcbuild.pm b/src/tools/msvc/Mkvcbuild.pm.new
+index 21faa58..569c7b1 100644
 --- a/src/tools/msvc/Mkvcbuild.pm
-+++ b/src/tools/msvc/Mkvcbuild.pm
++++ b/src/tools/msvc/Mkvcbuild.pm.new
 @@ -33,7 +33,7 @@ my $contrib_defines = { 'refint' => 'REFINT_VERBOSE' };
  my @contrib_uselibpq = ('dblink', 'oid2name', 'postgres_fdw', 'vacuumlo');
  my @contrib_uselibpgport   = ('oid2name', 'pg_standby', 'vacuumlo');
@@ -9153,14 +9153,5 @@ index 21faa58..3aabd57 100644
 -my $contrib_extralibs      = undef;
 +my $contrib_extralibs      = {'mchar' => ['icuin.lib', 'icuuc.lib']};
  my $contrib_extraincludes =
-   { 'tsearch2' => ['contrib/tsearch2'], 'dblink' => ['src/backend'] };
+ { 'tsearch2' => ['contrib/tsearch2'], 'dblink' => ['src/backend'] };
  my $contrib_extrasource = {
-@@ -58,6 +58,7 @@ my $frontend_extralibs = {
-	'initdb'     => ['ws2_32.lib'],
-	'pg_restore' => ['ws2_32.lib'],
-	'pgbench'    => ['ws2_32.lib'],
-+	'mchar'		 => ['icuin.lib', 'icuuc.lib'],
-	'psql'       => ['ws2_32.lib'] };
- my $contrib_extralibs = { 'pgbench' => ['wsock32.lib'], 'mchar' => ['icuin.lib', 'icuuc.lib'] };
- my $frontend_extraincludes = {
-	'initdb' => ['src/timezone'],
