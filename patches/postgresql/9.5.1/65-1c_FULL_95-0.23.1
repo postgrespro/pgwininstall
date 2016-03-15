@@ -5,7 +5,7 @@ index 0000000..06c47a1
 +++ b/contrib/fasttrun/Makefile
 @@ -0,0 +1,15 @@
 +MODULE_big = fasttrun
-+OBJS = fasttrun.o	
++OBJS = fasttrun.o
 +DATA_built = fasttrun.sql
 +DOCS = README.fasttrun
 +REGRESS = fasttrun
@@ -55,7 +55,7 @@ index 0000000..9914e77
 +ERROR:  Relation isn't a temporary table
 +insert into persist values (2);
 +select * from persist order by a;
-+ a 
++ a
 +---
 + 1
 + 2
@@ -67,13 +67,13 @@ index 0000000..9914e77
 +create temp table temp2 (a int);
 +insert into temp2 values (1);
 +select * from temp1 order by a;
-+ a 
++ a
 +---
 + 1
 +(1 row)
 +
 +select * from temp2 order by a;
-+ a 
++ a
 +---
 + 1
 +(1 row)
@@ -82,82 +82,82 @@ index 0000000..9914e77
 +insert into temp2 (select * from generate_series(1,11000));
 +analyze temp2;
 +select relname,  relpages>0, reltuples>0 from pg_class where relname in ('temp1', 'temp2') order by relname;
-+ relname | ?column? | ?column? 
++ relname | ?column? | ?column?
 +---------+----------+----------
 + temp1   | f        | f
 + temp2   | t        | t
 +(2 rows)
 +
 +select fasttruncate('temp1');
-+ fasttruncate 
++ fasttruncate
 +--------------
-+ 
++
 +(1 row)
 +
 +select fasttruncate('temp2');
-+ fasttruncate 
++ fasttruncate
 +--------------
-+ 
++
 +(1 row)
 +
 +insert into temp1 values (-2);
 +insert into temp2 values (-2);
 +select * from temp1 order by a;
-+ a  
++ a
 +----
 + -2
 +(1 row)
 +
 +select * from temp2 order by a;
-+ a  
++ a
 +----
 + -2
 +(1 row)
 +
 +COMMIT;
 +select * from temp1 order by a;
-+ a  
++ a
 +----
 + -2
 +(1 row)
 +
 +select * from temp2 order by a;
-+ a  
++ a
 +----
 + -2
 +(1 row)
 +
 +select relname,  relpages>0, reltuples>0 from pg_class where relname in ('temp1', 'temp2') order by relname;
-+ relname | ?column? | ?column? 
++ relname | ?column? | ?column?
 +---------+----------+----------
 + temp1   | f        | f
 + temp2   | f        | f
 +(2 rows)
 +
 +select fasttruncate('temp1');
-+ fasttruncate 
++ fasttruncate
 +--------------
-+ 
++
 +(1 row)
 +
 +select fasttruncate('temp2');
-+ fasttruncate 
++ fasttruncate
 +--------------
-+ 
++
 +(1 row)
 +
 +select * from temp1 order by a;
-+ a 
++ a
 +---
 +(0 rows)
 +
 +select * from temp2 order by a;
-+ a 
++ a
 +---
 +(0 rows)
 +
 +select relname,  relpages>0, reltuples>0 from pg_class where relname in ('temp1', 'temp2') order by relname;
-+ relname | ?column? | ?column? 
++ relname | ?column? | ?column?
 +---------+----------+----------
 + temp1   | f        | f
 + temp2   | f        | f
@@ -192,7 +192,7 @@ index 0000000..20cf576
 +
 +PG_FUNCTION_INFO_V1(fasttruncate);
 +Datum	fasttruncate(PG_FUNCTION_ARGS);
-+Datum	
++Datum
 +fasttruncate(PG_FUNCTION_ARGS) {
 +	text    *name=PG_GETARG_TEXT_P(0);
 +	char	*relname;
@@ -323,7 +323,7 @@ index 0000000..bc8bdd2
 +++ b/contrib/fulleq/Makefile
 @@ -0,0 +1,32 @@
 +MODULE_big = fulleq
-+OBJS = fulleq.o	
++OBJS = fulleq.o
 +DATA_built = fulleq.sql
 +DOCS = README.fulleq
 +REGRESS = fulleq
@@ -346,7 +346,7 @@ index 0000000..bc8bdd2
 +endif
 +
 +fulleq.sql.in:	fulleq.sql.in.in
-+	echo 'BEGIN;' >	$@ 
++	echo 'BEGIN;' >	$@
 +	echo 'SET search_path = public;' >> $@
 +	for type in	$(ARGTYPE);	\
 +	do	\
@@ -371,61 +371,61 @@ index 0000000..4842d8c
 @@ -0,0 +1,61 @@
 +\set ECHO none
 +select 4::int == 4;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 4::int == 5;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 4::int == NULL;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL::int == 5;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL::int == NULL;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select '4'::text == '4';
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select '4'::text == '5';
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select '4'::text == NULL;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL::text == '5';
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL::text == NULL;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
@@ -516,7 +516,7 @@ index 0000000..55e980e
 @@ -0,0 +1,26 @@
 +-- For ARGTYPE
 +
-+CREATE OR REPLACE FUNCTION isfulleq_ARGTYPE(ARGTYPE, ARGTYPE) 
++CREATE OR REPLACE FUNCTION isfulleq_ARGTYPE(ARGTYPE, ARGTYPE)
 +RETURNS bool AS 'MODULE_PATHNAME'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
@@ -573,7 +573,7 @@ index 0000000..b597ee7
 +0.16  fix pg_dump - now mchar in pg_catalog scheme, not public
 + 	  fix bug in mvarchar_substr()
 +0.15  add upper()/lower()
-+0.14  Add ESCAPE for LIKE, SIMILAR TO [ESCAPE], POSIX regexp 
++0.14  Add ESCAPE for LIKE, SIMILAR TO [ESCAPE], POSIX regexp
 +0.13  Outer binary format is now different from
 +	  inner: it's just a UTF-16 string
 +0.12  Fix copy binary
@@ -654,7 +654,7 @@ index 0000000..480a286
 @@ -0,0 +1,66 @@
 +--- table based checks
 +select '<' || ch || '>', '<' || vch || '>' from chvch;
-+    ?column?    |   ?column?   
++    ?column?    |   ?column?
 +----------------+--------------
 + <No spaces   > | <No spaces>
 + <One space   > | <One space >
@@ -662,60 +662,60 @@ index 0000000..480a286
 +(3 rows)
 +
 +select * from chvch where vch = 'One space';
-+      ch      |    vch     
++      ch      |    vch
 +--------------+------------
-+ One space    | One space 
++ One space    | One space
 +(1 row)
 +
 +select * from chvch where vch = 'One space ';
-+      ch      |    vch     
++      ch      |    vch
 +--------------+------------
-+ One space    | One space 
++ One space    | One space
 +(1 row)
 +
 +select * from ch where chcol = 'abcd' order by chcol;
-+              chcol               
++              chcol
 +----------------------------------
-+ abcd                            
-+ AbcD                            
++ abcd
++ AbcD
 +(2 rows)
 +
 +select * from ch t1 join ch t2 on t1.chcol = t2.chcol order by t1.chcol, t2.chcol;
-+              chcol               |              chcol               
++              chcol               |              chcol
 +----------------------------------+----------------------------------
-+ abcd                             | AbcD                            
-+ abcd                             | abcd                            
-+ AbcD                             | AbcD                            
-+ AbcD                             | abcd                            
-+ abcz                             | abcz                            
-+ defg                             | dEfg                            
-+ defg                             | defg                            
-+ dEfg                             | dEfg                            
-+ dEfg                             | defg                            
-+ ee                               | Ee                              
-+ ee                               | ee                              
-+ Ee                               | Ee                              
-+ Ee                               | ee                              
++ abcd                             | AbcD
++ abcd                             | abcd
++ AbcD                             | AbcD
++ AbcD                             | abcd
++ abcz                             | abcz
++ defg                             | dEfg
++ defg                             | defg
++ dEfg                             | dEfg
++ dEfg                             | defg
++ ee                               | Ee
++ ee                               | ee
++ Ee                               | Ee
++ Ee                               | ee
 +(13 rows)
 +
 +select * from ch where chcol > 'abcd' and chcol<'ee';
-+              chcol               
++              chcol
 +----------------------------------
-+ abcz                            
-+ defg                            
-+ dEfg                            
++ abcz
++ defg
++ dEfg
 +(3 rows)
 +
 +select * from ch order by chcol;
-+              chcol               
++              chcol
 +----------------------------------
-+ abcd                            
-+ AbcD                            
-+ abcz                            
-+ defg                            
-+ dEfg                            
-+ ee                              
-+ Ee                              
++ abcd
++ AbcD
++ abcz
++ defg
++ dEfg
++ ee
++ Ee
 +(7 rows)
 +
 diff --git a/contrib/mchar/expected/init.out b/contrib/mchar/expected/init.out
@@ -765,194 +765,194 @@ index 0000000..3a57082
 +-- simplest examples
 +-- E061-04 like predicate
 +SELECT 'hawkeye'::mchar LIKE 'h%' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar NOT LIKE 'h%' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar LIKE 'H%' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar NOT LIKE 'H%' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar LIKE 'indio%' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar NOT LIKE 'indio%' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar LIKE 'h%eye' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar NOT LIKE 'h%eye' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mchar LIKE '_ndio' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mchar NOT LIKE '_ndio' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mchar LIKE 'in__o' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mchar NOT LIKE 'in__o' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mchar LIKE 'in_o' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mchar NOT LIKE 'in_o' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar LIKE 'h%' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar NOT LIKE 'h%' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar LIKE 'H%' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar NOT LIKE 'H%' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar LIKE 'indio%' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar NOT LIKE 'indio%' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar LIKE 'h%eye' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar NOT LIKE 'h%eye' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mvarchar LIKE '_ndio' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mvarchar NOT LIKE '_ndio' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mvarchar LIKE 'in__o' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mvarchar NOT LIKE 'in__o' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mvarchar LIKE 'in_o' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mvarchar NOT LIKE 'in_o' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +-- unused escape character
 +SELECT 'hawkeye'::mchar LIKE 'h%'::mchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mchar NOT LIKE 'h%'::mchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mchar LIKE 'ind_o'::mchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mchar NOT LIKE 'ind_o'::mchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
@@ -960,183 +960,183 @@ index 0000000..3a57082
 +-- escape character
 +-- E061-05 like predicate with escape clause
 +SELECT 'h%'::mchar LIKE 'h#%'::mchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%'::mchar NOT LIKE 'h#%'::mchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%wkeye'::mchar LIKE 'h#%'::mchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%wkeye'::mchar NOT LIKE 'h#%'::mchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%wkeye'::mchar LIKE 'h#%%'::mchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%wkeye'::mchar NOT LIKE 'h#%%'::mchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%awkeye'::mchar LIKE 'h#%a%k%e'::mchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%awkeye'::mchar NOT LIKE 'h#%a%k%e'::mchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mchar LIKE '_ndio'::mchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mchar NOT LIKE '_ndio'::mchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'i_dio'::mchar LIKE 'i$_d_o'::mchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'i_dio'::mchar NOT LIKE 'i$_d_o'::mchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'i_dio'::mchar LIKE 'i$_nd_o'::mchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'i_dio'::mchar NOT LIKE 'i$_nd_o'::mchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'i_dio'::mchar LIKE 'i$_d%o'::mchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'i_dio'::mchar NOT LIKE 'i$_d%o'::mchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +-- escape character same as pattern character
 +SELECT 'maca'::mchar LIKE 'm%aca' ESCAPE '%'::mchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'maca'::mchar NOT LIKE 'm%aca' ESCAPE '%'::mchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'ma%a'::mchar LIKE 'm%a%%a' ESCAPE '%'::mchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'ma%a'::mchar NOT LIKE 'm%a%%a' ESCAPE '%'::mchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'bear'::mchar LIKE 'b_ear' ESCAPE '_'::mchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'bear'::mchar NOT LIKE 'b_ear'::mchar ESCAPE '_' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'be_r'::mchar LIKE 'b_e__r' ESCAPE '_'::mchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'be_r'::mchar NOT LIKE 'b_e__r' ESCAPE '_'::mchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'be_r'::mchar LIKE '__e__r' ESCAPE '_'::mchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'be_r'::mchar NOT LIKE '__e__r'::mchar ESCAPE '_' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +-- unused escape character
 +SELECT 'hawkeye'::mvarchar LIKE 'h%'::mvarchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'hawkeye'::mvarchar NOT LIKE 'h%'::mvarchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mvarchar LIKE 'ind_o'::mvarchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mvarchar NOT LIKE 'ind_o'::mvarchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
@@ -1144,295 +1144,295 @@ index 0000000..3a57082
 +-- escape character
 +-- E061-05 like predicate with escape clause
 +SELECT 'h%'::mvarchar LIKE 'h#%'::mvarchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%'::mvarchar NOT LIKE 'h#%'::mvarchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%wkeye'::mvarchar LIKE 'h#%'::mvarchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%wkeye'::mvarchar NOT LIKE 'h#%'::mvarchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%wkeye'::mvarchar LIKE 'h#%%'::mvarchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%wkeye'::mvarchar NOT LIKE 'h#%%'::mvarchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%awkeye'::mvarchar LIKE 'h#%a%k%e'::mvarchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'h%awkeye'::mvarchar NOT LIKE 'h#%a%k%e'::mvarchar ESCAPE '#' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'indio'::mvarchar LIKE '_ndio'::mvarchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'indio'::mvarchar NOT LIKE '_ndio'::mvarchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'i_dio'::mvarchar LIKE 'i$_d_o'::mvarchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'i_dio'::mvarchar NOT LIKE 'i$_d_o'::mvarchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'i_dio'::mvarchar LIKE 'i$_nd_o'::mvarchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'i_dio'::mvarchar NOT LIKE 'i$_nd_o'::mvarchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'i_dio'::mvarchar LIKE 'i$_d%o'::mvarchar ESCAPE '$' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'i_dio'::mvarchar NOT LIKE 'i$_d%o'::mvarchar ESCAPE '$' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +-- escape character same as pattern character
 +SELECT 'maca'::mvarchar LIKE 'm%aca' ESCAPE '%'::mvarchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'maca'::mvarchar NOT LIKE 'm%aca' ESCAPE '%'::mvarchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'ma%a'::mvarchar LIKE 'm%a%%a' ESCAPE '%'::mvarchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'ma%a'::mvarchar NOT LIKE 'm%a%%a' ESCAPE '%'::mvarchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'bear'::mvarchar LIKE 'b_ear' ESCAPE '_'::mvarchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'bear'::mvarchar NOT LIKE 'b_ear'::mvarchar ESCAPE '_' AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'be_r'::mvarchar LIKE 'b_e__r' ESCAPE '_'::mvarchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'be_r'::mvarchar NOT LIKE 'b_e__r' ESCAPE '_'::mvarchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'be_r'::mvarchar LIKE '__e__r' ESCAPE '_'::mvarchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'be_r'::mvarchar NOT LIKE '__e__r'::mvarchar ESCAPE '_' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +-- similar to
 +SELECT 'abc'::mchar SIMILAR TO 'abc'::mchar   AS   "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'abc'::mchar SIMILAR TO 'a'::mchar      AS  "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'abc'::mchar SIMILAR TO '%(b|d)%'::mchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'abc'::mchar SIMILAR TO '(b|c)%'::mchar AS  "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%'::mchar SIMILAR TO 'h#%'::mchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%'::mchar SIMILAR TO 'h#%'::mchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'abc'::mvarchar SIMILAR TO 'abc'::mvarchar   AS   "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'abc'::mvarchar SIMILAR TO 'a'::mvarchar      AS  "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'abc'::mvarchar SIMILAR TO '%(b|d)%'::mvarchar AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +SELECT 'abc'::mvarchar SIMILAR TO '(b|c)%'::mvarchar AS  "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%'::mvarchar SIMILAR TO 'h#%'::mvarchar AS "false";
-+ false 
++ false
 +-------
 + f
 +(1 row)
 +
 +SELECT 'h%'::mvarchar SIMILAR TO 'h#%'::mvarchar ESCAPE '#' AS "true";
-+ true 
++ true
 +------
 + t
 +(1 row)
 +
 +-- index support
 +SELECT * from ch where chcol like 'aB_d' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
++ AbcD
++ abcd
 +(2 rows)
 +
 +SELECT * from ch where chcol like 'aB%d' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
++ AbcD
++ abcd
 +(2 rows)
 +
 +SELECT * from ch where chcol like 'aB%' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
-+ abcz                            
++ AbcD
++ abcd
++ abcz
 +(3 rows)
 +
 +SELECT * from ch where chcol like '%BC%' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
-+ abcz                            
++ AbcD
++ abcd
++ abcz
 +(3 rows)
 +
 +set enable_seqscan = off;
 +SELECT * from ch where chcol like 'aB_d' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
++ AbcD
++ abcd
 +(2 rows)
 +
 +SELECT * from ch where chcol like 'aB%d' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
++ AbcD
++ abcd
 +(2 rows)
 +
 +SELECT * from ch where chcol like 'aB%' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
-+ abcz                            
++ AbcD
++ abcd
++ abcz
 +(3 rows)
 +
 +SELECT * from ch where chcol like '%BC%' order by chcol using &<;
-+              chcol               
++              chcol
 +----------------------------------
-+ AbcD                            
-+ abcd                            
-+ abcz                            
++ AbcD
++ abcd
++ abcz
 +(3 rows)
 +
 +set enable_seqscan = on;
@@ -1442,14 +1442,14 @@ index 0000000..3a57082
 +insert into testt values ('0000000001');
 +insert into testt values ('0000000002');
 +select f1 from testt where f1::mvarchar like E'Abc\\-%'::mvarchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'Abc\\-%'::mchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
@@ -1458,14 +1458,14 @@ index 0000000..3a57082
 +create index testindex on testt(f1);
 +set enable_seqscan=off;
 +select f1 from testt where f1::mvarchar like E'Abc\\-%'::mvarchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'Abc\\-%'::mchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
@@ -1479,28 +1479,28 @@ index 0000000..3a57082
 +insert into testt values ('0000000001');
 +insert into testt values ('0000000002');
 +select f1 from testt where f1::mvarchar like E'Abc\\-%'::mvarchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'Abc\\-%'::mchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'Abc\\-  %'::mchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'   %'::mchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
@@ -1511,28 +1511,28 @@ index 0000000..3a57082
 +create index testindex on testt(f1);
 +set enable_seqscan=off;
 +select f1 from testt where f1::mvarchar like E'Abc\\-%'::mvarchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'Abc\\-%'::mchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'Abc\\-   %'::mchar;
-+     f1     
++     f1
 +------------
 + Abc-000001
 + Abc-000002
 +(2 rows)
 +
 +select * from testt where f1::mchar like E'   %'::mchar;
-+     f1     
++     f1
 +------------
 + 0000000001
 + 0000000002
@@ -1548,9 +1548,9 @@ index 0000000..3a57082
 +insert into test values('11   ');
 +insert into test values('1    ');
 +SELECT * FROM test WHERE code LIKE ('%    ');
-+ code  
++ code
 +-------
-+ 1    
++ 1
 +(1 row)
 +
 diff --git a/contrib/mchar/expected/mchar.out b/contrib/mchar/expected/mchar.out
@@ -1561,363 +1561,363 @@ index 0000000..c587424
 @@ -0,0 +1,363 @@
 +-- I/O tests
 +select '1'::mchar;
-+ mchar 
++ mchar
 +-------
 + 1
 +(1 row)
 +
 +select '2  '::mchar;
-+ mchar 
++ mchar
 +-------
 + 2
 +(1 row)
 +
 +select '10          '::mchar;
-+ mchar 
++ mchar
 +-------
 + 10
 +(1 row)
 +
 +select '1'::mchar(2);
-+ mchar 
++ mchar
 +-------
-+ 1 
++ 1
 +(1 row)
 +
 +select '2 '::mchar(2);
-+ mchar 
++ mchar
 +-------
-+ 2 
++ 2
 +(1 row)
 +
 +select '3  '::mchar(2);
-+ mchar 
++ mchar
 +-------
-+ 3 
++ 3
 +(1 row)
 +
 +select '10          '::mchar(2);
-+ mchar 
++ mchar
 +-------
 + 10
 +(1 row)
 +
-+select '                  '::mchar(10); 
-+   mchar    
++select '                  '::mchar(10);
++   mchar
 +------------
-+           
++
 +(1 row)
 +
-+select '                  '::mchar; 
-+ mchar 
++select '                  '::mchar;
++ mchar
 +-------
-+ 
++
 +(1 row)
 +
 +-- operations & functions
 +select length('1'::mchar);
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('2  '::mchar);
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('10          '::mchar);
-+ length 
++ length
 +--------
 +      2
 +(1 row)
 +
 +select length('1'::mchar(2));
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('2 '::mchar(2));
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('3  '::mchar(2));
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('10          '::mchar(2));
-+ length 
++ length
 +--------
 +      2
 +(1 row)
 +
-+select length('                  '::mchar(10)); 
-+ length 
++select length('                  '::mchar(10));
++ length
 +--------
 +      0
 +(1 row)
 +
-+select length('                  '::mchar); 
-+ length 
++select length('                  '::mchar);
++ length
 +--------
 +      0
 +(1 row)
 +
 +select 'asd'::mchar(10) || '>'::mchar(10);
-+       ?column?       
++       ?column?
 +----------------------
-+ asd       >         
++ asd       >
 +(1 row)
 +
 +select length('asd'::mchar(10) || '>'::mchar(10));
-+ length 
++ length
 +--------
 +     11
 +(1 row)
 +
 +select 'asd'::mchar(2)  || '>'::mchar(10);
-+   ?column?   
++   ?column?
 +--------------
-+ as>         
++ as>
 +(1 row)
 +
 +select length('asd'::mchar(2) || '>'::mchar(10));
-+ length 
++ length
 +--------
 +      3
 +(1 row)
 +
 +-- Comparisons
 +select 'asdf'::mchar = 'aSdf'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar = 'aSdf '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar = 'aSdf 1'::mchar(4);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar = 'aSdf 1'::mchar(5);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar = 'aSdf 1'::mchar(6);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar(3) = 'aSdf 1'::mchar(5);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar(3) = 'aSdf 1'::mchar(3);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar < 'aSdf'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar < 'aSdf '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar < 'aSdf 1'::mchar(4);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar < 'aSdf 1'::mchar(5);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar < 'aSdf 1'::mchar(6);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar <= 'aSdf'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar <= 'aSdf '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar <= 'aSdf 1'::mchar(4);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar <= 'aSdf 1'::mchar(5);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar <= 'aSdf 1'::mchar(6);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar >= 'aSdf'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar >= 'aSdf '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar >= 'aSdf 1'::mchar(4);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar >= 'aSdf 1'::mchar(5);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mchar >= 'aSdf 1'::mchar(6);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar > 'aSdf'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar > 'aSdf '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar > 'aSdf 1'::mchar(4);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar > 'aSdf 1'::mchar(5);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mchar > 'aSdf 1'::mchar(6);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select max(ch) from chvch;
-+     max      
++     max
 +--------------
-+ One space   
++ One space
 +(1 row)
 +
 +select min(ch) from chvch;
-+     min      
++     min
 +--------------
-+ 1 space     
++ 1 space
 +(1 row)
 +
 +select substr('1234567890'::mchar, 3) = '34567890' as "34567890";
-+ 34567890 
++ 34567890
 +----------
 + f
 +(1 row)
 +
 +select substr('1234567890'::mchar, 4, 3) = '456' as "456";
-+ 456 
++ 456
 +-----
 + t
 +(1 row)
 +
 +select lower('asdfASDF'::mchar);
-+  lower   
++  lower
 +----------
 + asdfasdf
 +(1 row)
 +
 +select upper('asdfASDF'::mchar);
-+  upper   
++  upper
 +----------
 + ASDFASDF
 +(1 row)
 +
 +select 'asd'::mchar == 'aSd'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asd'::mchar == 'aCd'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asd'::mchar == NULL;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL == 'aCd'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL::mchar == NULL;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
@@ -1929,789 +1929,789 @@ index 0000000..fa2e924
 +++ b/contrib/mchar/expected/mm.out
 @@ -0,0 +1,805 @@
 +select 'asd'::mchar::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
 + asd
 +(1 row)
 +
 +select 'asd '::mchar::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
 + asd
 +(1 row)
 +
 +select 'asd'::mchar(2)::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd '::mchar(2)::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd'::mchar(5)::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd '::mchar(5)::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd'::mchar::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd '::mchar::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd'::mchar(2)::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd '::mchar(2)::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd'::mchar(5)::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd '::mchar(5)::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd'::mchar::mvarchar(5);
-+ mvarchar 
++ mvarchar
 +----------
 + asd
 +(1 row)
 +
 +select 'asd '::mchar::mvarchar(5);
-+ mvarchar 
++ mvarchar
 +----------
 + asd
 +(1 row)
 +
 +select 'asd'::mchar(2)::mvarchar(5);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd '::mchar(2)::mvarchar(5);
-+ mvarchar 
++ mvarchar
 +----------
 + as
 +(1 row)
 +
 +select 'asd'::mchar(5)::mvarchar(5);
-+ mvarchar 
++ mvarchar
 +----------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd '::mchar(5)::mvarchar(5);
-+ mvarchar 
++ mvarchar
 +----------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd'::mvarchar::mchar;
-+ mchar 
++ mchar
 +-------
 + asd
 +(1 row)
 +
 +select 'asd '::mvarchar::mchar;
-+ mchar 
++ mchar
 +-------
 + asd
 +(1 row)
 +
 +select 'asd'::mvarchar(2)::mchar;
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd '::mvarchar(2)::mchar;
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd'::mvarchar(5)::mchar;
-+ mchar 
++ mchar
 +-------
 + asd
 +(1 row)
 +
 +select 'asd '::mvarchar(5)::mchar;
-+ mchar 
++ mchar
 +-------
 + asd
 +(1 row)
 +
 +select 'asd'::mvarchar::mchar(2);
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd '::mvarchar::mchar(2);
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd'::mvarchar(2)::mchar(2);
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd '::mvarchar(2)::mchar(2);
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd'::mvarchar(5)::mchar(2);
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd '::mvarchar(5)::mchar(2);
-+ mchar 
++ mchar
 +-------
 + as
 +(1 row)
 +
 +select 'asd'::mvarchar::mchar(5);
-+ mchar 
++ mchar
 +-------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd '::mvarchar::mchar(5);
-+ mchar 
++ mchar
 +-------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd'::mvarchar(2)::mchar(5);
-+ mchar 
++ mchar
 +-------
-+ as   
++ as
 +(1 row)
 +
 +select 'asd '::mvarchar(2)::mchar(5);
-+ mchar 
++ mchar
 +-------
-+ as   
++ as
 +(1 row)
 +
 +select 'asd'::mvarchar(5)::mchar(5);
-+ mchar 
++ mchar
 +-------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd '::mvarchar(5)::mchar(5);
-+ mchar 
++ mchar
 +-------
-+ asd  
++ asd
 +(1 row)
 +
 +select 'asd'::mchar || '123';
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd'::mchar || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd'::mchar || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mchar || '123';
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mchar || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mchar || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mchar || '123 ';
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mchar || '123 '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mchar || '123 '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
-+ asd123 
++ asd123
 +(1 row)
 +
 +select 'asd'::mvarchar || '123';
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd'::mvarchar || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd'::mvarchar || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mvarchar || '123';
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar || '123 ';
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar || '123 '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar || '123 '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd'::mchar(2) || '123';
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd'::mchar(2) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd'::mchar(2) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mchar(2) || '123';
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mchar(2) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mchar(2) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mchar(2) || '123 ';
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mchar(2) || '123 '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mchar(2) || '123 '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
-+ as123 
++ as123
 +(1 row)
 +
 +select 'asd'::mvarchar(2) || '123';
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd'::mvarchar(2) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd'::mvarchar(2) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mvarchar(2) || '123';
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mvarchar(2) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mvarchar(2) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mvarchar(2) || '123 ';
-+ ?column? 
++ ?column?
 +----------
-+ as123 
++ as123
 +(1 row)
 +
 +select 'asd '::mvarchar(2) || '123 '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + as123
 +(1 row)
 +
 +select 'asd '::mvarchar(2) || '123 '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
-+ as123 
++ as123
 +(1 row)
 +
 +select 'asd'::mchar(4) || '143';
-+ ?column? 
++ ?column?
 +----------
 + asd 143
 +(1 row)
 +
 +select 'asd'::mchar(4) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd'::mchar(4) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mchar(4) || '123';
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mchar(4) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mchar(4) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mchar(4) || '123 ';
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mchar(4) || '123 '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mchar(4) || '123 '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd'::mvarchar(4) || '123';
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd'::mvarchar(4) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd'::mvarchar(4) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123';
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123'::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123 ';
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123 '::mchar;
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123 '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123 '::mchar(4);
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123 '::mvarchar(4);
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123'::mchar(4);
-+ ?column? 
++ ?column?
 +----------
-+ asd 123 
++ asd 123
 +(1 row)
 +
 +select 'asd '::mvarchar(4) || '123'::mvarchar(4);
-+ ?column? 
++ ?column?
 +----------
 + asd 123
 +(1 row)
 +
 +select 1 where 'f'::mchar='F'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f'::mchar='F '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar='F'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar='F '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f'::mchar='F'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f'::mchar='F '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar='F'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar='F '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f'::mchar(2)='F'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f'::mchar(2)='F '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar(2)='F'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar(2)='F '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f'::mchar(2)='F'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f'::mchar(2)='F '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar(2)='F'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'f '::mchar(2)='F '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo'::mchar='FOO'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo'::mchar='FOO '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo '::mchar='FOO'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo '::mchar='FOO '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo'::mchar='FOO'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo'::mchar='FOO '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo '::mchar='FOO'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo '::mchar='FOO '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo'::mchar(2)='FOO'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo'::mchar(2)='FOO '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo '::mchar(2)='FOO'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo '::mchar(2)='FOO '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 +(0 rows)
 +
 +select 1 where 'foo'::mchar(2)='FOO'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo'::mchar(2)='FOO '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo '::mchar(2)='FOO'::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +select 1 where 'foo '::mchar(2)='FOO '::mvarchar(2);
-+ ?column? 
++ ?column?
 +----------
 +        1
 +(1 row)
 +
 +Select 'f'::mchar(1) Union Select 'o'::mvarchar(1);
-+ mchar 
++ mchar
 +-------
 + f
 + o
 +(2 rows)
 +
 +Select 'f'::mvarchar(1) Union Select 'o'::mchar(1);
-+ mvarchar 
++ mvarchar
 +----------
 + f
 + o
 +(2 rows)
 +
 +select * from chvch where ch=vch;
-+      ch      |    vch     
++      ch      |    vch
 +--------------+------------
 + No spaces    | No spaces
-+ One space    | One space 
-+ 1 space      | 1 space 
++ One space    | One space
++ 1 space      | 1 space
 +(3 rows)
 +
 +select ch.* from ch, (select 'dEfg'::mvarchar as q) as p  where  chcol > p.q;
-+              chcol               
++              chcol
 +----------------------------------
-+ ee                              
-+ Ee                              
++ ee
++ Ee
 +(2 rows)
 +
 +create index qq on ch (chcol);
 +set enable_seqscan=off;
 +select ch.* from ch, (select 'dEfg'::mvarchar as q) as p  where  chcol > p.q;
-+              chcol               
++              chcol
 +----------------------------------
-+ ee                              
-+ Ee                              
++ ee
++ Ee
 +(2 rows)
 +
 +set enable_seqscan=on;
@@ -2722,12 +2722,12 @@ index 0000000..fa2e924
 +CREATE TABLE a (mchar2 MCHAR(2) NOT NULL);
 +CREATE TABLE c (mvarchar255 mvarchar NOT NULL);
 +SELECT * FROM a, c WHERE mchar2 = mvarchar255;
-+ mchar2 | mvarchar255 
++ mchar2 | mvarchar255
 +--------+-------------
 +(0 rows)
 +
 +SELECT * FROM a, c WHERE mvarchar255 = mchar2;
-+ mchar2 | mvarchar255 
++ mchar2 | mvarchar255
 +--------+-------------
 +(0 rows)
 +
@@ -2741,363 +2741,363 @@ index 0000000..5c866b4
 @@ -0,0 +1,363 @@
 +-- I/O tests
 +select '1'::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
 + 1
 +(1 row)
 +
 +select '2  '::mvarchar;
-+ mvarchar 
++ mvarchar
 +----------
-+ 2  
++ 2
 +(1 row)
 +
 +select '10          '::mvarchar;
-+   mvarchar   
++   mvarchar
 +--------------
-+ 10          
++ 10
 +(1 row)
 +
 +select '1'::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + 1
 +(1 row)
 +
 +select '2 '::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
-+ 2 
++ 2
 +(1 row)
 +
 +select '3  '::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
-+ 3 
++ 3
 +(1 row)
 +
 +select '10          '::mvarchar(2);
-+ mvarchar 
++ mvarchar
 +----------
 + 10
 +(1 row)
 +
-+select '                  '::mvarchar(10); 
-+  mvarchar  
++select '                  '::mvarchar(10);
++  mvarchar
 +------------
-+           
++
 +(1 row)
 +
-+select '                  '::mvarchar; 
-+      mvarchar      
++select '                  '::mvarchar;
++      mvarchar
 +--------------------
-+                   
++
 +(1 row)
 +
 +-- operations & functions
 +select length('1'::mvarchar);
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('2  '::mvarchar);
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('10          '::mvarchar);
-+ length 
++ length
 +--------
 +      2
 +(1 row)
 +
 +select length('1'::mvarchar(2));
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('2 '::mvarchar(2));
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('3  '::mvarchar(2));
-+ length 
++ length
 +--------
 +      1
 +(1 row)
 +
 +select length('10          '::mvarchar(2));
-+ length 
++ length
 +--------
 +      2
 +(1 row)
 +
-+select length('                  '::mvarchar(10)); 
-+ length 
++select length('                  '::mvarchar(10));
++ length
 +--------
 +      0
 +(1 row)
 +
-+select length('                  '::mvarchar); 
-+ length 
++select length('                  '::mvarchar);
++ length
 +--------
 +      0
 +(1 row)
 +
 +select 'asd'::mvarchar(10) || '>'::mvarchar(10);
-+ ?column? 
++ ?column?
 +----------
 + asd>
 +(1 row)
 +
 +select length('asd'::mvarchar(10) || '>'::mvarchar(10));
-+ length 
++ length
 +--------
 +      4
 +(1 row)
 +
 +select 'asd'::mvarchar(2)  || '>'::mvarchar(10);
-+ ?column? 
++ ?column?
 +----------
 + as>
 +(1 row)
 +
 +select length('asd'::mvarchar(2) || '>'::mvarchar(10));
-+ length 
++ length
 +--------
 +      3
 +(1 row)
 +
 +-- Comparisons
 +select 'asdf'::mvarchar = 'aSdf'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar = 'aSdf '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar = 'aSdf 1'::mvarchar(4);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar = 'aSdf 1'::mvarchar(5);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar = 'aSdf 1'::mvarchar(6);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar(3) = 'aSdf 1'::mvarchar(5);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar(3) = 'aSdf 1'::mvarchar(3);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar < 'aSdf'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar < 'aSdf '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar < 'aSdf 1'::mvarchar(4);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar < 'aSdf 1'::mvarchar(5);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar < 'aSdf 1'::mvarchar(6);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar <= 'aSdf'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar <= 'aSdf '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar <= 'aSdf 1'::mvarchar(4);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar <= 'aSdf 1'::mvarchar(5);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar <= 'aSdf 1'::mvarchar(6);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar >= 'aSdf'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar >= 'aSdf '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar >= 'aSdf 1'::mvarchar(4);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar >= 'aSdf 1'::mvarchar(5);
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asdf'::mvarchar >= 'aSdf 1'::mvarchar(6);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar > 'aSdf'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar > 'aSdf '::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar > 'aSdf 1'::mvarchar(4);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar > 'aSdf 1'::mvarchar(5);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asdf'::mvarchar > 'aSdf 1'::mvarchar(6);
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select max(vch) from chvch;
-+    max     
++    max
 +------------
-+ One space 
++ One space
 +(1 row)
 +
 +select min(vch) from chvch;
-+   min    
++   min
 +----------
-+ 1 space 
++ 1 space
 +(1 row)
 +
 +select substr('1234567890'::mvarchar, 3) = '34567890' as "34567890";
-+ 34567890 
++ 34567890
 +----------
 + f
 +(1 row)
 +
 +select substr('1234567890'::mvarchar, 4, 3) = '456' as "456";
-+ 456 
++ 456
 +-----
 + t
 +(1 row)
 +
 +select lower('asdfASDF'::mvarchar);
-+  lower   
++  lower
 +----------
 + asdfasdf
 +(1 row)
 +
 +select upper('asdfASDF'::mvarchar);
-+  upper   
++  upper
 +----------
 + ASDFASDF
 +(1 row)
 +
 +select 'asd'::mvarchar == 'aSd'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
 +
 +select 'asd'::mvarchar == 'aCd'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select 'asd'::mvarchar == NULL;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL == 'aCd'::mvarchar;
-+ ?column? 
++ ?column?
 +----------
 + f
 +(1 row)
 +
 +select NULL::mvarchar == NULL;
-+ ?column? 
++ ?column?
 +----------
 + t
 +(1 row)
@@ -3123,9 +3123,9 @@ index 0000000..8823169
 +	UChar	data[1];
 +} MChar;
 +
-+#define MCHARHDRSZ	offsetof(MChar, data)	
++#define MCHARHDRSZ	offsetof(MChar, data)
 +#define MCHARLENGTH(m)	( VARSIZE(m)-MCHARHDRSZ )
-+#define UCHARLENGTH(m)  ( MCHARLENGTH(m)/sizeof(UChar) )	
++#define UCHARLENGTH(m)  ( MCHARLENGTH(m)/sizeof(UChar) )
 +
 +#define DatumGetMChar(m)	((MChar*)DatumGetPointer(m))
 +#define MCharGetDatum(m)	PointerGetDatum(m)
@@ -3153,11 +3153,11 @@ index 0000000..8823169
 +#define PG_RETURN_MVARCHAR(m)	PG_RETURN_POINTER(m)
 +
 +
-+int Char2UChar(const char * src, int srclen, UChar *dst); 
-+int UChar2Char(const UChar * src, int srclen, char *dst); 
++int Char2UChar(const char * src, int srclen, UChar *dst);
++int UChar2Char(const UChar * src, int srclen, char *dst);
 +int UChar2Wchar(UChar * src, int srclen, pg_wchar *dst);
-+int UCharCompare(UChar * a, int alen, UChar *b, int blen); 
-+int UCharCaseCompare(UChar * a, int alen, UChar *b, int blen); 
++int UCharCompare(UChar * a, int alen, UChar *b, int blen);
++int UCharCaseCompare(UChar * a, int alen, UChar *b, int blen);
 +
 +void FillWhiteSpace( UChar *dst, int n );
 +
@@ -4536,7 +4536,7 @@ index 0000000..9179412
 +
 +PG_FUNCTION_INFO_V1(mchartypmod_in);
 +Datum mchartypmod_in(PG_FUNCTION_ARGS);
-+Datum 
++Datum
 +mchartypmod_in(PG_FUNCTION_ARGS) {
 +	ArrayType  *ta = PG_GETARG_ARRAYTYPE_P(0);
 +	int32      *tl;
@@ -4558,12 +4558,12 @@ index 0000000..9179412
 +
 +PG_FUNCTION_INFO_V1(mchartypmod_out);
 +Datum mchartypmod_out(PG_FUNCTION_ARGS);
-+Datum 
++Datum
 +mchartypmod_out(PG_FUNCTION_ARGS) {
 +	int32       typmod = PG_GETARG_INT32(0);
 +	char       *res = (char *) palloc(64);
 +
-+	if (typmod >0) 
++	if (typmod >0)
 +		snprintf(res, 64, "(%d)", (int) (typmod));
 +	else
 +		*res = '\0';
@@ -4574,7 +4574,7 @@ index 0000000..9179412
 +static void
 +mchar_strip( MChar * m, int atttypmod ) {
 +	int maxlen;
-+	
++
 +	if ( atttypmod<=0 ) {
 +		atttypmod =-1;
 +	} else {
@@ -4719,7 +4719,7 @@ index 0000000..9179412
 +	MVarChar	*result;
 +	int32    typmod = PG_GETARG_INT32(1);
 +	bool     isExplicit = PG_GETARG_BOOL(2);
-+	int		charlen = u_countChar32(source->data, UVARCHARLENGTH(source)); 
++	int		charlen = u_countChar32(source->data, UVARCHARLENGTH(source));
 +
 +	result = palloc( VARSIZE(source) );
 +	memcpy( result, source, VARSIZE(source) );
@@ -4737,7 +4737,7 @@ index 0000000..9179412
 +
 +PG_FUNCTION_INFO_V1(mvarchar_mchar);
 +Datum       mvarchar_mchar(PG_FUNCTION_ARGS);
-+Datum       
++Datum
 +mvarchar_mchar(PG_FUNCTION_ARGS) {
 +	MVarChar	*source = PG_GETARG_MVARCHAR(0);
 +	MChar	*result;
@@ -4751,7 +4751,7 @@ index 0000000..9179412
 +	memcpy( result->data, source->data, MVARCHARLENGTH(source));
 +
 +	PG_FREE_IF_COPY(source,0);
-+	
++
 +	mchar_strip( result, typmod );
 +
 +	PG_RETURN_MCHAR(result);
@@ -4759,7 +4759,7 @@ index 0000000..9179412
 +
 +PG_FUNCTION_INFO_V1(mchar_mvarchar);
 +Datum       mchar_mvarchar(PG_FUNCTION_ARGS);
-+Datum       
++Datum
 +mchar_mvarchar(PG_FUNCTION_ARGS) {
 +	MChar	*source = PG_GETARG_MCHAR(0);
 +	MVarChar	*result;
@@ -4784,7 +4784,7 @@ index 0000000..9179412
 +	SET_VARSIZE(result, MVARCHARHDRSZ + curlen *sizeof(UChar));
 +
 +	PG_FREE_IF_COPY(source,0);
-+	
++
 +	mvarchar_strip( result, typmod );
 +
 +	PG_RETURN_MCHAR(result);
@@ -4792,7 +4792,7 @@ index 0000000..9179412
 +
 +PG_FUNCTION_INFO_V1(mchar_send);
 +Datum       mchar_send(PG_FUNCTION_ARGS);
-+Datum       
++Datum
 +mchar_send(PG_FUNCTION_ARGS) {
 +	MChar	*in = PG_GETARG_MCHAR(0);
 +	size_t	inlen = UCHARLENGTH(in);
@@ -4815,15 +4815,15 @@ index 0000000..9179412
 +
 +	PG_FREE_IF_COPY(in,0);
 +
-+	PG_RETURN_BYTEA_P(pq_endtypsend(&buf));	
++	PG_RETURN_BYTEA_P(pq_endtypsend(&buf));
 +}
 +
 +PG_FUNCTION_INFO_V1(mchar_recv);
 +Datum       mchar_recv(PG_FUNCTION_ARGS);
-+Datum       
++Datum
 +mchar_recv(PG_FUNCTION_ARGS) {
 +	StringInfo  buf = (StringInfo) PG_GETARG_POINTER(0);
-+	MChar		*res; 
++	MChar		*res;
 +	int			nbytes;
 +#ifdef NOT_USED
 +	Oid         typelem = PG_GETARG_OID(1);
@@ -4839,12 +4839,12 @@ index 0000000..9179412
 +
 +	mchar_strip( res, atttypmod );
 +
-+	PG_RETURN_MCHAR(res);	
++	PG_RETURN_MCHAR(res);
 +}
 +
 +PG_FUNCTION_INFO_V1(mvarchar_send);
 +Datum       mvarchar_send(PG_FUNCTION_ARGS);
-+Datum       
++Datum
 +mvarchar_send(PG_FUNCTION_ARGS) {
 +	MVarChar	*in = PG_GETARG_MVARCHAR(0);
 +	size_t	inlen = UVARCHARLENGTH(in);
@@ -4855,15 +4855,15 @@ index 0000000..9179412
 +
 +	PG_FREE_IF_COPY(in,0);
 +
-+	PG_RETURN_BYTEA_P(pq_endtypsend(&buf));	
++	PG_RETURN_BYTEA_P(pq_endtypsend(&buf));
 +}
 +
 +PG_FUNCTION_INFO_V1(mvarchar_recv);
 +Datum       mvarchar_recv(PG_FUNCTION_ARGS);
-+Datum       
++Datum
 +mvarchar_recv(PG_FUNCTION_ARGS) {
 +	StringInfo  buf = (StringInfo) PG_GETARG_POINTER(0);
-+	MVarChar	*res; 
++	MVarChar	*res;
 +	int			nbytes;
 +#ifdef NOT_USED
 +	Oid         typelem = PG_GETARG_OID(1);
@@ -4878,7 +4878,7 @@ index 0000000..9179412
 +
 +	mvarchar_strip( res, atttypmod );
 +
-+	PG_RETURN_MVARCHAR(res);	
++	PG_RETURN_MVARCHAR(res);
 +}
 +
 +
@@ -4965,7 +4965,7 @@ index 0000000..3af13d8
 +		while (__l-- > 0)				\
 +			*(dst)++ = *(src)++;		\
 +	} while (0)
-+		
++
 +
 +static UChar	UCharPercent = 0;
 +static UChar	UCharBackSlesh = 0;
@@ -5016,7 +5016,7 @@ index 0000000..3af13d8
 +static int
 +MatchUChar(UChar *t, int tlen, UChar *p, int plen) {
 +	SET_UCHAR;
-+	
++
 +	/* Fast path for match-everything pattern */
 +	if ((plen == 1) && (*p == UCharPercent))
 +		return LIKE_TRUE;
@@ -5111,8 +5111,8 @@ index 0000000..3af13d8
 +Datum
 +mvarchar_notlike( PG_FUNCTION_ARGS ) {
 +	bool res = DatumGetBool( DirectFunctionCall2(
-+			mvarchar_like, 
-+			PG_GETARG_DATUM(0), 
++			mvarchar_like,
++			PG_GETARG_DATUM(0),
 +			PG_GETARG_DATUM(1)
 +		));
 +	PG_RETURN_BOOL( !res );
@@ -5130,7 +5130,7 @@ index 0000000..3af13d8
 +	ptr = src + srclen-1;
 +	SET_UCHAR;
 +
-+	*isSpecialLast = ( srclen > 0 && (u_isspace(*ptr) || *ptr == UCharPercent || *ptr == UCharUnderLine ) ) ? true : false; 
++	*isSpecialLast = ( srclen > 0 && (u_isspace(*ptr) || *ptr == UCharPercent || *ptr == UCharUnderLine ) ) ? true : false;
 +	while( ptr>=src ) {
 +		if ( *ptr == UCharPercent || *ptr == UCharUnderLine ) {
 +			if ( ptr==src )
@@ -5158,7 +5158,7 @@ index 0000000..3af13d8
 +
 +	dptr = dst + (ptr-src+1);
 +
-+	if ( ptr>=src ) 
++	if ( ptr>=src )
 +		memcpy( dst, src, sizeof(UChar) * (ptr-src+1) );
 +
 +	while( markptr - src < srclen ) {
@@ -5218,7 +5218,7 @@ index 0000000..3af13d8
 +	PG_FREE_IF_COPY(str,0);
 +	PG_FREE_IF_COPY(pat,1);
 +
-+	
++
 +	PG_RETURN_BOOL(result == LIKE_TRUE);
 +}
 +
@@ -5227,8 +5227,8 @@ index 0000000..3af13d8
 +Datum
 +mchar_notlike( PG_FUNCTION_ARGS ) {
 +	bool res = DatumGetBool( DirectFunctionCall2(
-+			mchar_like, 
-+			PG_GETARG_DATUM(0), 
++			mchar_like,
++			PG_GETARG_DATUM(0),
 +			PG_GETARG_DATUM(1)
 +		));
 +
@@ -5244,11 +5244,11 @@ index 0000000..3af13d8
 +	Const			*patt = 	(Const*)PG_GETARG_POINTER(0);
 +	Pattern_Type	ptype = 	(Pattern_Type)PG_GETARG_INT32(1);
 +	Const			**prefix = 	(Const**)PG_GETARG_POINTER(2);
-+	UChar			*spatt;	
++	UChar			*spatt;
 +	int32			slen, prefixlen=0, restlen=0, i=0;
 +	MVarChar		*sprefix;
 +	MVarChar		*srest;
-+	Pattern_Prefix_Status	status = Pattern_Prefix_None; 
++	Pattern_Prefix_Status	status = Pattern_Prefix_None;
 +
 +	*prefix = NULL;
 +
@@ -5275,7 +5275,7 @@ index 0000000..3af13d8
 +	}
 +
 +	while( prefixlen > 0 ) {
-+		if ( ! u_isspace( sprefix->data[ prefixlen-1 ] ) ) 
++		if ( ! u_isspace( sprefix->data[ prefixlen-1 ] ) )
 +			break;
 +		prefixlen--;
 +	}
@@ -5283,11 +5283,11 @@ index 0000000..3af13d8
 +	if ( prefixlen == 0 )
 +		PG_RETURN_INT32(Pattern_Prefix_None);
 +
-+	for(;i<slen;i++) 
++	for(;i<slen;i++)
 +		srest->data[ restlen++ ] = spatt[i];
 +
-+	SET_VARSIZE(sprefix, sizeof(UChar) * prefixlen + MVARCHARHDRSZ);	
-+	SET_VARSIZE(srest, sizeof(UChar) * restlen + MVARCHARHDRSZ);	
++	SET_VARSIZE(sprefix, sizeof(UChar) * prefixlen + MVARCHARHDRSZ);
++	SET_VARSIZE(srest, sizeof(UChar) * restlen + MVARCHARHDRSZ);
 +
 +	*prefix = makeConst( patt->consttype, -1, DEFAULT_COLLATION_OID, VARSIZE(sprefix), PointerGetDatum(sprefix), false, false );
 +
@@ -5296,10 +5296,10 @@ index 0000000..3af13d8
 +	else if ( prefixlen > 0 )
 +		status = Pattern_Prefix_Partial;
 +
-+	PG_RETURN_INT32( status );	
++	PG_RETURN_INT32( status );
 +}
 +
-+static bool 
++static bool
 +checkCmp( UChar *left, int32 leftlen, UChar *right, int32 rightlen ) {
 +
 +	return  (UCharCaseCompare( left, leftlen, right, rightlen) < 0 ) ? true : false;
@@ -5311,7 +5311,7 @@ index 0000000..3af13d8
 +Datum
 +mchar_greaterstring( PG_FUNCTION_ARGS ) {
 +	Const			*patt = 	(Const*)PG_GETARG_POINTER(0);
-+	char			*src  = 	(char*)DatumGetPointer( patt->constvalue ); 
++	char			*src  = 	(char*)DatumGetPointer( patt->constvalue );
 +	int				dstlen, srclen  = 	VARSIZE(src);
 +	char 			*dst = palloc( srclen );
 +	UChar			*ptr, *srcptr;
@@ -5334,19 +5334,19 @@ index 0000000..3af13d8
 +					continue;
 +				else {
 +					SET_VARSIZE(dst, sizeof(UChar) * dstlen + MVARCHARHDRSZ);
-+				
++
 +					PG_RETURN_POINTER( makeConst( patt->consttype, -1, DEFAULT_COLLATION_OID, VARSIZE(dst), PointerGetDatum(dst), false, false ) );
 +				}
 +			}
 +		}
-+				
++
 +		dstlen--;
 +	}
 +
 +	PG_RETURN_POINTER(NULL);
 +}
 +
-+static int 
++static int
 +do_like_escape( UChar *pat, int plen, UChar *esc, int elen, UChar *result) {
 +	UChar	*p = pat,*e =esc ,*r;
 +	bool	afterescape;
@@ -5360,7 +5360,7 @@ index 0000000..3af13d8
 +		 * pattern to make them act like ordinary characters.
 +		 */
 +		while (plen > 0) {
-+			if (*p == UCharBackSlesh ) 
++			if (*p == UCharBackSlesh )
 +				*r++ = UCharBackSlesh;
 +			CopyAdvChar(r, p, plen);
 +		}
@@ -5620,7 +5620,7 @@ index 0000000..3af13d8
 +	PG_RETURN_BOOL(!res);
 +}
 +
-+static int 
++static int
 +do_similar_escape(UChar *p, int plen, UChar *e, int elen, UChar *result) {
 +	UChar		*r;
 +	bool        afterescape = false;
@@ -5642,7 +5642,7 @@ index 0000000..3af13d8
 +	}
 +
 +	/*
-+	 * Look explanation of following in ./utils/adt/regexp.c 
++	 * Look explanation of following in ./utils/adt/regexp.c
 +	 */
 +	r = result;
 +
@@ -5679,7 +5679,7 @@ index 0000000..3af13d8
 +
 +		p++, plen--;
 +	}
-+	
++
 +	*r++ = UCharRBracket;
 +	*r++ = UCharDollar;
 +
@@ -5762,7 +5762,7 @@ index 0000000..4694d9c
 +lengthWithoutSpaceVarChar(MVarChar	*m) {
 +	int l = UVARCHARLENGTH(m);
 +
-+	while( l>0 && m_isspace( m->data[ l-1 ] ) ) 
++	while( l>0 && m_isspace( m->data[ l-1 ] ) )
 +		l--;
 +
 +	return l;
@@ -5772,7 +5772,7 @@ index 0000000..4694d9c
 +lengthWithoutSpaceChar(MChar	*m) {
 +	int l = UCHARLENGTH(m);
 +
-+	while( l>0 && m_isspace( m->data[ l-1 ] ) ) 
++	while( l>0 && m_isspace( m->data[ l-1 ] ) )
 +		l--;
 +
 +	return l;
@@ -5780,7 +5780,7 @@ index 0000000..4694d9c
 +
 +static inline int
 +mchar_icase_compare( MChar *a, MChar *b ) {
-+	return UCharCaseCompare( 
++	return UCharCaseCompare(
 +		a->data, lengthWithoutSpaceChar(a),
 +		b->data, lengthWithoutSpaceChar(b)
 +	);
@@ -5788,7 +5788,7 @@ index 0000000..4694d9c
 +
 +static inline int
 +mchar_case_compare( MChar *a, MChar *b ) {
-+	return UCharCompare( 
++	return UCharCompare(
 +		a->data, lengthWithoutSpaceChar(a),
 +		b->data, lengthWithoutSpaceChar(b)
 +	);
@@ -5864,7 +5864,7 @@ index 0000000..4694d9c
 +		bcharlen = u_countChar32(b->data, UCHARLENGTH(b));
 +
 +
-+	maxcharlen = ((a->typmod<=0) ? acharlen : a->typmod) + 
++	maxcharlen = ((a->typmod<=0) ? acharlen : a->typmod) +
 +				 ((b->typmod<=0) ? bcharlen : b->typmod);
 +
 +	result = (MChar*)palloc( MCHARHDRSZ + sizeof(UChar) * 2 * maxcharlen );
@@ -5898,8 +5898,8 @@ index 0000000..4694d9c
 +
 +static inline int
 +mvarchar_icase_compare( MVarChar *a, MVarChar *b ) {
-+	
-+	return UCharCaseCompare( 
++
++	return UCharCaseCompare(
 +		a->data, lengthWithoutSpaceVarChar(a),
 +		b->data, lengthWithoutSpaceVarChar(b)
 +	);
@@ -5907,7 +5907,7 @@ index 0000000..4694d9c
 +
 +static inline int
 +mvarchar_case_compare( MVarChar *a, MVarChar *b ) {
-+	return UCharCompare( 
++	return UCharCompare(
 +		a->data, lengthWithoutSpaceVarChar(a),
 +		b->data, lengthWithoutSpaceVarChar(b)
 +	);
@@ -6002,7 +6002,7 @@ index 0000000..4694d9c
 +
 +PG_FUNCTION_INFO_V1( mchar_mvarchar_concat );
 +Datum mchar_mvarchar_concat( PG_FUNCTION_ARGS );
-+Datum                                            
++Datum
 +mchar_mvarchar_concat( PG_FUNCTION_ARGS ) {
 +	MChar *a = PG_GETARG_MCHAR(0);
 +	MVarChar *b = PG_GETARG_MVARCHAR(1);
@@ -6038,7 +6038,7 @@ index 0000000..4694d9c
 +
 +PG_FUNCTION_INFO_V1( mvarchar_mchar_concat );
 +Datum mvarchar_mchar_concat( PG_FUNCTION_ARGS );
-+Datum                                            
++Datum
 +mvarchar_mchar_concat( PG_FUNCTION_ARGS ) {
 +	MVarChar *a = PG_GETARG_MVARCHAR(0);
 +	MChar *b = PG_GETARG_MCHAR(1);
@@ -6073,11 +6073,11 @@ index 0000000..4694d9c
 +}
 +
 +/*
-+ * mchar <> mvarchar 
++ * mchar <> mvarchar
 + */
 +static inline int
 +mc_mv_icase_compare( MChar *a, MVarChar *b ) {
-+	return UCharCaseCompare( 
++	return UCharCaseCompare(
 +		a->data, lengthWithoutSpaceChar(a),
 +		b->data, lengthWithoutSpaceVarChar(b)
 +	);
@@ -6085,7 +6085,7 @@ index 0000000..4694d9c
 +
 +static inline int
 +mc_mv_case_compare( MChar *a, MVarChar *b ) {
-+	return UCharCompare( 
++	return UCharCompare(
 +		a->data, lengthWithoutSpaceChar(a),
 +		b->data, lengthWithoutSpaceVarChar(b)
 +	);
@@ -6123,11 +6123,11 @@ index 0000000..4694d9c
 +MC_MV_CHARCMPFUNC( icase, cmp, +, INT32 )
 +
 +/*
-+ * mvarchar <> mchar 
++ * mvarchar <> mchar
 + */
 +static inline int
 +mv_mc_icase_compare( MVarChar *a, MChar *b ) {
-+	return UCharCaseCompare( 
++	return UCharCaseCompare(
 +		a->data, lengthWithoutSpaceVarChar(a),
 +		b->data, lengthWithoutSpaceChar(b)
 +	);
@@ -6135,7 +6135,7 @@ index 0000000..4694d9c
 +
 +static inline int
 +mv_mc_case_compare( MVarChar *a, MChar *b ) {
-+	return UCharCompare( 
++	return UCharCompare(
 +		a->data, lengthWithoutSpaceVarChar(a),
 +		b->data, lengthWithoutSpaceChar(b)
 +	);
@@ -6252,7 +6252,7 @@ index 0000000..165d44c
 +}
 +
 +static int32
-+uchar_substring( 
++uchar_substring(
 +		UChar *str, int32 strl,
 +		int32 start, int32 length, bool length_not_specified,
 +		UChar *dst) {
@@ -6283,14 +6283,14 @@ index 0000000..165d44c
 +		 * start was negative or one. SQL99 says to return a zero-length
 +		 * string.
 +		 */
-+		if (E < 0) 
++		if (E < 0)
 +			return 0;
 +
 +		L1 = E - S1;
 +	}
-+		 
++
 +	U16_FWD_N( str, subbegin, strl, S1 );
-+	if ( subbegin >= strl ) 
++	if ( subbegin >= strl )
 +		return 0;
 +	subend = subbegin;
 +	U16_FWD_N( str, subend, strl, L1 );
@@ -6309,14 +6309,14 @@ index 0000000..165d44c
 +	int32	length;
 +
 +	dst = (MChar*)palloc( VARSIZE(src) );
-+	length = uchar_substring( 
++	length = uchar_substring(
 +		src->data, UCHARLENGTH(src),
 +		PG_GETARG_INT32(1), PG_GETARG_INT32(2), false,
 +		dst->data);
 +
 +	dst->typmod = src->typmod;
 +	SET_VARSIZE(dst, MCHARHDRSZ + length *sizeof(UChar));
-+	
++
 +	PG_FREE_IF_COPY(src, 0);
 +	PG_RETURN_MCHAR(dst);
 +}
@@ -6330,7 +6330,7 @@ index 0000000..165d44c
 +	int32	length;
 +
 +	dst = (MChar*)palloc( VARSIZE(src) );
-+	length = uchar_substring( 
++	length = uchar_substring(
 +		src->data, UCHARLENGTH(src),
 +		PG_GETARG_INT32(1), -1, true,
 +		dst->data);
@@ -6351,7 +6351,7 @@ index 0000000..165d44c
 +	int32	length;
 +
 +	dst = (MVarChar*)palloc( VARSIZE(src) );
-+	length = uchar_substring( 
++	length = uchar_substring(
 +		src->data, UVARCHARLENGTH(src),
 +		PG_GETARG_INT32(1), PG_GETARG_INT32(2), false,
 +		dst->data);
@@ -6371,7 +6371,7 @@ index 0000000..165d44c
 +	int32	length;
 +
 +	dst = (MVarChar*)palloc( VARSIZE(src) );
-+	length = uchar_substring( 
++	length = uchar_substring(
 +		src->data, UVARCHARLENGTH(src),
 +		PG_GETARG_INT32(1), -1, true,
 +		dst->data);
@@ -6451,7 +6451,7 @@ index 0000000..165d44c
 +		if ( U_FAILURE(err) )
 +			elog(ERROR,"ICU u_strToUpper fails and returns %d (%s)", err,  u_errorName(err));
 +
-+		dst->len += sizeof(UChar) * length;	
++		dst->len += sizeof(UChar) * length;
 +	}
 +
 +	SET_VARSIZE( dst, dst->len );
@@ -6481,7 +6481,7 @@ index 0000000..165d44c
 +		if ( U_FAILURE(err) )
 +			elog(ERROR,"ICU u_strToLower fails and returns %d (%s)", err,  u_errorName(err));
 +
-+		dst->len += sizeof(UChar) * length;	
++		dst->len += sizeof(UChar) * length;
 +	}
 +
 +	SET_VARSIZE( dst, dst->len );
@@ -6511,7 +6511,7 @@ index 0000000..165d44c
 +		if ( U_FAILURE(err) )
 +			elog(ERROR,"ICU u_strToUpper fails and returns %d (%s)", err,  u_errorName(err));
 +
-+		dst->len += sizeof(UChar) * length;	
++		dst->len += sizeof(UChar) * length;
 +	}
 +
 +	SET_VARSIZE( dst, dst->len );
@@ -6541,7 +6541,7 @@ index 0000000..165d44c
 +		if ( U_FAILURE(err) )
 +			elog(ERROR,"ICU u_strToLower fails and returns %d (%s)", err,  u_errorName(err));
 +
-+		dst->len += sizeof(UChar) * length;	
++		dst->len += sizeof(UChar) * length;
 +	}
 +
 +	SET_VARSIZE( dst, dst->len );
@@ -6574,7 +6574,7 @@ index 0000000..d4f3659
 +			cnvDB = ucnv_open("UTF8", &err);
 +	 	else
 +			cnvDB = ucnv_open(NULL, &err);
-+		if ( U_FAILURE(err) || cnvDB == NULL ) 
++		if ( U_FAILURE(err) || cnvDB == NULL )
 +			elog(ERROR,"ICU ucnv_open returns %d (%s)", err,  u_errorName(err));
 +	}
 +
@@ -6582,7 +6582,7 @@ index 0000000..d4f3659
 +		UErrorCode err = 0;
 +
 +		colCaseInsensitive = ucol_open("", &err);
-+		if ( U_FAILURE(err) || cnvDB == NULL ) { 
++		if ( U_FAILURE(err) || cnvDB == NULL ) {
 +			if ( colCaseSensitive )
 +				ucol_close( colCaseSensitive );
 +			colCaseSensitive = NULL;
@@ -6596,14 +6596,14 @@ index 0000000..d4f3659
 +		UErrorCode err = 0;
 +
 +		colCaseSensitive = ucol_open("", &err);
-+		if ( U_FAILURE(err) || cnvDB == NULL ) { 
++		if ( U_FAILURE(err) || cnvDB == NULL ) {
 +			if ( colCaseSensitive )
 +				ucol_close( colCaseSensitive );
 +			colCaseSensitive = NULL;
 +			elog(ERROR,"ICU ucol_open returns %d (%s)", err,  u_errorName(err));
 +		}
 +
-+		ucol_setAttribute(colCaseSensitive, UCOL_CASE_FIRST, UCOL_UPPER_FIRST, &err);				
++		ucol_setAttribute(colCaseSensitive, UCOL_CASE_FIRST, UCOL_UPPER_FIRST, &err);
 +		if (U_FAILURE(err)) {
 +			if ( colCaseSensitive )
 +				ucol_close( colCaseSensitive );
@@ -6619,8 +6619,8 @@ index 0000000..d4f3659
 +	UErrorCode err = 0;
 +
 +	createUObjs();
-+	dstlen = ucnv_toUChars( cnvDB, dst, srclen*4, src, srclen, &err ); 
-+	if ( U_FAILURE(err)) 
++	dstlen = ucnv_toUChars( cnvDB, dst, srclen*4, src, srclen, &err );
++	if ( U_FAILURE(err))
 +		elog(ERROR,"ICU ucnv_toUChars returns %d (%s)", err,  u_errorName(err));
 +
 +	return dstlen;
@@ -6632,8 +6632,8 @@ index 0000000..d4f3659
 +	UErrorCode err = 0;
 +
 +	createUObjs();
-+	dstlen = ucnv_fromUChars( cnvDB, dst, srclen*4, src, srclen, &err ); 
-+	if ( U_FAILURE(err) ) 
++	dstlen = ucnv_fromUChars( cnvDB, dst, srclen*4, src, srclen, &err );
++	if ( U_FAILURE(err) )
 +		elog(ERROR,"ICU ucnv_fromUChars returns %d (%s)", err,  u_errorName(err));
 +
 +	return dstlen;
@@ -6665,11 +6665,11 @@ index 0000000..d4f3659
 +		Assert( !U_FAILURE(err) );
 +	}
 +
-+	while( n-- > 0 ) 
++	while( n-- > 0 )
 +		*dst++ = UCharWhiteSpace;
 +}
 +
-+int 
++int
 +UCharCaseCompare(UChar * a, int alen, UChar *b, int blen) {
 +	int len = Min(alen, blen);
 +	int res;
@@ -6684,11 +6684,11 @@ index 0000000..d4f3659
 +	return res;
 +}
 +
-+int 
++int
 +UCharCompare(UChar * a, int alen, UChar *b, int blen) {
 +	int len = Min(alen, blen);
 +	int res;
-+	
++
 +	createUObjs();
 +
 +	res =  (int)ucol_strcoll( colCaseSensitive,
@@ -6993,8 +6993,8 @@ index 0000000..640f166
 +select '3  '::mchar(2);
 +select '10          '::mchar(2);
 +
-+select '                  '::mchar(10); 
-+select '                  '::mchar; 
++select '                  '::mchar(10);
++select '                  '::mchar;
 +
 +-- operations & functions
 +
@@ -7007,8 +7007,8 @@ index 0000000..640f166
 +select length('3  '::mchar(2));
 +select length('10          '::mchar(2));
 +
-+select length('                  '::mchar(10)); 
-+select length('                  '::mchar); 
++select length('                  '::mchar(10));
++select length('                  '::mchar);
 +
 +select 'asd'::mchar(10) || '>'::mchar(10);
 +select length('asd'::mchar(10) || '>'::mchar(10));
@@ -7271,8 +7271,8 @@ index 0000000..91b0981
 +select '3  '::mvarchar(2);
 +select '10          '::mvarchar(2);
 +
-+select '                  '::mvarchar(10); 
-+select '                  '::mvarchar; 
++select '                  '::mvarchar(10);
++select '                  '::mvarchar;
 +
 +-- operations & functions
 +
@@ -7285,8 +7285,8 @@ index 0000000..91b0981
 +select length('3  '::mvarchar(2));
 +select length('10          '::mvarchar(2));
 +
-+select length('                  '::mvarchar(10)); 
-+select length('                  '::mvarchar); 
++select length('                  '::mvarchar(10));
++select length('                  '::mvarchar);
 +
 +select 'asd'::mvarchar(10) || '>'::mvarchar(10);
 +select length('asd'::mvarchar(10) || '>'::mvarchar(10));
@@ -7363,11 +7363,11 @@ index 2487f39..f14e4ea 100644
 +++ b/src/backend/nodes/outfuncs.c
 @@ -1693,6 +1693,7 @@ _outAppendPath(StringInfo str, const AppendPath *node)
  	_outPathInfo(str, (const Path *) node);
- 
+
  	WRITE_NODE_FIELD(subpaths);
 +	WRITE_BOOL_FIELD(pull_tlist);
  }
- 
+
  static void
 diff --git a/src/backend/optimizer/path/Makefile b/src/backend/optimizer/path/Makefile
 index 6864a62..ef250e0 100644
@@ -7376,12 +7376,12 @@ index 6864a62..ef250e0 100644
 @@ -12,7 +12,7 @@ subdir = src/backend/optimizer/path
  top_builddir = ../../../..
  include $(top_builddir)/src/Makefile.global
- 
+
 -OBJS = allpaths.o clausesel.o costsize.o equivclass.o indxpath.o \
 -       joinpath.o joinrels.o pathkeys.o tidpath.o
 +OBJS = allpaths.o appendorpath.o clausesel.o costsize.o equivclass.o \
 +       indxpath.o joinpath.o joinrels.o pathkeys.o tidpath.o
- 
+
  include $(top_srcdir)/src/backend/common.mk
 diff --git a/src/backend/optimizer/path/allpaths.c b/src/backend/optimizer/path/allpaths.c
 index 8fc1cfd..3cec60e 100644
@@ -7390,7 +7390,7 @@ index 8fc1cfd..3cec60e 100644
 @@ -480,6 +480,9 @@ set_plain_rel_pathlist(PlannerInfo *root, RelOptInfo *rel, RangeTblEntry *rte)
  	/* Consider index scans */
  	create_index_paths(root, rel);
- 
+
 +	/* Consider index scans with rewrited quals */
 +	keybased_rewrite_index_paths(root, rel);
 +
@@ -7403,25 +7403,25 @@ index 8fc1cfd..3cec60e 100644
  	if (subpaths_valid)
 -		add_path(rel, (Path *) create_append_path(rel, subpaths, NULL));
 +		add_path(rel, (Path *) create_append_path(rel, subpaths, NULL, false, NIL));
- 
+
  	/*
  	 * Also build unparameterized MergeAppend paths based on the collected
 @@ -1030,7 +1033,7 @@ set_append_rel_pathlist(PlannerInfo *root, RelOptInfo *rel,
- 
+
  		if (subpaths_valid)
  			add_path(rel, (Path *)
 -					 create_append_path(rel, subpaths, required_outer));
 +					 create_append_path(rel, subpaths, required_outer, false, NIL));
  	}
  }
- 
+
 @@ -1257,7 +1260,7 @@ set_dummy_rel_pathlist(RelOptInfo *rel)
  	/* Discard any pre-existing paths; no further need for them */
  	rel->pathlist = NIL;
- 
+
 -	add_path(rel, (Path *) create_append_path(rel, NIL, NULL));
 +	add_path(rel, (Path *) create_append_path(rel, NIL, NULL, false, NIL));
- 
+
  	/*
  	 * We set the cheapest path immediately, to ensure that IS_DUMMY_REL()
 diff --git a/src/backend/optimizer/path/appendorpath.c b/src/backend/optimizer/path/appendorpath.c
@@ -7451,7 +7451,7 @@ index 0000000..17950e5
 +	RestrictInfo	*rinfo;		/* original rinfo */
 +	int				n;			/* IndexPath's number in bitmapquals */
 +	OpExpr			*normalizedexpr; /* expression with Var on left */
-+	Var				*var;	
++	Var				*var;
 +	Node			*value;
 +	Oid				opfamily;
 +	int				strategy;
@@ -7492,7 +7492,7 @@ index 0000000..17950e5
 +
 +/*----------
 + * keybased_rewrite_or_index_quals
-+ *	  Examine join OR-of-AND quals to see if any useful common restriction 
++ *	  Examine join OR-of-AND quals to see if any useful common restriction
 + *	  clauses can be extracted.  If so, try to use for creating new index paths.
 + *
 + * For example consider
@@ -7519,7 +7519,7 @@ index 0000000..17950e5
 + *		Index Scan (a.x=5)	--in case of index on (a.x)
 + *		Index Scan (a.x>6)
 + * For that we should proof that index quals isn't overlapped,
-+ * also, some index quals may be containedi in other, so it can be eliminated  
++ * also, some index quals may be containedi in other, so it can be eliminated
 + */
 +
 +void
@@ -7586,7 +7586,7 @@ index 0000000..17950e5
 +			 * get 'union' of operation for key
 +			 */
 +			rinfo = unionOperation(key);
-+			if ( rinfo ) 
++			if ( rinfo )
 +				addon = lappend(addon, rinfo);
 +		}
 +
@@ -7600,7 +7600,7 @@ index 0000000..17950e5
 +			rel->baserestrictinfo = list_concat(rel->baserestrictinfo, addon);
 +
 +			create_index_paths(root, rel);
-+		
++
 +			rel->baserestrictinfo = origbaserestrictinfo;
 +		}
 +	}
@@ -7611,7 +7611,7 @@ index 0000000..17950e5
 +	 */
 +	if ( (bestpath = cleanup_nested_quals( root, rel, bestpath )) == NULL )
 +		return;
-+	
++
 +	if (IsA(bestpath, IndexPath)) {
 +		IndexPath	*ipath = (IndexPath*)bestpath;
 +
@@ -7637,7 +7637,7 @@ index 0000000..17950e5
 +			 * add path ordered in backward direction if our pathkeys
 +			 * is still unusable...
 +			 */
-+			if ( pathkeys == NULL || pathkeys_useful_for_ordering(root, pathkeys) == 0 ) 
++			if ( pathkeys == NULL || pathkeys_useful_for_ordering(root, pathkeys) == 0 )
 +			{
 +				pathkeys = build_index_pathkeys(root, index,
 +													BackwardScanDirection);
@@ -7663,7 +7663,7 @@ index 0000000..17950e5
 +		ipath->path.rows = rel->tuples * clauselist_selectivity(root,
 +															ipath->indexquals,
 +															rel->relid,
-+															JOIN_INNER, 
++															JOIN_INNER,
 +															NULL);
 +		ipath->path.rows = clamp_row_est(ipath->path.rows);
 +		cost_index(ipath, root, 1);
@@ -7676,11 +7676,11 @@ index 0000000..17950e5
 +	 * target list will be taked from indexscan
 +	 */
 +	index = ((IndexPath*)linitial(bestpath->bitmapquals))->indexinfo;
-+	if ( root->query_pathkeys != NIL && index->sortopfamily && OidIsValid(index->sortopfamily[0]) && 
++	if ( root->query_pathkeys != NIL && index->sortopfamily && OidIsValid(index->sortopfamily[0]) &&
 +				(indexPaths = sortIndexScans( bestpath->bitmapquals )) !=NULL ) {
 +		List	*pathkeys;
 +
-+		pathkeys = build_index_pathkeys(root, index, 
++		pathkeys = build_index_pathkeys(root, index,
 +										ForwardScanDirection);
 +		pathkeys = truncate_useless_pathkeys(root, rel,
 +											 pathkeys);
@@ -7693,8 +7693,8 @@ index 0000000..17950e5
 +		 * is still unusable...
 +		 */
 +		if ( pathkeys == NULL || pathkeys_useful_for_ordering(root, pathkeys) == 0 ) {
-+			
-+			pathkeys = build_index_pathkeys(root, index, 
++
++			pathkeys = build_index_pathkeys(root, index,
 +										BackwardScanDirection);
 +			pathkeys = truncate_useless_pathkeys(root, rel,
 +											 pathkeys);
@@ -7712,7 +7712,7 @@ index 0000000..17950e5
 +/*
 + * transformToCkey - transform RestrictionInfo
 + * to CKey struct. Fucntion checks possibility and correctness of
-+ * RestrictionInfo to use it as common key, normalizes 
++ * RestrictionInfo to use it as common key, normalizes
 + * expression and "caches" some information. Note,
 + * original RestrictInfo isn't touched
 + */
@@ -7730,14 +7730,14 @@ index 0000000..17950e5
 +
 +	if ( contain_mutable_functions((Node*)expr) )
 +		return NULL;
-+	
++
 +	if ( list_length( expr->args ) != 2 )
 +		return NULL;
 +
 +	key = (CKey*)palloc(sizeof(CKey));
 +	key->rinfo = rinfo;
 +
-+	key->normalizedexpr = (OpExpr*)copyObject( expr ); 
++	key->normalizedexpr = (OpExpr*)copyObject( expr );
 +	if (!bms_equal(rinfo->left_relids, index->rel->relids))
 +		CommuteOpExpr(key->normalizedexpr);
 +
@@ -7882,7 +7882,7 @@ index 0000000..17950e5
 +		if ( key->n != 0 )
 +			break;
 +
-+		if ( counter == count_entry(allquals, key) ) 
++		if ( counter == count_entry(allquals, key) )
 +			commonquals = lappend( commonquals, key );
 +	}
 +
@@ -7900,9 +7900,9 @@ index 0000000..17950e5
 +	int		strategy;
 +
 +	switch( key->strategyMask ) {
-+		case	BTMASK(BTLessStrategyNumber):	
-+		case	BTMASK(BTLessEqualStrategyNumber):	
-+		case	BTMASK(BTEqualStrategyNumber):	
++		case	BTMASK(BTLessStrategyNumber):
++		case	BTMASK(BTLessEqualStrategyNumber):
++		case	BTMASK(BTEqualStrategyNumber):
 +		case	BTMASK(BTGreaterEqualStrategyNumber):
 +		case	BTMASK(BTGreaterStrategyNumber):
 +				/* trivial case */
@@ -7911,14 +7911,14 @@ index 0000000..17950e5
 +		case	BTMASK(BTLessStrategyNumber) | BTMASK(BTLessEqualStrategyNumber) | BTMASK(BTEqualStrategyNumber):
 +		case	BTMASK(BTLessStrategyNumber) | BTMASK(BTEqualStrategyNumber):
 +		case	BTMASK(BTLessEqualStrategyNumber) | BTMASK(BTEqualStrategyNumber):
-+				/* any subset of <, <=, = can be unioned with <= */ 
++				/* any subset of <, <=, = can be unioned with <= */
 +				key->strategy = BTLessEqualStrategyNumber;
 +				break;
 +		case	BTMASK(BTGreaterEqualStrategyNumber) | BTMASK(BTGreaterStrategyNumber):
 +		case	BTMASK(BTEqualStrategyNumber) | BTMASK(BTGreaterEqualStrategyNumber) | BTMASK(BTGreaterStrategyNumber):
 +		case	BTMASK(BTEqualStrategyNumber) | BTMASK(BTGreaterStrategyNumber):
 +		case	BTMASK(BTEqualStrategyNumber) | BTMASK(BTGreaterEqualStrategyNumber):
-+				/* any subset of >, >=, = can be unioned with >= */ 
++				/* any subset of >, >=, = can be unioned with >= */
 +				key->strategy = BTGreaterEqualStrategyNumber;
 +				break;
 +		default:
@@ -7954,14 +7954,14 @@ index 0000000..17950e5
 + * Remove unneeded RestrioctionInfo nodes as it
 + * needed by predicate_*_by()
 + */
-+static void 
++static void
 +make_predicate(List *indexquals, List *indexqualcols, List **preds, List **predcols) {
 +	ListCell	*i, *c;
 +
 +	*preds = NIL;
 +	*predcols = NIL;
 +
-+	forboth(i, indexquals, c, indexqualcols) 
++	forboth(i, indexquals, c, indexqualcols)
 +	{
 +		RestrictInfo *rinfo = lfirst(i);
 +		OpExpr  *expr = (OpExpr*)rinfo->clause;
@@ -8027,7 +8027,7 @@ index 0000000..17950e5
 +			continue;
 +
 +		if ( equal(CELL_GET_QUALS(i), CELL_GET_CLAUSES(i)) &&
-+				predicate_implied_by( checkpred, CELL_GET_QUALS(i) ) ) 
++				predicate_implied_by( checkpred, CELL_GET_QUALS(i) ) )
 +			nested = lappend( nested, lfirst(i) );
 +	}
 +	return nested;
@@ -8061,7 +8061,7 @@ index 0000000..17950e5
 + * ie one row can't satisfy to several quals. It's open a possibility of
 + * Append node using instead of BitmapOr
 + */
-+static	BitmapOrPath* 
++static	BitmapOrPath*
 +cleanup_nested_quals( PlannerInfo *root, RelOptInfo *rel, BitmapOrPath *path ) {
 +	ListCell   *i;
 +	IndexOptInfo	*index=NULL;
@@ -8089,7 +8089,7 @@ index 0000000..17950e5
 +			 * work only with optimizable quals
 +			 */
 +			Assert(list_length(subpath->indexquals) == list_length(subpath->indexqualcols));
-+			make_predicate(subpath->indexquals, subpath->indexqualcols, &preds, &predcols); 
++			make_predicate(subpath->indexquals, subpath->indexqualcols, &preds, &predcols);
 +			if (preds == NIL)
 +				return NULL;
 +			subpath->indexquals = preds;
@@ -8112,14 +8112,14 @@ index 0000000..17950e5
 +		Assert( list_length( path->bitmapquals )>0 );
 +
 +		/*
-+		 * All quals becomes only one after eliminating nested quals 
++		 * All quals becomes only one after eliminating nested quals
 +		 */
-+		if (list_length( path->bitmapquals ) == 1) 
++		if (list_length( path->bitmapquals ) == 1)
 +			return (BitmapOrPath*)linitial(path->bitmapquals);
 +	}
 +
 +	/*
-+	 * Checks for intersection 
++	 * Checks for intersection
 +	 */
 +	foreach(i, path->bitmapquals ) {
 +		if ( is_intersect( i ) )
@@ -8135,14 +8135,14 @@ index 0000000..17950e5
 + */
 +static int
 +simpleCmpExpr( ExExpr *a, ExExpr *b ) {
-+	if ( predicate_implied_by((List*)a->expr, (List*)b->expr) ) 
-+		/*  
-+		 * a:( Var < 15 ) > b:( Var <= 10 ) 
++	if ( predicate_implied_by((List*)a->expr, (List*)b->expr) )
++		/*
++		 * a:( Var < 15 ) > b:( Var <= 10 )
 +		 */
-+		return 1; 
++		return 1;
 +	else if ( predicate_implied_by((List*)b->expr, (List*)a->expr) )
-+		/*  
-+		 * a:( Var <= 10 ) < b:( Var < 15 ) 
++		/*
++		 * a:( Var <= 10 ) < b:( Var < 15 )
 +		 */
 +		return -1;
 +	else
@@ -8191,7 +8191,7 @@ index 0000000..17950e5
 +	int	res = 0;
 +
 +	b->expr->opno = get_negator( b->expr->opno );
-+	if ( b->expr->opno != InvalidOid ) { 
++	if ( b->expr->opno != InvalidOid ) {
 +		b->expr->opfuncid = get_opcode( b->expr->opno );
 +		res = simpleCmpExpr(a,b);
 +	}
@@ -8213,25 +8213,25 @@ index 0000000..17950e5
 +cmpExpr( ExExpr *a, ExExpr *b ) {
 +	int res;
 +
-+	/* 
++	/*
 +	 * If a and b are overlapped, we can't decide which one is
 +	 * lefter or righter
 +	 */
 +	if ( IS_ONE_DIRECTION(a->strategy, b->strategy) || predicate_refuted_by((List*)a->expr, (List*)b->expr) == false )
-+		return 0; 
++		return 0;
 +
 +	/*
 +	 * In this place it's impossible to have a row which satisfies
 +	 * a and b expressions, so we will try to find relatiove position of that results
 +	 */
-+	if ( b->strategy == BTEqualStrategyNumber ) { 
++	if ( b->strategy == BTEqualStrategyNumber ) {
 +		return -cmpEqExpr(a, b); /* Covers cases with any operations in a */
 +	} else if ( a->strategy == BTEqualStrategyNumber ) {
 +		return cmpEqExpr(b, a);
-+	} else if ( (res = cmpNegCmp(a, b)) == 0 ) { /* so, a(<10) b(>20) */ 
++	} else if ( (res = cmpNegCmp(a, b)) == 0 ) { /* so, a(<10) b(>20) */
 +		res = -cmpNegCmp(b, a);
 +	}
-+		
++
 +	return res;
 +}
 +
@@ -8252,7 +8252,7 @@ index 0000000..17950e5
 +
 +		foreach(bi, b) {
 +			ExExpr	*be = (ExExpr*)lfirst(bi);
-+	
++
 +			if ( attno != be->attno )
 +				continue;
 +
@@ -8268,7 +8268,7 @@ index 0000000..17950e5
 +static bool volatile	unableToDefine = false;
 +
 +/*
-+ * Compare result of two indexquals. 
++ * Compare result of two indexquals.
 + * Warinig: it use PG_RE_THROW(), so any call should be wrapped with
 + * PG_TRY().  Try/catch construction is used here for minimize unneeded
 + * actions when sorting is impossible
@@ -8279,7 +8279,7 @@ index 0000000..17950e5
 +	IndexPathEx	*bipe = (IndexPathEx*)b;
 +	int attno, res = 0;
 +
-+	for(attno=1; res==0 && attno<=sortingIndex->ncolumns; attno++) 
++	for(attno=1; res==0 && attno<=sortingIndex->ncolumns; attno++)
 +		res=cmpColumnQuals(aipe->preparedquals, bipe->preparedquals, attno);
 +
 +	if ( res==0 ) {
@@ -8318,13 +8318,13 @@ index 0000000..17950e5
 +			return NULL;
 +
 +		ex = (ExExpr*)palloc(sizeof(ExExpr));
-+		ex->expr = (OpExpr*)copyObject( expr ); 
++		ex->expr = (OpExpr*)copyObject( expr );
 +		if (!bms_equal(rinfo->left_relids, index->rel->relids))
 +			CommuteOpExpr(ex->expr);
 +		linitial(ex->expr->args) = fix_indexqual_operand(linitial(ex->expr->args), index, lfirst_int(c));
 +		ex->attno = ((Var*)linitial(ex->expr->args))->varattno;
 +		ex->opfamily = index->opfamily[ ex->attno - 1 ];
-+		get_op_opfamily_properties( ex->expr->opno, ex->opfamily, false, 
++		get_op_opfamily_properties( ex->expr->opno, ex->opfamily, false,
 +			&ex->strategy, &ex->lefttype, &ex->righttype);
 +
 +
@@ -8361,7 +8361,7 @@ index 0000000..17950e5
 +	PG_TRY(); {
 +		qsort(ipe, list_length(ipaths), sizeof(IndexPathEx), cmpIndexPathEx);
 +	} PG_CATCH(); {
-+		if ( unableToDefine == false ) 
++		if ( unableToDefine == false )
 +			PG_RE_THROW(); /* not our problem */
 +	} PG_END_TRY();
 +
@@ -8369,9 +8369,9 @@ index 0000000..17950e5
 +		return NULL;
 +
 +	for(j=0;j<list_length(ipaths);j++)
-+		orderedPaths = lappend(orderedPaths, ipe[j].path);	
++		orderedPaths = lappend(orderedPaths, ipe[j].path);
 +
-+	return  orderedPaths;	
++	return  orderedPaths;
 +}
 +
 +static  IndexPath*
@@ -8403,7 +8403,7 @@ index 9da5444..b228a32 100644
 @@ -38,6 +38,14 @@
  #include "utils/pg_locale.h"
  #include "utils/selfuncs.h"
- 
+
 +/*
 + * index support for LIKE mchar
 + */
@@ -8412,7 +8412,7 @@ index 9da5444..b228a32 100644
 +#include "utils/catcache.h"
 +#include "utils/syscache.h"
 +#include "parser/parse_type.h"
- 
+
  #define IsBooleanOpfamily(opfamily) \
  	((opfamily) == BOOL_BTREE_FAM_OID || (opfamily) == BOOL_HASH_FAM_OID)
 @@ -115,8 +123,6 @@ static List *build_index_paths(PlannerInfo *root, RelOptInfo *rel,
@@ -8435,16 +8435,16 @@ index 9da5444..b228a32 100644
  {
 @@ -3058,6 +3064,208 @@ match_index_to_operand(Node *operand,
  }
- 
+
  /****************************************************************************
-+ *			----  ROUTINES FOR "SPECIAL" INDEXABLE OPERATORS  FOR 
++ *			----  ROUTINES FOR "SPECIAL" INDEXABLE OPERATORS  FOR
 + *                 SPECIAL USER_DEFINED TYPES ----
 + *									-- teodor
 + ****************************************************************************/
 +
-+static Oid mmPFPOid = InvalidOid; 
-+static Oid mmGTOid = InvalidOid; 
-+static Oid mcharOid = InvalidOid; 
++static Oid mmPFPOid = InvalidOid;
++static Oid mmGTOid = InvalidOid;
++static Oid mcharOid = InvalidOid;
 +static Oid mvarcharOid = InvalidOid;
 +
 +static bool
@@ -8461,7 +8461,7 @@ index 9da5444..b228a32 100644
 +
 +	if ( n_members != 1 ) {
 +		ReleaseSysCacheList(catlist);
-+		if ( n_members > 1 ) 
++		if ( n_members > 1 )
 +			elog(ERROR,"There are %d candidates for '%s' function'", n_members, funcname);
 +		return false;
 +	}
@@ -8492,7 +8492,7 @@ index 9da5444..b228a32 100644
 +
 +
 +		if ( mcharOid == InvalidOid || mvarcharOid == InvalidOid ) {
-+			elog(LOG,"Can't find mchar/mvarvarchar types: mchar=%d mvarchar=%d", 
++			elog(LOG,"Can't find mchar/mvarvarchar types: mchar=%d mvarchar=%d",
 +					mcharOid, mvarcharOid);
 +			return false;
 +		}
@@ -8504,13 +8504,13 @@ index 9da5444..b228a32 100644
 +
 +		if ( n_members != 1 ) {
 +			ReleaseSysCacheList(catlist);
-+			if ( n_members > 1 ) 
++			if ( n_members > 1 )
 +				elog(ERROR,"There are %d candidates for '%s' function'", n_members, quals_funcname);
 +			return false;
 +		}
 +
 +		tup = &catlist->members[0]->tuple;
-+		mmGTOid  = HeapTupleGetOid(tup); 
++		mmGTOid  = HeapTupleGetOid(tup);
 +		mmPFPOid = tmp_mmPFPOid;
 +	}
 +
@@ -8525,14 +8525,14 @@ index 9da5444..b228a32 100644
 +	HeapTuple	tup;
 +    Form_pg_operator oprForm;
 +	bool	isMCharLike = true;
-+	 
++
 +	if ( !fillMCharOIDS() )
 +		return Pattern_Prefix_None;
 +
 +	tup = SearchSysCache(OPEROID, opOid, 0, 0, 0);
 +	oprForm	= (Form_pg_operator) GETSTRUCT(tup);
 +
-+	if ( strncmp(oprForm->oprname.data, "~~", 2) != 0 ) 
++	if ( strncmp(oprForm->oprname.data, "~~", 2) != 0 )
 +		isMCharLike	= false;
 +
 +	if ( oprForm->oprright != mvarcharOid )
@@ -8544,7 +8544,7 @@ index 9da5444..b228a32 100644
 +	if ( patt->consttype != mvarcharOid )
 +		isMCharLike = false;
 +
-+	if (leftTypeOid) 
++	if (leftTypeOid)
 +		*leftTypeOid = oprForm->oprleft;
 +
 +	ReleaseSysCache(tup);
@@ -8608,7 +8608,7 @@ index 9da5444..b228a32 100644
 +		result = list_make1(make_simple_restrictinfo(expr));
 +		return result;
 +	}
-+	
++
 +	/* We can always say "x >= prefix". */
 +	oproid = get_opclass_member_mchar(opclass, leftTypeOid, BTGreaterEqualStrategyNumber);
 +
@@ -8641,11 +8641,11 @@ index 9da5444..b228a32 100644
 +/****************************************************************************
   *			----  ROUTINES FOR "SPECIAL" INDEXABLE OPERATORS  ----
   ****************************************************************************/
- 
+
 @@ -3249,9 +3457,16 @@ match_special_index_operator(Expr *clause, Oid opfamily, Oid idxcollation,
  		pfree(prefix);
  	}
- 
+
 -	/* done if the expression doesn't look indexable */
 -	if (!isIndexable)
 +	if ( !isIndexable ) {
@@ -8658,7 +8658,7 @@ index 9da5444..b228a32 100644
 +		}
  		return false;
 +	}
- 
+
  	/*
  	 * Must also check that index's opfamily supports the operators we will
 @@ -3502,6 +3717,14 @@ expand_indexqual_opclause(RestrictInfo *rinfo, Oid opfamily, Oid idxcollation)
@@ -8673,7 +8673,7 @@ index 9da5444..b228a32 100644
 +
 +	if ( pstatus != Pattern_Prefix_None )
 +		return mchar_prefix_quals(leftop, leftTypeOid, opfamily, prefix, pstatus);
- 
+
  	/*
  	 * LIKE and regex operators are not members of any btree index opfamily,
 diff --git a/src/backend/optimizer/path/joinrels.c b/src/backend/optimizer/path/joinrels.c
@@ -8682,11 +8682,11 @@ index ad58058..e38ac3f 100644
 +++ b/src/backend/optimizer/path/joinrels.c
 @@ -1196,7 +1196,7 @@ mark_dummy_rel(RelOptInfo *rel)
  	rel->pathlist = NIL;
- 
+
  	/* Set up the dummy path */
 -	add_path(rel, (Path *) create_append_path(rel, NIL, NULL));
 +	add_path(rel, (Path *) create_append_path(rel, NIL, NULL, false, NIL));
- 
+
  	/* Set or update cheapest_total_path and related fields */
  	set_cheapest(rel);
 diff --git a/src/backend/optimizer/path/pathkeys.c b/src/backend/optimizer/path/pathkeys.c
@@ -8722,7 +8722,7 @@ index 40f801e..fee9b72 100644
 +	List	   *tlist;
  	List	   *subplans = NIL;
  	ListCell   *subpaths;
- 
+
 @@ -721,6 +720,7 @@ create_append_plan(PlannerInfo *root, AppendPath *best_path)
  	if (best_path->subpaths == NIL)
  	{
@@ -8734,14 +8734,14 @@ index 40f801e..fee9b72 100644
 @@ -743,6 +743,11 @@ create_append_plan(PlannerInfo *root, AppendPath *best_path)
  	 * parent-rel Vars it'll be asked to emit.
  	 */
- 
+
 +	if ( best_path->pull_tlist )
 +		tlist = copyObject( ((Plan*)linitial(subplans))->targetlist );
 +	else
 +		tlist = build_path_tlist(root, &best_path->path);
 +
  	plan = make_append(subplans, tlist);
- 
+
  	return (Plan *) plan;
 @@ -3173,7 +3178,7 @@ fix_indexorderby_references(PlannerInfo *root, IndexPath *index_path)
   * Most of the code here is just for sanity cross-checking that the given
@@ -8759,7 +8759,7 @@ index 8a5ee01..e0e9aea 100644
 @@ -1994,6 +1994,10 @@ fix_join_expr_mutator(Node *node, fix_join_expr_context *context)
  	{
  		Var		   *var = (Var *) node;
- 
+
 +		/* join_references_mutator already checks this node */
 +		if (var->varno == OUTER_VAR)
 +			return (Node*)copyObject(var);
@@ -8800,7 +8800,7 @@ index 972e3b0..8a7e91e 100644
 +
  	pathnode->subpaths = subpaths;
 +	pathnode->pull_tlist = pull_tlist;
- 
+
  	/*
  	 * We don't bother with inventing a cost_append(), but just do it here.
 diff --git a/src/backend/parser/gram.y b/src/backend/parser/gram.y
@@ -8844,7 +8844,7 @@ index c46914d..bb85a9d 100644
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_ILIKE, "!~~*",
 @@ -11564,7 +11564,7 @@ a_expr:		c_expr									{ $$ = $1; }
- 
+
  			| a_expr SIMILAR TO a_expr							%prec SIMILAR
  				{
 -					FuncCall *n = makeFuncCall(SystemFuncName("similar_escape"),
@@ -8893,7 +8893,7 @@ index 5e6c34d..b2edcb2 100644
 +									because the only place - append
 +									index scan for range OR */
  } AppendPath;
- 
+
  #define IS_DUMMY_PATH(p) \
 diff --git a/src/include/optimizer/pathnode.h b/src/include/optimizer/pathnode.h
 index 241f2e3..8f52b04 100644
@@ -8931,7 +8931,7 @@ index 7757741..3ea99e8 100644
  						  List *pathkeys);
  extern bool has_useful_pathkeys(PlannerInfo *root, RelOptInfo *rel);
 +extern void keybased_rewrite_index_paths(PlannerInfo *root, RelOptInfo *rel);
- 
+
  #endif   /* PATHS_H */
 diff --git a/src/include/optimizer/planmain.h b/src/include/optimizer/planmain.h
 index f96e9ee..e6d8250 100644
@@ -8954,7 +8954,7 @@ index b72e65d..8ca0499 100644
  EXPLAIN (COSTS OFF)
  SELECT * FROM tenk1
    WHERE thousand = 42 AND (tenthous = 1 OR tenthous = 3 OR tenthous = 42);
--                                                               QUERY PLAN                                                                
+-                                                               QUERY PLAN
 ------------------------------------------------------------------------------------------------------------------------------------------
 - Bitmap Heap Scan on tenk1
 -   Recheck Cond: (((thousand = 42) AND (tenthous = 1)) OR ((thousand = 42) AND (tenthous = 3)) OR ((thousand = 42) AND (tenthous = 42)))
@@ -8966,13 +8966,13 @@ index b72e65d..8ca0499 100644
 -         ->  Bitmap Index Scan on tenk1_thous_tenthous
 -               Index Cond: ((thousand = 42) AND (tenthous = 42))
 -(9 rows)
-+                           QUERY PLAN                            
++                           QUERY PLAN
 +-----------------------------------------------------------------
 + Index Scan using tenk1_thous_tenthous on tenk1
 +   Index Cond: ((thousand = 42) AND (thousand = 42))
 +   Filter: ((tenthous = 1) OR (tenthous = 3) OR (tenthous = 42))
 +(3 rows)
- 
+
  SELECT * FROM tenk1
    WHERE thousand = 42 AND (tenthous = 1 OR tenthous = 3 OR tenthous = 42);
 diff --git a/src/test/regress/expected/select.out b/src/test/regress/expected/select.out
@@ -8981,22 +8981,22 @@ index c376523..185d177 100644
 +++ b/src/test/regress/expected/select.out
 @@ -518,6 +518,124 @@ TABLE int8_tbl;
  (9 rows)
- 
+
  --
 +-- test order by NULLS (FIRST|LAST)
 +--
 +select unique1, unique2 into onek_with_null from onek;
 +insert into onek_with_null (unique1,unique2) values (NULL, -1), (NULL, NULL);
 +select * from onek_with_null order by unique1 nulls first	, unique2				limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +         |      -1
-+         |        
++         |
 +       0 |     998
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 nulls last	, unique2				limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +       0 |     998
 +       1 |     214
@@ -9004,15 +9004,15 @@ index c376523..185d177 100644
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 nulls first	, unique2	nulls first	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
-+         |        
++         |
 +         |      -1
 +       0 |     998
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 nulls last	, unique2	nulls first	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +       0 |     998
 +       1 |     214
@@ -9020,15 +9020,15 @@ index c376523..185d177 100644
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 nulls first	, unique2	nulls last	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +         |      -1
-+         |        
++         |
 +       0 |     998
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 nulls last	, unique2	nulls last	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +       0 |     998
 +       1 |     214
@@ -9036,15 +9036,15 @@ index c376523..185d177 100644
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 desc nulls first	, unique2	desc 			limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
-+         |        
++         |
 +         |      -1
 +     999 |     152
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 desc nulls last	, unique2	desc 			limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +     999 |     152
 +     998 |     549
@@ -9052,15 +9052,15 @@ index c376523..185d177 100644
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 desc nulls first	, unique2	desc nulls first	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
-+         |        
++         |
 +         |      -1
 +     999 |     152
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 desc nulls last	, unique2	desc nulls first	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +     999 |     152
 +     998 |     549
@@ -9068,15 +9068,15 @@ index c376523..185d177 100644
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 desc nulls first	, unique2	desc nulls last	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +         |      -1
-+         |        
++         |
 +     999 |     152
 +(3 rows)
 +
 +select * from onek_with_null order by unique1 desc nulls last	, unique2	desc nulls last	limit 3;
-+ unique1 | unique2 
++ unique1 | unique2
 +---------+---------
 +     999 |     152
 +     998 |     549
@@ -9084,17 +9084,17 @@ index c376523..185d177 100644
 +(3 rows)
 +
 +select unique1 as u1, unique2 as u2 from onek_with_null order by u1 nulls first	, u2	nulls first	limit 3;
-+ u1 | u2  
++ u1 | u2
 +----+-----
-+    |    
++    |
 +    |  -1
 +  0 | 998
 +(3 rows)
 +
 +select unique1 as u1, unique2 as u2 from onek_with_null order by u1 asc nulls first	, u2 desc	nulls first	limit 3;
-+ u1 | u2  
++ u1 | u2
 +----+-----
-+    |    
++    |
 +    |  -1
 +  0 | 998
 +(3 rows)
@@ -9110,7 +9110,7 @@ index b99fb13..582e5d6 100644
 +++ b/src/test/regress/sql/select.sql
 @@ -149,6 +149,33 @@ UNION ALL
  TABLE int8_tbl;
- 
+
  --
 +-- test order by NULLS (FIRST|LAST)
 +--
@@ -9141,7 +9141,7 @@ index b99fb13..582e5d6 100644
 +--
  -- Test ORDER BY options
  --
- 
+
 diff --git a/src/tools/msvc/Mkvcbuild.pm b/src/tools/msvc/Mkvcbuild.pm
 index 21faa58..d104dbc 100644
 --- a/src/tools/msvc/Mkvcbuild.pm
@@ -9152,5 +9152,6 @@ index 21faa58..d104dbc 100644
  	'pgbench'    => ['ws2_32.lib'],
 +	'mchar'		 => ['icuin.lib', 'icuuc.lib'],
  	'psql'       => ['ws2_32.lib'] };
+ my $contrib_extralibs = { 'pgbench' => ['wsock32.lib'], 'mchar' => ['icuin.lib', 'icuuc.lib'] };
  my $frontend_extraincludes = {
  	'initdb' => ['src/timezone'],
