@@ -37,6 +37,7 @@ FOR /F %%I IN (series) do (
   cp -va %ROOT%/patches/postgresql/%PGVER%/%%I .
   patch -p1 < %%I || GOTO :ERROR
 )
+
 :DONE_POSTGRESQL_PATCH
 >src\tools\msvc\config.pl  ECHO use strict;
 >>src\tools\msvc\config.pl ECHO use warnings;
@@ -52,7 +53,7 @@ FOR /F %%I IN (series) do (
 >>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_BIN_DIR%\libintl',
 >>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
 IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
-IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',     )
+IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',   )
 IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON64_PATH%', )
 IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%', )
 >>src\tools\msvc\config.pl ECHO openssl ^=^> '%DEPENDENCIES_BIN_DIR%\openssl',
@@ -92,7 +93,7 @@ cp -va %DEPENDENCIES_BIN_DIR%/libxml2/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGV
 cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 REM Copy libraries headers to "include" directory for a God sake
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
@@ -102,6 +103,9 @@ cp -va %DEPENDENCIES_BIN_DIR%/libxslt/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
+
+CD %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
+cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 
 7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 
