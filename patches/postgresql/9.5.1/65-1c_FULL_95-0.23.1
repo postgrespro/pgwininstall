@@ -9156,10 +9156,11 @@ index 21faa58..3aabd57 100644
    { 'tsearch2' => ['contrib/tsearch2'], 'dblink' => ['src/backend'] };
  my $contrib_extrasource = {
 @@ -58,6 +58,7 @@ my $frontend_extralibs = {
-        'initdb'     => ['ws2_32.lib'],
-        'pg_restore' => ['ws2_32.lib'],
-        'pgbench'    => ['ws2_32.lib'],
-+       'mchar'      => ['icuin.lib', 'icuuc.lib'],
-        'psql'       => ['ws2_32.lib'] };
+	'initdb'     => ['ws2_32.lib'],
+	'pg_restore' => ['ws2_32.lib'],
+	'pgbench'    => ['ws2_32.lib'],
++	'mchar'		 => ['icuin.lib', 'icuuc.lib'],
+	'psql'       => ['ws2_32.lib'] };
+ my $contrib_extralibs = { 'pgbench' => ['wsock32.lib'], 'mchar' => ['icuin.lib', 'icuuc.lib'] };
  my $frontend_extraincludes = {
-        'initdb' => ['src/timezone'],
+	'initdb' => ['src/timezone'],
