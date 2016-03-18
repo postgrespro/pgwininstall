@@ -14,6 +14,7 @@ Directory contains various build scripts.
 * msys2
 * 7-Zip
 * NSIS
+* HTML Help Workshop (for PgAdmin documentation, included in Visual Studio)
 
 ## Patches
 
