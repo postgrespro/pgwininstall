@@ -1,5 +1,5 @@
 CALL %ROOT%\build\helpers\setvars.cmd
-GOTO :BUILD_PGADMIN
+
 rm -rf %DEPENDENCIES_BIN_DIR%
 IF EXIST %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip (
   7z x %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip -o%DEPENDENCIES_BIN_DIR% -y
