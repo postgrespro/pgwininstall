@@ -10,6 +10,50 @@ rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
 
+:BUILD_LESS
+TITLE "Building less"
+CD /D %DOWNLOADS_DIR%
+wget -O less.zip --no-check-certificate -c https://github.com/vbwagner/less/archive/master.zip
+rm -rf %DEPENDENCIES_SRC_DIR%\less-master %DEPENDENCIES_BIN_DIR%\less
+MKDIR %DEPENDENCIES_SRC_DIR%\less-master
+CD /D %DEPENDENCIES_SRC_DIR%
+7z x %DOWNLOADS_DIR%\less.zip
+
+CD /D %DEPENDENCIES_SRC_DIR%\less-master
+IF %ARCH% == X86 (
+   nmake -f Makefile.wnm || GOTO :ERROR
+) ELSE (
+   nmake -f Makefile.wnm  ARCH=%ARCH%|| GOTO :ERROR
+)
+MKDIR %DEPENDENCIES_BIN_DIR%\less
+cp -va *.exe %DEPENDENCIES_BIN_DIR%\less
+
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\less
+
+:BUILD_WINLIBEDIT
+TITLE Build winlibedit
+CD /D %DOWNLOADS_DIR%
+wget --no-check-certificate -c http://netcologne.dl.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip
+
+CD /D %DEPENDENCIES_SRC_DIR%
+7z x %DOWNLOADS_DIR%\wineditline-%EDITLINE_VER%.zip
+CD /D wineditline-%EDITLINE_VER%\src
+CL -I. -c history.c editline.c fn_complete.c || goto :ERROR
+LIB /out:edit.lib *.obj || goto :ERROR
+MKDIR %DEPENDENCIES_BIN_DIR%\wineditline
+MKDIR %DEPENDENCIES_BIN_DIR%\wineditline\include 
+MKDIR %DEPENDENCIES_BIN_DIR%\wineditline\include\editline
+if %ARCH% == X64 (
+   MKDIR %DEPENDENCIES_BIN_DIR%\wineditline\lib64
+   COPY edit.lib %DEPENDENCIES_BIN_DIR%\wineditline\lib64
+) else (
+   MKDIR %DEPENDENCIES_BIN_DIR%\wineditline\lib32
+   COPY edit.lib %DEPENDENCIES_BIN_DIR%\wineditline\lib32
+)
+COPY editline\readline.h %DEPENDENCIES_BIN_DIR%\wineditline\include\editline
+
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\wineditline
+
 :BUILD_ICONV
 TITLE Building iconv...
 CD /D %DOWNLOADS_DIR%
