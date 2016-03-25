@@ -72,11 +72,11 @@ rem Setting pager
 
 IF %ONE_C% == YES (
   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
+rem With PostgresPro we'll use ICU libraries without copiing them
+rem cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
+rem cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
+
 )
-
-cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
-
 perl src\tools\msvc\build.pl || GOTO :ERROR
 IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
@@ -84,13 +84,12 @@ rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
-REM xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll  %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
-REM xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll    %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\libintl\lib\libintl.dll	%BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\libiconv.dll    %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.dll       %BUILD_DIR%\postgresql\postgresql-%PGVER%\ || GOTO :ERROR
 
+rem We need ICONV and LibIntl DLLS available during install for ZIC to work
+rem no need to copy them, just add to PATH
+PATH %PATH% %DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
+rem now actually copy DLLs of dependencies into our bindir
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR

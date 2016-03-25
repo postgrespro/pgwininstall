@@ -165,9 +165,9 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 Section "Microsoft Visual C++ 2010 Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
-    File /oname=$1 "c:\pg\vcredist\vcredist_x64_2010.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
   !else
-    File /oname=$1 "c:\pg\vcredist\vcredist_x86_2010.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
   !endif
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
@@ -237,7 +237,7 @@ Section $(PostgreSQLString) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
