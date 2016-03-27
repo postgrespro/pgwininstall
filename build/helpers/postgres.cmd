@@ -14,11 +14,11 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
+rem wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
-tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql
-CD /D %BUILD_DIR%\postgresql\*%PGVER%*
+tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql || GOTO :ERROR
+CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 IF %ONE_C% == YES (
   cp -va %ROOT%/patches/postgresql/%PGVER%/series.for1c .
@@ -87,7 +87,7 @@ CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
 rem We need ICONV and LibIntl DLLS available during install for ZIC to work
 rem no need to copy them, just add to PATH
-PATH %PATH% %DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
+PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 rem now actually copy DLLs of dependencies into our bindir
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
@@ -95,8 +95,11 @@ cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGV
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+REM Copy needed executables
+cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/less/*.exe           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 REM Copy libraries headers to "include" directory for a God sake
