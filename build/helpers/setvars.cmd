@@ -9,7 +9,7 @@ SET LIBSSH2_VER=1.6.0
 SET WXWIDGETS_VER=3.0.2
 
 REM Path vars
-SET PERL32_PATH=C:\Perl
+SET PERL32_PATH=C:\Perl512x86
 SET PERL64_PATH=C:\Perl64
 SET PERL32_BIN=%PERL32_PATH%\bin
 SET PERL64_BIN=%PERL64_PATH%\bin
@@ -27,6 +27,15 @@ IF %SDK% == SDK71 (
   SET REDIST_YEAR=2010
   SET PlatformToolset=v100
   CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
+  ECHO ON
+)
+
+IF %SDK% == MSVC2010 (
+  SET REDIST_YEAR=2010
+  SET PlatformToolset=v100
+  IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall" x86 || GOTO :ERROR
+  ECHO ON
+  IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall" amd64 || GOTO :ERROR
   ECHO ON
 )
 

@@ -75,13 +75,13 @@ IF "%~1"=="3" (
 
 IF "%~1"=="4" (
   TITLE Building PgAdmin
-  IF "%SDK%"=="" SET SDK=MSVC2015
+  IF "%SDK%"=="" SET SDK=SDK71
   CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd
 )
 
 IF "%~1"=="5" (
   TITLE Building PgAdmin installer
-  IF "%SDK%"=="" SET SDK=MSVC2015
+  IF "%SDK%"=="" SET SDK=SDK71
   CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd
 )
 

@@ -1,5 +1,6 @@
 CALL %ROOT%\build\helpers\setvars.cmd
 
+
 rm -rf %DEPENDENCIES_BIN_DIR%
 IF EXIST %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip (
   7z x %DOWNLOADS_DIR%\deps-SDK71-%ARCH%.zip -o%DEPENDENCIES_BIN_DIR% -y
@@ -36,6 +37,10 @@ IF %SDK% == SDK71 (
   IF %ARCH% == X86 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
   IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
   IF %ARCH% == X64 msbuild build\msw\wx_vc10.sln  /m /p:Configuration="DLL Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  REM Upgrade hhp2cached project to VS2010
+  vcupgrade -overwrite -nologo utils\hhp2cached\hhp2cached_vc9.vcproj
+  IF %ARCH% == X86 msbuild utils\hhp2cached\hhp2cached_vc9.vcxproj /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+  IF %ARCH% == X86 msbuild utils\hhp2cached\hhp2cached_vc9.vcxproj /m /p:Configuration="DLL Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 )
 
 IF %SDK% == MSVC2013 (
