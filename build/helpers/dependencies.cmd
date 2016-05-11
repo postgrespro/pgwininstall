@@ -43,7 +43,6 @@ rm -rf %DEPENDENCIES_BIN_DIR%\zlib %DEPENDENCIES_SRC_DIR%\zlib*
 MKDIR %DEPENDENCIES_BIN_DIR%\zlib
 tar xf zlib-%ZLIB_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\zlib*
-set CL=/MP
 nmake -f win32/Makefile.msc || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\zlib\lib %DEPENDENCIES_BIN_DIR%\zlib\include
 cp -v *.lib %DEPENDENCIES_BIN_DIR%\zlib\lib || GOTO :ERROR
@@ -86,7 +85,6 @@ tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libxml2-*\win32
 cscript configure.js compiler=msvc include=%DEPENDENCIES_BIN_DIR%\iconv\include lib=%DEPENDENCIES_BIN_DIR%\iconv\lib
 sed -i /NOWIN98/d Makefile.msvc
-set CL=/MP
 nmake /f Makefile.msvc || GOTO :ERROR
 nmake /f Makefile.msvc install || GOTO :ERROR
 cp -av bin %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
@@ -106,7 +104,6 @@ tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libxslt-*\win32
 cscript configure.js compiler=msvc zlib=yes iconv=yes include=%DEPENDENCIES_BIN_DIR%\iconv\include;%DEPENDENCIES_BIN_DIR%\libxml2\include;%DEPENDENCIES_BIN_DIR%\zlib\include lib=%DEPENDENCIES_BIN_DIR%\iconv\lib;%DEPENDENCIES_BIN_DIR%\libxml2\lib;%DEPENDENCIES_BIN_DIR%\zlib\lib
 sed -i /NOWIN98/d Makefile.msvc
-set CL=/MP
 nmake /f Makefile.msvc || GOTO :ERROR
 nmake /f Makefile.msvc install || GOTO :ERROR
 cp -av bin %DEPENDENCIES_BIN_DIR%\libxslt || GOTO :ERROR
@@ -128,7 +125,6 @@ IF %ARCH% == X86 perl Configure VC-WIN32 no-asm   || GOTO :ERROR
 IF %ARCH% == X64 perl Configure VC-WIN64A no-asm  || GOTO :ERROR
 IF %ARCH% == X86 call ms\do_ms
 IF %ARCH% == X64 call ms\do_win64a.bat
-set CL=/MP
 nmake -f ms\ntdll.mak || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl\lib
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl\include
