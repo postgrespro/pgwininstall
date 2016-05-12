@@ -19,3 +19,12 @@ Directory contains various build scripts.
 ## Patches
 
 Directory contains patches which are need to build PostgreSQL.
+
+## Usage
+You can specify several environmental variables depending on desirable result:
+
+ARCH=[X86/X64] -- architecture, default X86
+ONE_C=[YES/NO] -- apply 1C patches or not, default NO
+SDK=[SDK71/MSVC2013/MSVC2015] -- MSVC version, default SDK71
+PG_MAJOR_VERSION=[9.4/9.5] - major PostgreSQL version, default 9.5
+PG_PATCH_VERSION=[2/7] - minor PostgreSQL version, default 2
