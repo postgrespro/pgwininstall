@@ -60,8 +60,8 @@ IF %SDK% == MSVC2015 (
 cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/lib   %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/utils  %DEPENDENCIES_BIN_DIR%\wxwidgets  || GOTO :ERROR
 IF %ARCH% == X64 (
-  mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*dll   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_dll  || GOTO :ERROR
-  mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*lib   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_lib  || GOTO :ERROR
+rem  mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*dll   %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_dll  || GOTO :ERROR
+rem  mv -v %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_*_lib/* %DEPENDENCIES_BIN_DIR%\wxwidgets\lib\vc_lib  || GOTO :ERROR
 )
 cp -va %DEPENDENCIES_SRC_DIR%/wxWidgets-3*/include  %DEPENDENCIES_BIN_DIR%\wxwidgets\include  || GOTO :ERROR
 

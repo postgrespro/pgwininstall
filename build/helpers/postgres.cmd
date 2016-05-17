@@ -85,6 +85,7 @@ MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
 
+
 rem We need ICONV and LibIntl DLLS available during install for ZIC to work
 rem no need to copy them, just add to PATH
 PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
@@ -111,9 +112,25 @@ cp -va %DEPENDENCIES_BIN_DIR%/openssl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 
-CD %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
-cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
-
+rem Copy msys shell and sed
+CD %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
+7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
+rem CD %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
+rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
+rem building help files
+CD %BUILD_DIR%\postgresql
+mkdir help-ru
+mkdir help-en
+CD help-ru
+7z x %DOWNLOADS_DIR%\help-sources-ru.zip
+CD help-ru
+"C:\Program Files (x86)\HTML Help Workshop\hhc" htmlhelp.hhp
+cp htmlhelp.chm %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc\postgresql-ru.chm
+CD ..\help-en
+7z x %DOWNLOADS_DIR%\help-sources-en.zip
+CD help-en
+"C:\Program Files (x86)\HTML Help Workshop\hhc" htmlhelp.hhp 
+cp htmlhelp.chm %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc\postgresql-en.chm
 7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 
 GOTO :DONE
@@ -125,4 +142,3 @@ EXIT /b %errorlevel%
 
 :DONE
 ECHO Done.
-PAUSE

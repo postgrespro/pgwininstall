@@ -21,7 +21,7 @@ IF %ONE_C% == YES (
   SET PRODUCT_DIR_REGKEY="Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}"
   SET PRODUCT_VERSION="%PG_MAJOR_VERSION%"
 ) ELSE (
-  SET PRODUCT_NAME=PostgreSQL
+  SET PRODUCT_NAME=PostgresPro
   SET PG_DEF_SERVICEID="postgresql-%ARCH%-%PG_MAJOR_VERSION%"
   SET PG_INS_SUFFIX="%ARCH%bit_Setup.exe"
   SET PG_REG_KEY="SOFTWARE\%COMPANY_NAME%\%ARCH%\%PRODUCT_NAME%\%PG_MAJOR_VERSION%\Installations\postgresql-%PG_MAJOR_VERSION%"
@@ -58,6 +58,8 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !addplugindir Plugins
+
 IF "%ARCH%" == "X64" (
   >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
 )
@@ -75,4 +77,3 @@ EXIT /b %errorlevel%
 
 :DONE
 ECHO Done.
-PAUSE

@@ -3,6 +3,7 @@
 ; used plugins: AccessControl, UserMgr,
 ; and AddToPath plugin was created by Victor Spirin for this project
 
+!addplugindir Plugins
 !include "postgres.def.nsh"
 
 ;--------------------------------
@@ -189,7 +190,7 @@ Section $(PostgreSQLString) sec1
     ;unregister
     DetailPrint "Unregister the service ..."
     ${if} $ServiceID_text != ""
-      nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" unregister -N "$ServiceID_text"'
+     nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" unregister -N "$ServiceID_text"'
       pop $0
       DetailPrint "pg_ctl.exe unregister return $0"
     ${endif}
@@ -237,7 +238,9 @@ Section $(PostgreSQLString) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 '@echo off$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  System::Call "kernel32::GetACP() i .r2"
+  DetailPrint "ANSI code page $2"
+  FileWrite $0 '@echo off$\r$\nchcp $2$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
@@ -262,6 +265,13 @@ Section $(PostgreSQLString) sec1
   FileClose $0
 
   creatBatErr5:
+  ClearErrors
+  FileOpen $0 $INSTDIR\scripts\pgpro_upgrade.cmd w
+  IfErrors creatBatErr6
+  FileWrite $0 '@echo off$\r$\nset dd=%1$\r\$\nset PGDATA=%dd:"=%$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nsh.exe "$INSTDIR\bin\pgpro_upgrade"$\r$\n'
+  FileClose $0
+
+  creatBatErr6:
   ;for all users
     SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -319,8 +329,13 @@ Section $(PostgreSQLString) sec1
     "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation" \
-    "$INSTDIR\doc\postgresql\html\index.html" \
+    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation (EN)" \
+    "$INSTDIR\doc\postgresql-en.chm" \
+    "$INSTDIR\doc\pg-help.ico" "0"
+
+  !insertmacro CreateInternetShortcut \
+    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation (RU)" \
+    "$INSTDIR\doc\postgresql-ru.chm" \
     "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro CreateInternetShortcut \
@@ -329,7 +344,6 @@ Section $(PostgreSQLString) sec1
     "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro MUI_STARTMENU_WRITE_END
-
   ; Create data dir begin
   ${if} $isDataDirExist == 0
     CreateDirectory "$DATA_DIR"
@@ -365,6 +379,7 @@ Section $(PostgreSQLString) sec1
     ${else}
       nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
         --locale="$Locale_text" \
+        --encoding=$Coding_text \
         -U "$UserName_text" \
         -D "$DATA_DIR"'
     ${endif}
@@ -389,6 +404,14 @@ Section $(PostgreSQLString) sec1
   ${if} $isDataDirExist == 0
     ${if} $checkNoLocal_state == ${BST_CHECKED}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
+	  ; Add line to pg_hba.conf
+	  FileOpen $4 "$DATA_DIR\pg_hba.conf" a
+	  FileSeek $4 0 END
+	  FileWrite $4 "host$\tall$\tall$\t0.0.0.0/0$\tmd5$\r$\n"
+	  FileClose $4
+	  ; Add postgres to Windows Firewall exceptions
+	  nsisFirewall::AddAuthorizedApplication "$INSTDIR\bin\postgres.exe" "PostgresPro server"
+	  pop $0
     ${else}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = 'localhost'"
     ${EndIf}
@@ -407,7 +430,7 @@ Section $(PostgreSQLString) sec1
       ${endif}
     ${endif}
   ${EndIf}
-
+  ;# Add line to pg_hba.conf
   Call WriteInstallOptions
   DetailPrint "Service $ServiceID_text registration ..."
   nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
@@ -445,6 +468,15 @@ Section $(PostgreSQLString) sec1
 
   AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
+  ${if} $isDataDirExist == 1
+  ; there exist data directory. We need to stop service,
+  ; run pgpro-upgrade script and
+  DetailPrint "Performing catalog upgradeon $DATA_DIR"	 
+	 nsExec::ExecToStack '"$INSTDIR/scripts/pgpro_upgrade" "$DATA_DIR"'
+    pop $0
+   Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
+	DetailPrint "$1"
+  ${endif}
 
   DetailPrint "Start server service..."
   Sleep 1000
@@ -493,6 +525,7 @@ Section $(PostgreSQLString) sec1
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGUSER" "$UserName_text"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGPORT" "$TextPort_text"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
+	AddToPath::AddToPath "$INSTDIR\bin"
   ${endif}
 SectionEnd
 
