@@ -268,7 +268,7 @@ Section $(PostgreSQLString) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\pgpro_upgrade.cmd w
   IfErrors creatBatErr6
-  FileWrite $0 '@echo off$\r$\nset dd=%1$\r\$\nset PGDATA=%dd:"=%$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nsh.exe "$INSTDIR\bin\pgpro_upgrade"$\r$\n'
+  FileWrite $0 '@echo off$\r$\nif "%PGDATA%"=="" set PGDATA=%~1$\r$\nif "%PGDATA%"=="" set PGDATA=$DATA_DIR$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nsh.exe "$INSTDIR\bin\pgpro_upgrade"$\r$\n'
   FileClose $0
 
   creatBatErr6:
