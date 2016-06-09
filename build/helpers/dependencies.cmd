@@ -33,8 +33,8 @@ cp -va *.exe %DEPENDENCIES_BIN_DIR%\less
 :BUILD_WINLIBEDIT
 TITLE Build winlibedit
 CD %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://downloads.dl.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip
-
+REM wget --no-check-certificate -c http://downloads.dl.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip
+wget --no-check-certificate -c -O wineditline-%EDITLINE_VER%.zip http://downloads.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip?r=
 CD %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\wineditline-%EDITLINE_VER%.zip
 CD wineditline-%EDITLINE_VER%\src
