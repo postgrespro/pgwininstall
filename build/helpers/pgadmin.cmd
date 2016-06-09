@@ -110,9 +110,7 @@ GOTO :DONE
 
 :ERROR
 ECHO Failed with error #%errorlevel%.
-PAUSE
 EXIT /b %errorlevel%
 
 :DONE
 ECHO Done.
-PAUSE

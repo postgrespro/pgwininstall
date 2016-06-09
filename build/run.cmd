@@ -27,7 +27,6 @@ IF DEFINED USG (
   ECHO 5: Build installer PgAdmin3
   ECHO 6: Make PostgreSQL and PgAdmin3 archives
   ECHO 7: Build pgbouncer
-  PAUSE
   EXIT /b 1
 )
 
