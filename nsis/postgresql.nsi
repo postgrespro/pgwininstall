@@ -25,7 +25,7 @@
 ;--------------------------------
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "c:\pg\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
+OutFile "${BUILD_DIR}\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
 
 !ifdef PG_64bit
   InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}\${PG_MAJOR_VERSION}"
@@ -166,9 +166,9 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 Section "Microsoft Visual C++ ${REDIST_YEAR} Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
-    File /oname=$1 "c:\pg\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
+    File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
   !else
-    File /oname=$1 "c:\pg\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
+    File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
   !endif
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
