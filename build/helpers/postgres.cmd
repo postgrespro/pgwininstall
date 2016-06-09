@@ -13,12 +13,12 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
-CD /D %DOWNLOADS_DIR%
+CD %DOWNLOADS_DIR%
 rem wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql || GOTO :ERROR
-CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
+CD %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 IF %ONE_C% == YES (
   cp -va %ROOT%/patches/postgresql/%PGVER%/series.for1c .
