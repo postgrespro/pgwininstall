@@ -33,8 +33,7 @@ cp -va *.exe %DEPENDENCIES_BIN_DIR%\less
 :BUILD_WINLIBEDIT
 TITLE Build winlibedit
 CD %DOWNLOADS_DIR%
-REM wget --no-check-certificate -c http://downloads.dl.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip
-wget --no-check-certificate -c -O wineditline-%EDITLINE_VER%.zip http://downloads.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip?r=
+wget --no-check-certificate -c http://downloads.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip
 CD %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\wineditline-%EDITLINE_VER%.zip
 CD wineditline-%EDITLINE_VER%\src
@@ -60,7 +59,7 @@ CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
-tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
 patch -f -p0 < libiconv.patch || GOTO :ERROR
@@ -85,7 +84,7 @@ CD %DOWNLOADS_DIR%
 wget -c http://zlib.net/zlib-%ZLIB_VER%.tar.gz -O zlib-%ZLIB_VER%.tar.gz
 rm -rf "%DEPENDENCIES_BIN_DIR%\zlib %DEPENDENCIES_SRC_DIR%\zlib*
 MKDIR "%DEPENDENCIES_BIN_DIR%\zlib
-tar xf zlib-%ZLIB_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf zlib-%ZLIB_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\zlib*
 set CL=/MP
 nmake -f win32/Makefile.msc || GOTO :ERROR
@@ -126,7 +125,7 @@ CD %DOWNLOADS_DIR%
 wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
-tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libxml2-*\win32
 cscript configure.js compiler=msvc include=%DEPENDENCIES_BIN_DIR%\iconv\include lib=%DEPENDENCIES_BIN_DIR%\iconv\lib
 sed -i /NOWIN98/d Makefile.msvc
@@ -146,7 +145,7 @@ CD %DOWNLOADS_DIR%
 wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxslt %DEPENDENCIES_SRC_DIR%\libxslt-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxslt
-tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\libxslt-*\win32
 cscript configure.js compiler=msvc zlib=yes iconv=yes include=%DEPENDENCIES_BIN_DIR%\iconv\include;%DEPENDENCIES_BIN_DIR%\libxml2\include;%DEPENDENCIES_BIN_DIR%\zlib\include lib=%DEPENDENCIES_BIN_DIR%\iconv\lib;%DEPENDENCIES_BIN_DIR%\libxml2\lib;%DEPENDENCIES_BIN_DIR%\zlib\lib
 sed -i /NOWIN98/d Makefile.msvc
@@ -166,7 +165,7 @@ CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\openssl %DEPENDENCIES_SRC_DIR%\openssl-*
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl
-tar zxf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR%
+tar zxf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR%
 CD %DEPENDENCIES_SRC_DIR%\openssl-*
 IF %ARCH% == X86 perl Configure VC-WIN32 no-asm   || GOTO :ERROR
 IF %ARCH% == X64 perl Configure VC-WIN64A no-asm  || GOTO :ERROR
@@ -192,7 +191,7 @@ CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libintl %DEPENDENCIES_SRC_DIR%\gettext-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
-tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\gettext-*
 cp -v %ROOT%/patches/gettext/gettext-%GETTEXT_VER%-%SDK%.patch gettext.patch
 patch -f -p0 < gettext.patch || GOTO :ERROR
@@ -214,7 +213,7 @@ CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-%LIBSSH2_VER%.tar.gz -O libssh2-%LIBSSH2_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libssh2 %DEPENDENCIES_SRC_DIR%/libssh2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libssh2
-tar xf libssh2-%LIBSSH2_VER%.tar.gz -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf libssh2-%LIBSSH2_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/include %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
 cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/win32/libssh2_config.h %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
 CD %DOWNLOADS_DIR%

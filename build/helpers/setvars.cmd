@@ -69,6 +69,11 @@ SET DEPENDENCIES_SRC_DIR=%BUILD_DIR%\dependencies_src
 SET DEPENDENCIES_BIN_DIR=%BUILD_DIR%\dependencies
 SET DEPS_ZIP=deps-%SDK%-%ARCH%.zip
 SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
+
+REM Convert paths for Unix utilites
+SET BUILD_UDIR=%BUILD_DIR:\=/%
+SET DEPENDENCIES_SRC_UDIR=%DEPENDENCIES_SRC_DIR:\=/%
+
 REM Magic to set root directory of those scripts (Where Readme.md lies)
 
 REM Let's use MP for nmake for parallel build
