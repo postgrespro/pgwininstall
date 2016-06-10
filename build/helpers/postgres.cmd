@@ -117,6 +117,12 @@ CD %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
 7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
 rem CD %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
 rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
+
+rem download help sources
+CD %DOWNLOADS_DIR%
+wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-en.zip || GOTO :ERROR
+wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-ru.zip || GOTO :ERROR
+
 rem building help files
 CD %BUILD_DIR%\postgresql
 mkdir help-ru
