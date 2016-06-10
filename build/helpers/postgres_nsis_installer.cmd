@@ -58,6 +58,7 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define BUILD_DIR %BUILD_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !addplugindir Plugins
 
 IF "%ARCH%" == "X64" (
