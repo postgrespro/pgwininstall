@@ -24,7 +24,7 @@ CD %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/%WXWIDGETS_VER%/wxWidgets-%WXWIDGETS_VER%.tar.bz2 -O wxWidgets-%WXWIDGETS_VER%.tar.bz2
 rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
-tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 
 cp -v %ROOT%/patches/wxWidgets/wxWidgets-%WXWIDGETS_VER%-%SDK%.patch wxWidgets.patch
