@@ -1,5 +1,5 @@
 REM ----------------------------------------------------------------------------
-REM Assume, you have your PostgreSQL and PgAdmin3 build in C:\pg\distr_X.._9.4...
+REM Assume, you have your PostgreSQL and PgAdmin3 build in %BUILD_DIR%\distr_X.._9.4...
 REM For PostgreSQL you have 'postgresql' directory and
 REM for PgAdmin3 you have 'pgadmin' directory
 REM ----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ SET PG_DEF_PORT="%DEFAULT_PORT%"
 SET PG_DEF_SUPERUSER="%DEFAULT_USER%"
 SET PG_DEF_SERVICEACCOUNT="NT AUTHORITY\NetworkService"
 SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_MAJOR_VERSION% (%ARCH%)"
-SET PG_INS_SOURCE_DIR="C:\pg\distr_%ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
+SET PG_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
 
 SET NSIS_RES_DIR=%~dp0
 SET NSIS_RES_DIR=%NSIS_RES_DIR:~0,-1%
