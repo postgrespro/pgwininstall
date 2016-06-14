@@ -73,8 +73,8 @@ IF "%PGURL%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postg
 
 REM Set useful directories paths so they're used in scripts
 SET BUILD_DIR=c:\pg
-SET DEPENDENCIES_SRC_DIR=%BUILD_DIR%\dependencies_src
-SET DEPENDENCIES_BIN_DIR=%BUILD_DIR%\dependencies
+SET DEPENDENCIES_SRC_DIR=%BUILD_DIR%\dependencies_src_%ARCH
+SET DEPENDENCIES_BIN_DIR=%BUILD_DIR%\dependencies_%ARCH%
 SET DEPS_ZIP=deps-%SDK%-%ARCH%.zip
 SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 REM Magic to set root directory of those scripts (Where Readme.md lies)
