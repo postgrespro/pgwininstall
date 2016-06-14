@@ -23,7 +23,7 @@ CD %DEPENDENCIES_SRC_DIR%\less-master
 IF %ARCH% == X86 (
    nmake -f Makefile.wnm || GOTO :ERROR
 ) ELSE (
-   nmake -f Makefile.wnm  ARCH=%ARCH%|| GOTO :ERROR
+   nmake -f Makefile.wnm ARCH=%ARCH% || GOTO :ERROR
 )
 MKDIR %DEPENDENCIES_BIN_DIR%\less
 cp -va *.exe %DEPENDENCIES_BIN_DIR%\less
