@@ -137,6 +137,8 @@ cp -va docs/en_US/_build/htmlhelp/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin
 cp -va docs/en_US/hints %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin\Docs\en_US\hints || GOTO :ERROR
 
 cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
+cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/pg_{dump,dumpall,restore}.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
+
 cp -va %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_dll/*.dll  %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
 
 GOTO :DONE
