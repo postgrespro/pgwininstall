@@ -66,7 +66,7 @@ IF "%ARCH%" == "X64" (
 )
 
 
-CD %NSIS_RES_DIR% || GOTO :ERROR
+CD /D %NSIS_RES_DIR% || GOTO :ERROR
 makensis postgresql.nsi || GOTO :ERROR
 
 GOTO :DONE

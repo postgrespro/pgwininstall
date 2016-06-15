@@ -36,7 +36,7 @@ IF "%ARCH%" == "X64" (
   >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
 )
 
-CD %NSIS_RES_DIR% || GOTO :ERROR
+CD /D %NSIS_RES_DIR% || GOTO :ERROR
 makensis pgadmin.nsi || GOTO :ERROR
 
 GOTO :DONE
