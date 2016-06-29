@@ -77,13 +77,16 @@ rem cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
 rem cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
 )
-perl src\tools\msvc\build.pl || GOTO :ERROR
+
 IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
+
+IF %ARCH% == X86 %PERL32_BIN%\perl src\tools\msvc\build.pl || GOTO :ERROR
+IF %ARCH% == X64 %PERL64_BIN%\perl src\tools\msvc\build.pl || GOTO :ERROR
+
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 CD /D %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
-
 
 
 rem We need ICONV and LibIntl DLLS available during install for ZIC to work
