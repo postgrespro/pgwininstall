@@ -367,8 +367,7 @@ Section $(PostgreSQLString) sec1
       StrCpy $tempVar ' --pwfile "$tempFileName"  -A md5 '
     ${endif}
     DetailPrint "Database initialization ..."
-    ;AccessControl::GetCurrentUserName
-    UserMgr::GetCurrentUserName
+    AccessControl::GetCurrentUserName
     Pop $0 ; or "error"
     AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
     Pop $0 ;"ok" or "error" + error details
