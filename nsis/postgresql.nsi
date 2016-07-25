@@ -578,7 +578,12 @@ Section "Uninstall"
   ;Call un.RemoveFromPath
   Pop $0 ; or "error"
 
+  IfSilent 0 +2
+    Goto done
+
   MessageBox MB_OK|MB_ICONINFORMATION "$(UNINSTALL_END)$DATA_DIR" ;debug
+
+  done:
 SectionEnd
 
 ;--------------------------------
