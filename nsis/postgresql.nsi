@@ -163,7 +163,7 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 
 ;--------------------------------
 ;Installer Sections
-Section "Microsoft Visual C++ ${REDIST_YEAR} Redistibutable" secMS
+Section "Microsoft Visual C++ ${REDIST_YEAR} Redistributable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
     File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
