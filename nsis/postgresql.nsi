@@ -1246,7 +1246,7 @@ Function .onInit
     StrCpy $service "YES"
   ${endif}
 
-   ReadINIStr $1 $0 options pgserver
+  ReadINIStr $1 $0 options pgserver
   ${if} "$1" == "no"
     SectionGetFlags ${sec1} $3
     IntOp $3 $3 & ${SECTION_OFF}
