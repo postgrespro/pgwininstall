@@ -23,9 +23,7 @@ CD /D %DEPENDENCIES_SRC_DIR%\less-master
 IF %ARCH% == X86 (
    nmake -f Makefile.wnm || GOTO :ERROR
 ) ELSE (
-   REM 64-bit less.exe is not work
-   REM Use X86 variant for 64-bit platform:
-   nmake -f Makefile.wnm ARCH=X86|| GOTO :ERROR
+   nmake -f Makefile.wnm ARCH=%ARCH%|| GOTO :ERROR
 )
 MKDIR %DEPENDENCIES_BIN_DIR%\less
 cp -va *.exe %DEPENDENCIES_BIN_DIR%\less
