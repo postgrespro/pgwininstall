@@ -68,7 +68,7 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 >>src\tools\msvc\config.pl ECHO 1^;
 
 rem Setting pager
->>src\include\pg_config.h.win32 ECHO #define DEFAULT_PAGER "less -X"
+>>src\include\pg_config.h.win32 ECHO #define DEFAULT_PAGER "more"
 
 IF %ONE_C% == YES (
   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
