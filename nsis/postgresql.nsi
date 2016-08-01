@@ -238,9 +238,11 @@ Section $(PostgreSQLString) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  System::Call "kernel32::GetACP() i .r2"
-  DetailPrint "ANSI code page $2"
-  FileWrite $0 '@echo off$\r$\nchcp $2$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  #System::Call "kernel32::GetACP() i .r2"
+  #DetailPrint "ANSI code page $2"
+  #FileWrite $0 '@echo off$\r$\nchcp $2$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  DetailPrint "UTF-8 code page 65001"
+  FileWrite $0 '@echo off$\r$\nchcp 65001$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
