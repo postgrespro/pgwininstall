@@ -242,7 +242,7 @@ Section $(PostgreSQLString) sec1
   #DetailPrint "ANSI code page $2"
   #FileWrite $0 '@echo off$\r$\nchcp $2$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   DetailPrint "UTF-8 code page 65001"
-  FileWrite $0 '@echo off$\r$\nchcp 65001$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\nchcp 65001$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist %APPDATA%\postgresql md %APPDATA%\postgresql$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
