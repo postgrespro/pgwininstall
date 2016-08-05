@@ -68,7 +68,7 @@ Var UserName_text
 Var Pass1_text
 Var Pass2_text
 
-Var Codepage_text
+Var Chcp_text
 
 Var ServiceAccount_text
 Var ServiceID_text
@@ -241,18 +241,20 @@ Section $(PostgreSQLString) sec1
   creatBatErr:
   ClearErrors
 
-  System::Call "kernel32::GetACP() i .r2"
-  StrCpy $Codepage_text $2
+  ;System::Call "kernel32::GetACP() i .r2"
+  ;StrCpy $Codepage_text $2
 
   ${If} ${AtLeastWin2008}
-    StrCpy $Codepage_text "65001"
+    StrCpy $Chcp_text "chcp 65001"
+  ${Else}
+    StrCpy $Chcp_text ""
   ${Endif}
   
   DetailPrint "Set codepage $Codepage_text"
   
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 '@echo off$\r$\nchcp $Codepage_text$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\n$Chcp_text$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
