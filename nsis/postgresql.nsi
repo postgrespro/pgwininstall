@@ -245,7 +245,7 @@ Section $(PostgreSQLString) sec1
   System::Call "kernel32::GetACP() i .r2"
   StrCpy $Codepage_text $2
 
-  GetWindowsVersion $Winver_text
+  ${GetWindowsVersion} $Winver_text
   ${If} $Winver_text != "XP"
     StrCpy $Codepage_text "65001"
   ${EndIf}
@@ -1296,7 +1296,7 @@ Function dirPre
 FunctionEnd
 
 Function CheckWindowsVersion
-  GetWindowsVersion $Winver_text
+  ${GetWindowsVersion} $Winver_text
   ${If} ${SDK} != "SDK71"
     ${If} $Winver_text == "XP"
 	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
