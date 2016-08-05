@@ -69,7 +69,6 @@ Var Pass1_text
 Var Pass2_text
 
 Var Codepage_text
-Var Winver_text
 
 Var ServiceAccount_text
 Var ServiceID_text
@@ -253,7 +252,7 @@ Section $(PostgreSQLString) sec1
   
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 '@echo off$\r$\nchcp ${Codepage_text}$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\nchcp $Codepage_text$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
@@ -1297,7 +1296,7 @@ FunctionEnd
 Function CheckWindowsVersion
   ${If} ${SDK} != "SDK71"
     ${Unless} ${AtLeastWin2008}
-	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
+	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform"
 	Abort
     ${EndUnless}
   ${EndIf}
