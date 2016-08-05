@@ -245,10 +245,9 @@ Section $(PostgreSQLString) sec1
   System::Call "kernel32::GetACP() i .r2"
   StrCpy $Codepage_text $2
 
-  ${GetWindowsVersion} $Winver_text
-  ${If} $Winver_text != "XP"
+  ${If} ${AtLeastWin2008}
     StrCpy $Codepage_text "65001"
-  ${EndIf}
+  ${Endif}
   
   DetailPrint "Set codepage $Codepage_text"
   
@@ -1296,15 +1295,10 @@ Function dirPre
 FunctionEnd
 
 Function CheckWindowsVersion
-  ${GetWindowsVersion} $Winver_text
   ${If} ${SDK} != "SDK71"
-    ${If} $Winver_text == "XP"
+    ${Unless} ${AtLeastWin2008}
 	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
 	Abort
-    ${EndIf}
-    ${If} $Winver_text == "2003"
-	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
-	Abort
-    ${EndIf}
+    ${EndUnless}
   ${EndIf}
 FunctionEnd
