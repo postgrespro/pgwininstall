@@ -1297,10 +1297,14 @@ FunctionEnd
 
 Function CheckWindowsVersion
   GetWindowsVersion $Winver_text
-  ${If} $Winver_text == "XP"
-  	${If} ${SDK} != "SDK71"
-	      MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
-	      Abort
-  	${EndIf}
+  ${If} ${SDK} != "SDK71"
+    ${If} $Winver_text == "XP"
+	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
+	Abort
+    ${EndIf}
+    ${If} $Winver_text == "2003"
+	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
+	Abort
+    ${EndIf}
   ${EndIf}
 FunctionEnd
