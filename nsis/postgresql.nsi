@@ -242,20 +242,23 @@ Section $(PostgreSQLString) sec1
   creatBatErr:
   ClearErrors
 
-  GetWindowsVersion ${Winver_text}
+  GetWindowsVersion $Winver_text
+  MessageBox MB_OK|MB_ICONINFORMATION "Windows Version: $Winver_text"
   
-  ${If} ${Winver_text} == "XP"
+  ${If} $Winver_text == "XP"
     System::Call "kernel32::GetACP() i .r2"
-    StrCpy ${Codepage_text} $2
+    StrCpy $Codepage_text $2
   ${Else}
-    StrCpy ${Codepage_text} "65001"
+    StrCpy $Codepage_text "65001"
   ${EndIf}
   
-  DetailPrint "Set codepage ${Codepage_text}"
+  DetailPrint "Set codepage $Codepage_text"
+  MessageBox MB_OK|MB_ICONINFORMATION "Set codepage: $Codepage_text"
 
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 '@echo off$\r$\nchcp ${Codepage_text}$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist %APPDATA%\postgresql md %APPDATA%\postgresql$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  ;chcp ${Codepage_text}$\r$\n
+  FileWrite $0 '@echo off$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist %APPDATA%\postgresql md %APPDATA%\postgresql$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
