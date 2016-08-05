@@ -20,6 +20,8 @@
 !include "common_macro.nsh"
 !include "Utf8Converter.nsh"
 
+!include "WinVer.nsh"
+
 !insertmacro VersionCompare
 
 ;--------------------------------
@@ -65,6 +67,9 @@ Var Coding_text
 Var UserName_text
 Var Pass1_text
 Var Pass2_text
+
+Var Codepage_text
+Var Winver_text
 
 Var ServiceAccount_text
 Var ServiceID_text
@@ -236,13 +241,21 @@ Section $(PostgreSQLString) sec1
   FileClose $0
   creatBatErr:
   ClearErrors
+
+  GetWindowsVersion ${Winver_text}
+  
+  ${If} ${Winver_text} == "XP"
+    System::Call "kernel32::GetACP() i .r2"
+    StrCpy ${Codepage_text} $2
+  ${Else}
+    StrCpy ${Codepage_text} "65001"
+  ${EndIf}
+  
+  DetailPrint "Set codepage ${Codepage_text}"
+
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  #System::Call "kernel32::GetACP() i .r2"
-  #DetailPrint "ANSI code page $2"
-  #FileWrite $0 '@echo off$\r$\nchcp $2$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
-  DetailPrint "UTF-8 code page 65001"
-  FileWrite $0 '@echo off$\r$\nchcp 65001$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist %APPDATA%\postgresql md %APPDATA%\postgresql$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\nchcp ${Codepage_text}$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist %APPDATA%\postgresql md %APPDATA%\postgresql$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
