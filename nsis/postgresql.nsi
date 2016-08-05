@@ -242,23 +242,19 @@ Section $(PostgreSQLString) sec1
   creatBatErr:
   ClearErrors
 
+  System::Call "kernel32::GetACP() i .r2"
+  StrCpy $Codepage_text $2
+
   GetWindowsVersion $Winver_text
-  MessageBox MB_OK|MB_ICONINFORMATION "Windows Version: $Winver_text"
-  
-  ${If} $Winver_text == "XP"
-    System::Call "kernel32::GetACP() i .r2"
-    StrCpy $Codepage_text $2
-  ${Else}
+  ${If} $Winver_text != "XP"
     StrCpy $Codepage_text "65001"
   ${EndIf}
   
   DetailPrint "Set codepage $Codepage_text"
-  MessageBox MB_OK|MB_ICONINFORMATION "Set codepage: $Codepage_text"
-
+  
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  ;chcp ${Codepage_text}$\r$\n
-  FileWrite $0 '@echo off$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist %APPDATA%\postgresql md %APPDATA%\postgresql$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\nchcp ${Codepage_text}$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
@@ -1157,6 +1153,8 @@ Function nsDialogsOptimizationPageLeave
 FunctionEnd
 
 Function .onInit
+  CheckWindowsVersion
+
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
@@ -1295,4 +1293,14 @@ Function dirPre
   ${if} $PG_OLD_DIR != "" ;exist PG install
     Abort
   ${endif}
+FunctionEnd
+
+Function CheckWindowsVersion
+  GetWindowsVersion $Winver_text
+  ${If} $Winver_text == "XP"
+  	${If} ${SDK} != "SDK71"
+	      MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform: $Winver_text"
+	      Abort
+  	${EndIf}
+  ${EndIf}
 FunctionEnd
