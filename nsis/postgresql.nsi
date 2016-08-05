@@ -1152,7 +1152,7 @@ Function nsDialogsOptimizationPageLeave
 FunctionEnd
 
 Function .onInit
-  CheckWindowsVersion
+  Call CheckWindowsVersion
 
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
