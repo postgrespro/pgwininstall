@@ -14,10 +14,10 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
-rem wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
+wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
-tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql || GOTO :ERROR
+tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql || GOTO :ERROR
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 IF %ONE_C% == YES (
@@ -77,19 +77,23 @@ rem cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
 rem cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
 )
-perl src\tools\msvc\build.pl || GOTO :ERROR
+
 IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
+
+IF %ARCH% == X86 %PERL32_BIN%\perl src\tools\msvc\build.pl || GOTO :ERROR
+IF %ARCH% == X64 %PERL64_BIN%\perl src\tools\msvc\build.pl || GOTO :ERROR
+
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
-CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
-
+CD /D %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
 
 rem We need ICONV and LibIntl DLLS available during install for ZIC to work
 rem no need to copy them, just add to PATH
 PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
-perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
+IF %ARCH% == X86 %PERL32_BIN%\perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
+IF %ARCH% == X64 %PERL64_BIN%\perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 rem now actually copy DLLs of dependencies into our bindir
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
@@ -113,12 +117,18 @@ cp -va %DEPENDENCIES_BIN_DIR%/zlib/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 
 rem Copy msys shell and sed
-CD %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
+CD /D %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
 7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
-rem CD %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
+rem CD /D %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
 rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
+
+rem download help sources
+CD /D %DOWNLOADS_DIR%
+wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-en.zip || GOTO :ERROR
+wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-ru.zip || GOTO :ERROR
+
 rem building help files
-CD %BUILD_DIR%\postgresql
+CD /D %BUILD_DIR%\postgresql
 mkdir help-ru
 mkdir help-en
 CD help-ru
@@ -137,7 +147,6 @@ GOTO :DONE
 
 :ERROR
 ECHO Failed with error #%errorlevel%.
-PAUSE
 EXIT /b %errorlevel%
 
 :DONE

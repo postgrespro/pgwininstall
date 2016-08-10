@@ -19,7 +19,7 @@ SET ADMIN_DEF_VERSION="%PGADMIN_VERSION%"
 SET PRODUCT_DIR_REGKEY="Software\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%"
 SET ADMIN_REG_KEY="SOFTWARE\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%\Installations\"
 SET ADMIN_INS_SUFFIX="%ARCH%bit_Setup.exe"
-SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
+SET ADMIN_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
 >%NSIS_RES_DIR%\pgadmin.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define PRODUCT_VERSION "%PGADMIN_VERSION%"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define PRODUCT_PUBLISHER %PRODUCT_PUBLISHER%
@@ -31,20 +31,19 @@ SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SUFFIX %ADMIN_INS_SUFFIX%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define ADMIN_INS_SOURCE_DIR %ADMIN_INS_SOURCE_DIR%
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
+>>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define BUILD_DIR %BUILD_DIR%
 IF "%ARCH%" == "X64" (
   >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define Admin64
 )
 
-CD %NSIS_RES_DIR% || GOTO :ERROR
+CD /D %NSIS_RES_DIR% || GOTO :ERROR
 makensis pgadmin.nsi || GOTO :ERROR
 
 GOTO :DONE
 
 :ERROR
 ECHO Failed with error #%errorlevel%.
-PAUSE
 EXIT /b %errorlevel%
 
 :DONE
 ECHO Done.
-PAUSE

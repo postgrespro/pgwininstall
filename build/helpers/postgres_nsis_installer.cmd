@@ -1,5 +1,5 @@
 REM ----------------------------------------------------------------------------
-REM Assume, you have your PostgreSQL and PgAdmin3 build in C:\pg\distr_X.._9.4...
+REM Assume, you have your PostgreSQL and PgAdmin3 build in %BUILD_DIR%\distr_X.._9.4...
 REM For PostgreSQL you have 'postgresql' directory and
 REM for PgAdmin3 you have 'pgadmin' directory
 REM ----------------------------------------------------------------------------
@@ -21,7 +21,9 @@ IF %ONE_C% == YES (
   SET PRODUCT_DIR_REGKEY="Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}"
   SET PRODUCT_VERSION="%PG_MAJOR_VERSION%"
 ) ELSE (
-  SET PRODUCT_NAME=PostgresPro
+  IF "%PRODUCT_NAME%" == "" (
+    SET PRODUCT_NAME=PostgresPro
+  )
   SET PG_DEF_SERVICEID="postgresql-%ARCH%-%PG_MAJOR_VERSION%"
   SET PG_INS_SUFFIX="%ARCH%bit_Setup.exe"
   SET PG_REG_KEY="SOFTWARE\%COMPANY_NAME%\%ARCH%\%PRODUCT_NAME%\%PG_MAJOR_VERSION%\Installations\postgresql-%PG_MAJOR_VERSION%"
@@ -34,7 +36,7 @@ SET PG_DEF_PORT="%DEFAULT_PORT%"
 SET PG_DEF_SUPERUSER="%DEFAULT_USER%"
 SET PG_DEF_SERVICEACCOUNT="NT AUTHORITY\NetworkService"
 SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_MAJOR_VERSION% (%ARCH%)"
-SET PG_INS_SOURCE_DIR="C:\pg\distr_%ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
+SET PG_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
 
 SET NSIS_RES_DIR=%~dp0
 SET NSIS_RES_DIR=%NSIS_RES_DIR:~0,-1%
@@ -58,6 +60,8 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define BUILD_DIR %BUILD_DIR%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define SDK %SDK%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !addplugindir Plugins
 
 IF "%ARCH%" == "X64" (
@@ -65,14 +69,13 @@ IF "%ARCH%" == "X64" (
 )
 
 
-CD %NSIS_RES_DIR% || GOTO :ERROR
+CD /D %NSIS_RES_DIR% || GOTO :ERROR
 makensis postgresql.nsi || GOTO :ERROR
 
 GOTO :DONE
 
 :ERROR
 ECHO Failed with error #%errorlevel%.
-PAUSE
 EXIT /b %errorlevel%
 
 :DONE

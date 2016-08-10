@@ -27,7 +27,7 @@ IF %ARCH% == X64 SET PATH=%PERL64_BIN%;%PATH%
 IF %SDK% == SDK71 (
   SET REDIST_YEAR=2010
   SET PlatformToolset=v100
-  CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
+  CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /xp /%ARCH% || GOTO :ERROR
   ECHO ON
 )
 
@@ -61,14 +61,20 @@ ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
 )
 
 SET PGVER=%PG_DEF_VERSION%
-IF "%PGURL%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
+REM IF "%PGURL%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
+IF "%PGURL%"=="" SET PGURL="http://repo.postgrespro.ru/pgpro-9.5-beta/src/postgrespro-%PGVER%.tar.bz2"
 
 REM Set useful directories paths so they're used in scripts
-SET BUILD_DIR=c:\pg
+SET BUILD_DIR=%ROOT%\builddir
 SET DEPENDENCIES_SRC_DIR=%BUILD_DIR%\dependencies_src
 SET DEPENDENCIES_BIN_DIR=%BUILD_DIR%\dependencies
 SET DEPS_ZIP=deps-%SDK%-%ARCH%.zip
 SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
+
+REM Convert paths for Unix utilites
+SET BUILD_UDIR=%BUILD_DIR:\=/%
+SET DEPENDENCIES_SRC_UDIR=%DEPENDENCIES_SRC_DIR:\=/%
+
 REM Magic to set root directory of those scripts (Where Readme.md lies)
 
 REM Let's use MP for nmake for parallel build

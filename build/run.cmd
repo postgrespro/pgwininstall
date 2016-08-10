@@ -27,7 +27,6 @@ IF DEFINED USG (
   ECHO 5: Build installer PgAdmin3
   ECHO 6: Make PostgreSQL and PgAdmin3 archives
   ECHO 7: Build pgbouncer
-  PAUSE
   EXIT /b 1
 )
 
@@ -35,7 +34,7 @@ IF DEFINED USG (
 
 REM Set PostgreSQL version
 IF "%PG_MAJOR_VERSION%"=="" SET PG_MAJOR_VERSION=9.5
-IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=3.2
+IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=4.1
 
 REM Set PgAdmin3 Version
 SET PGADMIN_VERSION=1.22.1

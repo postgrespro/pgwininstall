@@ -22,7 +22,7 @@
 ;--------------------------------
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "c:\pg\installers\${PRODUCT_NAME}_${ADMIN_DEF_VERSION}_${ADMIN_INS_SUFFIX}"
+OutFile "${BUILD_DIR}\installers\${PRODUCT_NAME}_${ADMIN_DEF_VERSION}_${ADMIN_INS_SUFFIX}"
 
 !ifdef Admin64
   InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}\${ADMIN_DEF_VERSION}"
@@ -87,9 +87,9 @@ Var StartMenuFolder
 Section "Microsoft Visual C++ $REDIST_YEAR Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
-    File /oname=$1 "c:\pg\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
+    File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
   !else
-    File /oname=$1 "c:\pg\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
+    File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
   !endif
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"

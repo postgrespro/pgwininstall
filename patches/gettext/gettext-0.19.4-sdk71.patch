@@ -2725,7 +2725,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
 +    <ClCompile>
 +      <Optimization>Disabled</Optimization>
-+      <AdditionalIncludeDirectories>.;.\gettext-runtime;c:\pg\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\gettext-runtime;..\..\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBINTL;BUILDING_DLL;IN_LIBINTL;ENABLE_RELOCATABLE=1;IN_LIBRARY;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <MinimalRebuild>true</MinimalRebuild>
 +      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -2737,7 +2737,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +    </ClCompile>
 +    <Link>
 +      <AdditionalDependencies>libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+	  <AdditionalLibraryDirectories>c:\pg\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++	  <AdditionalLibraryDirectories>..\..\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 +      <OutputFile>$(OutDir)libintl.dll</OutputFile>
 +      <GenerateDebugInformation>true</GenerateDebugInformation>
 +      <SubSystem>Windows</SubSystem>
@@ -2751,7 +2751,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +    <ClCompile>
 +      <Optimization>Full</Optimization>
 +      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-+      <AdditionalIncludeDirectories>.;.\gettext-runtime;c:\pg\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\gettext-runtime;..\..\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBINTL;BUILDING_DLL;IN_LIBINTL;ENABLE_RELOCATABLE=1;IN_LIBRARY;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 +      <PrecompiledHeader />
@@ -2761,7 +2761,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +    </ClCompile>
 +    <Link>
 +      <AdditionalDependencies>libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+	  <AdditionalLibraryDirectories>c:\pg\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++	  <AdditionalLibraryDirectories>..\..\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 +      <OutputFile>$(OutDir)libintl.dll</OutputFile>
 +      <GenerateDebugInformation>true</GenerateDebugInformation>
 +      <SubSystem>Windows</SubSystem>
@@ -2779,7 +2779,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +    </Midl>
 +    <ClCompile>
 +      <Optimization>Disabled</Optimization>
-+      <AdditionalIncludeDirectories>.;.\gettext-runtime;c:\pg\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\gettext-runtime;..\..\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBINTL;BUILDING_DLL;IN_LIBINTL;ENABLE_RELOCATABLE=1;IN_LIBRARY;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <MinimalRebuild>true</MinimalRebuild>
 +      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -2791,7 +2791,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +    </ClCompile>
 +    <Link>
 +      <AdditionalDependencies>libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+	  <AdditionalLibraryDirectories>c:\pg\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++	  <AdditionalLibraryDirectories>..\..\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 +      <OutputFile>$(OutDir)libintl.dll</OutputFile>
 +      <GenerateDebugInformation>true</GenerateDebugInformation>
 +      <SubSystem>Windows</SubSystem>
@@ -2809,7 +2809,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +    <ClCompile>
 +      <Optimization>Full</Optimization>
 +      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-+      <AdditionalIncludeDirectories>.;.\gettext-runtime;c:\pg\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>.;.\gettext-runtime;..\..\dependencies\iconv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>BUILDING_LIBINTL;BUILDING_DLL;IN_LIBINTL;ENABLE_RELOCATABLE=1;IN_LIBRARY;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 +      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 +      <PrecompiledHeader />
@@ -2819,7 +2819,7 @@ diff -ruN ./libintl.vcxproj ../gettext-0.19.4/libintl.vcxproj
 +    </ClCompile>
 +    <Link>
 +      <AdditionalDependencies>libiconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
-+	  <AdditionalLibraryDirectories>c:\pg\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
++	  <AdditionalLibraryDirectories>..\..\dependencies\iconv\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 +      <OutputFile>$(OutDir)libintl.dll</OutputFile>
 +      <GenerateDebugInformation>true</GenerateDebugInformation>
 +      <SubSystem>Windows</SubSystem>

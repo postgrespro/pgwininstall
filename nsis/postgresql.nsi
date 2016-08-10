@@ -20,12 +20,14 @@
 !include "common_macro.nsh"
 !include "Utf8Converter.nsh"
 
+!include "WinVer.nsh"
+
 !insertmacro VersionCompare
 
 ;--------------------------------
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "c:\pg\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
+OutFile "${BUILD_DIR}\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
 
 !ifdef PG_64bit
   InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}\${PG_MAJOR_VERSION}"
@@ -65,6 +67,8 @@ Var Coding_text
 Var UserName_text
 Var Pass1_text
 Var Pass2_text
+
+Var Chcp_text
 
 Var ServiceAccount_text
 Var ServiceID_text
@@ -163,12 +167,12 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 
 ;--------------------------------
 ;Installer Sections
-Section "Microsoft Visual C++ ${REDIST_YEAR} Redistibutable" secMS
+Section "Microsoft Visual C++ ${REDIST_YEAR} Redistributable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
-    File /oname=$1 "c:\pg\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
+    File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
   !else
-    File /oname=$1 "c:\pg\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
+    File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
   !endif
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
@@ -236,11 +240,21 @@ Section $(PostgreSQLString) sec1
   FileClose $0
   creatBatErr:
   ClearErrors
+
+  ;System::Call "kernel32::GetACP() i .r2"
+  ;StrCpy $Codepage_text $2
+
+  ${If} ${AtLeastWin2008}
+    StrCpy $Chcp_text "chcp 65001"
+  ${Else}
+    StrCpy $Chcp_text ""
+  ${Endif}
+  
+  DetailPrint "Set codepage $Codepage_text"
+  
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  System::Call "kernel32::GetACP() i .r2"
-  DetailPrint "ANSI code page $2"
-  FileWrite $0 '@echo off$\r$\nchcp $2$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\n$Chcp_text$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
@@ -587,7 +601,12 @@ Section "Uninstall"
   ;Call un.RemoveFromPath
   Pop $0 ; or "error"
 
+  IfSilent 0 +2
+    Goto done
+
   MessageBox MB_OK|MB_ICONINFORMATION "$(UNINSTALL_END)$DATA_DIR" ;debug
+
+  done:
 SectionEnd
 
 ;--------------------------------
@@ -1134,6 +1153,8 @@ Function nsDialogsOptimizationPageLeave
 FunctionEnd
 
 Function .onInit
+  Call CheckWindowsVersion
+
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
@@ -1272,4 +1293,13 @@ Function dirPre
   ${if} $PG_OLD_DIR != "" ;exist PG install
     Abort
   ${endif}
+FunctionEnd
+
+Function CheckWindowsVersion
+  ${If} ${SDK} != "SDK71"
+    ${Unless} ${AtLeastWin2008}
+	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform"
+	Abort
+    ${EndUnless}
+  ${EndIf}
 FunctionEnd

@@ -24,7 +24,7 @@ CD /D %DOWNLOADS_DIR%
 wget --no-check-certificate -c https://sourceforge.net/projects/wxwindows/files/%WXWIDGETS_VER%/wxWidgets-%WXWIDGETS_VER%.tar.bz2 -O wxWidgets-%WXWIDGETS_VER%.tar.bz2
 rm -rf %DEPENDENCIES_BIN_DIR%\wxwidgets %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 MKDIR %DEPENDENCIES_BIN_DIR%\wxwidgets
-tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_DIR% || GOTO :ERROR
+tar xf wxWidgets-%WXWIDGETS_VER%.tar.bz2 -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\wxWidgets-*
 
 cp -v %ROOT%/patches/wxWidgets/wxWidgets-%WXWIDGETS_VER%-%SDK%.patch wxWidgets.patch
@@ -101,8 +101,8 @@ REM msbuild docs/Docs.vcxproj /m /p:Configuration="All" /p:Platform="Win32" || G
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\lib
 cp -va pgadmin/Release*/*.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
-cp -va i18n c:/pg/distr_%ARCH%_%PGVER%/pgadmin/bin  || GOTO :ERROR
-cp -va c:/pg/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
+cp -va i18n %BUILD_DIR%/distr_%ARCH%_%PGVER%/pgadmin/bin  || GOTO :ERROR
+cp -va %BUILD_DIR%/distr_%ARCH%_%PGVER%/postgresql/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/wxwidgets/lib/vc_dll/*.dll  %BUILD_DIR%\distr_%ARCH%_%PGVER%\pgadmin\bin  || GOTO :ERROR
 
 
@@ -110,9 +110,7 @@ GOTO :DONE
 
 :ERROR
 ECHO Failed with error #%errorlevel%.
-PAUSE
 EXIT /b %errorlevel%
 
 :DONE
 ECHO Done.
-PAUSE
