@@ -343,19 +343,19 @@ Section $(PostgreSQLString) sec1
     "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation (EN)" \
+    "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (EN)" \
     "$INSTDIR\doc\postgresql-en.chm" \
     "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation (RU)" \
+    "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (RU)" \
     "$INSTDIR\doc\postgresql-ru.chm" \
     "$INSTDIR\doc\pg-help.ico" "0"
 
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL release notes" \
-    "$INSTDIR\doc\postgresql\html\release.html" \
-    "$INSTDIR\doc\pg-help.ico" "0"
+  ; !insertmacro CreateInternetShortcut \
+  ;   "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} release notes" \
+  ;   "$INSTDIR\doc\postgresql\html\release.html" \
+  ;   "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro MUI_STARTMENU_WRITE_END
   ; Create data dir begin
