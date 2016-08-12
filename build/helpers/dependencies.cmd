@@ -57,7 +57,8 @@ COPY editline\readline.h %DEPENDENCIES_BIN_DIR%\wineditline\include\editline
 :BUILD_ICONV
 TITLE Building iconv...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+REM wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
