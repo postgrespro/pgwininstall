@@ -14,6 +14,8 @@ IF "%~1" == "4" GOTO :OK
 IF "%~1" == "5" GOTO :OK
 IF "%~1" == "6" GOTO :OK
 IF "%~1" == "7" GOTO :OK
+IF "%~1" == "8" GOTO :OK
+IF "%~1" == "9" GOTO :OK
 
 SET USG=1
 
@@ -27,6 +29,9 @@ IF DEFINED USG (
   ECHO 5: Build installer PgAdmin3
   ECHO 6: Make PostgreSQL and PgAdmin3 archives
   ECHO 7: Build pgbouncer
+  ECHO 8: Build psqlODBC
+  ECHO 9: Build psqlODBC installer
+  PAUSE
   EXIT /b 1
 )
 
@@ -34,7 +39,7 @@ IF DEFINED USG (
 
 REM Set PostgreSQL version
 IF "%PG_MAJOR_VERSION%"=="" SET PG_MAJOR_VERSION=9.5
-IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=4.1
+IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=3
 
 REM Set PgAdmin3 Version
 SET PGADMIN_VERSION=1.22.1
@@ -50,6 +55,9 @@ IF "%ARCH%"=="x64" SET ARCH=X64
 
 REM Set PGBouner Version
 SET PGBOUNCER_VERSION=1.7
+
+REM Set PgODBC Version
+IF "%PG_ODBC_VERSION%"=="" SET PG_ODBC_VERSION=09.05.0400
 
 @echo off&setlocal
 FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
@@ -74,13 +82,13 @@ IF "%~1"=="3" (
 
 IF "%~1"=="4" (
   TITLE Building PgAdmin
-  IF "%SDK%"=="" SET SDK=MSVC2015
+  IF "%SDK%"=="" SET SDK=SDK71
   CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd
 )
 
 IF "%~1"=="5" (
   TITLE Building PgAdmin installer
-  IF "%SDK%"=="" SET SDK=MSVC2015
+  IF "%SDK%"=="" SET SDK=SDK71
   CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd
 )
 
@@ -92,4 +100,14 @@ IF "%~1"=="6" (
 IF "%~1"=="7" (
     TITLE Build PGBouncer
     CMD.EXE /C %ROOT%\build\helpers\pgbouncer.cmd
+)
+
+IF "%~1"=="8" (
+    TITLE Build psqlODBC
+    CMD.EXE /C %ROOT%\build\helpers\pgodbc.cmd
+)
+
+IF "%~1"=="9" (
+    TITLE Build psqlODBC installer
+    CMD.EXE /C %ROOT%\build\helpers\pgodbc_nsis_installer.cmd
 )
