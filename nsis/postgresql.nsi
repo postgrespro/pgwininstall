@@ -332,6 +332,7 @@ Section $(PostgreSQLString) sec1
   pop $0
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
+  ${if} ${PRODUCT_NAME} != "PostgreSQL"
   !insertmacro CreateInternetShortcut \
     "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes" \
     "$INSTDIR\doc\installation-notes.html" \
@@ -351,7 +352,8 @@ Section $(PostgreSQLString) sec1
     "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (RU)" \
     "$INSTDIR\doc\postgresql-ru.chm" \
     "$INSTDIR\doc\pg-help.ico" "0"
-
+  ${endif}
+  
   ; !insertmacro CreateInternetShortcut \
   ;   "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} release notes" \
   ;   "$INSTDIR\doc\postgresql\html\release.html" \
