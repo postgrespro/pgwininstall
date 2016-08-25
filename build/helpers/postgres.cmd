@@ -14,10 +14,10 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
-rm -rf %BUILD_DIR%\postgresql
-MKDIR %BUILD_DIR%\postgresql
-tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql || GOTO :ERROR
+REM wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
+REM rm -rf %BUILD_DIR%\postgresql
+REM MKDIR %BUILD_DIR%\postgresql
+REM tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql || GOTO :ERROR
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 IF %ONE_C% == YES (
@@ -29,6 +29,8 @@ IF %ONE_C% == YES (
     patch -p1 < %%I || GOTO :ERROR
   )
 )
+
+GOTO :DONE_POSTGRESQL_PATCH
 
 cp -va %ROOT%/patches/postgresql/%PGVER%/series .
 IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
@@ -81,8 +83,7 @@ rem cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc
 IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
 
-IF %ARCH% == X86 %PERL32_BIN%\perl src\tools\msvc\build.pl || GOTO :ERROR
-IF %ARCH% == X64 %PERL64_BIN%\perl src\tools\msvc\build.pl || GOTO :ERROR
+%PERL_EXE% src\tools\msvc\build.pl || GOTO :ERROR
 
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
@@ -92,8 +93,7 @@ CD /D %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 rem We need ICONV and LibIntl DLLS available during install for ZIC to work
 rem no need to copy them, just add to PATH
 PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
-IF %ARCH% == X86 %PERL32_BIN%\perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
-IF %ARCH% == X64 %PERL64_BIN%\perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
+%PERL_EXE% install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 rem now actually copy DLLs of dependencies into our bindir
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
