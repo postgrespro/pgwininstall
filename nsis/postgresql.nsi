@@ -1300,7 +1300,7 @@ FunctionEnd
 Function CheckWindowsVersion
   ${If} ${SDK} != "SDK71"
     ${Unless} ${AtLeastWin2008}
-	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this platform"
+	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this system"
 	Abort
     ${EndUnless}
   ${EndIf}

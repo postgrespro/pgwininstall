@@ -10,6 +10,12 @@ rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
 
+REM TO-DO: overwrite to build rules
+:DOWNLOAD_MSYS_UTILS
+TITLE Download msys utils...
+CD /D %DOWNLOADS_DIR%
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
+
 :BUILD_LESS
 TITLE "Building less"
 CD /D %DOWNLOADS_DIR%
@@ -243,7 +249,6 @@ IF %ARCH% == X64 (
 cp -va %DEPENDENCIES_SRC_DIR%\icu\include %DEPENDENCIES_BIN_DIR%\icu\include || GOTO :ERROR
 CD /D %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\icu
-
 
 REM If everything is compiled OK go to DONE
 GOTO :DONE

@@ -16,6 +16,8 @@ IF "%~1" == "6" GOTO :OK
 IF "%~1" == "7" GOTO :OK
 IF "%~1" == "8" GOTO :OK
 IF "%~1" == "9" GOTO :OK
+IF "%~1" == "12" GOTO :OK
+IF "%~1" == "13" GOTO :OK
 
 SET USG=1
 
@@ -31,6 +33,8 @@ IF DEFINED USG (
   ECHO 7: Build pgbouncer
   ECHO 8: Build psqlODBC
   ECHO 9: Build psqlODBC installer
+  ECHO 12: Build PostgresPro
+  ECHO 13: Build installer PostgresPro
   PAUSE
   EXIT /b 1
 )
@@ -74,9 +78,23 @@ IF "%~1"=="2" (
   CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
 )
 
+IF "%~1"=="12" (
+  TITLE Building PostgresPro
+  IF "%SDK%"=="" SET SDK=SDK71
+  IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME="PostgresPro"
+  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
+)
+
 IF "%~1"=="3" (
   TITLE Building PostgreSQL installer
   IF "%SDK%"=="" SET SDK=SDK71
+  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
+)
+
+IF "%~1"=="13" (
+  TITLE Building PostgresPro installer
+  IF "%SDK%"=="" SET SDK=SDK71
+  IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME="PostgresPro"
   CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
 )
 
