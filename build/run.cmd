@@ -81,7 +81,7 @@ IF "%~1"=="2" (
 IF "%~1"=="12" (
   TITLE Building PostgresPro
   IF "%SDK%"=="" SET SDK=SDK71
-  IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME="PostgresPro"
+  IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
   CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
 )
 
@@ -94,7 +94,7 @@ IF "%~1"=="3" (
 IF "%~1"=="13" (
   TITLE Building PostgresPro installer
   IF "%SDK%"=="" SET SDK=SDK71
-  IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME="PostgresPro"
+  IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
   CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
 )
 
