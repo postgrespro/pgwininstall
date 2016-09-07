@@ -357,17 +357,24 @@ Section $(PostgreSQLString) sec1
     Pop $0 ; or "error"
     AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
     Pop $0 ;"ok" or "error" + error details
-    ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
-      ; Initialise the database cluster, and set the appropriate permissions/ownership
-      nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --encoding=$Coding_text -U "$UserName_text" \
-        -D "$DATA_DIR"'
+    ${if} ${WITH_1C} == "TRUE"
+      DetailPrint "Running 1C installation. Using ru_RU.UTF-8 locale ..."
+        nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+          --locale="ru_RU.UTF-8" \
+          -U "$UserName_text" \
+          -D "$DATA_DIR"'
     ${else}
-      nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --locale="$Locale_text" \
-        -U "$UserName_text" \
-        -D "$DATA_DIR"'
-    ${endif}
+      ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
+        ; Initialise the database cluster, and set the appropriate permissions/ownership
+        nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+          --encoding=$Coding_text -U "$UserName_text" \
+          -D "$DATA_DIR"'
+      ${else}
+        nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+          --locale="$Locale_text" \
+          -U "$UserName_text" \
+          -D "$DATA_DIR"'
+      ${endif}
     pop $0
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
