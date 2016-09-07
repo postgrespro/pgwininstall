@@ -375,6 +375,7 @@ Section $(PostgreSQLString) sec1
           -U "$UserName_text" \
           -D "$DATA_DIR"'
       ${endif}
+    ${endif}
     pop $0
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
