@@ -30,8 +30,6 @@ IF %ONE_C% == YES (
   )
 )
 
-GOTO :DONE_POSTGRESQL_PATCH
-
 cp -va %ROOT%/patches/postgresql/%PGVER%/series .
 IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
 FOR /F %%I IN (series) do (
