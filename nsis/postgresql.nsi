@@ -624,6 +624,23 @@ SectionEnd
 ;if exist then get install options to vars
 Function ChecExistInstall
   StrCpy $Locale_text "$(DEF_LOCALE_NAME)"
+
+  ReadRegStr $1 HKLM "${PG_OLD_REG_KEY}" "Version"
+
+  ${if} $1 != "" ;we have install
+    ;get exist options
+    ReadRegStr $PG_OLD_VERSION HKLM "${PG_OLD_REG_KEY}" "Version"
+    ReadRegStr $INSTDIR HKLM "${PG_OLD_REG_KEY}" "Base Directory"
+    ReadRegStr $DATA_DIR HKLM "${PG_OLD_REG_KEY}" "Data Directory"
+
+    ReadRegStr $ServiceAccount_text HKLM "${PG_OLD_REG_KEY}" "Service Account"
+    ReadRegStr $ServiceID_text HKLM "${PG_OLD_REG_KEY}" "Service ID"
+    ReadRegStr $UserName_text HKLM "${PG_OLD_REG_KEY}" "Super User"
+    ReadRegStr $Branding_text HKLM "${PG_OLD_REG_KEY}" "Branding"
+
+    StrCpy $PG_OLD_DIR $INSTDIR
+  ${endif}
+
   ReadRegStr $1 HKLM "${PG_REG_KEY}" "Version"
 
   ${if} $1 != "" ;we have install
@@ -640,11 +657,19 @@ Function ChecExistInstall
     StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
 
+  ReadRegDWORD $1 HKLM "${PG_OLD_REG_SERVICE_KEY}" "Port"
+  ${if} $1 != "" ;we have install
+    StrCpy $TextPort_text $1
+  ${endif}
+
   ReadRegDWORD $1 HKLM "${PG_REG_SERVICE_KEY}" "Port"
   ${if} $1 != "" ;we have install
     StrCpy $TextPort_text $1
-  ${else}
-    ;calculate free num port - use EnumRegKey
+  ${endif}
+
+  ${if} $TextPort_text == ""
+    ; todo: compatibility with pg-installers family
+    ; calculate free num port - use EnumRegKey
     StrCpy $0 0
     StrCpy $2 5432
 
@@ -679,6 +704,11 @@ Function ChecExistInstall
     ${if} $IsTextPortInIni != 1 ;port can be send in ini file
       StrCpy $TextPort_text $2
     ${endif}
+  ${endif}
+
+  ReadRegStr $1 HKLM "${PG_OLD_REG_SERVICE_KEY}" "Locale"
+  ${if} $1 != ""
+    StrCpy $Locale_text $1
   ${endif}
 
   ReadRegStr $1 HKLM "${PG_REG_SERVICE_KEY}" "Locale"
