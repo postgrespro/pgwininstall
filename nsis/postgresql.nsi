@@ -758,6 +758,27 @@ Function un.DeleteInstallOptions
   DeleteRegValue HKLM "${PG_REG_SERVICE_KEY}" "Service Account"
   DeleteRegKey /ifempty HKLM "${PG_REG_KEY}"
   DeleteRegKey /ifempty HKLM "${PG_REG_SERVICE_KEY}"
+
+  ReadRegStr $1 HKLM "${PG_OLD_REG_KEY}" "Version"
+  ${if} $1 != "" ;we have old install
+  	DeleteRegValue HKLM "${PG_OLD_REG_KEY}" "Version"
+  	DeleteRegValue HKLM "${PG_OLD_REG_KEY}" "Base Directory"
+  	DeleteRegValue HKLM "${PG_OLD_REG_KEY}" "Data Directory"
+  	DeleteRegValue HKLM "${PG_OLD_REG_KEY}" "Service Account"
+  	DeleteRegValue HKLM "${PG_OLD_REG_KEY}" "Service ID"
+  	DeleteRegValue HKLM "${PG_OLD_REG_KEY}" "Super User"
+	DeleteRegValue HKLM "${PG_OLD_REG_KEY}" "Branding"
+  	DeleteRegValue HKLM "${PG_OLD_REG_SERVICE_KEY}" "Port"
+  	DeleteRegValue HKLM "${PG_OLD_REG_SERVICE_KEY}" "Locale"
+  	;for compatibility
+  	DeleteRegValue HKLM "${PG_OLD_REG_SERVICE_KEY}" "Data Directory"
+  	DeleteRegValue HKLM "${PG_OLD_REG_SERVICE_KEY}" "Database Superuser"
+	DeleteRegValue HKLM "${PG_OLD_REG_SERVICE_KEY}" "Display Name"
+  	DeleteRegValue HKLM "${PG_OLD_REG_SERVICE_KEY}" "Product Code"
+  	DeleteRegValue HKLM "${PG_OLD_REG_SERVICE_KEY}" "Service Account"
+	DeleteRegKey /ifempty HKLM "${PG_OLD_REG_KEY}"
+  	DeleteRegKey /ifempty HKLM "${PG_OLD_REG_SERVICE_KEY}"
+  ${endif}
 FunctionEnd
 
 Function un.ChecExistInstall
