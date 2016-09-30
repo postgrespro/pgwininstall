@@ -249,7 +249,11 @@ Section $(PostgreSQLString) sec1
   ${Else}
     StrCpy $Chcp_text ""
   ${Endif}
-  
+
+  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+    StrCpy $Chcp_text ""
+  ${endif}
+
   DetailPrint "Set codepage $Codepage_text"
   
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
