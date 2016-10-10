@@ -42,8 +42,8 @@ IF DEFINED USG (
 :OK
 
 REM Set PostgreSQL version
-IF "%PG_MAJOR_VERSION%"=="" SET PG_MAJOR_VERSION=9.5
-IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=4
+IF "%PG_MAJOR_VERSION%"=="" SET PG_MAJOR_VERSION=9.6
+IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=0
 
 REM Set PgAdmin3 Version
 SET PGADMIN_VERSION=1.22.1
@@ -82,7 +82,7 @@ IF "%~1"=="12" (
   TITLE Building PostgresPro
   IF "%SDK%"=="" SET SDK=SDK71
   IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
-  SET PG_PATCH_VERSION=4.1
+  SET PG_PATCH_VERSION=0.1
   CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
 )
 
@@ -96,7 +96,7 @@ IF "%~1"=="13" (
   TITLE Building PostgresPro installer
   IF "%SDK%"=="" SET SDK=SDK71
   IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
-  SET PG_PATCH_VERSION=4.1
+  SET PG_PATCH_VERSION=0.1
   CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
 )
 
