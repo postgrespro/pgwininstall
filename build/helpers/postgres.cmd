@@ -122,8 +122,8 @@ rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 
 rem download help sources
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-en.zip || GOTO :ERROR
-wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-ru.zip || GOTO :ERROR
+wget --no-check-certificate -O help-sources-en.zip -c http://repo.postgrespro.ru/doc/pgpro/9.6/en/help-sources.zip || GOTO :ERROR
+wget --no-check-certificate -O help-sources-ru.zip -c http://repo.postgrespro.ru/doc/pgpro/9.6/ru/help-sources.zip || GOTO :ERROR
 
 rem building help files
 CD /D %BUILD_DIR%\postgresql

@@ -67,7 +67,7 @@ SET PGVER=%PG_DEF_VERSION%
 IF "%PGURL%"=="" (
    IF "%PRODUCT_NAME%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
    IF "%PRODUCT_NAME%"=="PostgreSQL" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
-   IF "%PRODUCT_NAME%"=="PostgresPro" SET PGURL="http://repo.postgrespro.ru/pgpro-9.5-beta/src/postgrespro-%PGVER%.tar.bz2"
+   IF "%PRODUCT_NAME%"=="PostgresPro" SET PGURL="http://repo.postgrespro.ru/pgpro-9.6-beta/src/postgrespro-%PGVER%.tar.bz2"
 )
 
 REM Set useful directories paths so they're used in scripts
