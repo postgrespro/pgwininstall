@@ -43,7 +43,8 @@ SET NSIS_RES_DIR=%NSIS_RES_DIR:~0,-1%
 SET NSIS_RES_DIR=%NSIS_RES_DIR%\..\..\nsis
 
 REM PostgreSQL Section
->%NSIS_RES_DIR%\postgres.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
+>%NSIS_RES_DIR%\postgres.def.nsh ECHO !addplugindir "%NSIS_RES_DIR%\Plugins"
+>>%NSIS_RES_DIR%\postgres.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_VERSION %PRODUCT_VERSION%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_PUBLISHER %PRODUCT_PUBLISHER%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_WEB_SITE %PRODUCT_WEB_SITE%

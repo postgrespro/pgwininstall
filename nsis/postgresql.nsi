@@ -162,12 +162,12 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 
 ;--------------------------------
 ;Installer Sections
-Section "Microsoft Visual C++ 2010 Redistibutable" secMS
+Section "Microsoft Visual C++ ${REDIST_YEAR} Redistibutable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
-    File /oname=$1 "c:\pg\vcredist\vcredist_x64_2010.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
   !else
-    File /oname=$1 "c:\pg\vcredist\vcredist_x86_2010.exe"
+    File /oname=$1 "c:\pg\vcredist\vcredist_x86_${REDIST_YEAR}.exe"
   !endif
   ExecWait "$1  /passive /norestart" $0
   DetailPrint "Visual C++ Redistributable Packages return $0"
@@ -398,6 +398,14 @@ Section $(PostgreSQLString) sec1
   ${if} $isDataDirExist == 0
     ${if} $checkNoLocal_state == ${BST_CHECKED}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
+	  ; Add line to pg_hba.conf
+	  FileOpen $4 "$DATA_DIR\pg_hba.conf" a
+	  FileSeek $4 0 END
+	  FileWrite $4 "host$\tall$\tall$\t0.0.0.0/0$\tmd5$\r$\n"
+	  FileClose $4
+	  ; Add postgres to Windows Firewall exceptions
+	  nsisFirewall::AddAuthorizedApplication "$INSTDIR\bin\postgres.exe" "PostgresPro server"
+      pop $0
     ${else}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = 'localhost'"
     ${EndIf}
