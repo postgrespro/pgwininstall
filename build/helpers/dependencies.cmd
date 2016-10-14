@@ -10,11 +10,37 @@ rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
 
+:ZSTD
+TITLE "Building libzstd"
+set ZSTD_RELEASE=1.1.0
+CD /D %DOWNLOADS_DIR%
+wget -O zstd-%ZSTD_RELEASE%.zip --no-check-certificate -c https://github.com/facebook/zstd/archive/v%ZSTD_RELEASE%.zip
+rm -rf %DEPENDENCIES_SRC_DIR%/zstd-%ZSTD_RELEASE%
+MKDIR %DEPENDENCIES_SRC_DIR%\zstd-%ZSTD_RELEASE%
+CD /D %DEPENDENCIES_SRC_DIR%
+7z x %DOWNLOADS_DIR%\zstd-%ZSTD_RELEASE%.zip
+CD zstd-%ZSTD_RELEASE%
+call build/VS_Scripts/build.VS%REDIST_YEAR%.cmd || GOTO :ERROR
+MKDIR %DEPENDENCIES_BIN_DIR%\zstd
+cp lib\zstd.h %DEPENDENCIES_BIN_DIR%\zstd
+if %ARCH% == X86 (
+	cp -va build/VS_Scripts/BIN/Release/Win32/zstdlib_x86* %DEPENDENCIES_BIN_DIR%\zstd
+) else (
+	cp -va build/VS_Scripts/BIN/Release/x64/zstdlib_x64* %DEPENDENCIES_BIN_DIR%\zstd
+)
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zstd
+
+
 REM TO-DO: overwrite to build rules
 :DOWNLOAD_MSYS_UTILS
 TITLE Download msys utils...
 CD /D %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://repo.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
+MKDIR %DEPENDENCIES_SRC_DIR%\less-master
+CD /D %DEPENDENCIES_SRC_DIR%
+7z x %DOWNLOADS_DIR%\less.zip
+
+CD /D %DEPENDENCIES_SRC_DIR%\less-master
 
 :BUILD_LESS
 TITLE "Building less"
@@ -24,6 +50,7 @@ rm -rf %DEPENDENCIES_SRC_DIR%\less-master %DEPENDENCIES_BIN_DIR%\less
 MKDIR %DEPENDENCIES_SRC_DIR%\less-master
 CD /D %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\less.zip
+
 
 CD /D %DEPENDENCIES_SRC_DIR%\less-master
 IF %ARCH% == X86 (
