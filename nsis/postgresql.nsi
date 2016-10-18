@@ -78,7 +78,7 @@ Var Branding_text
 
 Var OldServiceAccount_text
 Var OldServiceID_text
-Var OldVersion_text
+Var OldUserName_text
 Var OldBranding_text
 
 Var loggedInUser ;current Domain/UserName
