@@ -193,8 +193,7 @@ Section $(PostgreSQLString) sec1
     doitStop:
     DetailPrint "Stop the server ..."
     ${if} $OLD_DATA_DIR != ""
-      DetailPrint "${PG_OLD_DIR}\bin\pg_ctl.exe stop -D ${OLD_DATA_DIR} -m fast -w"
-      nsExec::Exec '$PG_OLD_DIR\bin\pg_ctl.exe" stop -D "$OLD_DATA_DIR" -m fast -w'
+      nsExec::Exec '"$PG_OLD_DIR\bin\pg_ctl.exe" stop -D "$OLD_DATA_DIR" -m fast -w'
       pop $0
       DetailPrint "pg_ctl.exe stop return $0"
     ${endif}
@@ -250,6 +249,7 @@ Section $(PostgreSQLString) sec1
 
   ;System::Call "kernel32::GetACP() i .r2"
   ;StrCpy $Codepage_text $2
+  ;DetailPrint "Set codepage $Codepage_text"
 
   ${If} ${AtLeastWin2008}
     StrCpy $Chcp_text "chcp 65001"
@@ -260,8 +260,6 @@ Section $(PostgreSQLString) sec1
   ${if} ${PRODUCT_NAME} == "PostgreSQL"
     StrCpy $Chcp_text ""
   ${endif}
-
-  DetailPrint "Set codepage $Codepage_text"
   
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
