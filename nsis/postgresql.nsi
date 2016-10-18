@@ -76,6 +76,11 @@ Var ServiceID_text
 Var Version_text
 Var Branding_text
 
+Var OldServiceAccount_text
+Var OldServiceID_text
+Var OldVersion_text
+Var OldBranding_text
+
 Var loggedInUser ;current Domain/UserName
 Var loggedInUserShort ;current UserName
 
@@ -194,8 +199,8 @@ Section $(PostgreSQLString) sec1
     ${endif}
     ;unregister
     DetailPrint "Unregister the service ..."
-    ${if} $ServiceID_text != ""
-     nsExec::Exec '"$PG_OLD_DIR\bin\pg_ctl.exe" unregister -N "$ServiceID_text"'
+    ${if} $OldServiceID_text != ""
+     nsExec::Exec '"$PG_OLD_DIR\bin\pg_ctl.exe" unregister -N "$OldServiceID_text"'
       pop $0
       DetailPrint "pg_ctl.exe unregister return $0"
     ${endif}
@@ -638,10 +643,10 @@ Function ChecExistInstall
     ReadRegStr $PG_OLD_DIR HKLM "${PG_OLD_REG_KEY}" "Base Directory"
     ReadRegStr $OLD_DATA_DIR HKLM "${PG_OLD_REG_KEY}" "Data Directory"
 
-    ReadRegStr $ServiceAccount_text HKLM "${PG_OLD_REG_KEY}" "Service Account"
-    ReadRegStr $ServiceID_text HKLM "${PG_OLD_REG_KEY}" "Service ID"
-    ReadRegStr $UserName_text HKLM "${PG_OLD_REG_KEY}" "Super User"
-    ReadRegStr $Branding_text HKLM "${PG_OLD_REG_KEY}" "Branding"
+    ReadRegStr $OldServiceAccount_text HKLM "${PG_OLD_REG_KEY}" "Service Account"
+    ReadRegStr $OldServiceID_text HKLM "${PG_OLD_REG_KEY}" "Service ID"
+    ReadRegStr $OldUserName_text HKLM "${PG_OLD_REG_KEY}" "Super User"
+    ReadRegStr $OldBranding_text HKLM "${PG_OLD_REG_KEY}" "Branding"
 
     ; StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
@@ -665,10 +670,10 @@ Function ChecExistInstall
     ReadRegStr $PG_OLD_DIR HKLM "${PG95_REG_KEY}" "Base Directory"
     ReadRegStr $OLD_DATA_DIR HKLM "${PG95_REG_KEY}" "Data Directory"
 
-    ReadRegStr $ServiceAccount_text HKLM "${PG95_REG_KEY}" "Service Account"
-    ReadRegStr $ServiceID_text HKLM "${PG95_REG_KEY}" "Service ID"
-    ReadRegStr $UserName_text HKLM "${PG95_REG_KEY}" "Super User"
-    ReadRegStr $Branding_text HKLM "${PG95_REG_KEY}" "Branding"
+    ReadRegStr $OldServiceAccount_text HKLM "${PG95_REG_KEY}" "Service Account"
+    ReadRegStr $OldServiceID_text HKLM "${PG95_REG_KEY}" "Service ID"
+    ReadRegStr $OldUserName_text HKLM "${PG95_REG_KEY}" "Super User"
+    ReadRegStr $OldBranding_text HKLM "${PG95_REG_KEY}" "Branding"
 
     ; StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
@@ -689,15 +694,21 @@ Function ChecExistInstall
   ${if} $1 != "" ;we have install
     ;get exist options
     ReadRegStr $PG_OLD_VERSION HKLM "${PG_REG_KEY}" "Version"
-    ReadRegStr $INSTDIR HKLM "${PG_REG_KEY}" "Base Directory"
+    ReadRegStr $PG_OLD_DIR HKLM "${PG_REG_KEY}" "Base Directory"
     ReadRegStr $DATA_DIR HKLM "${PG_REG_KEY}" "Data Directory"
 
-    ReadRegStr $ServiceAccount_text HKLM "${PG_REG_KEY}" "Service Account"
-    ReadRegStr $ServiceID_text HKLM "${PG_REG_KEY}" "Service ID"
-    ReadRegStr $UserName_text HKLM "${PG_REG_KEY}" "Super User"
-    ReadRegStr $Branding_text HKLM "${PG_REG_KEY}" "Branding"
+    ReadRegStr $OldServiceAccount_text HKLM "${PG_REG_KEY}" "Service Account"
+    ReadRegStr $OldServiceID_text HKLM "${PG_REG_KEY}" "Service ID"
+    ReadRegStr $OldUserName_text HKLM "${PG_REG_KEY}" "Super User"
+    ReadRegStr $OldBranding_text HKLM "${PG_REG_KEY}" "Branding"
 
-    StrCpy $PG_OLD_DIR $INSTDIR
+    ; inherits
+    StrCpy $ServiceAccount_text $OldServiceAccount_text
+    StrCpy $ServiceID_text $OldServiceID_text
+    StrCpy $UserName_text $OldUserName_text
+    StrCpy $Branding_text $OldBranding_text
+    StrCpy $INSTDIR $PG_OLD_DIR
+    
   ${endif}
 
   ReadRegDWORD $1 HKLM "${PG_REG_SERVICE_KEY}" "Port"
@@ -821,7 +832,7 @@ Function un.ChecExistInstall
     ;get exist options
     ReadRegStr $PG_OLD_VERSION HKLM "${PG_REG_KEY}" "Version"
     ReadRegStr $0 HKLM "${PG_REG_KEY}" "Base Directory"
-    ${if} $0! = ""
+    ${if} $0 != ""
       StrCpy $INSTDIR $0
     ${endif}
     ReadRegStr $DATA_DIR HKLM "${PG_REG_KEY}" "Data Directory"
