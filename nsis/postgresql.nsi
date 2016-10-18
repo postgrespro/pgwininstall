@@ -57,7 +57,8 @@ Var UserName
 Var Pass1
 Var Pass2
 
-Var DATA_DIR  ;path to data
+Var DATA_DIR      ; path to data
+Var OLD_DATA_DIR  ; path to old data
 
 Var TextPort_text
 Var IsTextPortInIni
@@ -180,21 +181,21 @@ Section "Microsoft Visual C++ ${REDIST_YEAR} Redistributable" secMS
 SectionEnd
 
 Section $(PostgreSQLString) sec1
-  ${if} $PG_OLD_DIR != "" ;exist PG install
+  ${if} $PG_OLD_DIR != "" ; exist PG install
     MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
     noyetStop:
     Return
     doitStop:
     DetailPrint "Stop the server ..."
-    ${if} $DATA_DIR != ""
-      nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" stop -D "$DATA_DIR" -m fast -w'
+    ${if} $OLD_DATA_DIR != ""
+      nsExec::Exec '$PG_OLD_DIR\bin\pg_ctl.exe" stop -D "$OLD_DATA_DIR" -m fast -w'
       pop $0
       DetailPrint "pg_ctl.exe stop return $0"
     ${endif}
     ;unregister
     DetailPrint "Unregister the service ..."
     ${if} $ServiceID_text != ""
-     nsExec::Exec '"$INSTDIR\bin\pg_ctl.exe" unregister -N "$ServiceID_text"'
+     nsExec::Exec '"$PG_OLD_DIR\bin\pg_ctl.exe" unregister -N "$ServiceID_text"'
       pop $0
       DetailPrint "pg_ctl.exe unregister return $0"
     ${endif}
@@ -631,19 +632,18 @@ Function ChecExistInstall
   
   ; check old 9.5 params
   ReadRegStr $1 HKLM "${PG_OLD_REG_KEY}" "Version"
-
   ${if} $1 != "" ;we have install
     ;get exist options
     ReadRegStr $PG_OLD_VERSION HKLM "${PG_OLD_REG_KEY}" "Version"
-    ReadRegStr $INSTDIR HKLM "${PG_OLD_REG_KEY}" "Base Directory"
-    ReadRegStr $DATA_DIR HKLM "${PG_OLD_REG_KEY}" "Data Directory"
+    ReadRegStr $PG_OLD_DIR HKLM "${PG_OLD_REG_KEY}" "Base Directory"
+    ReadRegStr $OLD_DATA_DIR HKLM "${PG_OLD_REG_KEY}" "Data Directory"
 
     ReadRegStr $ServiceAccount_text HKLM "${PG_OLD_REG_KEY}" "Service Account"
     ReadRegStr $ServiceID_text HKLM "${PG_OLD_REG_KEY}" "Service ID"
     ReadRegStr $UserName_text HKLM "${PG_OLD_REG_KEY}" "Super User"
     ReadRegStr $Branding_text HKLM "${PG_OLD_REG_KEY}" "Branding"
 
-    StrCpy $PG_OLD_DIR $INSTDIR
+    ; StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
 
   ReadRegDWORD $1 HKLM "${PG_OLD_REG_SERVICE_KEY}" "Port"
@@ -662,15 +662,15 @@ Function ChecExistInstall
   ${if} $1 != "" ;we have install
     ;get exist options
     ReadRegStr $PG_OLD_VERSION HKLM "${PG95_REG_KEY}" "Version"
-    ReadRegStr $INSTDIR HKLM "${PG95_REG_KEY}" "Base Directory"
-    ReadRegStr $DATA_DIR HKLM "${PG95_REG_KEY}" "Data Directory"
+    ReadRegStr $PG_OLD_DIR HKLM "${PG95_REG_KEY}" "Base Directory"
+    ReadRegStr $OLD_DATA_DIR HKLM "${PG95_REG_KEY}" "Data Directory"
 
     ReadRegStr $ServiceAccount_text HKLM "${PG95_REG_KEY}" "Service Account"
     ReadRegStr $ServiceID_text HKLM "${PG95_REG_KEY}" "Service ID"
     ReadRegStr $UserName_text HKLM "${PG95_REG_KEY}" "Super User"
     ReadRegStr $Branding_text HKLM "${PG95_REG_KEY}" "Branding"
 
-    StrCpy $PG_OLD_DIR $INSTDIR
+    ; StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
 
   ReadRegDWORD $1 HKLM "${PG95_REG_SERVICE_KEY}" "Port"
@@ -1245,6 +1245,7 @@ Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
+  StrCpy $OLD_DATA_DIR ""
 
   StrCpy $TextPort_text "${PG_DEF_PORT}"
   StrCpy $UserName_text "${PG_DEF_SUPERUSER}"
