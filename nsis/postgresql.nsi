@@ -628,7 +628,8 @@ SectionEnd
 ;if exist then get install options to vars
 Function ChecExistInstall
   StrCpy $Locale_text "$(DEF_LOCALE_NAME)"
-
+  
+  ; check old 9.5 params
   ReadRegStr $1 HKLM "${PG_OLD_REG_KEY}" "Version"
 
   ${if} $1 != "" ;we have install
@@ -645,6 +646,44 @@ Function ChecExistInstall
     StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
 
+  ReadRegDWORD $1 HKLM "${PG_OLD_REG_SERVICE_KEY}" "Port"
+  ${if} $1 != "" ;we have install
+    StrCpy $TextPort_text $1
+  ${endif}
+
+  ReadRegStr $1 HKLM "${PG_OLD_REG_SERVICE_KEY}" "Locale"
+  ${if} $1 != ""
+    StrCpy $Locale_text $1
+  ${endif}
+
+  ; check 9.5 params
+  ReadRegStr $1 HKLM "${PG95_REG_KEY}" "Version"
+
+  ${if} $1 != "" ;we have install
+    ;get exist options
+    ReadRegStr $PG_OLD_VERSION HKLM "${PG95_REG_KEY}" "Version"
+    ReadRegStr $INSTDIR HKLM "${PG95_REG_KEY}" "Base Directory"
+    ReadRegStr $DATA_DIR HKLM "${PG95_REG_KEY}" "Data Directory"
+
+    ReadRegStr $ServiceAccount_text HKLM "${PG95_REG_KEY}" "Service Account"
+    ReadRegStr $ServiceID_text HKLM "${PG95_REG_KEY}" "Service ID"
+    ReadRegStr $UserName_text HKLM "${PG95_REG_KEY}" "Super User"
+    ReadRegStr $Branding_text HKLM "${PG95_REG_KEY}" "Branding"
+
+    StrCpy $PG_OLD_DIR $INSTDIR
+  ${endif}
+
+  ReadRegDWORD $1 HKLM "${PG95_REG_SERVICE_KEY}" "Port"
+  ${if} $1 != "" ;we have install
+    StrCpy $TextPort_text $1
+  ${endif}
+
+  ReadRegStr $1 HKLM "${PG95_REG_SERVICE_KEY}" "Locale"
+  ${if} $1 != ""
+    StrCpy $Locale_text $1
+  ${endif}
+
+  ; check 9.6 params
   ReadRegStr $1 HKLM "${PG_REG_KEY}" "Version"
 
   ${if} $1 != "" ;we have install
@@ -661,19 +700,19 @@ Function ChecExistInstall
     StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
 
-  ReadRegDWORD $1 HKLM "${PG_OLD_REG_SERVICE_KEY}" "Port"
-  ${if} $1 != "" ;we have install
-    StrCpy $TextPort_text $1
-  ${endif}
-
   ReadRegDWORD $1 HKLM "${PG_REG_SERVICE_KEY}" "Port"
   ${if} $1 != "" ;we have install
     StrCpy $TextPort_text $1
   ${endif}
 
+  ReadRegStr $1 HKLM "${PG_REG_SERVICE_KEY}" "Locale"
+  ${if} $1 != ""
+    StrCpy $Locale_text $1
+  ${endif}
+  
+  ; calculate free num port - use EnumRegKey
   ${if} $TextPort_text == ""
     ; todo: compatibility with pg-installers family
-    ; calculate free num port - use EnumRegKey
     StrCpy $0 0
     StrCpy $2 5432
 
@@ -710,18 +749,9 @@ Function ChecExistInstall
     ${endif}
   ${endif}
 
-  ReadRegStr $1 HKLM "${PG_OLD_REG_SERVICE_KEY}" "Locale"
-  ${if} $1 != ""
-    StrCpy $Locale_text $1
-  ${endif}
-
-  ReadRegStr $1 HKLM "${PG_REG_SERVICE_KEY}" "Locale"
-  ${if} $1 != ""
-    StrCpy $Locale_text $1
-  ${endif}
 FunctionEnd
 
-;write to PG_REG_KEY - "SOFTWARE\PostgreSQL\Installations\postgresql-9.5"
+;write to PG_REG_KEY - "SOFTWARE\PostgreSQL\Installations\postgresql-9.6"
 Function WriteInstallOptions
   ;get exist options
   WriteRegStr HKLM "${PG_REG_KEY}" "Version" "${PG_DEF_VERSION}"
