@@ -193,6 +193,7 @@ Section $(PostgreSQLString) sec1
     doitStop:
     DetailPrint "Stop the server ..."
     ${if} $OLD_DATA_DIR != ""
+      DetailPrint "${PG_OLD_DIR}\bin\pg_ctl.exe stop -D ${OLD_DATA_DIR} -m fast -w"
       nsExec::Exec '$PG_OLD_DIR\bin\pg_ctl.exe" stop -D "$OLD_DATA_DIR" -m fast -w'
       pop $0
       DetailPrint "pg_ctl.exe stop return $0"
