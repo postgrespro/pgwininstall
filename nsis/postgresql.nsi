@@ -695,7 +695,7 @@ Function ChecExistInstall
     ;get exist options
     ReadRegStr $PG_OLD_VERSION HKLM "${PG_REG_KEY}" "Version"
     ReadRegStr $PG_OLD_DIR HKLM "${PG_REG_KEY}" "Base Directory"
-    ReadRegStr $DATA_DIR HKLM "${PG_REG_KEY}" "Data Directory"
+    ReadRegStr $OLD_DATA_DIR HKLM "${PG_REG_KEY}" "Data Directory"
 
     ReadRegStr $OldServiceAccount_text HKLM "${PG_REG_KEY}" "Service Account"
     ReadRegStr $OldServiceID_text HKLM "${PG_REG_KEY}" "Service ID"
@@ -703,6 +703,7 @@ Function ChecExistInstall
     ReadRegStr $OldBranding_text HKLM "${PG_REG_KEY}" "Branding"
 
     ; inherits
+    StrCpy $DATA_DIR $OLD_DATA_DIR
     StrCpy $ServiceAccount_text $OldServiceAccount_text
     StrCpy $ServiceID_text $OldServiceID_text
     StrCpy $UserName_text $OldUserName_text
