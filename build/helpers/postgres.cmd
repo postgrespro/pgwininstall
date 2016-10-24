@@ -122,8 +122,15 @@ rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 
 rem download help sources
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -O help-sources-en.zip -c http://repo.postgrespro.ru/doc/pgpro/9.6/en/help-sources.zip || GOTO :ERROR
-wget --no-check-certificate -O help-sources-ru.zip -c http://repo.postgrespro.ru/doc/pgpro/9.6/ru/help-sources.zip || GOTO :ERROR
+WGET=wget --no-check-certificate
+DOCURL=http://repo.postgrespro.ru/doc
+
+if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip -c %DOCURL%/pgpro/9.6/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip -c %DOCURL%/pgpro/9.6/ru/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-en.zip -c %DOCURL%/pgproee/9.6/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-ru.zip -c %DOCURL%/pgproee/9.6/ru/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip -c %DOCURL%/pgsql/9.6/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip -c %DOCURL%/pgsql/9.6/ru/help-sources.zip || GOTO :ERROR
 
 rem building help files
 CD /D %BUILD_DIR%\postgresql
