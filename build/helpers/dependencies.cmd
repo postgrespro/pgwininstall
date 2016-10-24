@@ -40,11 +40,6 @@ REM TO-DO: overwrite to build rules
 TITLE Download msys utils...
 CD /D %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://repo.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
-MKDIR %DEPENDENCIES_SRC_DIR%\less-master
-CD /D %DEPENDENCIES_SRC_DIR%
-7z x %DOWNLOADS_DIR%\less.zip
-
-CD /D %DEPENDENCIES_SRC_DIR%\less-master
 
 :BUILD_LESS
 TITLE "Building less"
