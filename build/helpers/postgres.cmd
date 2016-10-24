@@ -122,7 +122,7 @@ rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 
 rem download help sources
 CD /D %DOWNLOADS_DIR%
-SET WGET="wget --no-check-certificate"
+SET WGET=wget --no-check-certificate
 SET DOCURL=http://repo.postgrespro.ru/doc
 
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip -c %DOCURL%/pgpro/9.6/en/help-sources.zip || GOTO :ERROR
