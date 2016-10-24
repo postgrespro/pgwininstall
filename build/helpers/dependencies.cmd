@@ -10,6 +10,9 @@ rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
 
+if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
+if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
+
 :ZSTD
 TITLE "Building libzstd"
 set ZSTD_RELEASE=1.1.0
@@ -30,6 +33,7 @@ if %ARCH% == X86 (
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zstd
 
+:SKIP_ZSTD
 
 REM TO-DO: overwrite to build rules
 :DOWNLOAD_MSYS_UTILS
