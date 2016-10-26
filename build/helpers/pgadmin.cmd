@@ -89,7 +89,7 @@ patch -f -p0 < libssh2.patch || GOTO :ERROR
 REM Update RU po
 wget --no-check-certificate -c https://repo.postgrespro.ru/depends/pgadmin3-%PGADMIN_VERSION%.po -O i18n/ru_RU/pgadmin3.po
 wget --no-check-certificate -c https://repo.postgrespro.ru/depends/pgadmin3-%PGADMIN_VERSION%-ru_RU.tar.bz2 -O docs/ru_RU.tar.bz2
-tar xf docs/ru_RU.tar.bz2 -C docs/ru_RU || GOTO :ERROR
+tar xf docs/ru_RU.tar.bz2 -C docs || GOTO :ERROR
 rm -f docs/ru_RU.tar.bz2
 
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' xtra\png2c\png2c.vcxproj
