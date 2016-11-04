@@ -414,6 +414,7 @@ Section $(PostgreSQLString) sec1
         ;#work_mem = 4MB				# min 64kB
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#work_mem = 4MB" "work_mem = $work_mem"
       ${endif}
+       ${ConfigWrite} "$DATA_DIR\postgresql.conf" "update_process_title = " "off" $R0
     ${endif}
   ${EndIf}
 
