@@ -30,11 +30,11 @@ IF %ONE_C% == YES (
   )
 )
 
-cp -va %ROOT%/patches/postgresql/%PGVER%/series .
+cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
 IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
 FOR /F %%I IN (series) do (
   ECHO %%I
-  cp -va %ROOT%/patches/postgresql/%PGVER%/%%I .
+  cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/%%I .
   patch -p1 < %%I || GOTO :ERROR
 )
 
