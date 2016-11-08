@@ -127,12 +127,12 @@ CD /D %DOWNLOADS_DIR%
 SET WGET=wget --no-check-certificate
 SET DOCURL=http://repo.postgrespro.ru/doc
 
-if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpro/9.6/en/help-sources.zip || GOTO :ERROR
-if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip %DOCURL%/pgpro/9.6/ru/help-sources.zip || GOTO :ERROR
-if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-en.zip %DOCURL%/pgproee/9.6/en/help-sources.zip || GOTO :ERROR
-if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-ru.zip %DOCURL%/pgproee/9.6/ru/help-sources.zip || GOTO :ERROR
-if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/9.6/en/help-sources.zip || GOTO :ERROR
-if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/9.6/ru/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-en.zip %DOCURL%/pgproee/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-ru.zip %DOCURL%/pgproee/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
 
 rem building help files
 CD /D %BUILD_DIR%\postgresql
