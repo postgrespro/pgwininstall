@@ -633,8 +633,34 @@ SectionEnd
 ;if exist then get install options to vars
 Function ChecExistInstall
   StrCpy $Locale_text "$(DEF_LOCALE_NAME)"
+
+  ; check old previous major version params
+  ReadRegStr $1 HKLM "${PG_OLD_PREV_REG_KEY}" "Version"
+  ${if} $1 != "" ;we have install
+    ;get exist options
+    ReadRegStr $PG_OLD_VERSION HKLM "${PG_OLD_PREV_REG_KEY}" "Version"
+    ReadRegStr $PG_OLD_DIR HKLM "${PG_OLD_PREV_REG_KEY}" "Base Directory"
+    ReadRegStr $OLD_DATA_DIR HKLM "${PG_OLD_PREV_REG_KEY}" "Data Directory"
+
+    ReadRegStr $OldServiceAccount_text HKLM "${PG_OLD_PREV_REG_KEY}" "Service Account"
+    ReadRegStr $OldServiceID_text HKLM "${PG_OLD_PREV_REG_KEY}" "Service ID"
+    ReadRegStr $OldUserName_text HKLM "${PG_OLD_PREV_REG_KEY}" "Super User"
+    ReadRegStr $OldBranding_text HKLM "${PG_OLD_PREV_REG_KEY}" "Branding"
+
+    ; StrCpy $PG_OLD_DIR $INSTDIR
+  ${endif}
+
+  ReadRegDWORD $1 HKLM "${PG_OLD_PREV_REG_SERVICE_KEY}" "Port"
+  ${if} $1 != "" ;we have install
+    StrCpy $TextPort_text $1
+  ${endif}
+
+  ReadRegStr $1 HKLM "${PG_OLD_PREV_REG_SERVICE_KEY}" "Locale"
+  ${if} $1 != ""
+    StrCpy $Locale_text $1
+  ${endif}
   
-  ; check old 9.5 params
+  ; check old major version params
   ReadRegStr $1 HKLM "${PG_OLD_REG_KEY}" "Version"
   ${if} $1 != "" ;we have install
     ;get exist options
@@ -660,34 +686,34 @@ Function ChecExistInstall
     StrCpy $Locale_text $1
   ${endif}
 
-  ; check 9.5 params
-  ReadRegStr $1 HKLM "${PG95_REG_KEY}" "Version"
+  ; check previous major version params
+  ReadRegStr $1 HKLM "${PG_PREV_REG_KEY}" "Version"
 
   ${if} $1 != "" ;we have install
     ;get exist options
-    ReadRegStr $PG_OLD_VERSION HKLM "${PG95_REG_KEY}" "Version"
-    ReadRegStr $PG_OLD_DIR HKLM "${PG95_REG_KEY}" "Base Directory"
-    ReadRegStr $OLD_DATA_DIR HKLM "${PG95_REG_KEY}" "Data Directory"
+    ReadRegStr $PG_OLD_VERSION HKLM "${PG_PREV_REG_KEY}" "Version"
+    ReadRegStr $PG_OLD_DIR HKLM "${PG_PREV_REG_KEY}" "Base Directory"
+    ReadRegStr $OLD_DATA_DIR HKLM "${PG_PREV_REG_KEY}" "Data Directory"
 
-    ReadRegStr $OldServiceAccount_text HKLM "${PG95_REG_KEY}" "Service Account"
-    ReadRegStr $OldServiceID_text HKLM "${PG95_REG_KEY}" "Service ID"
-    ReadRegStr $OldUserName_text HKLM "${PG95_REG_KEY}" "Super User"
-    ReadRegStr $OldBranding_text HKLM "${PG95_REG_KEY}" "Branding"
+    ReadRegStr $OldServiceAccount_text HKLM "${PG_PREV_REG_KEY}" "Service Account"
+    ReadRegStr $OldServiceID_text HKLM "${PG_PREV_REG_KEY}" "Service ID"
+    ReadRegStr $OldUserName_text HKLM "${PG_PREV_REG_KEY}" "Super User"
+    ReadRegStr $OldBranding_text HKLM "${PG_PREV_REG_KEY}" "Branding"
 
     ; StrCpy $PG_OLD_DIR $INSTDIR
   ${endif}
 
-  ReadRegDWORD $1 HKLM "${PG95_REG_SERVICE_KEY}" "Port"
+  ReadRegDWORD $1 HKLM "${PG_PREV_REG_SERVICE_KEY}" "Port"
   ${if} $1 != "" ;we have install
     StrCpy $TextPort_text $1
   ${endif}
 
-  ReadRegStr $1 HKLM "${PG95_REG_SERVICE_KEY}" "Locale"
+  ReadRegStr $1 HKLM "${PG_PREV_REG_SERVICE_KEY}" "Locale"
   ${if} $1 != ""
     StrCpy $Locale_text $1
   ${endif}
 
-  ; check 9.6 params
+  ; check current major version params
   ReadRegStr $1 HKLM "${PG_REG_KEY}" "Version"
 
   ${if} $1 != "" ;we have install
@@ -762,7 +788,7 @@ Function ChecExistInstall
 
 FunctionEnd
 
-;write to PG_REG_KEY - "SOFTWARE\PostgreSQL\Installations\postgresql-9.6"
+;write to PG_REG_KEY - "SOFTWARE\PostgreSQL\Installations\postgresql-${PG_MAJOR_VERSION}"
 Function WriteInstallOptions
   ;get exist options
   WriteRegStr HKLM "${PG_REG_KEY}" "Version" "${PG_DEF_VERSION}"
