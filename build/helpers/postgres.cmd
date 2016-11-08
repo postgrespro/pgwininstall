@@ -131,8 +131,14 @@ if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpr
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-en.zip %DOCURL%/pgproee/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-ru.zip %DOCURL%/pgproee/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
-if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
-if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
+
+SET HAVE_PGSQL_DOC=0
+if "%PG_MAJOR_VERSION%" == "9.5" SET HAVE_PGSQL_DOC=1
+if "%PG_MAJOR_VERSION%" == "9.6" SET HAVE_PGSQL_DOC=1
+if %HAVE_PGSQL_DOC% == 1 (
+   if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
+   if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
+)
 
 rem building help files
 CD /D %BUILD_DIR%\postgresql
