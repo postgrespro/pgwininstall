@@ -336,7 +336,7 @@ Section $(PostgreSQLString) sec1
   pop $0
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
-  ${if} ${PRODUCT_NAME} != "PostgreSQL"
+  ${if} ${PG_MAJOR_VERSION} != "9.4"
   !insertmacro CreateInternetShortcut \
     "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes" \
     "$INSTDIR\doc\installation-notes.html" \
