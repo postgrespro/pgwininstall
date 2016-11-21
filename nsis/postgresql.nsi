@@ -308,6 +308,9 @@ Section $(PostgreSQLString) sec1
   pop $0
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
+  !insertmacro _ReplaceInFile "$INSTDIR\doc\installation-notes.html"    "{PG_MAJOR_VERSION}" "${PG_MAJOR_VERSION}"
+  !insertmacro _ReplaceInFile "$INSTDIR\doc\installation-notes-ru.html" "{PG_MAJOR_VERSION}" "${PG_MAJOR_VERSION}"
+  
   !insertmacro CreateInternetShortcut \
     "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes" \
     "$INSTDIR\doc\installation-notes.html" \
@@ -318,15 +321,15 @@ Section $(PostgreSQLString) sec1
     "$INSTDIR\doc\installation-notes-ru.html" \
     "$INSTDIR\doc\pg-help.ico" "0"
 
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation" \
-    "$INSTDIR\doc\postgresql\html\index.html" \
-    "$INSTDIR\doc\pg-help.ico" "0"
+  ; !insertmacro CreateInternetShortcut \
+  ;   "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation" \
+  ;   "$INSTDIR\doc\postgresql\html\index.html" \
+  ;   "$INSTDIR\doc\pg-help.ico" "0"
 
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL release notes" \
-    "$INSTDIR\doc\postgresql\html\release.html" \
-    "$INSTDIR\doc\pg-help.ico" "0"
+  ; !insertmacro CreateInternetShortcut \
+  ;   "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL release notes" \
+  ;   "$INSTDIR\doc\postgresql\html\release.html" \
+  ;   "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
