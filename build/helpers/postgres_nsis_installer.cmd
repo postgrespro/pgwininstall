@@ -74,9 +74,9 @@ GOTO :DONE
 
 :ERROR
 ECHO Failed with error #%errorlevel%.
-PAUSE
+REM PAUSE
 EXIT /b %errorlevel%
 
 :DONE
 ECHO Done.
-PAUSE
+REM PAUSE
