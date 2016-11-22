@@ -237,7 +237,11 @@ Section $(PostgreSQLString) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  ${if} ${WITH_1C} == "TRUE"
+    FileWrite $0 'echo off$\r$\nchcp 1251$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  ${else}
+    FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  ${endif}
   FileClose $0
 
   creatBatErr2:
