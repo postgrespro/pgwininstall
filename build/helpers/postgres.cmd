@@ -66,9 +66,9 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 
-IF %ONE_C% == YES (
-  mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
-)
+REM IF %ONE_C% == YES (
+REM   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
+REM )
 
 cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
