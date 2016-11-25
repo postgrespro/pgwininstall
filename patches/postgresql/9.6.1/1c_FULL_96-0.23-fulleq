@@ -6,11 +6,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For bool
 +
 +CREATE OR REPLACE FUNCTION isfulleq_bool(bool, bool) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_bool(bool)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -32,11 +32,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For bytea
 +
 +CREATE OR REPLACE FUNCTION isfulleq_bytea(bytea, bytea) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_bytea(bytea)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -58,11 +58,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For char
 +
 +CREATE OR REPLACE FUNCTION isfulleq_char(char, char) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_char(char)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -84,11 +84,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For name
 +
 +CREATE OR REPLACE FUNCTION isfulleq_name(name, name) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_name(name)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -110,11 +110,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For int8
 +
 +CREATE OR REPLACE FUNCTION isfulleq_int8(int8, int8) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_int8(int8)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -136,11 +136,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For int2
 +
 +CREATE OR REPLACE FUNCTION isfulleq_int2(int2, int2) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_int2(int2)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -162,11 +162,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For int2vector
 +
 +CREATE OR REPLACE FUNCTION isfulleq_int2vector(int2vector, int2vector) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_int2vector(int2vector)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -188,11 +188,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For int4
 +
 +CREATE OR REPLACE FUNCTION isfulleq_int4(int4, int4) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_int4(int4)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -214,11 +214,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For text
 +
 +CREATE OR REPLACE FUNCTION isfulleq_text(text, text) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_text(text)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -240,11 +240,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For oid
 +
 +CREATE OR REPLACE FUNCTION isfulleq_oid(oid, oid) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_oid(oid)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -266,11 +266,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For xid
 +
 +CREATE OR REPLACE FUNCTION isfulleq_xid(xid, xid) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_xid(xid)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -292,11 +292,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For cid
 +
 +CREATE OR REPLACE FUNCTION isfulleq_cid(cid, cid) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_cid(cid)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -318,11 +318,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For oidvector
 +
 +CREATE OR REPLACE FUNCTION isfulleq_oidvector(oidvector, oidvector) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_oidvector(oidvector)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -344,11 +344,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For float4
 +
 +CREATE OR REPLACE FUNCTION isfulleq_float4(float4, float4) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_float4(float4)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -370,11 +370,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For float8
 +
 +CREATE OR REPLACE FUNCTION isfulleq_float8(float8, float8) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_float8(float8)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -396,11 +396,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For abstime
 +
 +CREATE OR REPLACE FUNCTION isfulleq_abstime(abstime, abstime) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_abstime(abstime)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -422,11 +422,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For reltime
 +
 +CREATE OR REPLACE FUNCTION isfulleq_reltime(reltime, reltime) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_reltime(reltime)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -448,11 +448,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For macaddr
 +
 +CREATE OR REPLACE FUNCTION isfulleq_macaddr(macaddr, macaddr) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_macaddr(macaddr)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -474,11 +474,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For inet
 +
 +CREATE OR REPLACE FUNCTION isfulleq_inet(inet, inet) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_inet(inet)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -500,11 +500,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For cidr
 +
 +CREATE OR REPLACE FUNCTION isfulleq_cidr(cidr, cidr) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_cidr(cidr)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -526,11 +526,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For varchar
 +
 +CREATE OR REPLACE FUNCTION isfulleq_varchar(varchar, varchar) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_varchar(varchar)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -552,11 +552,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For date
 +
 +CREATE OR REPLACE FUNCTION isfulleq_date(date, date) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_date(date)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -578,11 +578,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For time
 +
 +CREATE OR REPLACE FUNCTION isfulleq_time(time, time) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_time(time)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -604,11 +604,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For timestamp
 +
 +CREATE OR REPLACE FUNCTION isfulleq_timestamp(timestamp, timestamp) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_timestamp(timestamp)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -630,11 +630,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For timestamptz
 +
 +CREATE OR REPLACE FUNCTION isfulleq_timestamptz(timestamptz, timestamptz) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_timestamptz(timestamptz)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -656,11 +656,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For interval
 +
 +CREATE OR REPLACE FUNCTION isfulleq_interval(interval, interval) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_interval(interval)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -682,11 +682,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql postgresql-9.6.1/con
 +-- For timetz
 +
 +CREATE OR REPLACE FUNCTION isfulleq_timetz(timetz, timetz) 
-+RETURNS bool AS 'MODULE_PATHNAME'
++RETURNS bool AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +CREATE OR REPLACE FUNCTION fullhash_timetz(timetz)
-+RETURNS int4 AS 'MODULE_PATHNAME'
++RETURNS int4 AS '$libdir/fulleq'
 +LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 +
 +
@@ -711,11 +711,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql.in.in postgresql-9.6
 --- For ARGTYPE
 -
 -CREATE OR REPLACE FUNCTION isfulleq_ARGTYPE(ARGTYPE, ARGTYPE) 
--RETURNS bool AS 'MODULE_PATHNAME'
+-RETURNS bool AS '$libdir/fulleq'
 -LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 -
 -CREATE OR REPLACE FUNCTION fullhash_ARGTYPE(ARGTYPE)
--RETURNS int4 AS 'MODULE_PATHNAME'
+-RETURNS int4 AS '$libdir/fulleq'
 -LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 -
 -
