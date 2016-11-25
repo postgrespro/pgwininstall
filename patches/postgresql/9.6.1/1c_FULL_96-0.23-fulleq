@@ -711,11 +711,11 @@ diff -Naur postgresql-9.6.1.start/contrib/fulleq/fulleq.sql.in.in postgresql-9.6
 --- For ARGTYPE
 -
 -CREATE OR REPLACE FUNCTION isfulleq_ARGTYPE(ARGTYPE, ARGTYPE) 
--RETURNS bool AS '$libdir/fulleq'
+-RETURNS bool AS 'MODULE_PATHNAME'
 -LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 -
 -CREATE OR REPLACE FUNCTION fullhash_ARGTYPE(ARGTYPE)
--RETURNS int4 AS '$libdir/fulleq'
+-RETURNS int4 AS 'MODULE_PATHNAME'
 -LANGUAGE C CALLED ON NULL INPUT IMMUTABLE;
 -
 -
