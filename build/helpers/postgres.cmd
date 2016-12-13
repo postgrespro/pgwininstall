@@ -96,6 +96,8 @@ PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 %PERL_EXE% install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 rem now actually copy DLLs of dependencies into our bindir
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.lib
+%BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
@@ -122,6 +124,21 @@ CD /D %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
 rem CD /D %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
 rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 
+rem download and build pg_repack extension
+
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
+	CD /D %DOWNLOADS_DIR%
+	if not EXIST pg_repack-%PG_REPACK_VER%.tar.bz2 (
+	set PG_REPACK_URL=https://repo.postgrespro.ru/pgproee-9.6-beta/src/pg_repack-%PG_REPACK_VER%.tar.bz2
+	%WGET% %PG_REPACK_URL% || goto :ERROR
+	)
+	CD /D %BUILDDIR%
+	tar xf %DOWNLOADS_DIR%/pg_repack*.tar.bz2 || goto :ERROR
+	CD pg_repack-%PG_REPACK_VER%
+	perl win32build.pl  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
+)	
+
+)
 rem download help sources
 CD /D %DOWNLOADS_DIR%
 SET WGET=wget --no-check-certificate
@@ -131,6 +148,7 @@ if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpr
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-en.zip %DOCURL%/pgproee/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-ru.zip %DOCURL%/pgproee/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
+
 
 SET HAVE_PGSQL_DOC=0
 if "%PG_MAJOR_VERSION%" == "9.5" SET HAVE_PGSQL_DOC=1
