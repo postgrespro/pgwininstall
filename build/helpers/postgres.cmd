@@ -126,10 +126,10 @@ rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 rem download and build pg_repack extension
 SET WGET=wget --no-check-certificate
 
+set PG_REPACK_URL=https://repo.postgrespro.ru/pgproee-9.6-beta/src/pg_repack-%PG_REPACK_VER%.tar.bz2
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
 	CD /D %DOWNLOADS_DIR%
 	if not EXIST pg_repack-%PG_REPACK_VER%.tar.bz2 (
-	set PG_REPACK_URL=https://repo.postgrespro.ru/pgproee-9.6-beta/src/pg_repack-%PG_REPACK_VER%.tar.bz2
 	%WGET% %PG_REPACK_URL% || goto :ERROR
 	)
 	CD /D %BUILDDIR%
