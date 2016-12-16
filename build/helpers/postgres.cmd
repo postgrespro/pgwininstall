@@ -136,9 +136,8 @@ if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
 	tar xf %DOWNLOADS_DIR%/pg_repack*.tar.bz2 || goto :ERROR
 	CD pg_repack-%PG_REPACK_VER%
 	perl win32build.pl  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
-)	
-
 )
+
 rem download help sources
 CD /D %DOWNLOADS_DIR%
 SET DOCURL=http://repo.postgrespro.ru/doc
