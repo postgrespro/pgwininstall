@@ -124,6 +124,7 @@ rem CD /D %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
 rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 
 rem download and build pg_repack extension
+SET WGET=wget --no-check-certificate
 
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
 	CD /D %DOWNLOADS_DIR%
@@ -140,7 +141,6 @@ if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
 )
 rem download help sources
 CD /D %DOWNLOADS_DIR%
-SET WGET=wget --no-check-certificate
 SET DOCURL=http://repo.postgrespro.ru/doc
 
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
