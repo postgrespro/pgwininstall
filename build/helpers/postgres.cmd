@@ -132,7 +132,7 @@ if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
 	if not EXIST pg_repack-%PG_REPACK_VER%.tar.bz2 (
 	%WGET% %PG_REPACK_URL% || goto :ERROR
 	)
-	CD /D %BUILDDIR%
+	CD /D %BUILD_DIR%
 	tar xf %DOWNLOADS_DIR%/pg_repack*.tar.bz2 || goto :ERROR
 	CD pg_repack-%PG_REPACK_VER%
 	perl win32build.pl  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
