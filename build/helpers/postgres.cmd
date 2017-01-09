@@ -30,12 +30,14 @@ IF %ONE_C% == YES (
   )
 )
 
-cp -va %ROOT%/patches/postgresql/%PGVER%/series .
-IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
-FOR /F %%I IN (series) do (
-  ECHO %%I
-  cp -va %ROOT%/patches/postgresql/%PGVER%/%%I .
-  patch -p1 < %%I || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgreSQL" (
+   cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
+   IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
+   FOR /F %%I IN (series) do (
+    ECHO %%I
+    cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/%%I .
+    patch -p1 < %%I || GOTO :ERROR
+  )
 )
 
 :DONE_POSTGRESQL_PATCH
@@ -122,8 +124,15 @@ rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 
 rem download help sources
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-en.zip || GOTO :ERROR
-wget --no-check-certificate -c http://repo.postgrespro.ru/pgpro-9.5-beta/src/help-sources-ru.zip || GOTO :ERROR
+SET WGET=wget --no-check-certificate
+SET DOCURL=http://repo.postgrespro.ru/doc
+
+if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpro/9.5/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip %DOCURL%/pgpro/9.5/ru/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-en.zip %DOCURL%/pgproee/9.5/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" %WGET% -O help-sources-ru.zip %DOCURL%/pgproee/9.5/ru/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/9.5/en/help-sources.zip || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/9.5/ru/help-sources.zip || GOTO :ERROR
 
 rem building help files
 CD /D %BUILD_DIR%\postgresql

@@ -249,7 +249,11 @@ Section $(PostgreSQLString) sec1
   ${Else}
     StrCpy $Chcp_text ""
   ${Endif}
-  
+
+  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+    StrCpy $Chcp_text ""
+  ${endif}
+
   DetailPrint "Set codepage $Codepage_text"
   
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
@@ -332,7 +336,7 @@ Section $(PostgreSQLString) sec1
   pop $0
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
-  ${if} ${PRODUCT_NAME} != "PostgreSQL"
+  ${if} ${PG_MAJOR_VERSION} != "9.4"
   !insertmacro CreateInternetShortcut \
     "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes" \
     "$INSTDIR\doc\installation-notes.html" \

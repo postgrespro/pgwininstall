@@ -43,7 +43,7 @@ IF DEFINED USG (
 
 REM Set PostgreSQL version
 IF "%PG_MAJOR_VERSION%"=="" SET PG_MAJOR_VERSION=9.5
-IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=4
+IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=5
 
 REM Set PgAdmin3 Version
 SET PGADMIN_VERSION=1.22.1
@@ -69,65 +69,74 @@ FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 IF "%~1"=="1" (
   TITLE Building dependencies
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\dependencies.cmd
+  CMD.EXE /C %ROOT%\build\helpers\dependencies.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="2" (
   TITLE Building PostgreSQL
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
+  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="12" (
   TITLE Building PostgresPro
   IF "%SDK%"=="" SET SDK=SDK71
   IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
-  SET PG_PATCH_VERSION=4.1
-  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
+  SET PG_PATCH_VERSION=5.1
+  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="3" (
   TITLE Building PostgreSQL installer
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
+  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="13" (
   TITLE Building PostgresPro installer
   IF "%SDK%"=="" SET SDK=SDK71
   IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
-  SET PG_PATCH_VERSION=4.1
-  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
+  SET PG_PATCH_VERSION=5.1
+  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="4" (
   TITLE Building PgAdmin
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd
+  CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="5" (
   TITLE Building PgAdmin installer
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd
+  CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="6" (
     TITLE Making Archives
-    CMD.EXE /C %ROOT%\build\helpers\make_zip.cmd
+    CMD.EXE /C %ROOT%\build\helpers\make_zip.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="7" (
     TITLE Build PGBouncer
-    CMD.EXE /C %ROOT%\build\helpers\pgbouncer.cmd
+    CMD.EXE /C %ROOT%\build\helpers\pgbouncer.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="8" (
     TITLE Build psqlODBC
-    CMD.EXE /C %ROOT%\build\helpers\pgodbc.cmd
+    CMD.EXE /C %ROOT%\build\helpers\pgodbc.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="9" (
     TITLE Build psqlODBC installer
-    CMD.EXE /C %ROOT%\build\helpers\pgodbc_nsis_installer.cmd
+    CMD.EXE /C %ROOT%\build\helpers\pgodbc_nsis_installer.cmd || GOTO :ERROR
 )
+
+GOTO :DONE
+
+:ERROR
+ECHO Failed with error #%errorlevel%.
+EXIT /b %errorlevel%
+
+:DONE
+ECHO Done.
