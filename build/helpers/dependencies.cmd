@@ -131,7 +131,7 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building xml...
 CD /D %DOWNLOADS_DIR%
 wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-
+rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
 tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libxml2-*\win32
@@ -142,7 +142,8 @@ nmake /f Makefile.msvc || GOTO :ERROR
 nmake /f Makefile.msvc install || GOTO :ERROR
 cp -av bin %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
 cp -av lib %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
-cp -av include %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
+MKDIR %DEPENDENCIES_BIN_DIR%\libxml2\include || GOTO :ERROR
+cp -av include\libxml2\libxml %DEPENDENCIES_BIN_DIR%\libxml2\include || GOTO :ERROR
 CD /D %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libxml2 -y
 
