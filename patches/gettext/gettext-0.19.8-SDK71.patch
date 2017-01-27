@@ -1679,18 +1679,6 @@ diff -ruN ./config.h ../gettext-0.19.4/config.h
 +#pragma warning(disable: 4018) // warning C4018: signed/unsigned mismatch
 +#pragma warning(disable: 4996) // warning C4996: The POSIX name for this item is deprecated.
 +
-diff -ruN ./gettext-runtime/intl/loadmsgcat.c ../gettext-0.19.4/gettext-runtime/intl/loadmsgcat.c
---- ./gettext-runtime/intl/loadmsgcat.c	2014-12-09 11:43:44.000000000 +0300
-+++ ../gettext-0.19.4/gettext-runtime/intl/loadmsgcat.c	2015-10-06 17:10:26.771737719 +0300
-@@ -785,7 +785,7 @@
- _nl_load_domain (struct loaded_l10nfile *domain_file,
- 		 struct binding *domainbinding)
- {
--  __libc_lock_define_initialized_recursive (static, lock);
-+  __libc_lock_define_initialized_recursive (static, lock)
-   int fd = -1;
-   size_t size;
- #ifdef _LIBC
 diff -ruN ./libgnuintl.h ../gettext-0.19.4/libgnuintl.h
 --- ./libgnuintl.h	1970-01-01 03:00:00.000000000 +0300
 +++ ../gettext-0.19.4/libgnuintl.h	2015-10-06 17:37:53.971759143 +0300
