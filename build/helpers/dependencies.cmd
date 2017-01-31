@@ -134,6 +134,8 @@ wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.
 rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
 tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
+CD /D %DEPENDENCIES_SRC_DIR%\libxml2-*
+patch -f -p1 < %ROOT%/patches/libxml2/libxml2.patch || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libxml2-*\win32
 cscript configure.js compiler=msvc include=%DEPENDENCIES_BIN_DIR%\iconv\include lib=%DEPENDENCIES_BIN_DIR%\iconv\lib
 sed -i /NOWIN98/d Makefile.msvc
