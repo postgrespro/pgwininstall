@@ -635,30 +635,30 @@ Function ChecExistInstall
   StrCpy $Locale_text "$(DEF_LOCALE_NAME)"
 
   ; check old previous major version params
-  ReadRegStr $1 HKLM "${PG_OLD_PREV_REG_KEY}" "Version"
-  ${if} $1 != "" ;we have install
-    ;get exist options
-    ReadRegStr $PG_OLD_VERSION HKLM "${PG_OLD_PREV_REG_KEY}" "Version"
-    ReadRegStr $PG_OLD_DIR HKLM "${PG_OLD_PREV_REG_KEY}" "Base Directory"
-    ReadRegStr $OLD_DATA_DIR HKLM "${PG_OLD_PREV_REG_KEY}" "Data Directory"
+  ; ReadRegStr $1 HKLM "${PG_OLD_PREV_REG_KEY}" "Version"
+  ; ${if} $1 != "" ;we have install
+  ;   ;get exist options
+  ;   ReadRegStr $PG_OLD_VERSION HKLM "${PG_OLD_PREV_REG_KEY}" "Version"
+  ;   ReadRegStr $PG_OLD_DIR HKLM "${PG_OLD_PREV_REG_KEY}" "Base Directory"
+  ;   ReadRegStr $OLD_DATA_DIR HKLM "${PG_OLD_PREV_REG_KEY}" "Data Directory"
 
-    ReadRegStr $OldServiceAccount_text HKLM "${PG_OLD_PREV_REG_KEY}" "Service Account"
-    ReadRegStr $OldServiceID_text HKLM "${PG_OLD_PREV_REG_KEY}" "Service ID"
-    ReadRegStr $OldUserName_text HKLM "${PG_OLD_PREV_REG_KEY}" "Super User"
-    ReadRegStr $OldBranding_text HKLM "${PG_OLD_PREV_REG_KEY}" "Branding"
+  ;   ReadRegStr $OldServiceAccount_text HKLM "${PG_OLD_PREV_REG_KEY}" "Service Account"
+  ;   ReadRegStr $OldServiceID_text HKLM "${PG_OLD_PREV_REG_KEY}" "Service ID"
+  ;   ReadRegStr $OldUserName_text HKLM "${PG_OLD_PREV_REG_KEY}" "Super User"
+  ;   ReadRegStr $OldBranding_text HKLM "${PG_OLD_PREV_REG_KEY}" "Branding"
 
-    ; StrCpy $PG_OLD_DIR $INSTDIR
-  ${endif}
+  ;   ; StrCpy $PG_OLD_DIR $INSTDIR
+  ; ${endif}
 
-  ReadRegDWORD $1 HKLM "${PG_OLD_PREV_REG_SERVICE_KEY}" "Port"
-  ${if} $1 != "" ;we have install
-    StrCpy $TextPort_text $1
-  ${endif}
+  ; ReadRegDWORD $1 HKLM "${PG_OLD_PREV_REG_SERVICE_KEY}" "Port"
+  ; ${if} $1 != "" ;we have install
+  ;   StrCpy $TextPort_text $1
+  ; ${endif}
 
-  ReadRegStr $1 HKLM "${PG_OLD_PREV_REG_SERVICE_KEY}" "Locale"
-  ${if} $1 != ""
-    StrCpy $Locale_text $1
-  ${endif}
+  ; ReadRegStr $1 HKLM "${PG_OLD_PREV_REG_SERVICE_KEY}" "Locale"
+  ; ${if} $1 != ""
+  ;   StrCpy $Locale_text $1
+  ; ${endif}
   
   ; check old major version params
   ReadRegStr $1 HKLM "${PG_OLD_REG_KEY}" "Version"
@@ -687,31 +687,31 @@ Function ChecExistInstall
   ${endif}
 
   ; check previous major version params
-  ReadRegStr $1 HKLM "${PG_PREV_REG_KEY}" "Version"
+  ; ReadRegStr $1 HKLM "${PG_PREV_REG_KEY}" "Version"
 
-  ${if} $1 != "" ;we have install
-    ;get exist options
-    ReadRegStr $PG_OLD_VERSION HKLM "${PG_PREV_REG_KEY}" "Version"
-    ReadRegStr $PG_OLD_DIR HKLM "${PG_PREV_REG_KEY}" "Base Directory"
-    ReadRegStr $OLD_DATA_DIR HKLM "${PG_PREV_REG_KEY}" "Data Directory"
+  ; ${if} $1 != "" ;we have install
+  ;   ;get exist options
+  ;   ReadRegStr $PG_OLD_VERSION HKLM "${PG_PREV_REG_KEY}" "Version"
+  ;   ReadRegStr $PG_OLD_DIR HKLM "${PG_PREV_REG_KEY}" "Base Directory"
+  ;   ReadRegStr $OLD_DATA_DIR HKLM "${PG_PREV_REG_KEY}" "Data Directory"
 
-    ReadRegStr $OldServiceAccount_text HKLM "${PG_PREV_REG_KEY}" "Service Account"
-    ReadRegStr $OldServiceID_text HKLM "${PG_PREV_REG_KEY}" "Service ID"
-    ReadRegStr $OldUserName_text HKLM "${PG_PREV_REG_KEY}" "Super User"
-    ReadRegStr $OldBranding_text HKLM "${PG_PREV_REG_KEY}" "Branding"
+  ;   ReadRegStr $OldServiceAccount_text HKLM "${PG_PREV_REG_KEY}" "Service Account"
+  ;   ReadRegStr $OldServiceID_text HKLM "${PG_PREV_REG_KEY}" "Service ID"
+  ;   ReadRegStr $OldUserName_text HKLM "${PG_PREV_REG_KEY}" "Super User"
+  ;   ReadRegStr $OldBranding_text HKLM "${PG_PREV_REG_KEY}" "Branding"
 
-    ; StrCpy $PG_OLD_DIR $INSTDIR
-  ${endif}
+  ;   ; StrCpy $PG_OLD_DIR $INSTDIR
+  ; ${endif}
 
-  ReadRegDWORD $1 HKLM "${PG_PREV_REG_SERVICE_KEY}" "Port"
-  ${if} $1 != "" ;we have install
-    StrCpy $TextPort_text $1
-  ${endif}
+  ; ReadRegDWORD $1 HKLM "${PG_PREV_REG_SERVICE_KEY}" "Port"
+  ; ${if} $1 != "" ;we have install
+  ;   StrCpy $TextPort_text $1
+  ; ${endif}
 
-  ReadRegStr $1 HKLM "${PG_PREV_REG_SERVICE_KEY}" "Locale"
-  ${if} $1 != ""
-    StrCpy $Locale_text $1
-  ${endif}
+  ; ReadRegStr $1 HKLM "${PG_PREV_REG_SERVICE_KEY}" "Locale"
+  ; ${if} $1 != ""
+  ;   StrCpy $Locale_text $1
+  ; ${endif}
 
   ; check current major version params
   ReadRegStr $1 HKLM "${PG_REG_KEY}" "Version"
