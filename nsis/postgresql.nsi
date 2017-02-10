@@ -21,7 +21,7 @@
 !include "Utf8Converter.nsh"
 
 !include "WinVer.nsh"
-
+!include "Ports.nsh"
 !insertmacro VersionCompare
 
 ;--------------------------------
@@ -746,45 +746,57 @@ Function ChecExistInstall
   ${if} $1 != ""
     StrCpy $Locale_text $1
   ${endif}
+
+  ; tcp-port auto selector
+  ${if} $TextPort_text == ""
+    StrCpy $TextPort_text 5432
+    ${while} 1 = 1
+      ${if} ${TCPPortOpen} $TextPort_text
+	IntOp $TextPort_text $TextPort_text + 1
+      ${else}
+	${exitwhile}
+      ${endif}
+    ${endwhile}
+  ${endif}
   
   ; calculate free num port - use EnumRegKey
-  ${if} $TextPort_text == ""
-    ; todo: compatibility with pg-installers family
-    StrCpy $0 0
-    StrCpy $2 5432
+  ; ${if} $TextPort_text == ""
+  ;   ; todo: compatibility with pg-installers family
+  ;   StrCpy $0 0
+  ;   StrCpy $2 5432
 
-    ;SetRegView 32
-    SetRegView 64
-    ${While} 1 = 1
-      EnumRegKey $1 HKLM "SOFTWARE\PostgreSQL\Services" $0
-      ${if} $1 == ""
-        ${ExitWhile}
-      ${endif}
-      ReadRegDWORD $3 HKLM "SOFTWARE\PostgreSQL\Services\$1" "Port"
-      ${if} $3 >= $2
-        IntOp $2 $3 + 1
-      ${endif}
-      IntOp $0 $0 + 1
-    ${EndWhile}
-    SetRegView 32
-    StrCpy $0 0
-    ${While} 1 = 1
-      EnumRegKey $1 HKLM "SOFTWARE\PostgreSQL\Services" $0
-      ${if} $1 == ""
-        ${ExitWhile}
-      ${endif}
-      ReadRegDWORD $3 HKLM "SOFTWARE\PostgreSQL\Services\$1" "Port"
-      ${if} $3 >= $2
-        IntOp $2 $3 + 1
-      ${endif}
+  ;   ;SetRegView 32
+  ;   SetRegView 64
+  ;   ${While} 1 = 1
+  ;     EnumRegKey $1 HKLM "SOFTWARE\PostgreSQL\Services" $0
+  ;     ${if} $1 == ""
+  ;       ${ExitWhile}
+  ;     ${endif}
+  ;     ReadRegDWORD $3 HKLM "SOFTWARE\PostgreSQL\Services\$1" "Port"
+  ;     ${if} $3 >= $2
+  ;       IntOp $2 $3 + 1
+  ;     ${endif}
+  ;     IntOp $0 $0 + 1
+  ;   ${EndWhile}
+  ;   SetRegView 32
+  ;   StrCpy $0 0
+  ;   ${While} 1 = 1
+  ;     EnumRegKey $1 HKLM "SOFTWARE\PostgreSQL\Services" $0
+  ;     ${if} $1 == ""
+  ;       ${ExitWhile}
+  ;     ${endif}
+  ;     ReadRegDWORD $3 HKLM "SOFTWARE\PostgreSQL\Services\$1" "Port"
+  ;     ${if} $3 >= $2
+  ;       IntOp $2 $3 + 1
+  ;     ${endif}
 
-      IntOp $0 $0 + 1
-    ${EndWhile}
+  ;     IntOp $0 $0 + 1
+  ;   ${EndWhile}
 
-    ${if} $IsTextPortInIni != 1 ;port can be send in ini file
-      StrCpy $TextPort_text $2
-    ${endif}
-  ${endif}
+  ;   ${if} $IsTextPortInIni != 1 ;port can be send in ini file
+  ;     StrCpy $TextPort_text $2
+  ;   ${endif}
+  ; ${endif}
 
 FunctionEnd
 
