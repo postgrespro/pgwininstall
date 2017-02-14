@@ -747,18 +747,6 @@ Function ChecExistInstall
     StrCpy $Locale_text $1
   ${endif}
 
-  ; tcp-port auto selector
-  ${if} $TextPort_text == ""
-    StrCpy $TextPort_text 5432
-    ${while} 1 = 1
-      ${if} ${TCPPortOpen} $TextPort_text
-	IntOp $TextPort_text $TextPort_text + 1
-      ${else}
-	${exitwhile}
-      ${endif}
-    ${endwhile}
-  ${endif}
-  
   ; calculate free num port - use EnumRegKey
   ; ${if} $TextPort_text == ""
   ;   ; todo: compatibility with pg-installers family
@@ -1288,15 +1276,27 @@ Function nsDialogsOptimizationPageLeave
   ${endif}
 FunctionEnd
 
+Function SetDefaultTcpPort
+  ; tcp-port auto selector
+  StrCpy $TextPort_text "${PG_DEF_PORT}"
+  ${while} 1 = 1
+    ${if} ${TCPPortOpen} $TextPort_text
+      IntOp $TextPort_text $TextPort_text + 1
+    ${else}
+      ${exitwhile}
+    ${endif}
+  ${endwhile}
+FunctionEnd
+
 Function .onInit
   Call CheckWindowsVersion
-
+  Call SetDefaultTcpPort
+  
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
   StrCpy $OLD_DATA_DIR ""
-
-  StrCpy $TextPort_text "${PG_DEF_PORT}"
+  
   StrCpy $UserName_text "${PG_DEF_SUPERUSER}"
 
   StrCpy $ServiceAccount_text "${PG_DEF_SERVICEACCOUNT}"
