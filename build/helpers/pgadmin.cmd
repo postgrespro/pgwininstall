@@ -87,8 +87,8 @@ patch -f -p0 < libssh2.patch || GOTO :ERROR
 :DONE_PGADMIN_LIBSSH2_PATCH
 
 REM Update RU po
-wget --no-check-certificate -c https://repo.postgrespro.ru/depends/pgadmin3-%PGADMIN_VERSION%.po -O i18n/ru_RU/pgadmin3.po
-wget --no-check-certificate -c https://repo.postgrespro.ru/depends/pgadmin3-%PGADMIN_VERSION%-ru_RU.tar.bz2 -O docs/ru_RU.tar.bz2
+wget --no-check-certificate -c https://repo.l.postgrespro.ru/depends/pgadmin3-%PGADMIN_VERSION%.po -O i18n/ru_RU/pgadmin3.po
+wget --no-check-certificate -c https://repo.l.postgrespro.ru/depends/pgadmin3-%PGADMIN_VERSION%-ru_RU.tar.bz2 -O docs/ru_RU.tar.bz2
 tar xf docs/ru_RU.tar.bz2 -C docs || GOTO :ERROR
 rm -f docs/ru_RU.tar.bz2
 
