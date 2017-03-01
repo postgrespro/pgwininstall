@@ -259,6 +259,10 @@ Section $(PostgreSQLString) sec1
 
   ${if} ${PRODUCT_NAME} == "PostgreSQL"
     StrCpy $Chcp_text ""
+
+    ${if} ${LANGUAGE} == ${LANG_RUSSIAN}
+      StrCpy $Chcp_text "chcp 1251"
+    ${endif}
   ${endif}
   
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
