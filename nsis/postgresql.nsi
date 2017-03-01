@@ -260,7 +260,12 @@ Section $(PostgreSQLString) sec1
   ${if} ${PRODUCT_NAME} == "PostgreSQL"
     StrCpy $Chcp_text ""
 
-    ${if} ${LANGUAGE} == ${LANG_RUSSIAN}
+    DetailPrint "Language settings:"
+    DetailPrint "LANG_RUSSIAN=${LANG_RUSSIAN}"
+    DetailPrint "LANG_ENGLISH=${LANG_ENGLISH}"
+    DetailPrint "LANGUAGE=$LANGUAGE"
+
+    ${if} $LANGUAGE == ${LANG_RUSSIAN}
       StrCpy $Chcp_text "chcp 1251"
     ${endif}
   ${endif}
