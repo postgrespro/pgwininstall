@@ -1,0 +1,106 @@
+--- ../postgresql-9.2.0.orig/src/backend/parser/gram.y	2011-09-09 01:13:28.000000000 +0400
++++ ./src/backend/parser/gram.y	2011-09-14 21:38:48.694882400 +0400
+@@ -488,7 +488,7 @@
+ 
+ /* ordinary key words in alphabetical order */
+ %token <keyword> ABORT_P ABSOLUTE_P ACCESS ACTION ADD_P ADMIN AFTER
+-	AGGREGATE ALL ALSO ALTER ALWAYS ANALYSE ANALYZE AND ANY ARRAY AS ASC
++	AGGREGATE ALL ALSO ALTER ALWAYS ANALYSE ANALYZE AND ANY APPLICATION ARRAY AS ASC
+ 	ASSERTION ASSIGNMENT ASYMMETRIC AT ATTRIBUTE AUTHORIZATION
+ 
+ 	BACKWARD BEFORE BEGIN_P BETWEEN BIGINT BINARY BIT
+@@ -8139,6 +8139,8 @@
+ lock_type:	ACCESS SHARE					{ $$ = AccessShareLock; }
+ 			| ROW SHARE						{ $$ = RowShareLock; }
+ 			| ROW EXCLUSIVE					{ $$ = RowExclusiveLock; }
++			| APPLICATION SHARE             { $$ = ApplicationShareLock; }
++			| APPLICATION EXCLUSIVE         { $$ = ApplicationExclusiveLock; }
+ 			| SHARE UPDATE EXCLUSIVE		{ $$ = ShareUpdateExclusiveLock; }
+ 			| SHARE							{ $$ = ShareLock; }
+ 			| SHARE ROW EXCLUSIVE			{ $$ = ShareRowExclusiveLock; }
+@@ -11828,6 +11830,7 @@
+ 			| ALSO
+ 			| ALTER
+ 			| ALWAYS
++			| APPLICATION
+ 			| ASSERTION
+ 			| ASSIGNMENT
+ 			| AT
+--- --- ../postgresql-9.2.0.orig/src/backend/storage/lmgr/lock.c	Thu Aug 23 22:06:50 2012 UTC
++++ ./src/backend/storage/lmgr/lock.c 2011-09-14 21:38:48.694882400 +0400
+@@ -100,7 +100,13 @@
+ 	LOCKBIT_ON(AccessShareLock) | LOCKBIT_ON(RowShareLock) |
+ 	LOCKBIT_ON(RowExclusiveLock) | LOCKBIT_ON(ShareUpdateExclusiveLock) |
+ 	LOCKBIT_ON(ShareLock) | LOCKBIT_ON(ShareRowExclusiveLock) |
+-	LOCKBIT_ON(ExclusiveLock) | LOCKBIT_ON(AccessExclusiveLock)
++	LOCKBIT_ON(ExclusiveLock) | LOCKBIT_ON(AccessExclusiveLock),
++
++	/* ApplicationShareLock*/
++	LOCKBIT_ON(ApplicationExclusiveLock),
++
++	/* ApplicationExclusiveLock*/
++	LOCKBIT_ON(ApplicationExclusiveLock) | LOCKBIT_ON(ApplicationShareLock)
+ 
+ };
+ 
+@@ -115,7 +121,9 @@
+ 	"ShareLock",
+ 	"ShareRowExclusiveLock",
+ 	"ExclusiveLock",
+-	"AccessExclusiveLock"
++	"AccessExclusiveLock",
++	"ApplicationShareLock",
++	"ApplicationExclusiveLock"
+ };
+ 
+ #ifndef LOCK_DEBUG
+@@ -123,7 +131,7 @@
+ #endif
+ 
+ static const LockMethodData default_lockmethod = {
+-	AccessExclusiveLock,		/* highest valid lock mode number */
++	ApplicationExclusiveLock,		/* highest valid lock mode number */
+ 	LockConflicts,
+ 	lock_mode_names,
+ #ifdef LOCK_DEBUG
+@@ -134,7 +142,7 @@
+ };
+ 
+ static const LockMethodData user_lockmethod = {
+-	AccessExclusiveLock,		/* highest valid lock mode number */
++	ApplicationExclusiveLock,		/* highest valid lock mode number */
+ 	LockConflicts,
+ 	lock_mode_names,
+ #ifdef LOCK_DEBUG
+--- ../postgresql-9.2.0.orig/src/include/parser/kwlist.h	2011-09-09 01:13:28.000000000 +0400
++++ ./src/include/parser/kwlist.h	2011-09-14 19:40:30.858423500 +0400
+@@ -42,6 +42,7 @@
+ PG_KEYWORD("analyze", ANALYZE, RESERVED_KEYWORD)
+ PG_KEYWORD("and", AND, RESERVED_KEYWORD)
+ PG_KEYWORD("any", ANY, RESERVED_KEYWORD)
++PG_KEYWORD("application", APPLICATION, UNRESERVED_KEYWORD)
+ PG_KEYWORD("array", ARRAY, RESERVED_KEYWORD)
+ PG_KEYWORD("as", AS, RESERVED_KEYWORD)
+ PG_KEYWORD("asc", ASC, RESERVED_KEYWORD)
+
+--- ../postgresql-9.2.0_orig/src/include/storage/lock.h	2011-09-09 01:13:28.000000000 +0400
++++ ./src/include/storage/lock.h	2011-09-14 19:40:30.905223600 +0400
+@@ -87,7 +87,7 @@
+ typedef int LOCKMODE;
+ 
+ /* MAX_LOCKMODES cannot be larger than the # of bits in LOCKMASK */
+-#define MAX_LOCKMODES		10
++#define MAX_LOCKMODES		12
+ 
+ #define LOCKBIT_ON(lockmode) (1 << (lockmode))
+ #define LOCKBIT_OFF(lockmode) (~(1 << (lockmode)))
+@@ -156,6 +156,9 @@
+ #define AccessExclusiveLock		8		/* ALTER TABLE, DROP TABLE, VACUUM
+ 										 * FULL, and unqualified LOCK TABLE */
+ 
++#define ApplicationShareLock       9   /* requested explicitly */
++#define ApplicationExclusiveLock   10  /* requested explicitly */
++
+ 
+ /*
+  * LOCKTAG is the key information needed to look up a LOCK item in the

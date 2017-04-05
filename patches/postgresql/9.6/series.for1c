@@ -1,0 +1,6 @@
+1c_FULL_96-0.23.patch
+Mkvcbuild.pm.patch
+applock-1c-9.6.patch
+postgresql-1c-9.6.patch
+online_analyze-9.6.patch
+plantuner.patch
