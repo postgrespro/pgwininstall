@@ -128,6 +128,8 @@ rem We need ICONV and LibIntl DLLS available during install for ZIC to work
 rem no need to copy them, just add to PATH
 PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 %PERL_EXE% install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
+IF EXIST ..\..\..\doc\buildinfo.txt COPY ..\..\..\doc\buildinfo.txt %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
+rem now actually copy DLLs of dependencies into our bindir
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/bin/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
