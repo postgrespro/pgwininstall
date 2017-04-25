@@ -124,8 +124,8 @@ Var service
 
 !define MUI_ABORTWARNING
 
-;!define MUI_WELCOMEPAGE_TITLE_HEIGHT 38
 !define MUI_WELCOMEPAGE_TITLE_3LINES
+!define MUI_FINISHPAGE_TITLE_3LINES
 
 ;--------------------------------
 ;Pages
