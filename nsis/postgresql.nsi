@@ -124,13 +124,12 @@ Var service
 
 !define MUI_ABORTWARNING
 
-!define MUI_WELCOMEPAGE_TITLE_3LINES
-!define MUI_FINISHPAGE_TITLE_3LINES
-
 ;--------------------------------
 ;Pages
 ;Page custom nsDialogsPage
 
+!define MUI_WELCOMEPAGE_TITLE_3LINES
+!define MUI_FINISHPAGE_TITLE_3LINES
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "License.txt"
 
@@ -162,6 +161,8 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
+!define MUI_WELCOMEPAGE_TITLE_3LINES
+!define MUI_FINISHPAGE_TITLE_3LINES
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
