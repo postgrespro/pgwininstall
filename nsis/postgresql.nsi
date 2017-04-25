@@ -124,6 +124,9 @@ Var service
 
 !define MUI_ABORTWARNING
 
+;!define MUI_WELCOMEPAGE_TITLE_HEIGHT 38
+!define MUI_WELCOMEPAGE_TITLE_3LINES
+
 ;--------------------------------
 ;Pages
 ;Page custom nsDialogsPage
