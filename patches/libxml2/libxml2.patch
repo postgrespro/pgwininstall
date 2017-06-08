@@ -1,0 +1,40 @@
+diff -Naur libxml2-2.9.4.orig/relaxng.c libxml2-2.9.4/relaxng.c
+--- libxml2-2.9.4.orig/relaxng.c	2017-01-31 12:30:32.964119994 +0300
++++ libxml2-2.9.4/relaxng.c	2017-01-31 12:34:57.196114129 +0300
+@@ -2088,6 +2088,7 @@
+                          const xmlChar * arg2)
+ {
+     char msg[1000];
++    xmlChar *result = NULL;
+ 
+     if (arg1 == NULL)
+         arg1 = BAD_CAST "";
+@@ -2215,7 +2216,7 @@
+         snprintf(msg, 1000, "Unknown error code %d\n", err);
+     }
+     msg[1000 - 1] = 0;
+-    xmlChar *result = xmlCharStrdup(msg);
++    result = xmlCharStrdup(msg);
+     return (xmlEscapeFormatString(&result));
+ }
+ 
+diff -Naur libxml2-2.9.4.orig/xmlschemas.c libxml2-2.9.4/xmlschemas.c
+--- libxml2-2.9.4.orig/xmlschemas.c	2017-01-31 12:30:32.964119994 +0300
++++ libxml2-2.9.4/xmlschemas.c	2017-01-31 12:34:20.700114939 +0300
+@@ -3121,6 +3121,7 @@
+ 			const xmlChar *str2)
+ {
+     xmlChar *msg = NULL;
++    xmlChar *expectedEscaped = NULL;
+ 
+     xmlSchemaFormatNodeForError(&msg, ACTXT_CAST ctxt, node);
+     if (message == NULL) {
+@@ -3169,7 +3170,7 @@
+ 	}
+ 	if (expected) {
+ 	    msg = xmlStrcat(msg, BAD_CAST " Expected is '");
+-	    xmlChar *expectedEscaped = xmlCharStrdup(expected);
++	    expectedEscaped = xmlCharStrdup(expected);
+ 	    msg = xmlStrcat(msg, xmlEscapeFormatString(&expectedEscaped));
+ 	    FREE_AND_NULL(expectedEscaped);
+ 	    msg = xmlStrcat(msg, BAD_CAST "'.\n");
