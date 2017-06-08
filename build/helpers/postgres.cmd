@@ -21,20 +21,20 @@ tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_DIR%\postgresql
 CD /D %BUILD_DIR%\postgresql\*%PGVER%*
 
 IF %ONE_C% == YES (
-  cp -va %ROOT%/patches/postgresql/%PGVER%/series.for1c .
+  cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series.for1c .
   IF NOT EXIST series.for1c GOTO :ERROR
   FOR /F %%I IN (series.for1c) DO (
     ECHO %%I
-    cp -va %ROOT%/patches/postgresql/%PGVER%/%%I .
+    cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/%%I .
     patch -p1 < %%I || GOTO :ERROR
   )
 )
 
-cp -va %ROOT%/patches/postgresql/%PGVER%/series .
+cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
 IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
 FOR /F %%I IN (series) do (
   ECHO %%I
-  cp -va %ROOT%/patches/postgresql/%PGVER%/%%I .
+  cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/%%I .
   patch -p1 < %%I || GOTO :ERROR
 )
 
