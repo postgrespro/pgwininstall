@@ -1,5 +1,5 @@
 REM ----------------------------------------------------------------------------
-REM Assume, you have your PostgreSQL and PgAdmin3 build in C:\pg\distr_X.._9.4...
+REM Assume, you have your PostgreSQL and PgAdmin3 build in %BUILD_DIR%\distr_X.._9.x...
 REM For PostgreSQL you have 'postgresql' directory and
 REM for PgAdmin3 you have 'pgadmin' directory
 REM ----------------------------------------------------------------------------
@@ -19,7 +19,7 @@ SET ADMIN_DEF_VERSION="%PGADMIN_VERSION%"
 SET PRODUCT_DIR_REGKEY="Software\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%"
 SET ADMIN_REG_KEY="SOFTWARE\%COMPANY_NAME%\%PRODUCT_NAME%\%PGADMIN_VERSION%\Installations\"
 SET ADMIN_INS_SUFFIX="%ARCH%bit_Setup.exe"
-SET ADMIN_INS_SOURCE_DIR="C:\pg\distr_%ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
+SET ADMIN_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\pgadmin\*.*"
 
 >%NSIS_RES_DIR%\pgadmin.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
 >>%NSIS_RES_DIR%\pgadmin.def.nsh ECHO !define PRODUCT_VERSION "%PGADMIN_VERSION%"
