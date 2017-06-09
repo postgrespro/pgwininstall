@@ -62,6 +62,9 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define WITH_1C %WITH_1C%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define BUILD_DIR %BUILD_DIR%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define SDK %SDK%
+
 IF "%ARCH%" == "X64" (
   >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
 )
