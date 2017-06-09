@@ -12,9 +12,9 @@ REM Download VC Redistibutable packages
 TITLE Downloading VC Redistibutable packages
 MKDIR "c:\pg\vcredist"
 
-REM wget -c https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe -O "c:\pg\vcredist\vcredist_x86_2015.exe" || GOTO :ERROR
-REM wget -c https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x64.exe -O "c:\pg\vcredist\vcredist_x64_2015.exe" || GOTO :ERROR
-	wget -c https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "c:\pg\vcredist\vcredist_x86_2010.exe"  || GOTO :ERROR
+REM wget -c https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe -O "%BUILD_DIR%\vcredist\vcredist_x86_2015.exe" || GOTO :ERROR
+REM wget -c https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x64.exe -O "%BUILD_DIR%\vcredist\vcredist_x64_2015.exe" || GOTO :ERROR
+	wget -c https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "%BUILD_DIR%\vcredist\vcredist_x86_2010.exe"  || GOTO :ERROR
 
 REM Make directory for installers
 MKDIR "c:\pg\installers"
