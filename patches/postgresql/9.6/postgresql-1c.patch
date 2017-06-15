@@ -1,0 +1,94 @@
+diff -Naur ../postgresql-9.5.1.orig/contrib/Makefile ./contrib/Makefile
+--- ../postgresql-9.5.1.orig/contrib/Makefile	2016-02-09 00:12:28.000000000 +0300
++++ ./contrib/Makefile	2016-02-29 18:00:16.401753270 +0300
+@@ -47,7 +47,12 @@
+ 		tsm_system_time \
+ 		tsearch2	\
+ 		unaccent	\
+-		vacuumlo
++		vacuumlo	\
++		mchar		\
++		fulleq		\
++		fasttrun	\
++		online_analyze	\
++		plantuner
+ 
+ ifeq ($(with_openssl),yes)
+ SUBDIRS += sslinfo
+--- ../postgresql-9.3.0.orig/src/backend/libpq/pg_hba.conf.sample	Thu Aug 23 22:06:50 2012 UTC
++++ ./src/backend/libpq/pg_hba.conf.sample	Mon Sep 10 07:25:38 2012 UTC
+@@ -79,11 +79,12 @@
+ @remove-line-for-nolocal@# "local" is for Unix domain socket connections only
+ @remove-line-for-nolocal@local   all             all                                     @authmethodlocal@
+ # IPv4 local connections:
+-host    all             all             127.0.0.1/32            @authmethodhost@
++#host    all             all             127.0.0.1/32            @authmethodhost@
++host    all             all             0.0.0.0/0            @authmethodhost@
+ # IPv6 local connections:
+-host    all             all             ::1/128                 @authmethodhost@
++host    all             all             ::1/128                 @authmethodhost@
+ # Allow replication connections from localhost, by a user with the
+ # replication privilege.
+ @remove-line-for-nolocal@#local   replication     @default_username@                                @authmethodlocal@
+-#host    replication     @default_username@        127.0.0.1/32            @authmethodhost@
+-#host    replication     @default_username@        ::1/128                 @authmethodhost@
++#host    replication     @default_username@        127.0.0.1/32            @authmethodhost@
++#host    replication     @default_username@        ::1/128                 @authmethodhost@
+
+--- ../postgresql-9.5.1.orig/src/backend/utils/misc/postgresql.conf.sample	2016-02-09 00:12:28.000000000 +0300
++++ ./src/backend/utils/misc/postgresql.conf.sample	2016-02-29 18:20:25.956635543 +0300
+@@ -56,7 +56,7 @@
+ 
+ # - Connection Settings -
+ 
+-#listen_addresses = 'localhost'		# what IP address(es) to listen on;
++listen_addresses = '*'		# what IP address(es) to listen on;
+ 					# comma-separated list of addresses;
+ 					# defaults to 'localhost'; use '*' for all
+ 					# (change requires restart)
+@@ -144,7 +144,7 @@
+ 
+ #max_files_per_process = 1000		# min 25
+ 					# (change requires restart)
+-#shared_preload_libraries = ''		# (change requires restart)
++shared_preload_libraries = 'online_analyze, plantuner'		# (change requires restart)
+ 
+ # - Cost-Based Vacuum Delay -
+ 
+@@ -571,7 +571,7 @@
+ #------------------------------------------------------------------------------
+ 
+ #deadlock_timeout = 1s
+-#max_locks_per_transaction = 64		# min 10
++max_locks_per_transaction = 150		# min 10
+ 					# (change requires restart)
+ # Note:  Each lock table slot uses ~270 bytes of shared memory, and there are
+ # max_locks_per_transaction * (max_connections + max_prepared_transactions)
+@@ -589,12 +589,12 @@
+ #array_nulls = on
+ #backslash_quote = safe_encoding	# on, off, or safe_encoding
+ #default_with_oids = off
+-#escape_string_warning = on
++escape_string_warning = off
+ #lo_compat_privileges = off
+ #operator_precedence_warning = off
+ #quote_all_identifiers = off
+ #sql_inheritance = on
+-#standard_conforming_strings = on
++standard_conforming_strings = off
+ #synchronize_seqscans = on
+ 
+ # - Other Platforms and Clients -
+@@ -627,4 +627,10 @@
+ # CUSTOMIZED OPTIONS
+ #------------------------------------------------------------------------------
+ 
+-# Add settings for extensions here
++online_analyze.threshold = 50
++online_analyze.scale_factor = 0.1
++online_analyze.enable = on
++online_analyze.verbose = off
++online_analyze.min_interval = 10000 
++online_analyze.table_type = 'temporary'
++plantuner.fix_empty_table = false
+

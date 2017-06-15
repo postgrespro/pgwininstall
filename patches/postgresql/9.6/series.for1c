@@ -5,3 +5,4 @@ Mkvcbuild.pm.patch
 applock-1c-9.6.patch
 online_analyze.patch
 plantuner.patch
+postgresql-1c.patch
