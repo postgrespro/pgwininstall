@@ -517,6 +517,11 @@ Section $(PostgreSQLString) sec1
     DetailPrint "pgpro_upgrade return $0"
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
     DetailPrint "$1"
+
+    ; write log
+    FileOpen $R0 "$INSTDIR\scripts\pgpro_upgrade.log" w
+    FileWrite $R0 $1
+    FileClose $R0
     
     ; Don't work with empty password:
     ; StrCpy $1 $ServiceAccount_text
