@@ -505,14 +505,14 @@ Section $(PostgreSQLString) sec1
   Pop $0 ;"ok" or "error" + error details
 
   AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
-  AccessControl::GrantOnFile "$INSTDIR\scripts\pgpro_upgrade" "$loggedInUser" "GenericRead + GenericExecute"
+  AccessControl::GrantOnFile "$INSTDIR\scripts\pgpro_upgrade.cmd" "$loggedInUser" "GenericRead + GenericExecute"
   Pop $0 ;"ok" or "error" + error details
   ${if} $isDataDirExist == 1
     ; there exist data directory. We need to stop service,
     ; run pgpro-upgrade script and
     
     DetailPrint "Performing catalog upgradeon $DATA_DIR"
-    nsExec::ExecToStack /TIMEOUT=120000 '"$INSTDIR\scripts\pgpro_upgrade" "$DATA_DIR"'
+    nsExec::ExecToStack /TIMEOUT=120000 '"$INSTDIR\scripts\pgpro_upgrade.cmd" "$DATA_DIR"'
     Pop $0
     DetailPrint "pgpro_upgrade return $0"
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
