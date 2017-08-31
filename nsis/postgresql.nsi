@@ -512,8 +512,9 @@ Section $(PostgreSQLString) sec1
     ; run pgpro-upgrade script and
     
     DetailPrint "Performing catalog upgradeon $DATA_DIR"
-    nsExec::ExecToStack '"$INSTDIR\scripts\pgpro_upgrade" "$DATA_DIR"'
+    nsExec::ExecToStack /TIMEOUT=120000 '"$INSTDIR\scripts\pgpro_upgrade" "$DATA_DIR"'
     Pop $0
+    DetailPrint "pgpro_upgrade return $0"
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
     DetailPrint "$1"
     
