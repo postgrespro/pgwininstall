@@ -505,6 +505,7 @@ Section $(PostgreSQLString) sec1
   Pop $0 ;"ok" or "error" + error details
 
   AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
+  AccessControl::GrantOnFile "$INSTDIR\scripts\pgpro_upgrade" "$loggedInUser" "GenericRead + GenericExecute"
   Pop $0 ;"ok" or "error" + error details
   ${if} $isDataDirExist == 1
     ; there exist data directory. We need to stop service,
