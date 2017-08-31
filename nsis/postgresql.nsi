@@ -507,13 +507,21 @@ Section $(PostgreSQLString) sec1
   AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
   ${if} $isDataDirExist == 1
-  ; there exist data directory. We need to stop service,
-  ; run pgpro-upgrade script and
-  DetailPrint "Performing catalog upgradeon $DATA_DIR"	 
-	 nsExec::ExecToStack '"$INSTDIR/scripts/pgpro_upgrade" "$DATA_DIR"'
+    ; there exist data directory. We need to stop service,
+    ; run pgpro-upgrade script and
+    
+    ;DetailPrint "Performing catalog upgradeon $DATA_DIR"
+    ;nsExec::ExecToStack '"$INSTDIR/scripts/pgpro_upgrade" "$DATA_DIR"'
+    ;Pop $0
+    ;Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
+    ;DetailPrint "$1"
+    StrCpy $1 $ServiceAccount_text
+    StrCpy $2 ""
+    StrCpy $3 '"$INSTDIR/scripts/pgpro_upgrade" "$DATA_DIR"'
+    StrCpy $4 0
+    System::Call 'RunAs::RunAsW(w r1, w r2, w r3, *w .r4) i .r0 ? u'
     pop $0
-   Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-	DetailPrint "$1"
+    DetailPrint "pgpro_upgrade over runas return $0"
   ${endif}
 
   DetailPrint "Start server service..."
