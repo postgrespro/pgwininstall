@@ -365,9 +365,9 @@ Section $(PostgreSQLString) sec1
     AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
     Pop $0 ;"ok" or "error" + error details
     ${if} ${WITH_1C} == "TRUE"
-      DetailPrint "Running 1C installation. Using Russian locale and UTF-8 encoding ..."
+      DetailPrint "Running 1C installation. Using $Locale_text locale and UTF-8 encoding ..."
         nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-          --locale="russian" \
+          --locale="$Locale_text" \
           --encoding="UTF-8" \
           -U "$UserName_text" \
           -D "$DATA_DIR"'
