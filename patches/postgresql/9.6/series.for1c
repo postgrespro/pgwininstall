@@ -2,5 +2,6 @@
 Mkvcbuild.pm.patch
 applock-1c-9.6.patch
 postgresql-1c-9.6.patch
-online_analyze-9.6.patch
 plantuner.patch
+online_analyze_local_mem.patch
+exists_opt-2.1.patch

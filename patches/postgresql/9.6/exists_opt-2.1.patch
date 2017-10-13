@@ -1,0 +1,2621 @@
+diff --git a/contrib/citext/expected/citext.out b/contrib/citext/expected/citext.out
+index 6541b24b5f..2c388b9b43 100644
+--- a/contrib/citext/expected/citext.out
++++ b/contrib/citext/expected/citext.out
+@@ -2274,8 +2274,8 @@ SELECT *
+   WHERE t.id IS NULL OR m.id IS NULL;
+  id | name | id | name 
+ ----+------+----+------
+-    |      |  2 | Two
+   2 | two  |    | 
++    |      |  2 | Two
+ (2 rows)
+ 
+ REFRESH MATERIALIZED VIEW CONCURRENTLY citext_matview;
+diff --git a/contrib/citext/expected/citext_1.out b/contrib/citext/expected/citext_1.out
+index 462d42a3bd..dd084cb9b8 100644
+--- a/contrib/citext/expected/citext_1.out
++++ b/contrib/citext/expected/citext_1.out
+@@ -2274,8 +2274,8 @@ SELECT *
+   WHERE t.id IS NULL OR m.id IS NULL;
+  id | name | id | name 
+ ----+------+----+------
+-    |      |  2 | Two
+   2 | two  |    | 
++    |      |  2 | Two
+ (2 rows)
+ 
+ REFRESH MATERIALIZED VIEW CONCURRENTLY citext_matview;
+diff --git a/contrib/postgres_fdw/expected/postgres_fdw.out b/contrib/postgres_fdw/expected/postgres_fdw.out
+index 20ea7c0308..74e36edbda 100644
+--- a/contrib/postgres_fdw/expected/postgres_fdw.out
++++ b/contrib/postgres_fdw/expected/postgres_fdw.out
+@@ -426,13 +426,14 @@ EXPLAIN (VERBOSE, COSTS OFF)
+    Output: t1.c1, t2."C 1"
+    ->  Merge Join
+          Output: t1.c1, t2."C 1"
++         Inner Unique: true
+          Merge Cond: (t1.c1 = t2."C 1")
+          ->  Foreign Scan on public.ft2 t1
+                Output: t1.c1
+                Remote SQL: SELECT "C 1" FROM "S 1"."T 1" ORDER BY "C 1" ASC NULLS LAST
+          ->  Index Only Scan using t1_pkey on "S 1"."T 1" t2
+                Output: t2."C 1"
+-(10 rows)
++(11 rows)
+ 
+ SELECT t1.c1, t2."C 1" FROM ft2 t1 JOIN "S 1"."T 1" t2 ON (t1.c1 = t2."C 1") OFFSET 100 LIMIT 10;
+  c1  | C 1 
+@@ -459,13 +460,14 @@ EXPLAIN (VERBOSE, COSTS OFF)
+    Output: t1.c1, t2."C 1"
+    ->  Merge Left Join
+          Output: t1.c1, t2."C 1"
++         Inner Unique: true
+          Merge Cond: (t1.c1 = t2."C 1")
+          ->  Foreign Scan on public.ft2 t1
+                Output: t1.c1
+                Remote SQL: SELECT "C 1" FROM "S 1"."T 1" ORDER BY "C 1" ASC NULLS LAST
+          ->  Index Only Scan using t1_pkey on "S 1"."T 1" t2
+                Output: t2."C 1"
+-(10 rows)
++(11 rows)
+ 
+ SELECT t1.c1, t2."C 1" FROM ft2 t1 LEFT JOIN "S 1"."T 1" t2 ON (t1.c1 = t2."C 1") OFFSET 100 LIMIT 10;
+  c1  | C 1 
+@@ -492,6 +494,7 @@ EXPLAIN (VERBOSE, COSTS OFF)
+    Output: t1."C 1"
+    ->  Merge Right Join
+          Output: t1."C 1"
++         Inner Unique: true
+          Merge Cond: (t3.c1 = t1."C 1")
+          ->  Foreign Scan
+                Output: t3.c1
+@@ -499,7 +502,7 @@ EXPLAIN (VERBOSE, COSTS OFF)
+                Remote SQL: SELECT r3."C 1" FROM ("S 1"."T 1" r2 INNER JOIN "S 1"."T 1" r3 ON (((r2."C 1" = r3."C 1")))) ORDER BY r2."C 1" ASC NULLS LAST
+          ->  Index Only Scan using t1_pkey on "S 1"."T 1" t1
+                Output: t1."C 1"
+-(11 rows)
++(12 rows)
+ 
+ SELECT t1."C 1" FROM "S 1"."T 1" t1 left join ft1 t2 join ft2 t3 on (t2.c1 = t3.c1) on (t3.c1 = t1."C 1") OFFSET 100 LIMIT 10;
+  C 1 
+@@ -527,6 +530,7 @@ EXPLAIN (VERBOSE, COSTS OFF)
+    Output: t1."C 1", t2.c1, t3.c1
+    ->  Merge Right Join
+          Output: t1."C 1", t2.c1, t3.c1
++         Inner Unique: true
+          Merge Cond: (t3.c1 = t1."C 1")
+          ->  Foreign Scan
+                Output: t3.c1, t2.c1
+@@ -534,7 +538,7 @@ EXPLAIN (VERBOSE, COSTS OFF)
+                Remote SQL: SELECT r3."C 1", r2."C 1" FROM ("S 1"."T 1" r3 LEFT JOIN "S 1"."T 1" r2 ON (((r2."C 1" = r3."C 1")))) ORDER BY r3."C 1" ASC NULLS LAST
+          ->  Index Only Scan using t1_pkey on "S 1"."T 1" t1
+                Output: t1."C 1"
+-(11 rows)
++(12 rows)
+ 
+ SELECT t1."C 1", t2.c1, t3.c1 FROM "S 1"."T 1" t1 left join ft1 t2 full join ft2 t3 on (t2.c1 = t3.c1) on (t3.c1 = t1."C 1") OFFSET 100 LIMIT 10;
+  C 1 | c1  | c1  
+@@ -560,6 +564,7 @@ EXPLAIN (VERBOSE, COSTS OFF)
+    Output: t1."C 1", t2.c1, t3.c1
+    ->  Merge Full Join
+          Output: t1."C 1", t2.c1, t3.c1
++         Inner Unique: true
+          Merge Cond: (t3.c1 = t1."C 1")
+          ->  Foreign Scan
+                Output: t2.c1, t3.c1
+@@ -567,7 +572,7 @@ EXPLAIN (VERBOSE, COSTS OFF)
+                Remote SQL: SELECT r2."C 1", r3."C 1" FROM ("S 1"."T 1" r2 FULL JOIN "S 1"."T 1" r3 ON (((r2."C 1" = r3."C 1")))) ORDER BY r3."C 1" ASC NULLS LAST
+          ->  Index Only Scan using t1_pkey on "S 1"."T 1" t1
+                Output: t1."C 1"
+-(11 rows)
++(12 rows)
+ 
+ SELECT t1."C 1", t2.c1, t3.c1 FROM "S 1"."T 1" t1 full join ft1 t2 full join ft2 t3 on (t2.c1 = t3.c1) on (t3.c1 = t1."C 1") OFFSET 100 LIMIT 10;
+  C 1 | c1  | c1  
+@@ -1797,8 +1802,8 @@ SELECT t1.ctid, t1, t2, t1.c1 FROM ft1 t1 JOIN ft2 t2 ON (t1.c1 = t2.c1) ORDER B
+ -- SEMI JOIN, not pushed down
+ EXPLAIN (VERBOSE, COSTS OFF)
+ SELECT t1.c1 FROM ft1 t1 WHERE EXISTS (SELECT 1 FROM ft2 t2 WHERE t1.c1 = t2.c1) ORDER BY t1.c1 OFFSET 100 LIMIT 10;
+-                                         QUERY PLAN                                          
+----------------------------------------------------------------------------------------------
++                                      QUERY PLAN                                       
++---------------------------------------------------------------------------------------
+  Limit
+    Output: t1.c1
+    ->  Merge Semi Join
+@@ -1807,12 +1812,10 @@ SELECT t1.c1 FROM ft1 t1 WHERE EXISTS (SELECT 1 FROM ft2 t2 WHERE t1.c1 = t2.c1)
+          ->  Foreign Scan on public.ft1 t1
+                Output: t1.c1
+                Remote SQL: SELECT "C 1" FROM "S 1"."T 1" ORDER BY "C 1" ASC NULLS LAST
+-         ->  Materialize
++         ->  Foreign Scan on public.ft2 t2
+                Output: t2.c1
+-               ->  Foreign Scan on public.ft2 t2
+-                     Output: t2.c1
+-                     Remote SQL: SELECT "C 1" FROM "S 1"."T 1" ORDER BY "C 1" ASC NULLS LAST
+-(13 rows)
++               Remote SQL: SELECT "C 1" FROM "S 1"."T 1" ORDER BY "C 1" ASC NULLS LAST
++(11 rows)
+ 
+ SELECT t1.c1 FROM ft1 t1 WHERE EXISTS (SELECT 1 FROM ft2 t2 WHERE t1.c1 = t2.c1) ORDER BY t1.c1 OFFSET 100 LIMIT 10;
+  c1  
+@@ -1842,12 +1845,10 @@ SELECT t1.c1 FROM ft1 t1 WHERE NOT EXISTS (SELECT 1 FROM ft2 t2 WHERE t1.c1 = t2
+          ->  Foreign Scan on public.ft1 t1
+                Output: t1.c1
+                Remote SQL: SELECT "C 1" FROM "S 1"."T 1" ORDER BY "C 1" ASC NULLS LAST
+-         ->  Materialize
++         ->  Foreign Scan on public.ft2 t2
+                Output: t2.c2
+-               ->  Foreign Scan on public.ft2 t2
+-                     Output: t2.c2
+-                     Remote SQL: SELECT c2 FROM "S 1"."T 1" ORDER BY c2 ASC NULLS LAST
+-(13 rows)
++               Remote SQL: SELECT c2 FROM "S 1"."T 1" ORDER BY c2 ASC NULLS LAST
++(11 rows)
+ 
+ SELECT t1.c1 FROM ft1 t1 WHERE NOT EXISTS (SELECT 1 FROM ft2 t2 WHERE t1.c1 = t2.c2) ORDER BY t1.c1 OFFSET 100 LIMIT 10;
+  c1  
+@@ -2875,20 +2876,18 @@ explain (verbose, costs off) select * from ft3 where f2 = 'foo' COLLATE "C";
+ 
+ explain (verbose, costs off) select * from ft3 f, loct3 l
+   where f.f3 = l.f3 COLLATE "POSIX" and l.f1 = 'foo';
+-                         QUERY PLAN                          
+--------------------------------------------------------------
+- Hash Join
++                       QUERY PLAN                        
++---------------------------------------------------------
++ Nested Loop
+    Output: f.f1, f.f2, f.f3, l.f1, l.f2, l.f3
+-   Hash Cond: ((f.f3)::text = (l.f3)::text)
++   Join Filter: ((f.f3)::text = (l.f3)::text)
++   ->  Index Scan using loct3_f1_key on public.loct3 l
++         Output: l.f1, l.f2, l.f3
++         Index Cond: (l.f1 = 'foo'::text)
+    ->  Foreign Scan on public.ft3 f
+          Output: f.f1, f.f2, f.f3
+          Remote SQL: SELECT f1, f2, f3 FROM public.loct3
+-   ->  Hash
+-         Output: l.f1, l.f2, l.f3
+-         ->  Index Scan using loct3_f1_key on public.loct3 l
+-               Output: l.f1, l.f2, l.f3
+-               Index Cond: (l.f1 = 'foo'::text)
+-(11 rows)
++(9 rows)
+ 
+ -- ===================================================================
+ -- test writable foreign table stuff
+@@ -5428,6 +5427,7 @@ select * from bar where f1 in (select f1 from foo) for update;
+    Output: bar.f1, bar.f2, bar.ctid, bar.*, bar.tableoid, foo.ctid, foo.*, foo.tableoid
+    ->  Hash Join
+          Output: bar.f1, bar.f2, bar.ctid, bar.*, bar.tableoid, foo.ctid, foo.*, foo.tableoid
++         Inner Unique: true
+          Hash Cond: (bar.f1 = foo.f1)
+          ->  Append
+                ->  Seq Scan on public.bar
+@@ -5483,7 +5483,7 @@ select * from bar where f1 in (select f1 from foo) for share;
+                            ->  Foreign Scan on public.foo2
+                                  Output: foo2.ctid, foo2.*, foo2.tableoid, foo2.f1
+                                  Remote SQL: SELECT f1, f2, f3, ctid FROM public.loct1
+-(22 rows)
++(23 rows)
+ 
+ select * from bar where f1 in (select f1 from foo) for share;
+  f1 | f2 
+@@ -5505,6 +5505,7 @@ update bar set f2 = f2 + 100 where f1 in (select f1 from foo);
+      Remote SQL: UPDATE public.loct2 SET f2 = $2 WHERE ctid = $1
+    ->  Hash Join
+          Output: bar.f1, (bar.f2 + 100), bar.ctid, foo.ctid, foo.*, foo.tableoid
++         Inner Unique: true
+          Hash Cond: (bar.f1 = foo.f1)
+          ->  Seq Scan on public.bar
+                Output: bar.f1, bar.f2, bar.ctid
+@@ -5521,6 +5522,7 @@ update bar set f2 = f2 + 100 where f1 in (select f1 from foo);
+                                  Remote SQL: SELECT f1, f2, f3, ctid FROM public.loct1
+    ->  Hash Join
+          Output: bar2.f1, (bar2.f2 + 100), bar2.f3, bar2.ctid, foo.ctid, foo.*, foo.tableoid
++         Inner Unique: true
+          Hash Cond: (bar2.f1 = foo.f1)
+          ->  Foreign Scan on public.bar2
+                Output: bar2.f1, bar2.f2, bar2.f3, bar2.ctid
+@@ -5536,7 +5538,7 @@ update bar set f2 = f2 + 100 where f1 in (select f1 from foo);
+                            ->  Foreign Scan on public.foo2
+                                  Output: foo2.ctid, foo2.*, foo2.tableoid, foo2.f1
+                                  Remote SQL: SELECT f1, f2, f3, ctid FROM public.loct1
+-(37 rows)
++(39 rows)
+ 
+ update bar set f2 = f2 + 100 where f1 in (select f1 from foo);
+ select tableoid::regclass, * from bar order by 1,2;
+diff --git a/src/backend/commands/explain.c b/src/backend/commands/explain.c
+index cb2852207f..e0a3aa83f3 100644
+--- a/src/backend/commands/explain.c
++++ b/src/backend/commands/explain.c
+@@ -1283,6 +1283,23 @@ ExplainNode(PlanState *planstate, List *ancestors,
+ 	if (es->verbose)
+ 		show_plan_tlist(planstate, ancestors, es);
+ 
++	/* unique join */
++	switch (nodeTag(plan))
++	{
++		case T_NestLoop:
++		case T_MergeJoin:
++		case T_HashJoin:
++			/* try not to be too chatty about this in text mode */
++			if (es->format != EXPLAIN_FORMAT_TEXT ||
++				(es->verbose && ((Join *) plan)->inner_unique))
++				ExplainPropertyBool("Inner Unique",
++									((Join *) plan)->inner_unique,
++									es);
++			break;
++		default:
++			break;
++	}
++
+ 	/* quals, sort keys, etc */
+ 	switch (nodeTag(plan))
+ 	{
+diff --git a/src/backend/executor/nodeHashjoin.c b/src/backend/executor/nodeHashjoin.c
+index c4d4c60031..1088091c2e 100644
+--- a/src/backend/executor/nodeHashjoin.c
++++ b/src/backend/executor/nodeHashjoin.c
+@@ -306,10 +306,11 @@ ExecHashJoin(HashJoinState *node)
+ 					}
+ 
+ 					/*
+-					 * In a semijoin, we'll consider returning the first
+-					 * match, but after that we're done with this outer tuple.
++					 * If we only need to join to the first matching inner
++					 * tuple, then consider returning this one, but after that
++					 * continue with next outer tuple.
+ 					 */
+-					if (node->js.jointype == JOIN_SEMI)
++					if (node->js.single_match)
+ 						node->hj_JoinState = HJ_NEED_NEW_OUTER;
+ 
+ 					if (otherqual == NIL ||
+@@ -495,6 +496,12 @@ ExecInitHashJoin(HashJoin *node, EState *estate, int eflags)
+ 	ExecInitResultTupleSlot(estate, &hjstate->js.ps);
+ 	hjstate->hj_OuterTupleSlot = ExecInitExtraTupleSlot(estate);
+ 
++	/*
++	 * detect whether we need only consider the first matching inner tuple
++	 */
++	hjstate->js.single_match = (node->join.inner_unique ||
++								node->join.jointype == JOIN_SEMI);
++
+ 	/* set up null tuples for outer joins, if needed */
+ 	switch (node->join.jointype)
+ 	{
+diff --git a/src/backend/executor/nodeMergejoin.c b/src/backend/executor/nodeMergejoin.c
+index 6db09b836a..739104b02c 100644
+--- a/src/backend/executor/nodeMergejoin.c
++++ b/src/backend/executor/nodeMergejoin.c
+@@ -840,10 +840,11 @@ ExecMergeJoin(MergeJoinState *node)
+ 					}
+ 
+ 					/*
+-					 * In a semijoin, we'll consider returning the first
+-					 * match, but after that we're done with this outer tuple.
++					 * If we only need to join to the first matching inner
++					 * tuple, then consider returning this one, but after that
++					 * continue with next outer tuple.
+ 					 */
+-					if (node->js.jointype == JOIN_SEMI)
++					if (node->js.single_match)
+ 						node->mj_JoinState = EXEC_MJ_NEXTOUTER;
+ 
+ 					qualResult = (otherqual == NIL ||
+@@ -1099,6 +1100,10 @@ ExecMergeJoin(MergeJoinState *node)
+ 					 * scan position to the first mark, and go join that tuple
+ 					 * (and any following ones) to the new outer.
+ 					 *
++					 * If we were able to determine mark and restore are not
++					 * needed, then we don't have to back up; the current
++					 * inner is already the first possible match.
++					 *
+ 					 * NOTE: we do not need to worry about the MatchedInner
+ 					 * state for the rescanned inner tuples.  We know all of
+ 					 * them will match this new outer tuple and therefore
+@@ -1111,16 +1116,19 @@ ExecMergeJoin(MergeJoinState *node)
+ 					 * forcing the merge clause to never match, so we never
+ 					 * get here.
+ 					 */
+-					ExecRestrPos(innerPlan);
++					if (!node->mj_SkipMarkRestore)
++					{
++						ExecRestrPos(innerPlan);
+ 
+-					/*
+-					 * ExecRestrPos probably should give us back a new Slot,
+-					 * but since it doesn't, use the marked slot.  (The
+-					 * previously returned mj_InnerTupleSlot cannot be assumed
+-					 * to hold the required tuple.)
+-					 */
+-					node->mj_InnerTupleSlot = innerTupleSlot;
+-					/* we need not do MJEvalInnerValues again */
++						/*
++						 * ExecRestrPos probably should give us back a new
++						 * Slot, but since it doesn't, use the marked slot.
++						 * (The previously returned mj_InnerTupleSlot cannot
++						 * be assumed to hold the required tuple.)
++						 */
++						node->mj_InnerTupleSlot = innerTupleSlot;
++						/* we need not do MJEvalInnerValues again */
++					}
+ 
+ 					node->mj_JoinState = EXEC_MJ_JOINTUPLES;
+ 				}
+@@ -1221,7 +1229,8 @@ ExecMergeJoin(MergeJoinState *node)
+ 
+ 				if (compareResult == 0)
+ 				{
+-					ExecMarkPos(innerPlan);
++					if (!node->mj_SkipMarkRestore)
++						ExecMarkPos(innerPlan);
+ 
+ 					MarkInnerTuple(node->mj_InnerTupleSlot, node);
+ 
+@@ -1520,11 +1529,18 @@ ExecInitMergeJoin(MergeJoin *node, EState *estate, int eflags)
+ 	/*
+ 	 * initialize child nodes
+ 	 *
+-	 * inner child must support MARK/RESTORE.
++	 * inner child must support MARK/RESTORE, unless we have detected that we
++	 * don't need that.  Note that skip_mark_restore must never be set if
++	 * there are non-mergeclause joinquals, since the logic wouldn't work.
+ 	 */
++	Assert(node->join.joinqual == NIL || !node->skip_mark_restore);
++	mergestate->mj_SkipMarkRestore = node->skip_mark_restore;
++
+ 	outerPlanState(mergestate) = ExecInitNode(outerPlan(node), estate, eflags);
+ 	innerPlanState(mergestate) = ExecInitNode(innerPlan(node), estate,
+-											  eflags | EXEC_FLAG_MARK);
++											  mergestate->mj_SkipMarkRestore ?
++											  eflags :
++											  (eflags | EXEC_FLAG_MARK));
+ 
+ 	/*
+ 	 * For certain types of inner child nodes, it is advantageous to issue
+@@ -1537,7 +1553,8 @@ ExecInitMergeJoin(MergeJoin *node, EState *estate, int eflags)
+ 	 * only if eflags doesn't specify REWIND.
+ 	 */
+ 	if (IsA(innerPlan(node), Material) &&
+-		(eflags & EXEC_FLAG_REWIND) == 0)
++		(eflags & EXEC_FLAG_REWIND) == 0 &&
++		!mergestate->mj_SkipMarkRestore)
+ 		mergestate->mj_ExtraMarks = true;
+ 	else
+ 		mergestate->mj_ExtraMarks = false;
+@@ -1551,6 +1568,13 @@ ExecInitMergeJoin(MergeJoin *node, EState *estate, int eflags)
+ 	ExecSetSlotDescriptor(mergestate->mj_MarkedTupleSlot,
+ 						  ExecGetResultType(innerPlanState(mergestate)));
+ 
++	/*
++	 * detect whether we need only consider the first matching inner tuple
++	 */
++	mergestate->js.single_match = (node->join.inner_unique ||
++								   node->join.jointype == JOIN_SEMI);
++
++	/* set up null tuples for outer joins, if needed */
+ 	switch (node->join.jointype)
+ 	{
+ 		case JOIN_INNER:
+diff --git a/src/backend/executor/nodeNestloop.c b/src/backend/executor/nodeNestloop.c
+index 555fa09679..0bd76ebbb1 100644
+--- a/src/backend/executor/nodeNestloop.c
++++ b/src/backend/executor/nodeNestloop.c
+@@ -247,10 +247,11 @@ ExecNestLoop(NestLoopState *node)
+ 			}
+ 
+ 			/*
+-			 * In a semijoin, we'll consider returning the first match, but
+-			 * after that we're done with this outer tuple.
++			 * If we only need to join to the first matching inner tuple, then
++			 * consider returning this one, but after that continue with next
++			 * outer tuple.
+ 			 */
+-			if (node->js.jointype == JOIN_SEMI)
++			if (node->js.single_match)
+ 				node->nl_NeedNewOuter = true;
+ 
+ 			if (otherqual == NIL || ExecQual(otherqual, econtext, false))
+@@ -352,6 +353,13 @@ ExecInitNestLoop(NestLoop *node, EState *estate, int eflags)
+ 	 */
+ 	ExecInitResultTupleSlot(estate, &nlstate->js.ps);
+ 
++	/*
++	 * detect whether we need only consider the first matching inner tuple
++	 */
++	nlstate->js.single_match = (node->join.inner_unique ||
++								node->join.jointype == JOIN_SEMI);
++
++	/* set up null tuples for outer joins, if needed */
+ 	switch (node->join.jointype)
+ 	{
+ 		case JOIN_INNER:
+diff --git a/src/backend/nodes/copyfuncs.c b/src/backend/nodes/copyfuncs.c
+index c2b1ccf99f..26adbb551c 100644
+--- a/src/backend/nodes/copyfuncs.c
++++ b/src/backend/nodes/copyfuncs.c
+@@ -706,6 +706,7 @@ CopyJoinFields(const Join *from, Join *newnode)
+ 	CopyPlanFields((const Plan *) from, (Plan *) newnode);
+ 
+ 	COPY_SCALAR_FIELD(jointype);
++	COPY_SCALAR_FIELD(inner_unique);
+ 	COPY_NODE_FIELD(joinqual);
+ }
+ 
+@@ -766,6 +767,7 @@ _copyMergeJoin(const MergeJoin *from)
+ 	/*
+ 	 * copy remainder of node
+ 	 */
++	COPY_SCALAR_FIELD(skip_mark_restore);
+ 	COPY_NODE_FIELD(mergeclauses);
+ 	numCols = list_length(from->mergeclauses);
+ 	if (numCols > 0)
+diff --git a/src/backend/nodes/outfuncs.c b/src/backend/nodes/outfuncs.c
+index c4f4bed43a..e2c36f8a25 100644
+--- a/src/backend/nodes/outfuncs.c
++++ b/src/backend/nodes/outfuncs.c
+@@ -316,6 +316,7 @@ _outJoinPlanInfo(StringInfo str, const Join *node)
+ 	_outPlanInfo(str, (const Plan *) node);
+ 
+ 	WRITE_ENUM_FIELD(jointype, JoinType);
++	WRITE_BOOL_FIELD(inner_unique);
+ 	WRITE_NODE_FIELD(joinqual);
+ }
+ 
+@@ -663,6 +664,7 @@ _outMergeJoin(StringInfo str, const MergeJoin *node)
+ 
+ 	_outJoinPlanInfo(str, (const Join *) node);
+ 
++	WRITE_BOOL_FIELD(skip_mark_restore);
+ 	WRITE_NODE_FIELD(mergeclauses);
+ 
+ 	numCols = list_length(node->mergeclauses);
+@@ -1624,6 +1626,7 @@ _outJoinPathInfo(StringInfo str, const JoinPath *node)
+ 	_outPathInfo(str, (const Path *) node);
+ 
+ 	WRITE_ENUM_FIELD(jointype, JoinType);
++	WRITE_BOOL_FIELD(inner_unique);
+ 	WRITE_NODE_FIELD(outerjoinpath);
+ 	WRITE_NODE_FIELD(innerjoinpath);
+ 	WRITE_NODE_FIELD(joinrestrictinfo);
+@@ -1986,6 +1989,7 @@ _outMergePath(StringInfo str, const MergePath *node)
+ 	WRITE_NODE_FIELD(path_mergeclauses);
+ 	WRITE_NODE_FIELD(outersortkeys);
+ 	WRITE_NODE_FIELD(innersortkeys);
++	WRITE_BOOL_FIELD(skip_mark_restore);
+ 	WRITE_BOOL_FIELD(materialize_inner);
+ }
+ 
+@@ -2113,6 +2117,7 @@ _outRelOptInfo(StringInfo str, const RelOptInfo *node)
+ 	WRITE_OID_FIELD(userid);
+ 	WRITE_BOOL_FIELD(useridiscurrent);
+ 	/* we don't try to print fdwroutine or fdw_private */
++	/* can't print unique_for_rels/non_unique_for_rels; BMSes aren't Nodes */
+ 	WRITE_NODE_FIELD(baserestrictinfo);
+ 	WRITE_NODE_FIELD(joininfo);
+ 	WRITE_BOOL_FIELD(has_eclass_joins);
+diff --git a/src/backend/nodes/readfuncs.c b/src/backend/nodes/readfuncs.c
+index da71dbb733..d2b6519835 100644
+--- a/src/backend/nodes/readfuncs.c
++++ b/src/backend/nodes/readfuncs.c
+@@ -1856,6 +1856,7 @@ ReadCommonJoin(Join *local_node)
+ 	ReadCommonPlan(&local_node->plan);
+ 
+ 	READ_ENUM_FIELD(jointype, JoinType);
++	READ_BOOL_FIELD(inner_unique);
+ 	READ_NODE_FIELD(joinqual);
+ }
+ 
+@@ -1899,6 +1900,7 @@ _readMergeJoin(void)
+ 
+ 	ReadCommonJoin(&local_node->join);
+ 
++	READ_BOOL_FIELD(skip_mark_restore);
+ 	READ_NODE_FIELD(mergeclauses);
+ 
+ 	numCols = list_length(local_node->mergeclauses);
+diff --git a/src/backend/optimizer/path/costsize.c b/src/backend/optimizer/path/costsize.c
+index fa9b322610..8e6861d5f7 100644
+--- a/src/backend/optimizer/path/costsize.c
++++ b/src/backend/optimizer/path/costsize.c
+@@ -1890,15 +1890,13 @@ cost_group(Path *path, PlannerInfo *root,
+  * 'jointype' is the type of join to be performed
+  * 'outer_path' is the outer input to the join
+  * 'inner_path' is the inner input to the join
+- * 'sjinfo' is extra info about the join for selectivity estimation
+- * 'semifactors' contains valid data if jointype is SEMI or ANTI
++ * 'extra' contains miscellaneous information about the join
+  */
+ void
+ initial_cost_nestloop(PlannerInfo *root, JoinCostWorkspace *workspace,
+ 					  JoinType jointype,
+ 					  Path *outer_path, Path *inner_path,
+-					  SpecialJoinInfo *sjinfo,
+-					  SemiAntiJoinFactors *semifactors)
++					  JoinPathExtraData *extra)
+ {
+ 	Cost		startup_cost = 0;
+ 	Cost		run_cost = 0;
+@@ -1929,10 +1927,12 @@ initial_cost_nestloop(PlannerInfo *root, JoinCostWorkspace *workspace,
+ 	inner_run_cost = inner_path->total_cost - inner_path->startup_cost;
+ 	inner_rescan_run_cost = inner_rescan_total_cost - inner_rescan_start_cost;
+ 
+-	if (jointype == JOIN_SEMI || jointype == JOIN_ANTI)
++	if (jointype == JOIN_SEMI || jointype == JOIN_ANTI ||
++		extra->inner_unique)
+ 	{
+ 		/*
+-		 * SEMI or ANTI join: executor will stop after first match.
++		 * With a SEMI or ANTI join, or if the innerrel is known unique, the
++		 * executor will stop after the first match.
+ 		 *
+ 		 * Getting decent estimates requires inspection of the join quals,
+ 		 * which we choose to postpone to final_cost_nestloop.
+@@ -1965,14 +1965,12 @@ initial_cost_nestloop(PlannerInfo *root, JoinCostWorkspace *workspace,
+  *
+  * 'path' is already filled in except for the rows and cost fields
+  * 'workspace' is the result from initial_cost_nestloop
+- * 'sjinfo' is extra info about the join for selectivity estimation
+- * 'semifactors' contains valid data if path->jointype is SEMI or ANTI
++ * 'extra' contains miscellaneous information about the join
+  */
+ void
+ final_cost_nestloop(PlannerInfo *root, NestPath *path,
+ 					JoinCostWorkspace *workspace,
+-					SpecialJoinInfo *sjinfo,
+-					SemiAntiJoinFactors *semifactors)
++					JoinPathExtraData *extra)
+ {
+ 	Path	   *outer_path = path->outerjoinpath;
+ 	Path	   *inner_path = path->innerjoinpath;
+@@ -2015,14 +2013,17 @@ final_cost_nestloop(PlannerInfo *root, NestPath *path,
+ 
+ 	/* cost of inner-relation source data (we already dealt with outer rel) */
+ 
+-	if (path->jointype == JOIN_SEMI || path->jointype == JOIN_ANTI)
++	if (path->jointype == JOIN_SEMI || path->jointype == JOIN_ANTI ||
++		extra->inner_unique)
+ 	{
+ 		/*
+-		 * SEMI or ANTI join: executor will stop after first match.
++		 * With a SEMI or ANTI join, or if the innerrel is known unique, the
++		 * executor will stop after the first match.
+ 		 */
+ 		Cost		inner_run_cost = workspace->inner_run_cost;
+ 		Cost		inner_rescan_run_cost = workspace->inner_rescan_run_cost;
+ 		double		outer_matched_rows;
++		double		outer_unmatched_rows;
+ 		Selectivity inner_scan_frac;
+ 
+ 		/*
+@@ -2034,8 +2035,9 @@ final_cost_nestloop(PlannerInfo *root, NestPath *path,
+ 		 * clamp inner_scan_frac to at most 1.0; but since match_count is at
+ 		 * least 1, no such clamp is needed now.)
+ 		 */
+-		outer_matched_rows = rint(outer_path_rows * semifactors->outer_match_frac);
+-		inner_scan_frac = 2.0 / (semifactors->match_count + 1.0);
++		outer_matched_rows = rint(outer_path_rows * extra->semifactors.outer_match_frac);
++		outer_unmatched_rows = outer_path_rows - outer_matched_rows;
++		inner_scan_frac = 2.0 / (extra->semifactors.match_count + 1.0);
+ 
+ 		/*
+ 		 * Compute number of tuples processed (not number emitted!).  First,
+@@ -2078,7 +2080,7 @@ final_cost_nestloop(PlannerInfo *root, NestPath *path,
+ 			 * of a nonempty scan.  We consider that these are all rescans,
+ 			 * since we used inner_run_cost once already.
+ 			 */
+-			run_cost += (outer_path_rows - outer_matched_rows) *
++			run_cost += outer_unmatched_rows *
+ 				inner_rescan_run_cost / inner_path_rows;
+ 
+ 			/*
+@@ -2096,20 +2098,28 @@ final_cost_nestloop(PlannerInfo *root, NestPath *path,
+ 			 * difficult to estimate whether that will happen (and it could
+ 			 * not happen if there are any unmatched outer rows!), so be
+ 			 * conservative and always charge the whole first-scan cost once.
++			 * We consider this charge to correspond to the first unmatched
++			 * outer row, unless there isn't one in our estimate, in which
++			 * case blame it on the first matched row.
+ 			 */
++
++			/* First, count all unmatched join tuples as being processed */
++			ntuples += outer_unmatched_rows * inner_path_rows;
++
++			/* Now add the forced full scan, and decrement appropriate count */
+ 			run_cost += inner_run_cost;
++			if (outer_unmatched_rows >= 1)
++				outer_unmatched_rows -= 1;
++			else
++				outer_matched_rows -= 1;
+ 
+ 			/* Add inner run cost for additional outer tuples having matches */
+-			if (outer_matched_rows > 1)
+-				run_cost += (outer_matched_rows - 1) * inner_rescan_run_cost * inner_scan_frac;
++			if (outer_matched_rows > 0)
++				run_cost += outer_matched_rows * inner_rescan_run_cost * inner_scan_frac;
+ 
+-			/* Add inner run cost for unmatched outer tuples */
+-			run_cost += (outer_path_rows - outer_matched_rows) *
+-				inner_rescan_run_cost;
+-
+-			/* And count the unmatched join tuples as being processed */
+-			ntuples += (outer_path_rows - outer_matched_rows) *
+-				inner_path_rows;
++			/* Add inner run cost for additional unmatched outer tuples */
++			if (outer_unmatched_rows > 0)
++				run_cost += outer_unmatched_rows * inner_rescan_run_cost;
+ 		}
+ 	}
+ 	else
+@@ -2159,7 +2169,7 @@ final_cost_nestloop(PlannerInfo *root, NestPath *path,
+  * 'inner_path' is the inner input to the join
+  * 'outersortkeys' is the list of sort keys for the outer path
+  * 'innersortkeys' is the list of sort keys for the inner path
+- * 'sjinfo' is extra info about the join for selectivity estimation
++ * 'extra' contains miscellaneous information about the join
+  *
+  * Note: outersortkeys and innersortkeys should be NIL if no explicit
+  * sort is needed because the respective source path is already ordered.
+@@ -2170,7 +2180,7 @@ initial_cost_mergejoin(PlannerInfo *root, JoinCostWorkspace *workspace,
+ 					   List *mergeclauses,
+ 					   Path *outer_path, Path *inner_path,
+ 					   List *outersortkeys, List *innersortkeys,
+-					   SpecialJoinInfo *sjinfo)
++					   JoinPathExtraData *extra)
+ {
+ 	Cost		startup_cost = 0;
+ 	Cost		run_cost = 0;
+@@ -2371,26 +2381,33 @@ initial_cost_mergejoin(PlannerInfo *root, JoinCostWorkspace *workspace,
+  * final_cost_mergejoin
+  *	  Final estimate of the cost and result size of a mergejoin path.
+  *
+- * Unlike other costsize functions, this routine makes one actual decision:
+- * whether we should materialize the inner path.  We do that either because
+- * the inner path can't support mark/restore, or because it's cheaper to
+- * use an interposed Material node to handle mark/restore.  When the decision
+- * is cost-based it would be logically cleaner to build and cost two separate
+- * paths with and without that flag set; but that would require repeating most
+- * of the cost calculations, which are not all that cheap.  Since the choice
+- * will not affect output pathkeys or startup cost, only total cost, there is
+- * no possibility of wanting to keep both paths.  So it seems best to make
+- * the decision here and record it in the path's materialize_inner field.
++ * Unlike other costsize functions, this routine makes two actual decisions:
++ * whether the executor will need to do mark/restore, and whether we should
++ * materialize the inner path.  It would be logically cleaner to build
++ * separate paths testing these alternatives, but that would require repeating
++ * most of the cost calculations, which are not all that cheap.  Since the
++ * choice will not affect output pathkeys or startup cost, only total cost,
++ * there is no possibility of wanting to keep more than one path.  So it seems
++ * best to make the decisions here and record them in the path's
++ * skip_mark_restore and materialize_inner fields.
++ *
++ * Mark/restore overhead is usually required, but can be skipped if we know
++ * that the executor need find only one match per outer tuple, and that the
++ * mergeclauses are sufficient to identify a match.
++ *
++ * We materialize the inner path if we need mark/restore and either the inner
++ * path can't support mark/restore, or it's cheaper to use an interposed
++ * Material node to handle mark/restore.
+  *
+  * 'path' is already filled in except for the rows and cost fields and
+- *		materialize_inner
++ *		skip_mark_restore and materialize_inner
+  * 'workspace' is the result from initial_cost_mergejoin
+- * 'sjinfo' is extra info about the join for selectivity estimation
++ * 'extra' contains miscellaneous information about the join
+  */
+ void
+ final_cost_mergejoin(PlannerInfo *root, MergePath *path,
+ 					 JoinCostWorkspace *workspace,
+-					 SpecialJoinInfo *sjinfo)
++					 JoinPathExtraData *extra)
+ {
+ 	Path	   *outer_path = path->jpath.outerjoinpath;
+ 	Path	   *inner_path = path->jpath.innerjoinpath;
+@@ -2449,6 +2466,21 @@ final_cost_mergejoin(PlannerInfo *root, MergePath *path,
+ 	qp_qual_cost.startup -= merge_qual_cost.startup;
+ 	qp_qual_cost.per_tuple -= merge_qual_cost.per_tuple;
+ 
++	/*
++	 * With a SEMI or ANTI join, or if the innerrel is known unique, the
++	 * executor will stop scanning for matches after the first match.  When
++	 * all the joinclauses are merge clauses, this means we don't ever need to
++	 * back up the merge, and so we can skip mark/restore overhead.
++	 */
++	if ((path->jpath.jointype == JOIN_SEMI ||
++		 path->jpath.jointype == JOIN_ANTI ||
++		 extra->inner_unique) &&
++		(list_length(path->jpath.joinrestrictinfo) ==
++		 list_length(path->path_mergeclauses)))
++		path->skip_mark_restore = true;
++	else
++		path->skip_mark_restore = false;
++
+ 	/*
+ 	 * Get approx # tuples passing the mergequals.  We use approx_tuple_count
+ 	 * here because we need an estimate done with JOIN_INNER semantics.
+@@ -2479,9 +2511,9 @@ final_cost_mergejoin(PlannerInfo *root, MergePath *path,
+ 	 * computations?
+ 	 *
+ 	 * The whole issue is moot if we are working from a unique-ified outer
+-	 * input.
++	 * input, or if we know we don't need to mark/restore at all.
+ 	 */
+-	if (IsA(outer_path, UniquePath))
++	if (IsA(outer_path, UniquePath) ||path->skip_mark_restore)
+ 		rescannedtuples = 0;
+ 	else
+ 	{
+@@ -2520,11 +2552,17 @@ final_cost_mergejoin(PlannerInfo *root, MergePath *path,
+ 	mat_inner_cost = inner_run_cost +
+ 		cpu_operator_cost * inner_path_rows * rescanratio;
+ 
++	/*
++	 * If we don't need mark/restore at all, we don't need materialization.
++	 */
++	if (path->skip_mark_restore)
++		path->materialize_inner = false;
++
+ 	/*
+ 	 * Prefer materializing if it looks cheaper, unless the user has asked to
+ 	 * suppress materialization.
+ 	 */
+-	if (enable_material && mat_inner_cost < bare_inner_cost)
++	else if (enable_material && mat_inner_cost < bare_inner_cost)
+ 		path->materialize_inner = true;
+ 
+ 	/*
+@@ -2685,16 +2723,14 @@ cached_scansel(PlannerInfo *root, RestrictInfo *rinfo, PathKey *pathkey)
+  * 'hashclauses' is the list of joinclauses to be used as hash clauses
+  * 'outer_path' is the outer input to the join
+  * 'inner_path' is the inner input to the join
+- * 'sjinfo' is extra info about the join for selectivity estimation
+- * 'semifactors' contains valid data if jointype is SEMI or ANTI
++ * 'extra' contains miscellaneous information about the join
+  */
+ void
+ initial_cost_hashjoin(PlannerInfo *root, JoinCostWorkspace *workspace,
+ 					  JoinType jointype,
+ 					  List *hashclauses,
+ 					  Path *outer_path, Path *inner_path,
+-					  SpecialJoinInfo *sjinfo,
+-					  SemiAntiJoinFactors *semifactors)
++					  JoinPathExtraData *extra)
+ {
+ 	Cost		startup_cost = 0;
+ 	Cost		run_cost = 0;
+@@ -2779,14 +2815,12 @@ initial_cost_hashjoin(PlannerInfo *root, JoinCostWorkspace *workspace,
+  * 'path' is already filled in except for the rows and cost fields and
+  *		num_batches
+  * 'workspace' is the result from initial_cost_hashjoin
+- * 'sjinfo' is extra info about the join for selectivity estimation
+- * 'semifactors' contains valid data if path->jointype is SEMI or ANTI
++ * 'extra' contains miscellaneous information about the join
+  */
+ void
+ final_cost_hashjoin(PlannerInfo *root, HashPath *path,
+ 					JoinCostWorkspace *workspace,
+-					SpecialJoinInfo *sjinfo,
+-					SemiAntiJoinFactors *semifactors)
++					JoinPathExtraData *extra)
+ {
+ 	Path	   *outer_path = path->jpath.outerjoinpath;
+ 	Path	   *inner_path = path->jpath.innerjoinpath;
+@@ -2912,13 +2946,16 @@ final_cost_hashjoin(PlannerInfo *root, HashPath *path,
+ 
+ 	/* CPU costs */
+ 
+-	if (path->jpath.jointype == JOIN_SEMI || path->jpath.jointype == JOIN_ANTI)
++	if (path->jpath.jointype == JOIN_SEMI ||
++		path->jpath.jointype == JOIN_ANTI ||
++		extra->inner_unique)
+ 	{
+ 		double		outer_matched_rows;
+ 		Selectivity inner_scan_frac;
+ 
+ 		/*
+-		 * SEMI or ANTI join: executor will stop after first match.
++		 * With a SEMI or ANTI join, or if the innerrel is known unique, the
++		 * executor will stop after the first match.
+ 		 *
+ 		 * For an outer-rel row that has at least one match, we can expect the
+ 		 * bucket scan to stop after a fraction 1/(match_count+1) of the
+@@ -2928,8 +2965,8 @@ final_cost_hashjoin(PlannerInfo *root, HashPath *path,
+ 		 * to clamp inner_scan_frac to at most 1.0; but since match_count is
+ 		 * at least 1, no such clamp is needed now.)
+ 		 */
+-		outer_matched_rows = rint(outer_path_rows * semifactors->outer_match_frac);
+-		inner_scan_frac = 2.0 / (semifactors->match_count + 1.0);
++		outer_matched_rows = rint(outer_path_rows * extra->semifactors.outer_match_frac);
++		inner_scan_frac = 2.0 / (extra->semifactors.match_count + 1.0);
+ 
+ 		startup_cost += hash_qual_cost.startup;
+ 		run_cost += hash_qual_cost.per_tuple * outer_matched_rows *
+@@ -3495,11 +3532,12 @@ get_restriction_qual_cost(PlannerInfo *root, RelOptInfo *baserel,
+ 
+ /*
+  * compute_semi_anti_join_factors
+- *	  Estimate how much of the inner input a SEMI or ANTI join
++ *	  Estimate how much of the inner input a SEMI, ANTI, or inner_unique join
+  *	  can be expected to scan.
+  *
+  * In a hash or nestloop SEMI/ANTI join, the executor will stop scanning
+  * inner rows as soon as it finds a match to the current outer row.
++ * The same happens if we have detected the inner rel is unique.
+  * We should therefore adjust some of the cost components for this effect.
+  * This function computes some estimates needed for these adjustments.
+  * These estimates will be the same regardless of the particular paths used
+@@ -3509,7 +3547,7 @@ get_restriction_qual_cost(PlannerInfo *root, RelOptInfo *baserel,
+  * Input parameters:
+  *	outerrel: outer relation under consideration
+  *	innerrel: inner relation under consideration
+- *	jointype: must be JOIN_SEMI or JOIN_ANTI
++ *	jointype: if not JOIN_SEMI or JOIN_ANTI, we assume it's inner_unique
+  *	sjinfo: SpecialJoinInfo relevant to this join
+  *	restrictlist: join quals
+  * Output parameters:
+@@ -3531,16 +3569,14 @@ compute_semi_anti_join_factors(PlannerInfo *root,
+ 	List	   *joinquals;
+ 	ListCell   *l;
+ 
+-	/* Should only be called in these cases */
+-	Assert(jointype == JOIN_SEMI || jointype == JOIN_ANTI);
+-
+ 	/*
+ 	 * In an ANTI join, we must ignore clauses that are "pushed down", since
+ 	 * those won't affect the match logic.  In a SEMI join, we do not
+ 	 * distinguish joinquals from "pushed down" quals, so just use the whole
+-	 * restrictinfo list.
++	 * restrictinfo list.  For other outer join types, we should consider only
++	 * non-pushed-down quals, so that this devolves to an IS_OUTER_JOIN check.
+ 	 */
+-	if (jointype == JOIN_ANTI)
++	if (IS_OUTER_JOIN(jointype))
+ 	{
+ 		joinquals = NIL;
+ 		foreach(l, restrictlist)
+@@ -3561,7 +3597,7 @@ compute_semi_anti_join_factors(PlannerInfo *root,
+ 	jselec = clauselist_selectivity(root,
+ 									joinquals,
+ 									0,
+-									jointype,
++							 (jointype == JOIN_ANTI) ? JOIN_ANTI : JOIN_SEMI,
+ 									sjinfo);
+ 
+ 	/*
+@@ -3588,7 +3624,7 @@ compute_semi_anti_join_factors(PlannerInfo *root,
+ 									&norm_sjinfo);
+ 
+ 	/* Avoid leaking a lot of ListCells */
+-	if (jointype == JOIN_ANTI)
++	if (IS_OUTER_JOIN(jointype))
+ 		list_free(joinquals);
+ 
+ 	/*
+diff --git a/src/backend/optimizer/path/joinpath.c b/src/backend/optimizer/path/joinpath.c
+index 1d1a3f1fe7..2b70d6ba2a 100644
+--- a/src/backend/optimizer/path/joinpath.c
++++ b/src/backend/optimizer/path/joinpath.c
+@@ -21,6 +21,7 @@
+ #include "optimizer/cost.h"
+ #include "optimizer/pathnode.h"
+ #include "optimizer/paths.h"
++#include "optimizer/planmain.h"
+ 
+ /* Hook for plugins to get control in add_paths_to_joinrel() */
+ set_join_pathlist_hook_type set_join_pathlist_hook = NULL;
+@@ -93,6 +94,49 @@ add_paths_to_joinrel(PlannerInfo *root,
+ 	extra.sjinfo = sjinfo;
+ 	extra.param_source_rels = NULL;
+ 
++	/*
++	 * See if the inner relation is provably unique for this outer rel.
++	 *
++	 * We have some special cases: for JOIN_SEMI and JOIN_ANTI, it doesn't
++	 * matter since the executor can make the equivalent optimization anyway;
++	 * we need not expend planner cycles on proofs.  For JOIN_UNIQUE_INNER, we
++	 * must be considering a semijoin whose inner side is not provably unique
++	 * (else reduce_unique_semijoins would've simplified it), so there's no
++	 * point in calling innerrel_is_unique.  However, if the LHS covers all of
++	 * the semijoin's min_lefthand, then it's appropriate to set inner_unique
++	 * because the path produced by create_unique_path will be unique relative
++	 * to the LHS.  (If we have an LHS that's only part of the min_lefthand,
++	 * that is *not* true.)  For JOIN_UNIQUE_OUTER, pass JOIN_INNER to avoid
++	 * letting that value escape this module.
++	 */
++	switch (jointype)
++	{
++		case JOIN_SEMI:
++		case JOIN_ANTI:
++			extra.inner_unique = false; /* well, unproven */
++			break;
++		case JOIN_UNIQUE_INNER:
++			extra.inner_unique = bms_is_subset(sjinfo->min_lefthand,
++											   outerrel->relids);
++			break;
++		case JOIN_UNIQUE_OUTER:
++			extra.inner_unique = innerrel_is_unique(root,
++													outerrel->relids,
++													innerrel,
++													JOIN_INNER,
++													restrictlist,
++													false);
++			break;
++		default:
++			extra.inner_unique = innerrel_is_unique(root,
++													outerrel->relids,
++													innerrel,
++													jointype,
++													restrictlist,
++													false);
++			break;
++	}
++
+ 	/*
+ 	 * Find potential mergejoin clauses.  We can skip this if we are not
+ 	 * interested in doing a mergejoin.  However, mergejoin may be our only
+@@ -109,10 +153,10 @@ add_paths_to_joinrel(PlannerInfo *root,
+ 														  &mergejoin_allowed);
+ 
+ 	/*
+-	 * If it's SEMI or ANTI join, compute correction factors for cost
+-	 * estimation.  These will be the same for all paths.
++	 * If it's SEMI, ANTI, or inner_unique join, compute correction factors
++	 * for cost estimation.  These will be the same for all paths.
+ 	 */
+-	if (jointype == JOIN_SEMI || jointype == JOIN_ANTI)
++	if (jointype == JOIN_SEMI || jointype == JOIN_ANTI || extra.inner_unique)
+ 		compute_semi_anti_join_factors(root, outerrel, innerrel,
+ 									   jointype, sjinfo, restrictlist,
+ 									   &extra.semifactors);
+@@ -309,8 +353,7 @@ try_nestloop_path(PlannerInfo *root,
+ 	 * methodology worthwhile.
+ 	 */
+ 	initial_cost_nestloop(root, &workspace, jointype,
+-						  outer_path, inner_path,
+-						  extra->sjinfo, &extra->semifactors);
++						  outer_path, inner_path, extra);
+ 
+ 	if (add_path_precheck(joinrel,
+ 						  workspace.startup_cost, workspace.total_cost,
+@@ -321,8 +364,7 @@ try_nestloop_path(PlannerInfo *root,
+ 									  joinrel,
+ 									  jointype,
+ 									  &workspace,
+-									  extra->sjinfo,
+-									  &extra->semifactors,
++									  extra,
+ 									  outer_path,
+ 									  inner_path,
+ 									  extra->restrictlist,
+@@ -372,8 +414,7 @@ try_partial_nestloop_path(PlannerInfo *root,
+ 	 * cost.  Bail out right away if it looks terrible.
+ 	 */
+ 	initial_cost_nestloop(root, &workspace, jointype,
+-						  outer_path, inner_path,
+-						  extra->sjinfo, &extra->semifactors);
++						  outer_path, inner_path, extra);
+ 	if (!add_partial_path_precheck(joinrel, workspace.total_cost, pathkeys))
+ 		return;
+ 
+@@ -383,8 +424,7 @@ try_partial_nestloop_path(PlannerInfo *root,
+ 										  joinrel,
+ 										  jointype,
+ 										  &workspace,
+-										  extra->sjinfo,
+-										  &extra->semifactors,
++										  extra,
+ 										  outer_path,
+ 										  inner_path,
+ 										  extra->restrictlist,
+@@ -443,7 +483,7 @@ try_mergejoin_path(PlannerInfo *root,
+ 	initial_cost_mergejoin(root, &workspace, jointype, mergeclauses,
+ 						   outer_path, inner_path,
+ 						   outersortkeys, innersortkeys,
+-						   extra->sjinfo);
++						   extra);
+ 
+ 	if (add_path_precheck(joinrel,
+ 						  workspace.startup_cost, workspace.total_cost,
+@@ -454,7 +494,7 @@ try_mergejoin_path(PlannerInfo *root,
+ 									   joinrel,
+ 									   jointype,
+ 									   &workspace,
+-									   extra->sjinfo,
++									   extra,
+ 									   outer_path,
+ 									   inner_path,
+ 									   extra->restrictlist,
+@@ -507,8 +547,7 @@ try_hashjoin_path(PlannerInfo *root,
+ 	 * never have any output pathkeys, per comments in create_hashjoin_path.
+ 	 */
+ 	initial_cost_hashjoin(root, &workspace, jointype, hashclauses,
+-						  outer_path, inner_path,
+-						  extra->sjinfo, &extra->semifactors);
++						  outer_path, inner_path, extra);
+ 
+ 	if (add_path_precheck(joinrel,
+ 						  workspace.startup_cost, workspace.total_cost,
+@@ -519,8 +558,7 @@ try_hashjoin_path(PlannerInfo *root,
+ 									  joinrel,
+ 									  jointype,
+ 									  &workspace,
+-									  extra->sjinfo,
+-									  &extra->semifactors,
++									  extra,
+ 									  outer_path,
+ 									  inner_path,
+ 									  extra->restrictlist,
+@@ -570,8 +608,7 @@ try_partial_hashjoin_path(PlannerInfo *root,
+ 	 * cost.  Bail out right away if it looks terrible.
+ 	 */
+ 	initial_cost_hashjoin(root, &workspace, jointype, hashclauses,
+-						  outer_path, inner_path,
+-						  extra->sjinfo, &extra->semifactors);
++						  outer_path, inner_path, extra);
+ 	if (!add_partial_path_precheck(joinrel, workspace.total_cost, NIL))
+ 		return;
+ 
+@@ -581,8 +618,7 @@ try_partial_hashjoin_path(PlannerInfo *root,
+ 										  joinrel,
+ 										  jointype,
+ 										  &workspace,
+-										  extra->sjinfo,
+-										  &extra->semifactors,
++										  extra,
+ 										  outer_path,
+ 										  inner_path,
+ 										  extra->restrictlist,
+diff --git a/src/backend/optimizer/plan/analyzejoins.c b/src/backend/optimizer/plan/analyzejoins.c
+index 614fd293ed..739dfb8d91 100644
+--- a/src/backend/optimizer/plan/analyzejoins.c
++++ b/src/backend/optimizer/plan/analyzejoins.c
+@@ -41,6 +41,11 @@ static bool rel_supports_distinctness(PlannerInfo *root, RelOptInfo *rel);
+ static bool rel_is_distinct_for(PlannerInfo *root, RelOptInfo *rel,
+ 					List *clause_list);
+ static Oid	distinct_col_search(int colno, List *colnos, List *opids);
++static bool is_innerrel_unique_for(PlannerInfo *root,
++					   Relids outerrelids,
++					   RelOptInfo *innerrel,
++					   JoinType jointype,
++					   List *restrictlist);
+ 
+ 
+ /*
+@@ -490,6 +495,88 @@ remove_rel_from_joinlist(List *joinlist, int relid, int *nremoved)
+ }
+ 
+ 
++/*
++ * reduce_unique_semijoins
++ *		Check for semijoins that can be simplified to plain inner joins
++ *		because the inner relation is provably unique for the join clauses.
++ *
++ * Ideally this would happen during reduce_outer_joins, but we don't have
++ * enough information at that point.
++ *
++ * To perform the strength reduction when applicable, we need only delete
++ * the semijoin's SpecialJoinInfo from root->join_info_list.  (We don't
++ * bother fixing the join type attributed to it in the query jointree,
++ * since that won't be consulted again.)
++ */
++void
++reduce_unique_semijoins(PlannerInfo *root)
++{
++	ListCell   *lc;
++	ListCell   *next;
++
++	/*
++	 * Scan the join_info_list to find semijoins.  We can't use foreach
++	 * because we may delete the current cell.
++	 */
++	for (lc = list_head(root->join_info_list); lc != NULL; lc = next)
++	{
++		SpecialJoinInfo *sjinfo = (SpecialJoinInfo *) lfirst(lc);
++		int			innerrelid;
++		RelOptInfo *innerrel;
++		Relids		joinrelids;
++		List	   *restrictlist;
++
++		next = lnext(lc);
++
++		/*
++		 * Must be a non-delaying semijoin to a single baserel, else we aren't
++		 * going to be able to do anything with it.  (It's probably not
++		 * possible for delay_upper_joins to be set on a semijoin, but we
++		 * might as well check.)
++		 */
++		if (sjinfo->jointype != JOIN_SEMI ||
++			sjinfo->delay_upper_joins)
++			continue;
++
++		if (!bms_get_singleton_member(sjinfo->min_righthand, &innerrelid))
++			continue;
++
++		innerrel = find_base_rel(root, innerrelid);
++
++		/*
++		 * Before we trouble to run generate_join_implied_equalities, make a
++		 * quick check to eliminate cases in which we will surely be unable to
++		 * prove uniqueness of the innerrel.
++		 */
++		if (!rel_supports_distinctness(root, innerrel))
++			continue;
++
++		/* Compute the relid set for the join we are considering */
++		joinrelids = bms_union(sjinfo->min_lefthand, sjinfo->min_righthand);
++
++		/*
++		 * Since we're only considering a single-rel RHS, any join clauses it
++		 * has must be clauses linking it to the semijoin's min_lefthand.  We
++		 * can also consider EC-derived join clauses.
++		 */
++		restrictlist =
++			list_concat(generate_join_implied_equalities(root,
++														 joinrelids,
++														 sjinfo->min_lefthand,
++														 innerrel),
++						innerrel->joininfo);
++
++		/* Test whether the innerrel is unique for those clauses. */
++		if (!innerrel_is_unique(root, sjinfo->min_lefthand, innerrel,
++								JOIN_SEMI, restrictlist, true))
++			continue;
++
++		/* OK, remove the SpecialJoinInfo from the list. */
++		root->join_info_list = list_delete_ptr(root->join_info_list, sjinfo);
++	}
++}
++
++
+ /*
+  * rel_supports_distinctness
+  *		Could the relation possibly be proven distinct on some set of columns?
+@@ -850,3 +937,184 @@ distinct_col_search(int colno, List *colnos, List *opids)
+ 	}
+ 	return InvalidOid;
+ }
++
++
++/*
++ * innerrel_is_unique
++ *	  Check if the innerrel provably contains at most one tuple matching any
++ *	  tuple from the outerrel, based on join clauses in the 'restrictlist'.
++ *
++ * We need an actual RelOptInfo for the innerrel, but it's sufficient to
++ * identify the outerrel by its Relids.  This asymmetry supports use of this
++ * function before joinrels have been built.
++ *
++ * The proof must be made based only on clauses that will be "joinquals"
++ * rather than "otherquals" at execution.  For an inner join there's no
++ * difference; but if the join is outer, we must ignore pushed-down quals,
++ * as those will become "otherquals".  Note that this means the answer might
++ * vary depending on whether IS_OUTER_JOIN(jointype); since we cache the
++ * answer without regard to that, callers must take care not to call this
++ * with jointypes that would be classified differently by IS_OUTER_JOIN().
++ *
++ * The actual proof is undertaken by is_innerrel_unique_for(); this function
++ * is a frontend that is mainly concerned with caching the answers.
++ * In particular, the force_cache argument allows overriding the internal
++ * heuristic about whether to cache negative answers; it should be "true"
++ * if making an inquiry that is not part of the normal bottom-up join search
++ * sequence.
++ */
++bool
++innerrel_is_unique(PlannerInfo *root,
++				   Relids outerrelids,
++				   RelOptInfo *innerrel,
++				   JoinType jointype,
++				   List *restrictlist,
++				   bool force_cache)
++{
++	MemoryContext old_context;
++	ListCell   *lc;
++
++	/* Certainly can't prove uniqueness when there are no joinclauses */
++	if (restrictlist == NIL)
++		return false;
++
++	/*
++	 * Make a quick check to eliminate cases in which we will surely be unable
++	 * to prove uniqueness of the innerrel.
++	 */
++	if (!rel_supports_distinctness(root, innerrel))
++		return false;
++
++	/*
++	 * Query the cache to see if we've managed to prove that innerrel is
++	 * unique for any subset of this outerrel.  We don't need an exact match,
++	 * as extra outerrels can't make the innerrel any less unique (or more
++	 * formally, the restrictlist for a join to a superset outerrel must be a
++	 * superset of the conditions we successfully used before).
++	 */
++	foreach(lc, innerrel->unique_for_rels)
++	{
++		Relids		unique_for_rels = (Relids) lfirst(lc);
++
++		if (bms_is_subset(unique_for_rels, outerrelids))
++			return true;		/* Success! */
++	}
++
++	/*
++	 * Conversely, we may have already determined that this outerrel, or some
++	 * superset thereof, cannot prove this innerrel to be unique.
++	 */
++	foreach(lc, innerrel->non_unique_for_rels)
++	{
++		Relids		unique_for_rels = (Relids) lfirst(lc);
++
++		if (bms_is_subset(outerrelids, unique_for_rels))
++			return false;
++	}
++
++	/* No cached information, so try to make the proof. */
++	if (is_innerrel_unique_for(root, outerrelids, innerrel,
++							   jointype, restrictlist))
++	{
++		/*
++		 * Cache the positive result for future probes, being sure to keep it
++		 * in the planner_cxt even if we are working in GEQO.
++		 *
++		 * Note: one might consider trying to isolate the minimal subset of
++		 * the outerrels that proved the innerrel unique.  But it's not worth
++		 * the trouble, because the planner builds up joinrels incrementally
++		 * and so we'll see the minimally sufficient outerrels before any
++		 * supersets of them anyway.
++		 */
++		old_context = MemoryContextSwitchTo(root->planner_cxt);
++		innerrel->unique_for_rels = lappend(innerrel->unique_for_rels,
++											bms_copy(outerrelids));
++		MemoryContextSwitchTo(old_context);
++
++		return true;			/* Success! */
++	}
++	else
++	{
++		/*
++		 * None of the join conditions for outerrel proved innerrel unique, so
++		 * we can safely reject this outerrel or any subset of it in future
++		 * checks.
++		 *
++		 * However, in normal planning mode, caching this knowledge is totally
++		 * pointless; it won't be queried again, because we build up joinrels
++		 * from smaller to larger.  It is useful in GEQO mode, where the
++		 * knowledge can be carried across successive planning attempts; and
++		 * it's likely to be useful when using join-search plugins, too. Hence
++		 * cache when join_search_private is non-NULL.  (Yeah, that's a hack,
++		 * but it seems reasonable.)
++		 *
++		 * Also, allow callers to override that heuristic and force caching;
++		 * that's useful for reduce_unique_semijoins, which calls here before
++		 * the normal join search starts.
++		 */
++		if (force_cache || root->join_search_private)
++		{
++			old_context = MemoryContextSwitchTo(root->planner_cxt);
++			innerrel->non_unique_for_rels =
++				lappend(innerrel->non_unique_for_rels,
++						bms_copy(outerrelids));
++			MemoryContextSwitchTo(old_context);
++		}
++
++		return false;
++	}
++}
++
++/*
++ * is_innerrel_unique_for
++ *	  Check if the innerrel provably contains at most one tuple matching any
++ *	  tuple from the outerrel, based on join clauses in the 'restrictlist'.
++ */
++static bool
++is_innerrel_unique_for(PlannerInfo *root,
++					   Relids outerrelids,
++					   RelOptInfo *innerrel,
++					   JoinType jointype,
++					   List *restrictlist)
++{
++	List	   *clause_list = NIL;
++	ListCell   *lc;
++
++	/*
++	 * Search for mergejoinable clauses that constrain the inner rel against
++	 * the outer rel.  If an operator is mergejoinable then it behaves like
++	 * equality for some btree opclass, so it's what we want.  The
++	 * mergejoinability test also eliminates clauses containing volatile
++	 * functions, which we couldn't depend on.
++	 */
++	foreach(lc, restrictlist)
++	{
++		RestrictInfo *restrictinfo = (RestrictInfo *) lfirst(lc);
++
++		/*
++		 * As noted above, if it's a pushed-down clause and we're at an outer
++		 * join, we can't use it.
++		 */
++		if (restrictinfo->is_pushed_down && IS_OUTER_JOIN(jointype))
++			continue;
++
++		/* Ignore if it's not a mergejoinable clause */
++		if (!restrictinfo->can_join ||
++			restrictinfo->mergeopfamilies == NIL)
++			continue;			/* not mergejoinable */
++
++		/*
++		 * Check if clause has the form "outer op inner" or "inner op outer",
++		 * and if so mark which side is inner.
++		 */
++		if (!clause_sides_match_join(restrictinfo, outerrelids,
++									 innerrel->relids))
++			continue;			/* no good for these input relations */
++
++		/* OK, add to list */
++		clause_list = lappend(clause_list, restrictinfo);
++	}
++
++	/* Let rel_is_distinct_for() do the hard work */
++	return rel_is_distinct_for(root, innerrel, clause_list);
++}
+diff --git a/src/backend/optimizer/plan/createplan.c b/src/backend/optimizer/plan/createplan.c
+index e36234336b..8ccb8fba5e 100644
+--- a/src/backend/optimizer/plan/createplan.c
++++ b/src/backend/optimizer/plan/createplan.c
+@@ -204,12 +204,12 @@ static BitmapOr *make_bitmap_or(List *bitmapplans);
+ static NestLoop *make_nestloop(List *tlist,
+ 			  List *joinclauses, List *otherclauses, List *nestParams,
+ 			  Plan *lefttree, Plan *righttree,
+-			  JoinType jointype);
++			  JoinType jointype, bool inner_unique);
+ static HashJoin *make_hashjoin(List *tlist,
+ 			  List *joinclauses, List *otherclauses,
+ 			  List *hashclauses,
+ 			  Plan *lefttree, Plan *righttree,
+-			  JoinType jointype);
++			  JoinType jointype, bool inner_unique);
+ static Hash *make_hash(Plan *lefttree,
+ 		  Oid skewTable,
+ 		  AttrNumber skewColumn,
+@@ -224,7 +224,8 @@ static MergeJoin *make_mergejoin(List *tlist,
+ 			   int *mergestrategies,
+ 			   bool *mergenullsfirst,
+ 			   Plan *lefttree, Plan *righttree,
+-			   JoinType jointype);
++			   JoinType jointype, bool inner_unique,
++			   bool skip_mark_restore);
+ static Sort *make_sort(Plan *lefttree, int numCols,
+ 		  AttrNumber *sortColIdx, Oid *sortOperators,
+ 		  Oid *collations, bool *nullsFirst);
+@@ -3508,7 +3509,8 @@ create_nestloop_plan(PlannerInfo *root,
+ 							  nestParams,
+ 							  outer_plan,
+ 							  inner_plan,
+-							  best_path->jointype);
++							  best_path->jointype,
++							  best_path->inner_unique);
+ 
+ 	copy_generic_path_info(&join_plan->join.plan, &best_path->path);
+ 
+@@ -3811,7 +3813,9 @@ create_mergejoin_plan(PlannerInfo *root,
+ 							   mergenullsfirst,
+ 							   outer_plan,
+ 							   inner_plan,
+-							   best_path->jpath.jointype);
++							   best_path->jpath.jointype,
++							   best_path->jpath.inner_unique,
++							   best_path->skip_mark_restore);
+ 
+ 	/* Costs of sort and material steps are included in path cost already */
+ 	copy_generic_path_info(&join_plan->join.plan, &best_path->jpath.path);
+@@ -3951,7 +3955,8 @@ create_hashjoin_plan(PlannerInfo *root,
+ 							  hashclauses,
+ 							  outer_plan,
+ 							  (Plan *) hash_plan,
+-							  best_path->jpath.jointype);
++							  best_path->jpath.jointype,
++							  best_path->jpath.inner_unique);
+ 
+ 	copy_generic_path_info(&join_plan->join.plan, &best_path->jpath.path);
+ 
+@@ -5051,7 +5056,8 @@ make_nestloop(List *tlist,
+ 			  List *nestParams,
+ 			  Plan *lefttree,
+ 			  Plan *righttree,
+-			  JoinType jointype)
++			  JoinType jointype,
++			  bool inner_unique)
+ {
+ 	NestLoop   *node = makeNode(NestLoop);
+ 	Plan	   *plan = &node->join.plan;
+@@ -5061,6 +5067,7 @@ make_nestloop(List *tlist,
+ 	plan->lefttree = lefttree;
+ 	plan->righttree = righttree;
+ 	node->join.jointype = jointype;
++	node->join.inner_unique = inner_unique;
+ 	node->join.joinqual = joinclauses;
+ 	node->nestParams = nestParams;
+ 
+@@ -5074,7 +5081,8 @@ make_hashjoin(List *tlist,
+ 			  List *hashclauses,
+ 			  Plan *lefttree,
+ 			  Plan *righttree,
+-			  JoinType jointype)
++			  JoinType jointype,
++			  bool inner_unique)
+ {
+ 	HashJoin   *node = makeNode(HashJoin);
+ 	Plan	   *plan = &node->join.plan;
+@@ -5085,6 +5093,7 @@ make_hashjoin(List *tlist,
+ 	plan->righttree = righttree;
+ 	node->hashclauses = hashclauses;
+ 	node->join.jointype = jointype;
++	node->join.inner_unique = inner_unique;
+ 	node->join.joinqual = joinclauses;
+ 
+ 	return node;
+@@ -5126,7 +5135,9 @@ make_mergejoin(List *tlist,
+ 			   bool *mergenullsfirst,
+ 			   Plan *lefttree,
+ 			   Plan *righttree,
+-			   JoinType jointype)
++			   JoinType jointype,
++			   bool inner_unique,
++			   bool skip_mark_restore)
+ {
+ 	MergeJoin  *node = makeNode(MergeJoin);
+ 	Plan	   *plan = &node->join.plan;
+@@ -5135,12 +5146,14 @@ make_mergejoin(List *tlist,
+ 	plan->qual = otherclauses;
+ 	plan->lefttree = lefttree;
+ 	plan->righttree = righttree;
++	node->skip_mark_restore = skip_mark_restore;
+ 	node->mergeclauses = mergeclauses;
+ 	node->mergeFamilies = mergefamilies;
+ 	node->mergeCollations = mergecollations;
+ 	node->mergeStrategies = mergestrategies;
+ 	node->mergeNullsFirst = mergenullsfirst;
+ 	node->join.jointype = jointype;
++	node->join.inner_unique = inner_unique;
+ 	node->join.joinqual = joinclauses;
+ 
+ 	return node;
+diff --git a/src/backend/optimizer/plan/planmain.c b/src/backend/optimizer/plan/planmain.c
+index 6680935b31..b664bdba74 100644
+--- a/src/backend/optimizer/plan/planmain.c
++++ b/src/backend/optimizer/plan/planmain.c
+@@ -193,6 +193,12 @@ query_planner(PlannerInfo *root, List *tlist,
+ 	 */
+ 	joinlist = remove_useless_joins(root, joinlist);
+ 
++	/*
++	 * Also, reduce any semijoins with unique inner rels to plain inner joins.
++	 * Likewise, this can't be done until now for lack of needed info.
++	 */
++	reduce_unique_semijoins(root);
++
+ 	/*
+ 	 * Now distribute "placeholders" to base rels as needed.  This has to be
+ 	 * done after join removal because removal could change whether a
+diff --git a/src/backend/optimizer/util/pathnode.c b/src/backend/optimizer/util/pathnode.c
+index a2a1deba74..2b328f5ff6 100644
+--- a/src/backend/optimizer/util/pathnode.c
++++ b/src/backend/optimizer/util/pathnode.c
+@@ -1940,8 +1940,7 @@ calc_non_nestloop_required_outer(Path *outer_path, Path *inner_path)
+  * 'joinrel' is the join relation.
+  * 'jointype' is the type of join required
+  * 'workspace' is the result from initial_cost_nestloop
+- * 'sjinfo' is extra info about the join for selectivity estimation
+- * 'semifactors' contains valid data if jointype is SEMI or ANTI
++ * 'extra' contains various information about the join
+  * 'outer_path' is the outer path
+  * 'inner_path' is the inner path
+  * 'restrict_clauses' are the RestrictInfo nodes to apply at the join
+@@ -1955,8 +1954,7 @@ create_nestloop_path(PlannerInfo *root,
+ 					 RelOptInfo *joinrel,
+ 					 JoinType jointype,
+ 					 JoinCostWorkspace *workspace,
+-					 SpecialJoinInfo *sjinfo,
+-					 SemiAntiJoinFactors *semifactors,
++					 JoinPathExtraData *extra,
+ 					 Path *outer_path,
+ 					 Path *inner_path,
+ 					 List *restrict_clauses,
+@@ -2000,7 +1998,7 @@ create_nestloop_path(PlannerInfo *root,
+ 								  joinrel,
+ 								  outer_path,
+ 								  inner_path,
+-								  sjinfo,
++								  extra->sjinfo,
+ 								  required_outer,
+ 								  &restrict_clauses);
+ 	pathnode->path.parallel_aware = false;
+@@ -2010,11 +2008,12 @@ create_nestloop_path(PlannerInfo *root,
+ 	pathnode->path.parallel_workers = outer_path->parallel_workers;
+ 	pathnode->path.pathkeys = pathkeys;
+ 	pathnode->jointype = jointype;
++	pathnode->inner_unique = extra->inner_unique;
+ 	pathnode->outerjoinpath = outer_path;
+ 	pathnode->innerjoinpath = inner_path;
+ 	pathnode->joinrestrictinfo = restrict_clauses;
+ 
+-	final_cost_nestloop(root, pathnode, workspace, sjinfo, semifactors);
++	final_cost_nestloop(root, pathnode, workspace, extra);
+ 
+ 	return pathnode;
+ }
+@@ -2027,7 +2026,7 @@ create_nestloop_path(PlannerInfo *root,
+  * 'joinrel' is the join relation
+  * 'jointype' is the type of join required
+  * 'workspace' is the result from initial_cost_mergejoin
+- * 'sjinfo' is extra info about the join for selectivity estimation
++ * 'extra' contains various information about the join
+  * 'outer_path' is the outer path
+  * 'inner_path' is the inner path
+  * 'restrict_clauses' are the RestrictInfo nodes to apply at the join
+@@ -2043,7 +2042,7 @@ create_mergejoin_path(PlannerInfo *root,
+ 					  RelOptInfo *joinrel,
+ 					  JoinType jointype,
+ 					  JoinCostWorkspace *workspace,
+-					  SpecialJoinInfo *sjinfo,
++					  JoinPathExtraData *extra,
+ 					  Path *outer_path,
+ 					  Path *inner_path,
+ 					  List *restrict_clauses,
+@@ -2063,7 +2062,7 @@ create_mergejoin_path(PlannerInfo *root,
+ 								  joinrel,
+ 								  outer_path,
+ 								  inner_path,
+-								  sjinfo,
++								  extra->sjinfo,
+ 								  required_outer,
+ 								  &restrict_clauses);
+ 	pathnode->jpath.path.parallel_aware = false;
+@@ -2073,15 +2072,17 @@ create_mergejoin_path(PlannerInfo *root,
+ 	pathnode->jpath.path.parallel_workers = outer_path->parallel_workers;
+ 	pathnode->jpath.path.pathkeys = pathkeys;
+ 	pathnode->jpath.jointype = jointype;
++	pathnode->jpath.inner_unique = extra->inner_unique;
+ 	pathnode->jpath.outerjoinpath = outer_path;
+ 	pathnode->jpath.innerjoinpath = inner_path;
+ 	pathnode->jpath.joinrestrictinfo = restrict_clauses;
+ 	pathnode->path_mergeclauses = mergeclauses;
+ 	pathnode->outersortkeys = outersortkeys;
+ 	pathnode->innersortkeys = innersortkeys;
++	/* pathnode->skip_mark_restore will be set by final_cost_mergejoin */
+ 	/* pathnode->materialize_inner will be set by final_cost_mergejoin */
+ 
+-	final_cost_mergejoin(root, pathnode, workspace, sjinfo);
++	final_cost_mergejoin(root, pathnode, workspace, extra);
+ 
+ 	return pathnode;
+ }
+@@ -2093,8 +2094,7 @@ create_mergejoin_path(PlannerInfo *root,
+  * 'joinrel' is the join relation
+  * 'jointype' is the type of join required
+  * 'workspace' is the result from initial_cost_hashjoin
+- * 'sjinfo' is extra info about the join for selectivity estimation
+- * 'semifactors' contains valid data if jointype is SEMI or ANTI
++ * 'extra' contains various information about the join
+  * 'outer_path' is the cheapest outer path
+  * 'inner_path' is the cheapest inner path
+  * 'restrict_clauses' are the RestrictInfo nodes to apply at the join
+@@ -2107,8 +2107,7 @@ create_hashjoin_path(PlannerInfo *root,
+ 					 RelOptInfo *joinrel,
+ 					 JoinType jointype,
+ 					 JoinCostWorkspace *workspace,
+-					 SpecialJoinInfo *sjinfo,
+-					 SemiAntiJoinFactors *semifactors,
++					 JoinPathExtraData *extra,
+ 					 Path *outer_path,
+ 					 Path *inner_path,
+ 					 List *restrict_clauses,
+@@ -2125,7 +2124,7 @@ create_hashjoin_path(PlannerInfo *root,
+ 								  joinrel,
+ 								  outer_path,
+ 								  inner_path,
+-								  sjinfo,
++								  extra->sjinfo,
+ 								  required_outer,
+ 								  &restrict_clauses);
+ 	pathnode->jpath.path.parallel_aware = false;
+@@ -2147,13 +2146,14 @@ create_hashjoin_path(PlannerInfo *root,
+ 	 */
+ 	pathnode->jpath.path.pathkeys = NIL;
+ 	pathnode->jpath.jointype = jointype;
++	pathnode->jpath.inner_unique = extra->inner_unique;
+ 	pathnode->jpath.outerjoinpath = outer_path;
+ 	pathnode->jpath.innerjoinpath = inner_path;
+ 	pathnode->jpath.joinrestrictinfo = restrict_clauses;
+ 	pathnode->path_hashclauses = hashclauses;
+ 	/* final_cost_hashjoin will fill in pathnode->num_batches */
+ 
+-	final_cost_hashjoin(root, pathnode, workspace, sjinfo, semifactors);
++	final_cost_hashjoin(root, pathnode, workspace, extra);
+ 
+ 	return pathnode;
+ }
+diff --git a/src/backend/optimizer/util/relnode.c b/src/backend/optimizer/util/relnode.c
+index 23615f22e3..805569557f 100644
+--- a/src/backend/optimizer/util/relnode.c
++++ b/src/backend/optimizer/util/relnode.c
+@@ -132,6 +132,8 @@ build_simple_rel(PlannerInfo *root, int relid, RelOptKind reloptkind)
+ 	rel->useridiscurrent = false;
+ 	rel->fdwroutine = NULL;
+ 	rel->fdw_private = NULL;
++	rel->unique_for_rels = NIL;
++	rel->non_unique_for_rels = NIL;
+ 	rel->baserestrictinfo = NIL;
+ 	rel->baserestrictcost.startup = 0;
+ 	rel->baserestrictcost.per_tuple = 0;
+@@ -404,6 +406,8 @@ build_join_rel(PlannerInfo *root,
+ 	joinrel->useridiscurrent = false;
+ 	joinrel->fdwroutine = NULL;
+ 	joinrel->fdw_private = NULL;
++	joinrel->unique_for_rels = NIL;
++	joinrel->non_unique_for_rels = NIL;
+ 	joinrel->baserestrictinfo = NIL;
+ 	joinrel->baserestrictcost.startup = 0;
+ 	joinrel->baserestrictcost.per_tuple = 0;
+diff --git a/src/include/nodes/execnodes.h b/src/include/nodes/execnodes.h
+index 0f99ef16e3..64c7ee0e1b 100644
+--- a/src/include/nodes/execnodes.h
++++ b/src/include/nodes/execnodes.h
+@@ -1634,6 +1634,8 @@ typedef struct JoinState
+ {
+ 	PlanState	ps;
+ 	JoinType	jointype;
++	bool		single_match;	/* True if we should skip to next outer tuple
++								 * after finding one inner match */
+ 	List	   *joinqual;		/* JOIN quals (in addition to ps.qual) */
+ } JoinState;
+ 
+@@ -1659,6 +1661,7 @@ typedef struct NestLoopState
+  *		NumClauses		   number of mergejoinable join clauses
+  *		Clauses			   info for each mergejoinable clause
+  *		JoinState		   current state of ExecMergeJoin state machine
++ *		SkipMarkRestore    true if we may skip Mark and Restore operations
+  *		ExtraMarks		   true to issue extra Mark operations on inner scan
+  *		ConstFalseJoin	   true if we have a constant-false joinqual
+  *		FillOuter		   true if should emit unjoined outer tuples anyway
+@@ -1683,6 +1686,7 @@ typedef struct MergeJoinState
+ 	int			mj_NumClauses;
+ 	MergeJoinClause mj_Clauses; /* array of length mj_NumClauses */
+ 	int			mj_JoinState;
++	bool		mj_SkipMarkRestore;
+ 	bool		mj_ExtraMarks;
+ 	bool		mj_ConstFalseJoin;
+ 	bool		mj_FillOuter;
+diff --git a/src/include/nodes/plannodes.h b/src/include/nodes/plannodes.h
+index e2fbc7d5a7..575d51bb46 100644
+--- a/src/include/nodes/plannodes.h
++++ b/src/include/nodes/plannodes.h
+@@ -581,6 +581,7 @@ typedef struct CustomScan
+  *		Join node
+  *
+  * jointype:	rule for joining tuples from left and right subtrees
++ * inner_unique each outer tuple can match to no more than one inner tuple
+  * joinqual:	qual conditions that came from JOIN/ON or JOIN/USING
+  *				(plan.qual contains conditions that came from WHERE)
+  *
+@@ -591,12 +592,18 @@ typedef struct CustomScan
+  * (But plan.qual is still applied before actually returning a tuple.)
+  * For an outer join, only joinquals are allowed to be used as the merge
+  * or hash condition of a merge or hash join.
++ *
++ * inner_unique is set if the joinquals are such that no more than one inner
++ * tuple could match any given outer tuple.  This allows the executor to
++ * skip searching for additional matches.  (This must be provable from just
++ * the joinquals, ignoring plan.qual, due to where the executor tests it.)
+  * ----------------
+  */
+ typedef struct Join
+ {
+ 	Plan		plan;
+ 	JoinType	jointype;
++	bool		inner_unique;
+ 	List	   *joinqual;		/* JOIN quals (in addition to plan.qual) */
+ } Join;
+ 
+@@ -638,6 +645,7 @@ typedef struct NestLoopParam
+ typedef struct MergeJoin
+ {
+ 	Join		join;
++	bool		skip_mark_restore;		/* Can we skip mark/restore calls? */
+ 	List	   *mergeclauses;	/* mergeclauses as expression trees */
+ 	/* these are arrays, but have the same length as the mergeclauses list: */
+ 	Oid		   *mergeFamilies;	/* per-clause OIDs of btree opfamilies */
+diff --git a/src/include/nodes/relation.h b/src/include/nodes/relation.h
+index 3afea78905..372145b40c 100644
+--- a/src/include/nodes/relation.h
++++ b/src/include/nodes/relation.h
+@@ -433,6 +433,19 @@ typedef struct PlannerInfo
+  *		fdwroutine - function hooks for FDW, if foreign table (else NULL)
+  *		fdw_private - private state for FDW, if foreign table (else NULL)
+  *
++ * Two fields are used to cache knowledge acquired during the join search
++ * about whether this rel is provably unique when being joined to given other
++ * relation(s), ie, it can have at most one row matching any given row from
++ * that join relation.  Currently we only attempt such proofs, and thus only
++ * populate these fields, for base rels; but someday they might be used for
++ * join rels too:
++ *
++ *		unique_for_rels - list of Relid sets, each one being a set of other
++ *					rels for which this one has been proven unique
++ *		non_unique_for_rels - list of Relid sets, each one being a set of
++ *					other rels for which we have tried and failed to prove
++ *					this one unique
++ *
+  * The presence of the remaining fields depends on the restrictions
+  * and joins that the relation participates in:
+  *
+@@ -533,6 +546,10 @@ typedef struct RelOptInfo
+ 	struct FdwRoutine *fdwroutine;
+ 	void	   *fdw_private;
+ 
++	/* cache space for remembering if we have proven this relation unique */
++	List	   *unique_for_rels;	/* known unique for these other relid set(s) */
++	List	   *non_unique_for_rels;	/* known not unique for these set(s) */
++
+ 	/* used by various scans and joins: */
+ 	List	   *baserestrictinfo;		/* RestrictInfo structures (if base
+ 										 * rel) */
+@@ -1207,6 +1224,9 @@ typedef struct JoinPath
+ 
+ 	JoinType	jointype;
+ 
++	bool		inner_unique;	/* each outer tuple provably matches no more
++								 * than one inner tuple */
++
+ 	Path	   *outerjoinpath;	/* path for the outer side of the join */
+ 	Path	   *innerjoinpath;	/* path for the inner side of the join */
+ 
+@@ -1249,6 +1269,13 @@ typedef JoinPath NestPath;
+  * mergejoin.  If it is not NIL then it is a PathKeys list describing
+  * the ordering that must be created by an explicit Sort node.
+  *
++ * skip_mark_restore is TRUE if the executor need not do mark/restore calls.
++ * Mark/restore overhead is usually required, but can be skipped if we know
++ * that the executor need find only one match per outer tuple, and that the
++ * mergeclauses are sufficient to identify a match.  In such cases the
++ * executor can immediately advance the outer relation after processing a
++ * match, and therefoere it need never back up the inner relation.
++ *
+  * materialize_inner is TRUE if a Material node should be placed atop the
+  * inner input.  This may appear with or without an inner Sort step.
+  */
+@@ -1259,6 +1286,7 @@ typedef struct MergePath
+ 	List	   *path_mergeclauses;		/* join clauses to be used for merge */
+ 	List	   *outersortkeys;	/* keys for explicit sort, if any */
+ 	List	   *innersortkeys;	/* keys for explicit sort, if any */
++	bool		skip_mark_restore;		/* can executor skip mark/restore? */
+ 	bool		materialize_inner;		/* add Materialize to inner? */
+ } MergePath;
+ 
+@@ -1982,8 +2010,8 @@ typedef struct PlannerParamItem
+ } PlannerParamItem;
+ 
+ /*
+- * When making cost estimates for a SEMI or ANTI join, there are some
+- * correction factors that are needed in both nestloop and hash joins
++ * When making cost estimates for a SEMI/ANTI/inner_unique join, there are
++ * some correction factors that are needed in both nestloop and hash joins
+  * to account for the fact that the executor can stop scanning inner rows
+  * as soon as it finds a match to the current outer row.  These numbers
+  * depend only on the selected outer and inner join relations, not on the
+@@ -2010,14 +2038,17 @@ typedef struct SemiAntiJoinFactors
+  *		clauses that apply to this join
+  * mergeclause_list is a list of RestrictInfo nodes for available
+  *		mergejoin clauses in this join
++ * inner_unique is true if each outer tuple provably matches no more
++ *		than one inner tuple
+  * sjinfo is extra info about special joins for selectivity estimation
+- * semifactors is as shown above (only valid for SEMI or ANTI joins)
++ * semifactors is as shown above (only valid for SEMI/ANTI/inner_unique joins)
+  * param_source_rels are OK targets for parameterization of result paths
+  */
+ typedef struct JoinPathExtraData
+ {
+ 	List	   *restrictlist;
+ 	List	   *mergeclause_list;
++	bool		inner_unique;
+ 	SpecialJoinInfo *sjinfo;
+ 	SemiAntiJoinFactors semifactors;
+ 	Relids		param_source_rels;
+diff --git a/src/include/optimizer/cost.h b/src/include/optimizer/cost.h
+index 2a4df2fc16..000d37fb24 100644
+--- a/src/include/optimizer/cost.h
++++ b/src/include/optimizer/cost.h
+@@ -122,33 +122,29 @@ extern void initial_cost_nestloop(PlannerInfo *root,
+ 					  JoinCostWorkspace *workspace,
+ 					  JoinType jointype,
+ 					  Path *outer_path, Path *inner_path,
+-					  SpecialJoinInfo *sjinfo,
+-					  SemiAntiJoinFactors *semifactors);
++					  JoinPathExtraData *extra);
+ extern void final_cost_nestloop(PlannerInfo *root, NestPath *path,
+ 					JoinCostWorkspace *workspace,
+-					SpecialJoinInfo *sjinfo,
+-					SemiAntiJoinFactors *semifactors);
++					JoinPathExtraData *extra);
+ extern void initial_cost_mergejoin(PlannerInfo *root,
+ 					   JoinCostWorkspace *workspace,
+ 					   JoinType jointype,
+ 					   List *mergeclauses,
+ 					   Path *outer_path, Path *inner_path,
+ 					   List *outersortkeys, List *innersortkeys,
+-					   SpecialJoinInfo *sjinfo);
++					   JoinPathExtraData *extra);
+ extern void final_cost_mergejoin(PlannerInfo *root, MergePath *path,
+ 					 JoinCostWorkspace *workspace,
+-					 SpecialJoinInfo *sjinfo);
++					 JoinPathExtraData *extra);
+ extern void initial_cost_hashjoin(PlannerInfo *root,
+ 					  JoinCostWorkspace *workspace,
+ 					  JoinType jointype,
+ 					  List *hashclauses,
+ 					  Path *outer_path, Path *inner_path,
+-					  SpecialJoinInfo *sjinfo,
+-					  SemiAntiJoinFactors *semifactors);
++					  JoinPathExtraData *extra);
+ extern void final_cost_hashjoin(PlannerInfo *root, HashPath *path,
+ 					JoinCostWorkspace *workspace,
+-					SpecialJoinInfo *sjinfo,
+-					SemiAntiJoinFactors *semifactors);
++					JoinPathExtraData *extra);
+ extern void cost_gather(GatherPath *path, PlannerInfo *root,
+ 			RelOptInfo *baserel, ParamPathInfo *param_info, double *rows);
+ extern void cost_subplan(PlannerInfo *root, SubPlan *subplan, Plan *plan);
+diff --git a/src/include/optimizer/pathnode.h b/src/include/optimizer/pathnode.h
+index ce6d4979e3..95a42ba855 100644
+--- a/src/include/optimizer/pathnode.h
++++ b/src/include/optimizer/pathnode.h
+@@ -103,8 +103,7 @@ extern NestPath *create_nestloop_path(PlannerInfo *root,
+ 					 RelOptInfo *joinrel,
+ 					 JoinType jointype,
+ 					 JoinCostWorkspace *workspace,
+-					 SpecialJoinInfo *sjinfo,
+-					 SemiAntiJoinFactors *semifactors,
++					 JoinPathExtraData *extra,
+ 					 Path *outer_path,
+ 					 Path *inner_path,
+ 					 List *restrict_clauses,
+@@ -115,7 +114,7 @@ extern MergePath *create_mergejoin_path(PlannerInfo *root,
+ 					  RelOptInfo *joinrel,
+ 					  JoinType jointype,
+ 					  JoinCostWorkspace *workspace,
+-					  SpecialJoinInfo *sjinfo,
++					  JoinPathExtraData *extra,
+ 					  Path *outer_path,
+ 					  Path *inner_path,
+ 					  List *restrict_clauses,
+@@ -129,8 +128,7 @@ extern HashPath *create_hashjoin_path(PlannerInfo *root,
+ 					 RelOptInfo *joinrel,
+ 					 JoinType jointype,
+ 					 JoinCostWorkspace *workspace,
+-					 SpecialJoinInfo *sjinfo,
+-					 SemiAntiJoinFactors *semifactors,
++					 JoinPathExtraData *extra,
+ 					 Path *outer_path,
+ 					 Path *inner_path,
+ 					 List *restrict_clauses,
+diff --git a/src/include/optimizer/planmain.h b/src/include/optimizer/planmain.h
+index f335992f01..7948f11890 100644
+--- a/src/include/optimizer/planmain.h
++++ b/src/include/optimizer/planmain.h
+@@ -104,8 +104,12 @@ extern void match_foreign_keys_to_quals(PlannerInfo *root);
+  * prototypes for plan/analyzejoins.c
+  */
+ extern List *remove_useless_joins(PlannerInfo *root, List *joinlist);
++extern void reduce_unique_semijoins(PlannerInfo *root);
+ extern bool query_supports_distinctness(Query *query);
+ extern bool query_is_distinct_for(Query *query, List *colnos, List *opids);
++extern bool innerrel_is_unique(PlannerInfo *root,
++				   Relids outerrelids, RelOptInfo *innerrel,
++				   JoinType jointype, List *restrictlist, bool force_cache);
+ 
+ /*
+  * prototypes for plan/setrefs.c
+diff --git a/src/test/regress/expected/aggregates.out b/src/test/regress/expected/aggregates.out
+index fa1f5e7879..32452bbf81 100644
+--- a/src/test/regress/expected/aggregates.out
++++ b/src/test/regress/expected/aggregates.out
+@@ -981,29 +981,31 @@ explain (costs off) select a,c from t1 group by a,c,d;
+ explain (costs off) select *
+ from t1 inner join t2 on t1.a = t2.x and t1.b = t2.y
+ group by t1.a,t1.b,t1.c,t1.d,t2.x,t2.y,t2.z;
+-                      QUERY PLAN                       
+--------------------------------------------------------
+- Group
++                      QUERY PLAN                      
++------------------------------------------------------
++ HashAggregate
+    Group Key: t1.a, t1.b, t2.x, t2.y
+-   ->  Merge Join
+-         Merge Cond: ((t1.a = t2.x) AND (t1.b = t2.y))
+-         ->  Index Scan using t1_pkey on t1
+-         ->  Index Scan using t2_pkey on t2
+-(6 rows)
++   ->  Hash Join
++         Hash Cond: ((t2.x = t1.a) AND (t2.y = t1.b))
++         ->  Seq Scan on t2
++         ->  Hash
++               ->  Seq Scan on t1
++(7 rows)
+ 
+ -- Test case where t1 can be optimized but not t2
+ explain (costs off) select t1.*,t2.x,t2.z
+ from t1 inner join t2 on t1.a = t2.x and t1.b = t2.y
+ group by t1.a,t1.b,t1.c,t1.d,t2.x,t2.z;
+-                      QUERY PLAN                       
+--------------------------------------------------------
++                      QUERY PLAN                      
++------------------------------------------------------
+  HashAggregate
+    Group Key: t1.a, t1.b, t2.x, t2.z
+-   ->  Merge Join
+-         Merge Cond: ((t1.a = t2.x) AND (t1.b = t2.y))
+-         ->  Index Scan using t1_pkey on t1
+-         ->  Index Scan using t2_pkey on t2
+-(6 rows)
++   ->  Hash Join
++         Hash Cond: ((t2.x = t1.a) AND (t2.y = t1.b))
++         ->  Seq Scan on t2
++         ->  Hash
++               ->  Seq Scan on t1
++(7 rows)
+ 
+ -- Cannot optimize when PK is deferrable
+ explain (costs off) select * from t3 group by a,b,c;
+diff --git a/src/test/regress/expected/equivclass.out b/src/test/regress/expected/equivclass.out
+index 0391b8eec1..888b49f398 100644
+--- a/src/test/regress/expected/equivclass.out
++++ b/src/test/regress/expected/equivclass.out
+@@ -317,12 +317,11 @@ explain (costs off)
+                      ->  Index Scan using ec1_expr2 on ec1 ec1_1
+                      ->  Index Scan using ec1_expr3 on ec1 ec1_2
+                      ->  Index Scan using ec1_expr4 on ec1 ec1_3
+-               ->  Materialize
+-                     ->  Sort
+-                           Sort Key: ec1.f1 USING <
+-                           ->  Index Scan using ec1_pkey on ec1
+-                                 Index Cond: (ff = '42'::bigint)
+-(20 rows)
++               ->  Sort
++                     Sort Key: ec1.f1 USING <
++                     ->  Index Scan using ec1_pkey on ec1
++                           Index Cond: (ff = '42'::bigint)
++(19 rows)
+ 
+ -- check partially indexed scan
+ set enable_nestloop = on;
+@@ -374,10 +373,9 @@ explain (costs off)
+                Sort Key: (((ec1_2.ff + 3) + 1))
+                ->  Seq Scan on ec1 ec1_2
+          ->  Index Scan using ec1_expr4 on ec1 ec1_3
+-   ->  Materialize
+-         ->  Sort
+-               Sort Key: ec1.f1 USING <
+-               ->  Index Scan using ec1_pkey on ec1
+-                     Index Cond: (ff = '42'::bigint)
+-(14 rows)
++   ->  Sort
++         Sort Key: ec1.f1 USING <
++         ->  Index Scan using ec1_pkey on ec1
++               Index Cond: (ff = '42'::bigint)
++(13 rows)
+ 
+diff --git a/src/test/regress/expected/join.out b/src/test/regress/expected/join.out
+index eafc933e8f..da5843a602 100644
+--- a/src/test/regress/expected/join.out
++++ b/src/test/regress/expected/join.out
+@@ -3979,7 +3979,7 @@ select id from a where id in (
+ );
+          QUERY PLAN         
+ ----------------------------
+- Hash Semi Join
++ Hash Join
+    Hash Cond: (a.id = b.id)
+    ->  Seq Scan on a
+    ->  Hash
+@@ -5324,6 +5324,364 @@ LINE 1: ...xx1 using lateral (select * from int4_tbl where f1 = x1) ss;
+                                                                 ^
+ HINT:  There is an entry for table "xx1", but it cannot be referenced from this part of the query.
+ --
++-- test planner's ability to mark joins as unique
++--
++create table j1 (id int primary key);
++create table j2 (id int primary key);
++create table j3 (id int);
++insert into j1 values(1),(2),(3);
++insert into j2 values(1),(2),(3);
++insert into j3 values(1),(1);
++analyze j1;
++analyze j2;
++analyze j3;
++-- ensure join is properly marked as unique
++explain (verbose, costs off)
++select * from j1 inner join j2 on j1.id = j2.id;
++            QUERY PLAN             
++-----------------------------------
++ Hash Join
++   Output: j1.id, j2.id
++   Inner Unique: true
++   Hash Cond: (j1.id = j2.id)
++   ->  Seq Scan on public.j1
++         Output: j1.id
++   ->  Hash
++         Output: j2.id
++         ->  Seq Scan on public.j2
++               Output: j2.id
++(10 rows)
++
++-- ensure join is not unique when not an equi-join
++explain (verbose, costs off)
++select * from j1 inner join j2 on j1.id > j2.id;
++            QUERY PLAN             
++-----------------------------------
++ Nested Loop
++   Output: j1.id, j2.id
++   Join Filter: (j1.id > j2.id)
++   ->  Seq Scan on public.j1
++         Output: j1.id
++   ->  Materialize
++         Output: j2.id
++         ->  Seq Scan on public.j2
++               Output: j2.id
++(9 rows)
++
++-- ensure non-unique rel is not chosen as inner
++explain (verbose, costs off)
++select * from j1 inner join j3 on j1.id = j3.id;
++            QUERY PLAN             
++-----------------------------------
++ Hash Join
++   Output: j1.id, j3.id
++   Inner Unique: true
++   Hash Cond: (j3.id = j1.id)
++   ->  Seq Scan on public.j3
++         Output: j3.id
++   ->  Hash
++         Output: j1.id
++         ->  Seq Scan on public.j1
++               Output: j1.id
++(10 rows)
++
++-- ensure left join is marked as unique
++explain (verbose, costs off)
++select * from j1 left join j2 on j1.id = j2.id;
++            QUERY PLAN             
++-----------------------------------
++ Hash Left Join
++   Output: j1.id, j2.id
++   Inner Unique: true
++   Hash Cond: (j1.id = j2.id)
++   ->  Seq Scan on public.j1
++         Output: j1.id
++   ->  Hash
++         Output: j2.id
++         ->  Seq Scan on public.j2
++               Output: j2.id
++(10 rows)
++
++-- ensure right join is marked as unique
++explain (verbose, costs off)
++select * from j1 right join j2 on j1.id = j2.id;
++            QUERY PLAN             
++-----------------------------------
++ Hash Left Join
++   Output: j1.id, j2.id
++   Inner Unique: true
++   Hash Cond: (j2.id = j1.id)
++   ->  Seq Scan on public.j2
++         Output: j2.id
++   ->  Hash
++         Output: j1.id
++         ->  Seq Scan on public.j1
++               Output: j1.id
++(10 rows)
++
++-- ensure full join is marked as unique
++explain (verbose, costs off)
++select * from j1 full join j2 on j1.id = j2.id;
++            QUERY PLAN             
++-----------------------------------
++ Hash Full Join
++   Output: j1.id, j2.id
++   Inner Unique: true
++   Hash Cond: (j1.id = j2.id)
++   ->  Seq Scan on public.j1
++         Output: j1.id
++   ->  Hash
++         Output: j2.id
++         ->  Seq Scan on public.j2
++               Output: j2.id
++(10 rows)
++
++-- a clauseless (cross) join can't be unique
++explain (verbose, costs off)
++select * from j1 cross join j2;
++            QUERY PLAN             
++-----------------------------------
++ Nested Loop
++   Output: j1.id, j2.id
++   ->  Seq Scan on public.j1
++         Output: j1.id
++   ->  Materialize
++         Output: j2.id
++         ->  Seq Scan on public.j2
++               Output: j2.id
++(8 rows)
++
++-- ensure a natural join is marked as unique
++explain (verbose, costs off)
++select * from j1 natural join j2;
++            QUERY PLAN             
++-----------------------------------
++ Hash Join
++   Output: j1.id
++   Inner Unique: true
++   Hash Cond: (j1.id = j2.id)
++   ->  Seq Scan on public.j1
++         Output: j1.id
++   ->  Hash
++         Output: j2.id
++         ->  Seq Scan on public.j2
++               Output: j2.id
++(10 rows)
++
++-- ensure a distinct clause allows the inner to become unique
++explain (verbose, costs off)
++select * from j1
++inner join (select distinct id from j3) j3 on j1.id = j3.id;
++               QUERY PLAN                
++-----------------------------------------
++ Nested Loop
++   Output: j1.id, j3.id
++   Inner Unique: true
++   Join Filter: (j1.id = j3.id)
++   ->  Unique
++         Output: j3.id
++         ->  Sort
++               Output: j3.id
++               Sort Key: j3.id
++               ->  Seq Scan on public.j3
++                     Output: j3.id
++   ->  Seq Scan on public.j1
++         Output: j1.id
++(13 rows)
++
++-- ensure group by clause allows the inner to become unique
++explain (verbose, costs off)
++select * from j1
++inner join (select id from j3 group by id) j3 on j1.id = j3.id;
++               QUERY PLAN                
++-----------------------------------------
++ Nested Loop
++   Output: j1.id, j3.id
++   Inner Unique: true
++   Join Filter: (j1.id = j3.id)
++   ->  Group
++         Output: j3.id
++         Group Key: j3.id
++         ->  Sort
++               Output: j3.id
++               Sort Key: j3.id
++               ->  Seq Scan on public.j3
++                     Output: j3.id
++   ->  Seq Scan on public.j1
++         Output: j1.id
++(14 rows)
++
++drop table j1;
++drop table j2;
++drop table j3;
++-- test more complex permutations of unique joins
++create table j1 (id1 int, id2 int, primary key(id1,id2));
++create table j2 (id1 int, id2 int, primary key(id1,id2));
++create table j3 (id1 int, id2 int, primary key(id1,id2));
++insert into j1 values(1,1),(1,2);
++insert into j2 values(1,1);
++insert into j3 values(1,1);
++analyze j1;
++analyze j2;
++analyze j3;
++-- ensure there's no unique join when not all columns which are part of the
++-- unique index are seen in the join clause
++explain (verbose, costs off)
++select * from j1
++inner join j2 on j1.id1 = j2.id1;
++                QUERY PLAN                
++------------------------------------------
++ Nested Loop
++   Output: j1.id1, j1.id2, j2.id1, j2.id2
++   Join Filter: (j1.id1 = j2.id1)
++   ->  Seq Scan on public.j2
++         Output: j2.id1, j2.id2
++   ->  Seq Scan on public.j1
++         Output: j1.id1, j1.id2
++(7 rows)
++
++-- ensure proper unique detection with multiple join quals
++explain (verbose, costs off)
++select * from j1
++inner join j2 on j1.id1 = j2.id1 and j1.id2 = j2.id2;
++                        QUERY PLAN                        
++----------------------------------------------------------
++ Nested Loop
++   Output: j1.id1, j1.id2, j2.id1, j2.id2
++   Inner Unique: true
++   Join Filter: ((j1.id1 = j2.id1) AND (j1.id2 = j2.id2))
++   ->  Seq Scan on public.j2
++         Output: j2.id1, j2.id2
++   ->  Seq Scan on public.j1
++         Output: j1.id1, j1.id2
++(8 rows)
++
++-- ensure we don't detect the join to be unique when quals are not part of the
++-- join condition
++explain (verbose, costs off)
++select * from j1
++inner join j2 on j1.id1 = j2.id1 where j1.id2 = 1;
++                QUERY PLAN                
++------------------------------------------
++ Nested Loop
++   Output: j1.id1, j1.id2, j2.id1, j2.id2
++   Join Filter: (j1.id1 = j2.id1)
++   ->  Seq Scan on public.j1
++         Output: j1.id1, j1.id2
++         Filter: (j1.id2 = 1)
++   ->  Seq Scan on public.j2
++         Output: j2.id1, j2.id2
++(8 rows)
++
++-- as above, but for left joins.
++explain (verbose, costs off)
++select * from j1
++left join j2 on j1.id1 = j2.id1 where j1.id2 = 1;
++                QUERY PLAN                
++------------------------------------------
++ Nested Loop Left Join
++   Output: j1.id1, j1.id2, j2.id1, j2.id2
++   Join Filter: (j1.id1 = j2.id1)
++   ->  Seq Scan on public.j1
++         Output: j1.id1, j1.id2
++         Filter: (j1.id2 = 1)
++   ->  Seq Scan on public.j2
++         Output: j2.id1, j2.id2
++(8 rows)
++
++-- validate logic in merge joins which skips mark and restore.
++-- it should only do this if all quals which were used to detect the unique
++-- are present as join quals, and not plain quals.
++set enable_nestloop to 0;
++set enable_hashjoin to 0;
++set enable_sort to 0;
++-- create an index that will be preferred over the PK to perform the join
++create index j1_id1_idx on j1 (id1) where id1 % 1000 = 1;
++explain (costs off) select * from j1 j1
++inner join j1 j2 on j1.id1 = j2.id1 and j1.id2 = j2.id2
++where j1.id1 % 1000 = 1 and j2.id1 % 1000 = 1;
++                 QUERY PLAN                 
++--------------------------------------------
++ Merge Join
++   Merge Cond: (j1.id1 = j2.id1)
++   Join Filter: (j1.id2 = j2.id2)
++   ->  Index Scan using j1_id1_idx on j1
++   ->  Index Scan using j1_id1_idx on j1 j2
++(5 rows)
++
++select * from j1 j1
++inner join j1 j2 on j1.id1 = j2.id1 and j1.id2 = j2.id2
++where j1.id1 % 1000 = 1 and j2.id1 % 1000 = 1;
++ id1 | id2 | id1 | id2 
++-----+-----+-----+-----
++   1 |   1 |   1 |   1
++   1 |   2 |   1 |   2
++(2 rows)
++
++reset enable_nestloop;
++reset enable_hashjoin;
++reset enable_sort;
++drop table j1;
++drop table j2;
++drop table j3;
++-- check that semijoin inner is not seen as unique for a portion of the outerrel
++explain (verbose, costs off)
++select t1.unique1, t2.hundred
++from onek t1, tenk1 t2
++where exists (select 1 from tenk1 t3
++              where t3.thousand = t1.unique1 and t3.tenthous = t2.hundred)
++      and t1.unique1 < 1;
++                                   QUERY PLAN                                    
++---------------------------------------------------------------------------------
++ Nested Loop
++   Output: t1.unique1, t2.hundred
++   ->  Hash Join
++         Output: t1.unique1, t3.tenthous
++         Hash Cond: (t3.thousand = t1.unique1)
++         ->  HashAggregate
++               Output: t3.thousand, t3.tenthous
++               Group Key: t3.thousand, t3.tenthous
++               ->  Index Only Scan using tenk1_thous_tenthous on public.tenk1 t3
++                     Output: t3.thousand, t3.tenthous
++         ->  Hash
++               Output: t1.unique1
++               ->  Index Only Scan using onek_unique1 on public.onek t1
++                     Output: t1.unique1
++                     Index Cond: (t1.unique1 < 1)
++   ->  Index Only Scan using tenk1_hundred on public.tenk1 t2
++         Output: t2.hundred
++         Index Cond: (t2.hundred = t3.tenthous)
++(18 rows)
++
++-- ... unless it actually is unique
++create table j3 as select unique1, tenthous from onek;
++vacuum analyze j3;
++create unique index on j3(unique1, tenthous);
++explain (verbose, costs off)
++select t1.unique1, t2.hundred
++from onek t1, tenk1 t2
++where exists (select 1 from j3
++              where j3.unique1 = t1.unique1 and j3.tenthous = t2.hundred)
++      and t1.unique1 < 1;
++                               QUERY PLAN                               
++------------------------------------------------------------------------
++ Nested Loop
++   Output: t1.unique1, t2.hundred
++   ->  Nested Loop
++         Output: t1.unique1, j3.tenthous
++         ->  Index Only Scan using onek_unique1 on public.onek t1
++               Output: t1.unique1
++               Index Cond: (t1.unique1 < 1)
++         ->  Index Only Scan using j3_unique1_tenthous_idx on public.j3
++               Output: j3.unique1, j3.tenthous
++               Index Cond: (j3.unique1 = t1.unique1)
++   ->  Index Only Scan using tenk1_hundred on public.tenk1 t2
++         Output: t2.hundred
++         Index Cond: (t2.hundred = j3.tenthous)
++(13 rows)
++
++drop table j3;
++--
+ -- test that foreign key join estimation performs sanely for outer joins
+ --
+ begin;
+diff --git a/src/test/regress/expected/rowsecurity.out b/src/test/regress/expected/rowsecurity.out
+index c15bf958a5..967c17eae8 100644
+--- a/src/test/regress/expected/rowsecurity.out
++++ b/src/test/regress/expected/rowsecurity.out
+@@ -848,21 +848,19 @@ NOTICE:  f_leak => a87ff679a2f3e71d9181a67b7542122c
+ (2 rows)
+ 
+ EXPLAIN (COSTS OFF) SELECT * FROM only s1 WHERE f_leak(b);
+-                        QUERY PLAN                        
+-----------------------------------------------------------
++                     QUERY PLAN                     
++----------------------------------------------------
+  Subquery Scan on s1
+    Filter: f_leak(s1.b)
+-   ->  Hash Join
++   ->  Hash Semi Join
+          Hash Cond: (s1_1.a = s2.x)
+          ->  Seq Scan on s1 s1_1
+          ->  Hash
+-               ->  HashAggregate
+-                     Group Key: s2.x
+-                     ->  Subquery Scan on s2
+-                           Filter: (s2.y ~~ '%2f%'::text)
+-                           ->  Seq Scan on s2 s2_1
+-                                 Filter: ((x % 2) = 0)
+-(12 rows)
++               ->  Subquery Scan on s2
++                     Filter: (s2.y ~~ '%2f%'::text)
++                     ->  Seq Scan on s2 s2_1
++                           Filter: ((x % 2) = 0)
++(10 rows)
+ 
+ SET SESSION AUTHORIZATION regress_rls_alice;
+ ALTER POLICY p1 ON s1 USING (a in (select x from v2)); -- using VIEW in RLS policy
+@@ -877,21 +875,19 @@ NOTICE:  f_leak => 1679091c5a880faf6fb5e6087eb1b2dc
+ (2 rows)
+ 
+ EXPLAIN (COSTS OFF) SELECT * FROM s1 WHERE f_leak(b);
+-                        QUERY PLAN                        
+-----------------------------------------------------------
++                     QUERY PLAN                     
++----------------------------------------------------
+  Subquery Scan on s1
+    Filter: f_leak(s1.b)
+-   ->  Hash Join
++   ->  Hash Semi Join
+          Hash Cond: (s1_1.a = s2.x)
+          ->  Seq Scan on s1 s1_1
+          ->  Hash
+-               ->  HashAggregate
+-                     Group Key: s2.x
+-                     ->  Subquery Scan on s2
+-                           Filter: (s2.y ~~ '%af%'::text)
+-                           ->  Seq Scan on s2 s2_1
+-                                 Filter: ((x % 2) = 0)
+-(12 rows)
++               ->  Subquery Scan on s2
++                     Filter: (s2.y ~~ '%af%'::text)
++                     ->  Seq Scan on s2 s2_1
++                           Filter: ((x % 2) = 0)
++(10 rows)
+ 
+ SELECT (SELECT x FROM s1 LIMIT 1) xx, * FROM s2 WHERE y like '%28%';
+  xx | x  |                y                 
+diff --git a/src/test/regress/expected/updatable_views.out b/src/test/regress/expected/updatable_views.out
+index 6162d40e59..f18cd76ca8 100644
+--- a/src/test/regress/expected/updatable_views.out
++++ b/src/test/regress/expected/updatable_views.out
+@@ -1680,7 +1680,7 @@ EXPLAIN (costs off) UPDATE rw_view1 SET a = a + 5;
+                            QUERY PLAN                            
+ -----------------------------------------------------------------
+  Update on base_tbl b
+-   ->  Hash Semi Join
++   ->  Hash Join
+          Hash Cond: (b.a = r.a)
+          ->  Seq Scan on base_tbl b
+          ->  Hash
+diff --git a/src/test/regress/sql/join.sql b/src/test/regress/sql/join.sql
+index af6d6129c8..22a77dff44 100644
+--- a/src/test/regress/sql/join.sql
++++ b/src/test/regress/sql/join.sql
+@@ -1731,6 +1731,152 @@ delete from xx1 using (select * from int4_tbl where f1 = x1) ss;
+ delete from xx1 using (select * from int4_tbl where f1 = xx1.x1) ss;
+ delete from xx1 using lateral (select * from int4_tbl where f1 = x1) ss;
+ 
++--
++-- test planner's ability to mark joins as unique
++--
++
++create table j1 (id int primary key);
++create table j2 (id int primary key);
++create table j3 (id int);
++
++insert into j1 values(1),(2),(3);
++insert into j2 values(1),(2),(3);
++insert into j3 values(1),(1);
++
++analyze j1;
++analyze j2;
++analyze j3;
++
++-- ensure join is properly marked as unique
++explain (verbose, costs off)
++select * from j1 inner join j2 on j1.id = j2.id;
++
++-- ensure join is not unique when not an equi-join
++explain (verbose, costs off)
++select * from j1 inner join j2 on j1.id > j2.id;
++
++-- ensure non-unique rel is not chosen as inner
++explain (verbose, costs off)
++select * from j1 inner join j3 on j1.id = j3.id;
++
++-- ensure left join is marked as unique
++explain (verbose, costs off)
++select * from j1 left join j2 on j1.id = j2.id;
++
++-- ensure right join is marked as unique
++explain (verbose, costs off)
++select * from j1 right join j2 on j1.id = j2.id;
++
++-- ensure full join is marked as unique
++explain (verbose, costs off)
++select * from j1 full join j2 on j1.id = j2.id;
++
++-- a clauseless (cross) join can't be unique
++explain (verbose, costs off)
++select * from j1 cross join j2;
++
++-- ensure a natural join is marked as unique
++explain (verbose, costs off)
++select * from j1 natural join j2;
++
++-- ensure a distinct clause allows the inner to become unique
++explain (verbose, costs off)
++select * from j1
++inner join (select distinct id from j3) j3 on j1.id = j3.id;
++
++-- ensure group by clause allows the inner to become unique
++explain (verbose, costs off)
++select * from j1
++inner join (select id from j3 group by id) j3 on j1.id = j3.id;
++
++drop table j1;
++drop table j2;
++drop table j3;
++
++-- test more complex permutations of unique joins
++
++create table j1 (id1 int, id2 int, primary key(id1,id2));
++create table j2 (id1 int, id2 int, primary key(id1,id2));
++create table j3 (id1 int, id2 int, primary key(id1,id2));
++
++insert into j1 values(1,1),(1,2);
++insert into j2 values(1,1);
++insert into j3 values(1,1);
++
++analyze j1;
++analyze j2;
++analyze j3;
++
++-- ensure there's no unique join when not all columns which are part of the
++-- unique index are seen in the join clause
++explain (verbose, costs off)
++select * from j1
++inner join j2 on j1.id1 = j2.id1;
++
++-- ensure proper unique detection with multiple join quals
++explain (verbose, costs off)
++select * from j1
++inner join j2 on j1.id1 = j2.id1 and j1.id2 = j2.id2;
++
++-- ensure we don't detect the join to be unique when quals are not part of the
++-- join condition
++explain (verbose, costs off)
++select * from j1
++inner join j2 on j1.id1 = j2.id1 where j1.id2 = 1;
++
++-- as above, but for left joins.
++explain (verbose, costs off)
++select * from j1
++left join j2 on j1.id1 = j2.id1 where j1.id2 = 1;
++
++-- validate logic in merge joins which skips mark and restore.
++-- it should only do this if all quals which were used to detect the unique
++-- are present as join quals, and not plain quals.
++set enable_nestloop to 0;
++set enable_hashjoin to 0;
++set enable_sort to 0;
++
++-- create an index that will be preferred over the PK to perform the join
++create index j1_id1_idx on j1 (id1) where id1 % 1000 = 1;
++
++explain (costs off) select * from j1 j1
++inner join j1 j2 on j1.id1 = j2.id1 and j1.id2 = j2.id2
++where j1.id1 % 1000 = 1 and j2.id1 % 1000 = 1;
++
++select * from j1 j1
++inner join j1 j2 on j1.id1 = j2.id1 and j1.id2 = j2.id2
++where j1.id1 % 1000 = 1 and j2.id1 % 1000 = 1;
++
++reset enable_nestloop;
++reset enable_hashjoin;
++reset enable_sort;
++
++drop table j1;
++drop table j2;
++drop table j3;
++
++-- check that semijoin inner is not seen as unique for a portion of the outerrel
++explain (verbose, costs off)
++select t1.unique1, t2.hundred
++from onek t1, tenk1 t2
++where exists (select 1 from tenk1 t3
++              where t3.thousand = t1.unique1 and t3.tenthous = t2.hundred)
++      and t1.unique1 < 1;
++
++-- ... unless it actually is unique
++create table j3 as select unique1, tenthous from onek;
++vacuum analyze j3;
++create unique index on j3(unique1, tenthous);
++
++explain (verbose, costs off)
++select t1.unique1, t2.hundred
++from onek t1, tenk1 t2
++where exists (select 1 from j3
++              where j3.unique1 = t1.unique1 and j3.tenthous = t2.hundred)
++      and t1.unique1 < 1;
++
++drop table j3;
++
+ --
+ -- test that foreign key join estimation performs sanely for outer joins
+ --

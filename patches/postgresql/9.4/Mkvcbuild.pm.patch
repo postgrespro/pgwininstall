@@ -1,0 +1,13 @@
+diff --git a/src/tools/msvc/Mkvcbuild.pm b/src/tools/msvc/Mkvcbuild.pm
+index d104dbc..754eac9 100644
+--- a/src/tools/msvc/Mkvcbuild.pm
++++ b/src/tools/msvc/Mkvcbuild.pm
+@@ -33,7 +33,7 @@ my $contrib_defines = { 'refint' => 'REFINT_VERBOSE' };
+ my @contrib_uselibpq = ('dblink', 'oid2name', 'postgres_fdw', 'vacuumlo');
+ my @contrib_uselibpgport   = ('oid2name', 'pg_standby', 'vacuumlo');
+ my @contrib_uselibpgcommon = ('oid2name', 'pg_standby', 'vacuumlo');
+-my $contrib_extralibs      = undef;
++my $contrib_extralibs      = {'mchar' => [ 'icuin.lib', 'icuuc.lib' ]};
+ my $contrib_extraincludes =
+   { 'tsearch2' => ['contrib/tsearch2'], 'dblink' => ['src/backend'] };
+ my $contrib_extrasource = {
