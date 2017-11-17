@@ -1046,7 +1046,7 @@ Function nsDialogServer
   Pop $Locale
 
   ${NSD_CB_AddString} $Locale "$(DEF_LOCALE_NAME)"
-
+  ${if} ${PG_MAJOR_VERSION} != "10"
   ${NSD_CB_AddString} $Locale "Afrikaans, South Africa"
   ${NSD_CB_AddString} $Locale "Albanian, Albania"
   ${NSD_CB_AddString} $Locale "Azeri (Cyrillic), Azerbaijan"
@@ -1173,7 +1173,7 @@ Function nsDialogServer
   ${NSD_CB_AddString} $Locale "Welsh, United Kingdom"
   ${NSD_CB_AddString} $Locale "Xhosa, South Africa"
   ${NSD_CB_AddString} $Locale "Zulu, South Africa"
-
+  ${endif}
   ${NSD_CB_SelectString} $Locale $Locale_text
 
   ${NSD_CreateLabel} 0 54u 60u 24u "$(DLG_SUPERUSER)"
