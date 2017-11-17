@@ -1046,133 +1046,486 @@ Function nsDialogServer
   Pop $Locale
 
   ${NSD_CB_AddString} $Locale "$(DEF_LOCALE_NAME)"
-  ${if} ${PG_MAJOR_VERSION} != "10"
-  ${NSD_CB_AddString} $Locale "Afrikaans, South Africa"
-  ${NSD_CB_AddString} $Locale "Albanian, Albania"
-  ${NSD_CB_AddString} $Locale "Azeri (Cyrillic), Azerbaijan"
-  ${NSD_CB_AddString} $Locale "Azeri (Latin), Azerbaijan"
-  ${NSD_CB_AddString} $Locale "Basque, Spain"
-  ${NSD_CB_AddString} $Locale "Belarusian, Belarus"
-  ${NSD_CB_AddString} $Locale "Bosnian, Bosnia and Herzegovina"
-  ${NSD_CB_AddString} $Locale "Bosnian (Cyrillic), Bosnia and Herzegovina"
-  ${NSD_CB_AddString} $Locale "Bulgarian, Bulgaria"
-  ${NSD_CB_AddString} $Locale "Catalan, Spain"
-  ${NSD_CB_AddString} $Locale "Croatian, Bosnia and Herzegovina"
-  ${NSD_CB_AddString} $Locale "Croatian, Croatia"
-  ${NSD_CB_AddString} $Locale "Czech, Czech Republic"
-  ${NSD_CB_AddString} $Locale "Danish, Denmark"
-  ${NSD_CB_AddString} $Locale "Dutch, Belgium"
-  ${NSD_CB_AddString} $Locale "Dutch, Netherlands"
-  ${NSD_CB_AddString} $Locale "English, Australia"
-  ${NSD_CB_AddString} $Locale "English, Belize"
-  ${NSD_CB_AddString} $Locale "English, Canada"
-  ${NSD_CB_AddString} $Locale "English, Caribbean"
-  ${NSD_CB_AddString} $Locale "English, Ireland"
-  ${NSD_CB_AddString} $Locale "English, Jamaica"
-  ${NSD_CB_AddString} $Locale "English, New Zealand"
-  ${NSD_CB_AddString} $Locale "English, Republic of the Philippines"
-  ${NSD_CB_AddString} $Locale "English, South Africa"
-  ${NSD_CB_AddString} $Locale "English, Trinidad and Tobago"
-  ${NSD_CB_AddString} $Locale "English, United Kingdom"
-  ${NSD_CB_AddString} $Locale "English, United States"
-  ${NSD_CB_AddString} $Locale "English, Zimbabwe"
-  ${NSD_CB_AddString} $Locale "Estonian, Estonia"
-  ${NSD_CB_AddString} $Locale "FYRO Macedonian, Former Yugoslav Republic of Macedonia"
-  ${NSD_CB_AddString} $Locale "Faroese, Faroe Islands"
-  ${NSD_CB_AddString} $Locale "Filipino, Philippines"
-  ${NSD_CB_AddString} $Locale "Finnish, Finland"
-  ${NSD_CB_AddString} $Locale "French, Belgium"
-  ${NSD_CB_AddString} $Locale "French, Canada"
-  ${NSD_CB_AddString} $Locale "French, France"
-  ${NSD_CB_AddString} $Locale "French, Luxembourg"
-  ${NSD_CB_AddString} $Locale "French, Principality of Monaco"
-  ${NSD_CB_AddString} $Locale "French, Switzerland"
-  ${NSD_CB_AddString} $Locale "Frisian, Netherlands"
-  ${NSD_CB_AddString} $Locale "Galician, Spain"
-  ${NSD_CB_AddString} $Locale "German, Austria"
-  ${NSD_CB_AddString} $Locale "German, Germany"
-  ${NSD_CB_AddString} $Locale "German, Liechtenstein"
-  ${NSD_CB_AddString} $Locale "German, Luxembourg"
-  ${NSD_CB_AddString} $Locale "German, Switzerland"
-  ${NSD_CB_AddString} $Locale "Greek, Greece"
-  ${NSD_CB_AddString} $Locale "Hungarian, Hungary"
-  ${NSD_CB_AddString} $Locale "Icelandic, Iceland"
-  ${NSD_CB_AddString} $Locale "Indonesian, Indonesia"
-  ${NSD_CB_AddString} $Locale "Inuktitut (Latin), Canada"
-  ${NSD_CB_AddString} $Locale "Irish, Ireland"
-  ${NSD_CB_AddString} $Locale "Italian, Italy"
-  ${NSD_CB_AddString} $Locale "Italian, Switzerland"
-  ${NSD_CB_AddString} $Locale "Kazakh, Kazakhstan"
-  ${NSD_CB_AddString} $Locale "Kyrgyz, Kyrgyzstan"
-  ${NSD_CB_AddString} $Locale "Latvian, Latvia"
-  ${NSD_CB_AddString} $Locale "Lithuanian, Lithuania"
-  ${NSD_CB_AddString} $Locale "Luxembourgish, Luxembourg"
-  ${NSD_CB_AddString} $Locale "Malay, Brunei Darussalam"
-  ${NSD_CB_AddString} $Locale "Malay, Malaysia"
-  ${NSD_CB_AddString} $Locale "Maltese, Malta"
-  ${NSD_CB_AddString} $Locale "Maori, New Zealand"
-  ${NSD_CB_AddString} $Locale "Mapudungun, Chile"
-  ${NSD_CB_AddString} $Locale "Mohawk, Canada"
-  ${NSD_CB_AddString} $Locale "Mongolian, Mongolia"
-  ${NSD_CB_AddString} $Locale "Northern Sotho, South Africa"
-  ${NSD_CB_AddString} $Locale "Norwegian (Bokmal), Norway"
-  ${NSD_CB_AddString} $Locale "Norwegian (Nynorsk), Norway"
-  ${NSD_CB_AddString} $Locale "Polish, Poland"
-  ${NSD_CB_AddString} $Locale "Portuguese, Brazil"
-  ${NSD_CB_AddString} $Locale "Portuguese, Portugal"
-  ${NSD_CB_AddString} $Locale "Quechua, Bolivia"
-  ${NSD_CB_AddString} $Locale "Quechua, Ecuador"
-  ${NSD_CB_AddString} $Locale "Quechua, Peru"
-  ${NSD_CB_AddString} $Locale "Romanian, Romania"
-  ${NSD_CB_AddString} $Locale "Romansh, Switzerland"
-  ${NSD_CB_AddString} $Locale "Russian, Russia"
-  ${NSD_CB_AddString} $Locale "Sami (Inari), Finland"
-  ${NSD_CB_AddString} $Locale "Sami (Lule), Norway"
-  ${NSD_CB_AddString} $Locale "Sami (Lule), Sweden"
-  ${NSD_CB_AddString} $Locale "Sami (Northern), Finland"
-  ${NSD_CB_AddString} $Locale "Sami (Northern), Norway"
-  ${NSD_CB_AddString} $Locale "Sami (Northern), Sweden"
-  ${NSD_CB_AddString} $Locale "Sami (Skolt), Finland"
-  ${NSD_CB_AddString} $Locale "Sami (Southern), Norway"
-  ${NSD_CB_AddString} $Locale "Sami (Southern), Sweden"
-  ${NSD_CB_AddString} $Locale "Serbian (Cyrillic), Bosnia and Herzegovina"
-  ${NSD_CB_AddString} $Locale "Serbian (Cyrillic), Serbia and Montenegro"
-  ${NSD_CB_AddString} $Locale "Serbian (Latin), Bosnia and Herzegovina"
-  ${NSD_CB_AddString} $Locale "Serbian (Latin), Serbia and Montenegro"
-  ${NSD_CB_AddString} $Locale "Slovak, Slovakia"
-  ${NSD_CB_AddString} $Locale "Slovenian, Slovenia"
-  ${NSD_CB_AddString} $Locale "Spanish, Argentina"
-  ${NSD_CB_AddString} $Locale "Spanish, Bolivia"
-  ${NSD_CB_AddString} $Locale "Spanish, Chile"
-  ${NSD_CB_AddString} $Locale "Spanish, Colombia"
-  ${NSD_CB_AddString} $Locale "Spanish, Costa Rica"
-  ${NSD_CB_AddString} $Locale "Spanish, Dominican Republic"
-  ${NSD_CB_AddString} $Locale "Spanish, Ecuador"
-  ${NSD_CB_AddString} $Locale "Spanish, El Salvador"
-  ${NSD_CB_AddString} $Locale "Spanish, Guatemala"
-  ${NSD_CB_AddString} $Locale "Spanish, Honduras"
-  ${NSD_CB_AddString} $Locale "Spanish, Mexico"
-  ${NSD_CB_AddString} $Locale "Spanish, Nicaragua"
-  ${NSD_CB_AddString} $Locale "Spanish, Panama"
-  ${NSD_CB_AddString} $Locale "Spanish, Paraguay"
-  ${NSD_CB_AddString} $Locale "Spanish, Peru"
-  ${NSD_CB_AddString} $Locale "Spanish, Puerto Rico"
-  ${NSD_CB_AddString} $Locale "Spanish, Spain"
-  ${NSD_CB_AddString} $Locale "Spanish, Spain"
-  ${NSD_CB_AddString} $Locale "Spanish, Uruguay"
-  ${NSD_CB_AddString} $Locale "Spanish, Venezuela"
-  ${NSD_CB_AddString} $Locale "Swahili, Kenya"
-  ${NSD_CB_AddString} $Locale "Swedish, Finland"
-  ${NSD_CB_AddString} $Locale "Swedish, Sweden"
-  ${NSD_CB_AddString} $Locale "Tatar, Russia"
-  ${NSD_CB_AddString} $Locale "Tswana, South Africa"
-  ${NSD_CB_AddString} $Locale "Turkish, Turkey"
-  ${NSD_CB_AddString} $Locale "Ukrainian, Ukraine"
-  ${NSD_CB_AddString} $Locale "Uzbek (Cyrillic), Uzbekistan"
-  ${NSD_CB_AddString} $Locale "Uzbek (Latin), Uzbekistan"
-  ${NSD_CB_AddString} $Locale "Welsh, United Kingdom"
-  ${NSD_CB_AddString} $Locale "Xhosa, South Africa"
-  ${NSD_CB_AddString} $Locale "Zulu, South Africa"
+  ${if} ${PG_MAJOR_VERSION} == "10"
+    ;; Source URL: https://www.microsoft.com/resources/msdn/goglobal/default.mspx (windows 7)
+    ${NSD_CB_AddString} $Locale "af"         ; 0x0036	af	Afrikaans	Afrikaans	Afrikaans	1252	850	ZAF	AFK
+    ${NSD_CB_AddString} $Locale "af-ZA"      ; 0x0436	af-ZA	Afrikaans (South Africa)	Afrikaans	Afrikaans (Suid Afrika)	1252	850	ZAF	AFK
+    ${NSD_CB_AddString} $Locale "sq"         ; 0x001C	sq	Albanian	Albanian	shqipe	1250	852	ALB	SQI
+    ${NSD_CB_AddString} $Locale "sq-AL"      ; 0x041C	sq-AL	Albanian (Albania)	Albanian	shqipe (Shqipëria)	1250	852	ALB	SQI
+    ${NSD_CB_AddString} $Locale "gsw"        ; 0x0084	gsw	Alsatian	Alsatian	Elsässisch	1252	850	FRA	GSW
+    ${NSD_CB_AddString} $Locale "gsw-FR"     ; 0x0484	gsw-FR	Alsatian (France)	Alsatian	Elsässisch (Frànkrisch)	1252	850	FRA	GSW
+    ${NSD_CB_AddString} $Locale "am"         ; 0x005E	am	Amharic	Amharic	አማርኛ	0	1	ETH	AMH
+    ${NSD_CB_AddString} $Locale "am-ET"      ; 0x045E	am-ET	Amharic (Ethiopia)	Amharic	አማርኛ (ኢትዮጵያ)	0	1	ETH	AMH
+    ${NSD_CB_AddString} $Locale "ar"         ; 0x0001	ar	Arabic‎	Arabic	العربية‏	1256	720	SAU	ARA
+    ${NSD_CB_AddString} $Locale "ar-DZ"      ; 0x1401	ar-DZ	Arabic (Algeria)‎	Arabic	العربية (الجزائر)‏	1256	720	DZA	ARG
+    ${NSD_CB_AddString} $Locale "ar-BH"      ; 0x3C01	ar-BH	Arabic (Bahrain)‎	Arabic	العربية (البحرين)‏	1256	720	BHR	ARH
+    ${NSD_CB_AddString} $Locale "ar-EG"      ; 0x0C01	ar-EG	Arabic (Egypt)‎	Arabic	العربية (مصر)‏	1256	720	EGY	ARE
+    ${NSD_CB_AddString} $Locale "ar-IQ"      ; 0x0801	ar-IQ	Arabic (Iraq)‎	Arabic	العربية (العراق)‏	1256	720	IRQ	ARI
+    ${NSD_CB_AddString} $Locale "ar-JO"      ; 0x2C01	ar-JO	Arabic (Jordan)‎	Arabic	العربية (الأردن)‏	1256	720	JOR	ARJ
+    ${NSD_CB_AddString} $Locale "ar-KW"      ; 0x3401	ar-KW	Arabic (Kuwait)‎	Arabic	العربية (الكويت)‏	1256	720	KWT	ARK
+    ${NSD_CB_AddString} $Locale "ar-LB"      ; 0x3001	ar-LB	Arabic (Lebanon)‎	Arabic	العربية (لبنان)‏	1256	720	LBN	ARB
+    ${NSD_CB_AddString} $Locale "ar-LY"      ; 0x1001	ar-LY	Arabic (Libya)‎	Arabic	العربية (ليبيا)‏	1256	720	LBY	ARL
+    ${NSD_CB_AddString} $Locale "ar-MA"      ; 0x1801	ar-MA	Arabic (Morocco)‎	Arabic	العربية (المملكة المغربية)‏	1256	720	MAR	ARM
+    ${NSD_CB_AddString} $Locale "ar-OM"      ; 0x2001	ar-OM	Arabic (Oman)‎	Arabic	العربية (عمان)‏	1256	720	OMN	ARO
+    ${NSD_CB_AddString} $Locale "ar-QA"      ; 0x4001	ar-QA	Arabic (Qatar)‎	Arabic	العربية (قطر)‏	1256	720	QAT	ARQ
+    ${NSD_CB_AddString} $Locale "ar-SA"      ; 0x0401	ar-SA	Arabic (Saudi Arabia)‎	Arabic	العربية (المملكة العربية السعودية)‏	1256	720	SAU	ARA
+    ${NSD_CB_AddString} $Locale "ar-SY"      ; 0x2801	ar-SY	Arabic (Syria)‎	Arabic	العربية (سوريا)‏	1256	720	SYR	ARS
+    ${NSD_CB_AddString} $Locale "ar-TN"      ; 0x1C01	ar-TN	Arabic (Tunisia)‎	Arabic	العربية (تونس)‏	1256	720	TUN	ART
+    ${NSD_CB_AddString} $Locale "ar-AE"      ; 0x3801	ar-AE	Arabic (U.A.E.)‎	Arabic	العربية (الإمارات العربية المتحدة)‏	1256	720	ARE	ARU
+    ${NSD_CB_AddString} $Locale "ar-YE"      ; 0x2401	ar-YE	Arabic (Yemen)‎	Arabic	العربية (اليمن)‏	1256	720	YEM	ARY
+    ${NSD_CB_AddString} $Locale "hy"         ; 0x002B	hy	Armenian	Armenian	Հայերեն	0	1	ARM	HYE
+    ${NSD_CB_AddString} $Locale "hy-AM"      ; 0x042B	hy-AM	Armenian (Armenia)	Armenian	Հայերեն (Հայաստան)	0	1	ARM	HYE
+    ${NSD_CB_AddString} $Locale "as"         ; 0x004D	as	Assamese	Assamese	অসমীয়া	0	1	IND	ASM
+    ${NSD_CB_AddString} $Locale "as-IN"      ; 0x044D	as-IN	Assamese (India)	Assamese	অসমীয়া (ভাৰত)	0	1	IND	ASM
+    ${NSD_CB_AddString} $Locale "az"         ; 0x002C	az	Azeri	Azeri (Latin)	Azərbaycan­ılı	1254	857	AZE	AZE
+    ${NSD_CB_AddString} $Locale "az-Cyrl"    ; 0x742C	az-Cyrl	Azeri (Cyrillic)	Azeri (Cyrillic)	Азәрбајҹан дили	1251	866	AZE	AZC
+    ${NSD_CB_AddString} $Locale "az-Cyrl-AZ" ; 0x082C	az-Cyrl-AZ	Azeri (Cyrillic, Azerbaijan)	Azeri (Cyrillic)	Азәрбајҹан (Азәрбајҹан)	1251	866	AZE	AZC
+    ${NSD_CB_AddString} $Locale "az-Latn"    ; 0x782C	az-Latn	Azeri (Latin)	Azeri (Latin)	Azərbaycan­ılı	1254	857	AZE	AZE
+    ${NSD_CB_AddString} $Locale "az-Latn-AZ" ; 0x042C	az-Latn-AZ	Azeri (Latin, Azerbaijan)	Azeri (Latin)	Azərbaycan­ılı (Azərbaycan)	1254	857	AZE	AZE
+    ${NSD_CB_AddString} $Locale "ba"         ; 0x006D	ba	Bashkir	Bashkir	Башҡорт	1251	866	RUS	BAS
+    ${NSD_CB_AddString} $Locale "ba-RU"      ; 0x046D	ba-RU	Bashkir (Russia)	Bashkir	Башҡорт (Россия)	1251	866	RUS	BAS
+    ${NSD_CB_AddString} $Locale "eu"         ; 0x002D	eu	Basque	Basque	euskara	1252	850	ESP	EUQ
+    ${NSD_CB_AddString} $Locale "eu-ES"      ; 0x042D	eu-ES	Basque (Basque)	Basque	euskara (euskara)	1252	850	ESP	EUQ
+    ${NSD_CB_AddString} $Locale "be"         ; 0x0023	be	Belarusian	Belarusian	Беларускі	1251	866	BLR	BEL
+    ${NSD_CB_AddString} $Locale "be-BY"      ; 0x0423	be-BY	Belarusian (Belarus)	Belarusian	Беларускі (Беларусь)	1251	866	BLR	BEL
+    ${NSD_CB_AddString} $Locale "bn"         ; 0x0045	bn	Bengali	Bengali	বাংলা	0	1	IND	BNG
+    ${NSD_CB_AddString} $Locale "bn-BD"      ; 0x0845	bn-BD	Bengali (Bangladesh)	Bengali	বাংলা (বাংলাদেশ)	0	1	BGD	BNB
+    ${NSD_CB_AddString} $Locale "bn-IN"      ; 0x0445	bn-IN	Bengali (India)	Bengali	বাংলা (ভারত)	0	1	IND	BNG
+    ${NSD_CB_AddString} $Locale "bs"         ; 0x781A	bs	Bosnian	Bosnian (Latin)	bosanski	1250	852	BIH	BSB
+    ${NSD_CB_AddString} $Locale "bs-Cyrl"    ; 0x641A	bs-Cyrl	Bosnian (Cyrillic)	Bosnian (Cyrillic)	босански (Ћирилица)	1251	855	BIH	BSC
+    ${NSD_CB_AddString} $Locale "bs-Cyrl-BA" ; 0x201A	bs-Cyrl-BA	Bosnian (Cyrillic, Bosnia and Herzegovina)	Bosnian (Cyrillic)	босански (Босна и Херцеговина)	1251	855	BIH	BSC
+    ${NSD_CB_AddString} $Locale "bs-Latn"    ; 0x681A	bs-Latn	Bosnian (Latin)	Bosnian (Latin)	bosanski (Latinica)	1250	852	BIH	BSB
+    ${NSD_CB_AddString} $Locale "bs-Latn-BA" ; 0x141A	bs-Latn-BA	Bosnian (Latin, Bosnia and Herzegovina)	Bosnian (Latin)	bosanski (Bosna i Hercegovina)	1250	852	BIH	BSB
+    ${NSD_CB_AddString} $Locale "br"         ; 0x007E	br	Breton	Breton	brezhoneg	1252	850	FRA	BRE
+    ${NSD_CB_AddString} $Locale "br-FR"      ; 0x047E	br-FR	Breton (France)	Breton	brezhoneg (Frañs)	1252	850	FRA	BRE
+    ${NSD_CB_AddString} $Locale "bg"         ; 0x0002	bg	Bulgarian	Bulgarian	български	1251	866	BGR	BGR
+    ${NSD_CB_AddString} $Locale "bg-BG"      ; 0x0402	bg-BG	Bulgarian (Bulgaria)	Bulgarian	български (България)	1251	866	BGR	BGR
+    ${NSD_CB_AddString} $Locale "ca"         ; 0x0003	ca	Catalan	Catalan	català	1252	850	ESP	CAT
+    ${NSD_CB_AddString} $Locale "ca-ES"      ; 0x0403	ca-ES	Catalan (Catalan)	Catalan	català (català)	1252	850	ESP	CAT
+    ${NSD_CB_AddString} $Locale "zh"         ; 0x7804	zh	Chinese	Chinese (Simplified)	中文	936	936	CHN	CHS
+    ${NSD_CB_AddString} $Locale "zh-Hans"    ; 0x0004	zh-Hans	Chinese (Simplified)	Chinese (Simplified)	中文(简体)	936	936	CHN	CHS
+    ${NSD_CB_AddString} $Locale "zh-CN"      ; 0x0804	zh-CN	Chinese (Simplified, PRC)	Chinese (Simplified)	中文(中华人民共和国)	936	936	CHN	CHS
+    ${NSD_CB_AddString} $Locale "zh-SG"      ; 0x1004	zh-SG	Chinese (Simplified, Singapore)	Chinese (Simplified)	中文(新加坡)	936	936	SGP	ZHI
+    ${NSD_CB_AddString} $Locale "zh-Hant"    ; 0x7C04	zh-Hant	Chinese (Traditional)	Chinese (Traditional)	中文(繁體)	950	950	HKG	ZHH
+    ${NSD_CB_AddString} $Locale "zh-HK"      ; 0x0C04	zh-HK	Chinese (Traditional, Hong Kong S.A.R.)	Chinese (Traditional)	中文(香港特別行政區)	950	950	HKG	ZHH
+    ${NSD_CB_AddString} $Locale "zh-MO"      ; 0x1404	zh-MO	Chinese (Traditional, Macao S.A.R.)	Chinese (Traditional)	中文(澳門特別行政區)	950	950	MCO	ZHM
+    ${NSD_CB_AddString} $Locale "zh-TW"      ; 0x0404	zh-TW	Chinese (Traditional, Taiwan)	Chinese (Traditional)	中文(台灣)	950	950	TWN	CHT
+    ${NSD_CB_AddString} $Locale "co"         ; 0x0083	co	Corsican	Corsican	Corsu	1252	850	FRA	COS
+    ${NSD_CB_AddString} $Locale "co-FR"      ; 0x0483	co-FR	Corsican (France)	Corsican	Corsu (France)	1252	850	FRA	COS
+    ${NSD_CB_AddString} $Locale "hr"         ; 0x001A	hr	Croatian	Croatian	hrvatski	1250	852	HRV	HRV
+    ${NSD_CB_AddString} $Locale "hr-HR"      ; 0x041A	hr-HR	Croatian (Croatia)	Croatian	hrvatski (Hrvatska)	1250	852	HRV	HRV
+    ${NSD_CB_AddString} $Locale "hr-BA"      ; 0x101A	hr-BA	Croatian (Latin, Bosnia and Herzegovina)	Croatian (Latin)	hrvatski (Bosna i Hercegovina)	1250	852	BIH	HRB
+    ${NSD_CB_AddString} $Locale "cs"         ; 0x0005	cs	Czech	Czech	čeština	1250	852	CZE	CSY
+    ${NSD_CB_AddString} $Locale "cs-CZ"      ; 0x0405	cs-CZ	Czech (Czech Republic)	Czech	čeština (Česká republika)	1250	852	CZE	CSY
+    ${NSD_CB_AddString} $Locale "da"         ; 0x0006	da	Danish	Danish	dansk	1252	850	DNK	DAN
+    ${NSD_CB_AddString} $Locale "da-DK"      ; 0x0406	da-DK	Danish (Denmark)	Danish	dansk (Danmark)	1252	850	DNK	DAN
+    ${NSD_CB_AddString} $Locale "prs"        ; 0x008C	prs	Dari‎	Dari	درى‏	1256	720	AFG	PRS
+    ${NSD_CB_AddString} $Locale "prs-AF"     ; 0x048C	prs-AF	Dari (Afghanistan)‎	Dari	درى (افغانستان)‏	1256	720	AFG	PRS
+    ${NSD_CB_AddString} $Locale "dv"         ; 0x0065	dv	Divehi‎	Divehi	ދިވެހިބަސް‏	0	1	MDV	DIV
+    ${NSD_CB_AddString} $Locale "dv-MV"      ; 0x0465	dv-MV	Divehi (Maldives)‎	Divehi	ދިވެހިބަސް (ދިވެހި ރާއްޖެ)‏	0	1	MDV	DIV
+    ${NSD_CB_AddString} $Locale "nl"         ; 0x0013	nl	Dutch	Dutch	Nederlands	1252	850	NLD	NLD
+    ${NSD_CB_AddString} $Locale "nl-BE"      ; 0x0813	nl-BE	Dutch (Belgium)	Dutch	Nederlands (België)	1252	850	BEL	NLB
+    ${NSD_CB_AddString} $Locale "nl-NL"      ; 0x0413	nl-NL	Dutch (Netherlands)	Dutch	Nederlands (Nederland)	1252	850	NLD	NLD
+    ${NSD_CB_AddString} $Locale "en"         ; 0x0009	en	English	English	English	1252	437	USA	ENU
+    ${NSD_CB_AddString} $Locale "en-AU"      ; 0x0C09	en-AU	English (Australia)	English	English (Australia)	1252	850	AUS	ENA
+    ${NSD_CB_AddString} $Locale "en-BZ"      ; 0x2809	en-BZ	English (Belize)	English	English (Belize)	1252	850	BLZ	ENL
+    ${NSD_CB_AddString} $Locale "en-CA"      ; 0x1009	en-CA	English (Canada)	English	English (Canada)	1252	850	CAN	ENC
+    ${NSD_CB_AddString} $Locale "en-029"     ; 0x2409	en-029	English (Caribbean)	English	English (Caribbean)	1252	850	CAR	ENB
+    ${NSD_CB_AddString} $Locale "en-IN"      ; 0x4009	en-IN	English (India)	English	English (India)	1252	437	IND	ENN
+    ${NSD_CB_AddString} $Locale "en-IE"      ; 0x1809	en-IE	English (Ireland)	English	English (Ireland)	1252	850	IRL	ENI
+    ${NSD_CB_AddString} $Locale "en-JM"      ; 0x2009	en-JM	English (Jamaica)	English	English (Jamaica)	1252	850	JAM	ENJ
+    ${NSD_CB_AddString} $Locale "en-MY"      ; 0x4409	en-MY	English (Malaysia)	English	English (Malaysia)	1252	437	MYS	ENM
+    ${NSD_CB_AddString} $Locale "en-NZ"      ; 0x1409	en-NZ	English (New Zealand)	English	English (New Zealand)	1252	850	NZL	ENZ
+    ${NSD_CB_AddString} $Locale "en-PH"      ; 0x3409	en-PH	English (Republic of the Philippines)	English	English (Philippines)	1252	437	PHL	ENP
+    ${NSD_CB_AddString} $Locale "en-SG"      ; 0x4809	en-SG	English (Singapore)	English	English (Singapore)	1252	437	SGP	ENE
+    ${NSD_CB_AddString} $Locale "en-ZA"      ; 0x1C09	en-ZA	English (South Africa)	English	English (South Africa)	1252	437	ZAF	ENS
+    ${NSD_CB_AddString} $Locale "en-TT"      ; 0x2C09	en-TT	English (Trinidad and Tobago)	English	English (Trinidad y Tobago)	1252	850	TTO	ENT
+    ${NSD_CB_AddString} $Locale "en-GB"      ; 0x0809	en-GB	English (United Kingdom)	English	English (United Kingdom)	1252	850	GBR	ENG
+    ${NSD_CB_AddString} $Locale "en-US"      ; 0x0409	en-US	English (United States)	English	English (United States)	1252	437	USA	ENU
+    ${NSD_CB_AddString} $Locale "en-ZW"      ; 0x3009	en-ZW	English (Zimbabwe)	English	English (Zimbabwe)	1252	437	ZWE	ENW
+    ${NSD_CB_AddString} $Locale "et"         ; 0x0025	et	Estonian	Estonian	eesti	1257	775	EST	ETI
+    ${NSD_CB_AddString} $Locale "et-EE"      ; 0x0425	et-EE	Estonian (Estonia)	Estonian	eesti (Eesti)	1257	775	EST	ETI
+    ${NSD_CB_AddString} $Locale "fo"         ; 0x0038	fo	Faroese	Faroese	føroyskt	1252	850	FRO	FOS
+    ${NSD_CB_AddString} $Locale "fo-FO"      ; 0x0438	fo-FO	Faroese (Faroe Islands)	Faroese	føroyskt (Føroyar)	1252	850	FRO	FOS
+    ${NSD_CB_AddString} $Locale "fil"        ; 0x0064	fil	Filipino	Filipino	Filipino	1252	437	PHL	FPO
+    ${NSD_CB_AddString} $Locale "fil-PH"     ; 0x0464	fil-PH	Filipino (Philippines)	Filipino	Filipino (Pilipinas)	1252	437	PHL	FPO
+    ${NSD_CB_AddString} $Locale "fi"         ; 0x000B	fi	Finnish	Finnish	suomi	1252	850	FIN	FIN
+    ${NSD_CB_AddString} $Locale "fi-FI"      ; 0x040B	fi-FI	Finnish (Finland)	Finnish	suomi (Suomi)	1252	850	FIN	FIN
+    ${NSD_CB_AddString} $Locale "fr"         ; 0x000C	fr	French	French	français	1252	850	FRA	FRA
+    ${NSD_CB_AddString} $Locale "fr-BE"      ; 0x080C	fr-BE	French (Belgium)	French	français (Belgique)	1252	850	BEL	FRB
+    ${NSD_CB_AddString} $Locale "fr-CA"      ; 0x0C0C	fr-CA	French (Canada)	French	français (Canada)	1252	850	CAN	FRC
+    ${NSD_CB_AddString} $Locale "fr-FR"      ; 0x040C	fr-FR	French (France)	French	français (France)	1252	850	FRA	FRA
+    ${NSD_CB_AddString} $Locale "fr-LU"      ; 0x140C	fr-LU	French (Luxembourg)	French	français (Luxembourg)	1252	850	LUX	FRL
+    ${NSD_CB_AddString} $Locale "fr-MC"      ; 0x180C	fr-MC	French (Monaco)	French	français (Principauté de Monaco)	1252	850	MCO	FRM
+    ${NSD_CB_AddString} $Locale "fr-CH"      ; 0x100C	fr-CH	French (Switzerland)	French	français (Suisse)	1252	850	CHE	FRS
+    ${NSD_CB_AddString} $Locale "fy"         ; 0x0062	fy	Frisian	Frisian	Frysk	1252	850	NLD	FYN
+    ${NSD_CB_AddString} $Locale "fy-NL"      ; 0x0462	fy-NL	Frisian (Netherlands)	Frisian	Frysk (Nederlân)	1252	850	NLD	FYN
+    ${NSD_CB_AddString} $Locale "gl"         ; 0x0056	gl	Galician	Galician	galego	1252	850	ESP	GLC
+    ${NSD_CB_AddString} $Locale "gl-ES"      ; 0x0456	gl-ES	Galician (Galician)	Galician	galego (galego)	1252	850	ESP	GLC
+    ${NSD_CB_AddString} $Locale "ka"         ; 0x0037	ka	Georgian	Georgian	ქართული	0	1	GEO	KAT
+    ${NSD_CB_AddString} $Locale "ka-GE"      ; 0x0437	ka-GE	Georgian (Georgia)	Georgian	ქართული (საქართველო)	0	1	GEO	KAT
+    ${NSD_CB_AddString} $Locale "de"         ; 0x0007	de	German	German	Deutsch	1252	850	DEU	DEU
+    ${NSD_CB_AddString} $Locale "de-AT"      ; 0x0C07	de-AT	German (Austria)	German	Deutsch (Österreich)	1252	850	AUT	DEA
+    ${NSD_CB_AddString} $Locale "de-DE"      ; 0x0407	de-DE	German (Germany)	German	Deutsch (Deutschland)	1252	850	DEU	DEU
+    ${NSD_CB_AddString} $Locale "de-LI"      ; 0x1407	de-LI	German (Liechtenstein)	German	Deutsch (Liechtenstein)	1252	850	LIE	DEC
+    ${NSD_CB_AddString} $Locale "de-LU"      ; 0x1007	de-LU	German (Luxembourg)	German	Deutsch (Luxemburg)	1252	850	LUX	DEL
+    ${NSD_CB_AddString} $Locale "de-CH"      ; 0x0807	de-CH	German (Switzerland)	German	Deutsch (Schweiz)	1252	850	CHE	DES
+    ${NSD_CB_AddString} $Locale "el"         ; 0x0008	el	Greek	Greek	Ελληνικά	1253	737	GRC	ELL
+    ${NSD_CB_AddString} $Locale "el-GR"      ; 0x0408	el-GR	Greek (Greece)	Greek	Ελληνικά (Ελλάδα)	1253	737	GRC	ELL
+    ${NSD_CB_AddString} $Locale "kl"         ; 0x006F	kl	Greenlandic	Greenlandic	kalaallisut	1252	850	GRL	KAL
+    ${NSD_CB_AddString} $Locale "kl-GL"      ; 0x046F	kl-GL	Greenlandic (Greenland)	Greenlandic	kalaallisut (Kalaallit Nunaat)	1252	850	GRL	KAL
+    ${NSD_CB_AddString} $Locale "gu"         ; 0x0047	gu	Gujarati	Gujarati	ગુજરાતી	0	1	IND	GUJ
+    ${NSD_CB_AddString} $Locale "gu-IN"      ; 0x0447	gu-IN	Gujarati (India)	Gujarati	ગુજરાતી (ભારત)	0	1	IND	GUJ
+    ${NSD_CB_AddString} $Locale "ha"         ; 0x0068	ha	Hausa	Hausa (Latin)	Hausa	1252	437	NGA	HAU
+    ${NSD_CB_AddString} $Locale "ha-Latn"    ; 0x7C68	ha-Latn	Hausa (Latin)	Hausa (Latin)	Hausa (Latin)	1252	437	NGA	HAU
+    ${NSD_CB_AddString} $Locale "ha-Latn-NG" ; 0x0468	ha-Latn-NG	Hausa (Latin, Nigeria)	Hausa (Latin)	Hausa (Nigeria)	1252	437	NGA	HAU
+    ${NSD_CB_AddString} $Locale "he"         ; 0x000D	he	Hebrew‎	Hebrew	עברית‏	1255	862	ISR	HEB
+    ${NSD_CB_AddString} $Locale "he-IL"      ; 0x040D	he-IL	Hebrew (Israel)‎	Hebrew	עברית (ישראל)‏	1255	862	ISR	HEB
+    ${NSD_CB_AddString} $Locale "hi"         ; 0x0039	hi	Hindi	Hindi	हिंदी	0	1	IND	HIN
+    ${NSD_CB_AddString} $Locale "hi-IN"      ; 0x0439	hi-IN	Hindi (India)	Hindi	हिंदी (भारत)	0	1	IND	HIN
+    ${NSD_CB_AddString} $Locale "hu"         ; 0x000E	hu	Hungarian	Hungarian	magyar	1250	852	HUN	HUN
+    ${NSD_CB_AddString} $Locale "hu-HU"      ; 0x040E	hu-HU	Hungarian (Hungary)	Hungarian	magyar (Magyarország)	1250	852	HUN	HUN
+    ${NSD_CB_AddString} $Locale "is"         ; 0x000F	is	Icelandic	Icelandic	íslenska	1252	850	ISL	ISL
+    ${NSD_CB_AddString} $Locale "is-IS"      ; 0x040F	is-IS	Icelandic (Iceland)	Icelandic	íslenska (Ísland)	1252	850	ISL	ISL
+    ${NSD_CB_AddString} $Locale "ig"         ; 0x0070	ig	Igbo	Igbo	Igbo	1252	437	NGA	IBO
+    ${NSD_CB_AddString} $Locale "ig-NG"      ; 0x0470	ig-NG	Igbo (Nigeria)	Igbo	Igbo (Nigeria)	1252	437	NGA	IBO
+    ${NSD_CB_AddString} $Locale "id"         ; 0x0021	id	Indonesian	Indonesian	Bahasa Indonesia	1252	850	IDN	IND
+    ${NSD_CB_AddString} $Locale "id-ID"      ; 0x0421	id-ID	Indonesian (Indonesia)	Indonesian	Bahasa Indonesia (Indonesia)	1252	850	IDN	IND
+    ${NSD_CB_AddString} $Locale "iu"         ; 0x005D	iu	Inuktitut	Inuktitut (Latin)	Inuktitut	1252	437	CAN	IUK
+    ${NSD_CB_AddString} $Locale "iu-Latn"    ; 0x7C5D	iu-Latn	Inuktitut (Latin)	Inuktitut (Latin)	Inuktitut (Qaliujaaqpait)	1252	437	CAN	IUK
+    ${NSD_CB_AddString} $Locale "iu-Latn-CA" ; 0x085D	iu-Latn-CA	Inuktitut (Latin, Canada)	Inuktitut (Latin)	Inuktitut	1252	437	CAN	IUK
+    ${NSD_CB_AddString} $Locale "iu-Cans"    ; 0x785D	iu-Cans	Inuktitut (Syllabics)	Inuktitut (Syllabics)	ᐃᓄᒃᑎᑐᑦ (ᖃᓂᐅᔮᖅᐸᐃᑦ)	0	1	CAN	IUS
+    ${NSD_CB_AddString} $Locale "iu-Cans-CA" ; 0x045D	iu-Cans-CA	Inuktitut (Syllabics, Canada)	Inuktitut (Syllabics)	ᐃᓄᒃᑎᑐᑦ (ᑲᓇᑕᒥ)	0	1	CAN	IUS
+    ${NSD_CB_AddString} $Locale "ga"         ; 0x003C	ga	Irish	Irish	Gaeilge	1252	850	IRL	IRE
+    ${NSD_CB_AddString} $Locale "ga-IE"      ; 0x083C	ga-IE	Irish (Ireland)	Irish	Gaeilge (Éire)	1252	850	IRL	IRE
+    ${NSD_CB_AddString} $Locale "xh"         ; 0x0034	xh	isiXhosa	isiXhosa	isiXhosa	1252	850	ZAF	XHO
+    ${NSD_CB_AddString} $Locale "xh-ZA"      ; 0x0434	xh-ZA	isiXhosa (South Africa)	isiXhosa	isiXhosa (uMzantsi Afrika)	1252	850	ZAF	XHO
+    ${NSD_CB_AddString} $Locale "zu"         ; 0x0035	zu	isiZulu	isiZulu	isiZulu	1252	850	ZAF	ZUL
+    ${NSD_CB_AddString} $Locale "zu-ZA"      ; 0x0435	zu-ZA	isiZulu (South Africa)	isiZulu	isiZulu (iNingizimu Afrika)	1252	850	ZAF	ZUL
+    ${NSD_CB_AddString} $Locale "it"         ; 0x0010	it	Italian	Italian	italiano	1252	850	ITA	ITA
+    ${NSD_CB_AddString} $Locale "it-IT"      ; 0x0410	it-IT	Italian (Italy)	Italian	italiano (Italia)	1252	850	ITA	ITA
+    ${NSD_CB_AddString} $Locale "it-CH"      ; 0x0810	it-CH	Italian (Switzerland)	Italian	italiano (Svizzera)	1252	850	CHE	ITS
+    ${NSD_CB_AddString} $Locale "ja"         ; 0x0011	ja	Japanese	Japanese	日本語	932	932	JPN	JPN
+    ${NSD_CB_AddString} $Locale "ja-JP"      ; 0x0411	ja-JP	Japanese (Japan)	Japanese	日本語 (日本)	932	932	JPN	JPN
+    ${NSD_CB_AddString} $Locale "kn"         ; 0x004B	kn	Kannada	Kannada	ಕನ್ನಡ	0	1	IND	KDI
+    ${NSD_CB_AddString} $Locale "kn-IN"      ; 0x044B	kn-IN	Kannada (India)	Kannada	ಕನ್ನಡ (ಭಾರತ)	0	1	IND	KDI
+    ${NSD_CB_AddString} $Locale "kk"         ; 0x003F	kk	Kazakh	Kazakh	Қазақ	0	1	KAZ	KKZ
+    ${NSD_CB_AddString} $Locale "kk-KZ"      ; 0x043F	kk-KZ	Kazakh (Kazakhstan)	Kazakh	Қазақ (Қазақстан)	0	1	KAZ	KKZ
+    ${NSD_CB_AddString} $Locale "km"         ; 0x0053	km	Khmer	Khmer	ខ្មែរ	0	1	KHM	KHM
+    ${NSD_CB_AddString} $Locale "km-KH"      ; 0x0453	km-KH	Khmer (Cambodia)	Khmer	ខ្មែរ (កម្ពុជា)	0	1	KHM	KHM
+    ${NSD_CB_AddString} $Locale "qut"        ; 0x0086	qut	K'iche	K'iche	K'iche	1252	850	GTM	QUT
+    ${NSD_CB_AddString} $Locale "qut-GT"     ; 0x0486	qut-GT	K'iche (Guatemala)	K'iche	K'iche (Guatemala)	1252	850	GTM	QUT
+    ${NSD_CB_AddString} $Locale "rw"         ; 0x0087	rw	Kinyarwanda	Kinyarwanda	Kinyarwanda	1252	437	RWA	KIN
+    ${NSD_CB_AddString} $Locale "rw-RW"      ; 0x0487	rw-RW	Kinyarwanda (Rwanda)	Kinyarwanda	Kinyarwanda (Rwanda)	1252	437	RWA	KIN
+    ${NSD_CB_AddString} $Locale "sw"         ; 0x0041	sw	Kiswahili	Kiswahili	Kiswahili	1252	437	KEN	SWK
+    ${NSD_CB_AddString} $Locale "sw-KE"      ; 0x0441	sw-KE	Kiswahili (Kenya)	Kiswahili	Kiswahili (Kenya)	1252	437	KEN	SWK
+    ${NSD_CB_AddString} $Locale "kok"        ; 0x0057	kok	Konkani	Konkani	कोंकणी	0	1	IND	KNK
+    ${NSD_CB_AddString} $Locale "kok-IN"     ; 0x0457	kok-IN	Konkani (India)	Konkani	कोंकणी (भारत)	0	1	IND	KNK
+    ${NSD_CB_AddString} $Locale "ko"         ; 0x0012	ko	Korean	Korean	한국어	949	949	KOR	KOR
+    ${NSD_CB_AddString} $Locale "ko-KR"      ; 0x0412	ko-KR	Korean (Korea)	Korean	한국어 (대한민국)	949	949	KOR	KOR
+    ${NSD_CB_AddString} $Locale "ky"         ; 0x0040	ky	Kyrgyz	Kyrgyz	Кыргыз	1251	866	KGZ	KYR
+    ${NSD_CB_AddString} $Locale "ky-KG"      ; 0x0440	ky-KG	Kyrgyz (Kyrgyzstan)	Kyrgyz	Кыргыз (Кыргызстан)	1251	866	KGZ	KYR
+    ${NSD_CB_AddString} $Locale "lo"         ; 0x0054	lo	Lao	Lao	ລາວ	0	1	LAO	LAO
+    ${NSD_CB_AddString} $Locale "lo-LA"      ; 0x0454	lo-LA	Lao (Lao P.D.R.)	Lao	ລາວ (ສ.ປ.ປ. ລາວ)	0	1	LAO	LAO
+    ${NSD_CB_AddString} $Locale "lv"         ; 0x0026	lv	Latvian	Latvian	latviešu	1257	775	LVA	LVI
+    ${NSD_CB_AddString} $Locale "lv-LV"      ; 0x0426	lv-LV	Latvian (Latvia)	Latvian	latviešu (Latvija)	1257	775	LVA	LVI
+    ${NSD_CB_AddString} $Locale "lt"         ; 0x0027	lt	Lithuanian	Lithuanian	lietuvių	1257	775	LTU	LTH
+    ${NSD_CB_AddString} $Locale "lt-LT"      ; 0x0427	lt-LT	Lithuanian (Lithuania)	Lithuanian	lietuvių (Lietuva)	1257	775	LTU	LTH
+    ${NSD_CB_AddString} $Locale "dsb"        ; 0x7C2E	dsb	Lower Sorbian	Lower Sorbian	dolnoserbšćina	1252	850	GER	DSB
+    ${NSD_CB_AddString} $Locale "dsb-DE"     ; 0x082E	dsb-DE	Lower Sorbian (Germany)	Lower Sorbian	dolnoserbšćina (Nimska)	1252	850	GER	DSB
+    ${NSD_CB_AddString} $Locale "lb"         ; 0x006E	lb	Luxembourgish	Luxembourgish	Lëtzebuergesch	1252	850	LUX	LBX
+    ${NSD_CB_AddString} $Locale "lb-LU"      ; 0x046E	lb-LU	Luxembourgish (Luxembourg)	Luxembourgish	Lëtzebuergesch (Luxembourg)	1252	850	LUX	LBX
+    ${NSD_CB_AddString} $Locale "mk-MK"      ; 0x042F	mk-MK	Macedonian (Former Yugoslav Republic of Macedonia)	Macedonian (FYROM)	македонски јазик (Македонија)	1251	866	MKD	MKI
+    ${NSD_CB_AddString} $Locale "mk"         ; 0x002F	mk	Macedonian (FYROM)	Macedonian (FYROM)	македонски јазик	1251	866	MKD	MKI
+    ${NSD_CB_AddString} $Locale "ms"         ; 0x003E	ms	Malay	Malay	Bahasa Melayu	1252	850	MYS	MSL
+    ${NSD_CB_AddString} $Locale "ms-BN"      ; 0x083E	ms-BN	Malay (Brunei Darussalam)	Malay	Bahasa Melayu (Brunei Darussalam)	1252	850	BRN	MSB
+    ${NSD_CB_AddString} $Locale "ms-MY"      ; 0x043E	ms-MY	Malay (Malaysia)	Malay	Bahasa Melayu (Malaysia)	1252	850	MYS	MSL
+    ${NSD_CB_AddString} $Locale "ml"         ; 0x004C	ml	Malayalam	Malayalam	മലയാളം	0	1	IND	MYM
+    ${NSD_CB_AddString} $Locale "ml-IN"      ; 0x044C	ml-IN	Malayalam (India)	Malayalam	മലയാളം (ഭാരതം)	0	1	IND	MYM
+    ${NSD_CB_AddString} $Locale "mt"         ; 0x003A	mt	Maltese	Maltese	Malti	0	1	MLT	MLT
+    ${NSD_CB_AddString} $Locale "mt-MT"      ; 0x043A	mt-MT	Maltese (Malta)	Maltese	Malti (Malta)	0	1	MLT	MLT
+    ${NSD_CB_AddString} $Locale "mi"         ; 0x0081	mi	Maori	Maori	Reo Māori	0	1	NZL	MRI
+    ${NSD_CB_AddString} $Locale "mi-NZ"      ; 0x0481	mi-NZ	Maori (New Zealand)	Maori	Reo Māori (Aotearoa)	0	1	NZL	MRI
+    ${NSD_CB_AddString} $Locale "arn"        ; 0x007A	arn	Mapudungun	Mapudungun	Mapudungun	1252	850	CHL	MPD
+    ${NSD_CB_AddString} $Locale "arn-CL"     ; 0x047A	arn-CL	Mapudungun (Chile)	Mapudungun	Mapudungun (Chile)	1252	850	CHL	MPD
+    ${NSD_CB_AddString} $Locale "mr"         ; 0x004E	mr	Marathi	Marathi	मराठी	0	1	IND	MAR
+    ${NSD_CB_AddString} $Locale "mr-IN"      ; 0x044E	mr-IN	Marathi (India)	Marathi	मराठी (भारत)	0	1	IND	MAR
+    ${NSD_CB_AddString} $Locale "moh"        ; 0x007C	moh	Mohawk	Mohawk	Kanien'kéha	1252	850	CAN	MWK
+    ${NSD_CB_AddString} $Locale "moh-CA"     ; 0x047C	moh-CA	Mohawk (Mohawk)	Mohawk	Kanien'kéha	1252	850	CAN	MWK
+    ${NSD_CB_AddString} $Locale "mn"         ; 0x0050	mn	Mongolian (Cyrillic)	Mongolian (Cyrillic)	Монгол хэл	1251	866	MNG	MNN
+    ${NSD_CB_AddString} $Locale "mn-Cyrl"    ; 0x7850	mn-Cyrl	Mongolian (Cyrillic)	Mongolian (Cyrillic)	Монгол хэл	1251	866	MNG	MNN
+    ${NSD_CB_AddString} $Locale "mn-MN"      ; 0x0450	mn-MN	Mongolian (Cyrillic, Mongolia)	Mongolian (Cyrillic)	Монгол хэл (Монгол улс)	1251	866	MNG	MNN
+    ${NSD_CB_AddString} $Locale "mn-Mong"    ; 0x7C50	mn-Mong	Mongolian (Traditional Mongolian)	Mongolian (Traditional Mongolian)	ᠮᠤᠨᠭᠭᠤᠯ ᠬᠡᠯᠡ	0	1	CHN	MNG
+    ${NSD_CB_AddString} $Locale "mn-Mong-CN" ; 0x0850	mn-Mong-CN	Mongolian (Traditional Mongolian, PRC)	Mongolian (Traditional Mongolian)	ᠮᠤᠨᠭᠭᠤᠯ ᠬᠡᠯᠡ (ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ)	0	1	CHN	MNG
+    ${NSD_CB_AddString} $Locale "ne"         ; 0x0061	ne	Nepali	Nepali	नेपाली	0	1	NEP	NEP
+    ${NSD_CB_AddString} $Locale "ne-NP"      ; 0x0461	ne-NP	Nepali (Nepal)	Nepali	नेपाली (नेपाल)	0	1	NEP	NEP
+    ${NSD_CB_AddString} $Locale "no"         ; 0x0014	no	Norwegian	Norwegian (Bokmål)	norsk	1252	850	NOR	NOR
+    ${NSD_CB_AddString} $Locale "nb"         ; 0x7C14	nb	Norwegian (Bokmål)	Norwegian (Bokmål)	norsk (bokmål)	1252	850	NOR	NOR
+    ${NSD_CB_AddString} $Locale "nn"         ; 0x7814	nn	Norwegian (Nynorsk)	Norwegian (Nynorsk)	norsk (nynorsk)	1252	850	NOR	NON
+    ${NSD_CB_AddString} $Locale "nb-NO"      ; 0x0414	nb-NO	Norwegian, Bokmål (Norway)	Norwegian (Bokmål)	norsk, bokmål (Norge)	1252	850	NOR	NOR
+    ${NSD_CB_AddString} $Locale "nn-NO"      ; 0x0814	nn-NO	Norwegian, Nynorsk (Norway)	Norwegian (Nynorsk)	norsk, nynorsk (Noreg)	1252	850	NOR	NON
+    ${NSD_CB_AddString} $Locale "oc"         ; 0x0082	oc	Occitan	Occitan	Occitan	1252	850	FRA	OCI
+    ${NSD_CB_AddString} $Locale "oc-FR"      ; 0x0482	oc-FR	Occitan (France)	Occitan	Occitan (França)	1252	850	FRA	OCI
+    ${NSD_CB_AddString} $Locale "or"         ; 0x0048	or	Oriya	Oriya	ଓଡ଼ିଆ	0	1	IND	ORI
+    ${NSD_CB_AddString} $Locale "or-IN"      ; 0x0448	or-IN	Oriya (India)	Oriya	ଓଡ଼ିଆ (ଭାରତ)	0	1	IND	ORI
+    ${NSD_CB_AddString} $Locale "ps"         ; 0x0063	ps	Pashto‎	Pashto	پښتو‏	0	1	AFG	PAS
+    ${NSD_CB_AddString} $Locale "ps-AF"      ; 0x0463	ps-AF	Pashto (Afghanistan)‎	Pashto	پښتو (افغانستان)‏	0	1	AFG	PAS
+    ${NSD_CB_AddString} $Locale "fa"         ; 0x0029	fa	Persian‎	Persian	فارسى‏	1256	720	IRN	FAR
+    ${NSD_CB_AddString} $Locale "fa-IR"      ; 0x0429	fa-IR	Persian‎	Persian	فارسى (ایران)‏	1256	720	IRN	FAR
+    ${NSD_CB_AddString} $Locale "pl"         ; 0x0015	pl	Polish	Polish	polski	1250	852	POL	PLK
+    ${NSD_CB_AddString} $Locale "pl-PL"      ; 0x0415	pl-PL	Polish (Poland)	Polish	polski (Polska)	1250	852	POL	PLK
+    ${NSD_CB_AddString} $Locale "pt"         ; 0x0016	pt	Portuguese	Portuguese	Português	1252	850	BRA	PTB
+    ${NSD_CB_AddString} $Locale "pt-BR"      ; 0x0416	pt-BR	Portuguese (Brazil)	Portuguese	Português (Brasil)	1252	850	BRA	PTB
+    ${NSD_CB_AddString} $Locale "pt-PT"      ; 0x0816	pt-PT	Portuguese (Portugal)	Portuguese	português (Portugal)	1252	850	PRT	PTG
+    ${NSD_CB_AddString} $Locale "pa"         ; 0x0046	pa	Punjabi	Punjabi	ਪੰਜਾਬੀ	0	1	IND	PAN
+    ${NSD_CB_AddString} $Locale "pa-IN"      ; 0x0446	pa-IN	Punjabi (India)	Punjabi	ਪੰਜਾਬੀ (ਭਾਰਤ)	0	1	IND	PAN
+    ${NSD_CB_AddString} $Locale "quz"        ; 0x006B	quz	Quechua	Quechua	runasimi	1252	850	BOL	QUB
+    ${NSD_CB_AddString} $Locale "quz-BO"     ; 0x046B	quz-BO	Quechua (Bolivia)	Quechua	runasimi (Qullasuyu)	1252	850	BOL	QUB
+    ${NSD_CB_AddString} $Locale "quz-EC"     ; 0x086B	quz-EC	Quechua (Ecuador)	Quechua	runasimi (Ecuador)	1252	850	ECU	QUE
+    ${NSD_CB_AddString} $Locale "quz-PE"     ; 0x0C6B	quz-PE	Quechua (Peru)	Quechua	runasimi (Piruw)	1252	850	PER	QUP
+    ${NSD_CB_AddString} $Locale "ro"         ; 0x0018	ro	Romanian	Romanian	română	1250	852	ROM	ROM
+    ${NSD_CB_AddString} $Locale "ro-RO"      ; 0x0418	ro-RO	Romanian (Romania)	Romanian	română (România)	1250	852	ROM	ROM
+    ${NSD_CB_AddString} $Locale "rm"         ; 0x0017	rm	Romansh	Romansh	Rumantsch	1252	850	CHE	RMC
+    ${NSD_CB_AddString} $Locale "rm-CH"      ; 0x0417	rm-CH	Romansh (Switzerland)	Romansh	Rumantsch (Svizra)	1252	850	CHE	RMC
+    ${NSD_CB_AddString} $Locale "ru"         ; 0x0019	ru	Russian	Russian	русский	1251	866	RUS	RUS
+    ${NSD_CB_AddString} $Locale "ru-RU"      ; 0x0419	ru-RU	Russian (Russia)	Russian	русский (Россия)	1251	866	RUS	RUS
+    ${NSD_CB_AddString} $Locale "smn"        ; 0x703B	smn	Sami (Inari)	Sami (Inari)	sämikielâ	1252	850	FIN	SMN
+    ${NSD_CB_AddString} $Locale "smj"        ; 0x7C3B	smj	Sami (Lule)	Sami (Lule)	julevusámegiella	1252	850	SWE	SMK
+    ${NSD_CB_AddString} $Locale "se"         ; 0x003B	se	Sami (Northern)	Sami (Northern)	davvisámegiella	1252	850	NOR	SME
+    ${NSD_CB_AddString} $Locale "sms"        ; 0x743B	sms	Sami (Skolt)	Sami (Skolt)	sääm´ǩiõll	1252	850	FIN	SMS
+    ${NSD_CB_AddString} $Locale "sma"        ; 0x783B	sma	Sami (Southern)	Sami (Southern)	åarjelsaemiengiele	1252	850	SWE	SMB
+    ${NSD_CB_AddString} $Locale "smn-FI"     ; 0x243B	smn-FI	Sami, Inari (Finland)	Sami (Inari)	sämikielâ (Suomâ)	1252	850	FIN	SMN
+    ${NSD_CB_AddString} $Locale "smj-NO"     ; 0x103B	smj-NO	Sami, Lule (Norway)	Sami (Lule)	julevusámegiella (Vuodna)	1252	850	NOR	SMJ
+    ${NSD_CB_AddString} $Locale "smj-SE"     ; 0x143B	smj-SE	Sami, Lule (Sweden)	Sami (Lule)	julevusámegiella (Svierik)	1252	850	SWE	SMK
+    ${NSD_CB_AddString} $Locale "se-FI"      ; 0x0C3B	se-FI	Sami, Northern (Finland)	Sami (Northern)	davvisámegiella (Suopma)	1252	850	FIN	SMG
+    ${NSD_CB_AddString} $Locale "se-NO"      ; 0x043B	se-NO	Sami, Northern (Norway)	Sami (Northern)	davvisámegiella (Norga)	1252	850	NOR	SME
+    ${NSD_CB_AddString} $Locale "se-SE"      ; 0x083B	se-SE	Sami, Northern (Sweden)	Sami (Northern)	davvisámegiella (Ruoŧŧa)	1252	850	SWE	SMF
+    ${NSD_CB_AddString} $Locale "sms-FI"     ; 0x203B	sms-FI	Sami, Skolt (Finland)	Sami (Skolt)	sääm´ǩiõll (Lää´ddjânnam)	1252	850	FIN	SMS
+    ${NSD_CB_AddString} $Locale "sma-NO"     ; 0x183B	sma-NO	Sami, Southern (Norway)	Sami (Southern)	åarjelsaemiengiele (Nöörje)	1252	850	NOR	SMA
+    ${NSD_CB_AddString} $Locale "sma-SE"     ; 0x1C3B	sma-SE	Sami, Southern (Sweden)	Sami (Southern)	åarjelsaemiengiele (Sveerje)	1252	850	SWE	SMB
+    ${NSD_CB_AddString} $Locale "sa"         ; 0x004F	sa	Sanskrit	Sanskrit	संस्कृत	0	1	IND	SAN
+    ${NSD_CB_AddString} $Locale "sa-IN"      ; 0x044F	sa-IN	Sanskrit (India)	Sanskrit	संस्कृत (भारतम्)	0	1	IND	SAN
+    ${NSD_CB_AddString} $Locale "gd"         ; 0x0091	gd	Scottish Gaelic	Scottish Gaelic	Gàidhlig	1252	850	GBR	GLA
+    ${NSD_CB_AddString} $Locale "gd-GB"      ; 0x0491	gd-GB	Scottish Gaelic (United Kingdom)	Scottish Gaelic	Gàidhlig (An Rìoghachd Aonaichte)	1252	850	GBR	GLA
+    ${NSD_CB_AddString} $Locale "sr"         ; 0x7C1A	sr	Serbian	Serbian (Latin)	srpski	1250	852	SRB	SRM
+    ${NSD_CB_AddString} $Locale "sr-Cyrl"    ; 0x6C1A	sr-Cyrl	Serbian (Cyrillic)	Serbian (Cyrillic)	српски (Ћирилица)	1251	855	SRB	SRO
+    ${NSD_CB_AddString} $Locale "sr-Cyrl-BA" ; 0x1C1A	sr-Cyrl-BA	Serbian (Cyrillic, Bosnia and Herzegovina)	Serbian (Cyrillic)	српски (Босна и Херцеговина)	1251	855	BIH	SRN
+    ${NSD_CB_AddString} $Locale "sr-Cyrl-ME" ; 0x301A	sr-Cyrl-ME	Serbian (Cyrillic, Montenegro)	Serbian (Cyrillic)	српски (Црна Гора)	1251	855	MNE	SRQ
+    ${NSD_CB_AddString} $Locale "sr-Cyrl-CS" ; 0x0C1A	sr-Cyrl-CS	Serbian (Cyrillic, Serbia and Montenegro (Former))	Serbian (Cyrillic)	српски (Србија и Црна Гора (Претходно))	1251	855	SCG	SRB
+    ${NSD_CB_AddString} $Locale "sr-Cyrl-RS" ; 0x281A	sr-Cyrl-RS	Serbian (Cyrillic, Serbia)	Serbian (Cyrillic)	српски (Србија)	1251	855	SRB	SRO
+    ${NSD_CB_AddString} $Locale "sr-Latn"    ; 0x701A	sr-Latn	Serbian (Latin)	Serbian (Latin)	srpski (Latinica)	1250	852	SRB	SRM
+    ${NSD_CB_AddString} $Locale "sr-Latn-BA" ; 0x181A	sr-Latn-BA	Serbian (Latin, Bosnia and Herzegovina)	Serbian (Latin)	srpski (Bosna i Hercegovina)	1250	852	BIH	SRS
+    ${NSD_CB_AddString} $Locale "sr-Latn-ME" ; 0x2C1A	sr-Latn-ME	Serbian (Latin, Montenegro)	Serbian (Latin)	srpski (Crna Gora)	1250	852	MNE	SRP
+    ${NSD_CB_AddString} $Locale "sr-Latn-CS" ; 0x081A	sr-Latn-CS	Serbian (Latin, Serbia and Montenegro (Former))	Serbian (Latin)	srpski (Srbija i Crna Gora (Prethodno))	1250	852	SCG	SRL
+    ${NSD_CB_AddString} $Locale "sr-Latn-RS" ; 0x241A	sr-Latn-RS	Serbian (Latin, Serbia)	Serbian (Latin)	srpski (Srbija)	1250	852	SRB	SRM
+    ${NSD_CB_AddString} $Locale "nso"        ; 0x006C	nso	Sesotho sa Leboa	Sesotho sa Leboa	Sesotho sa Leboa	1252	850	ZAF	NSO
+    ${NSD_CB_AddString} $Locale "nso-ZA"     ; 0x046C	nso-ZA	Sesotho sa Leboa (South Africa)	Sesotho sa Leboa	Sesotho sa Leboa (Afrika Borwa)	1252	850	ZAF	NSO
+    ${NSD_CB_AddString} $Locale "tn"         ; 0x0032	tn	Setswana	Setswana	Setswana	1252	850	ZAF	TSN
+    ${NSD_CB_AddString} $Locale "tn-ZA"      ; 0x0432	tn-ZA	Setswana (South Africa)	Setswana	Setswana (Aforika Borwa)	1252	850	ZAF	TSN
+    ${NSD_CB_AddString} $Locale "si"         ; 0x005B	si	Sinhala	Sinhala	සිංහ	0	1	LKA	SIN
+    ${NSD_CB_AddString} $Locale "si-LK"      ; 0x045B	si-LK	Sinhala (Sri Lanka)	Sinhala	සිංහ (ශ්‍රී ලංකා)	0	1	LKA	SIN
+    ${NSD_CB_AddString} $Locale "sk"         ; 0x001B	sk	Slovak	Slovak	slovenčina	1250	852	SVK	SKY
+    ${NSD_CB_AddString} $Locale "sk-SK"      ; 0x041B	sk-SK	Slovak (Slovakia)	Slovak	slovenčina (Slovenská republika)	1250	852	SVK	SKY
+    ${NSD_CB_AddString} $Locale "sl"         ; 0x0024	sl	Slovenian	Slovenian	slovenski	1250	852	SVN	SLV
+    ${NSD_CB_AddString} $Locale "sl-SI"      ; 0x0424	sl-SI	Slovenian (Slovenia)	Slovenian	slovenski (Slovenija)	1250	852	SVN	SLV
+    ${NSD_CB_AddString} $Locale "es"         ; 0x000A	es	Spanish	Spanish	español	1252	850	ESP	ESN
+    ${NSD_CB_AddString} $Locale "es-AR"      ; 0x2C0A	es-AR	Spanish (Argentina)	Spanish	Español (Argentina)	1252	850	ARG	ESS
+    ${NSD_CB_AddString} $Locale "es-BO"      ; 0x400A	es-BO	Spanish (Bolivia)	Spanish	Español (Bolivia)	1252	850	BOL	ESB
+    ${NSD_CB_AddString} $Locale "es-CL"      ; 0x340A	es-CL	Spanish (Chile)	Spanish	Español (Chile)	1252	850	CHL	ESL
+    ${NSD_CB_AddString} $Locale "es-CO"      ; 0x240A	es-CO	Spanish (Colombia)	Spanish	Español (Colombia)	1252	850	COL	ESO
+    ${NSD_CB_AddString} $Locale "es-CR"      ; 0x140A	es-CR	Spanish (Costa Rica)	Spanish	Español (Costa Rica)	1252	850	CRI	ESC
+    ${NSD_CB_AddString} $Locale "es-DO"      ; 0x1C0A	es-DO	Spanish (Dominican Republic)	Spanish	Español (República Dominicana)	1252	850	DOM	ESD
+    ${NSD_CB_AddString} $Locale "es-EC"      ; 0x300A	es-EC	Spanish (Ecuador)	Spanish	Español (Ecuador)	1252	850	ECU	ESF
+    ${NSD_CB_AddString} $Locale "es-SV"      ; 0x440A	es-SV	Spanish (El Salvador)	Spanish	Español (El Salvador)	1252	850	SLV	ESE
+    ${NSD_CB_AddString} $Locale "es-GT"      ; 0x100A	es-GT	Spanish (Guatemala)	Spanish	Español (Guatemala)	1252	850	GTM	ESG
+    ${NSD_CB_AddString} $Locale "es-HN"      ; 0x480A	es-HN	Spanish (Honduras)	Spanish	Español (Honduras)	1252	850	HND	ESH
+    ${NSD_CB_AddString} $Locale "es-MX"      ; 0x080A	es-MX	Spanish (Mexico)	Spanish	Español (México)	1252	850	MEX	ESM
+    ${NSD_CB_AddString} $Locale "es-NI"      ; 0x4C0A	es-NI	Spanish (Nicaragua)	Spanish	Español (Nicaragua)	1252	850	NIC	ESI
+    ${NSD_CB_AddString} $Locale "es-PA"      ; 0x180A	es-PA	Spanish (Panama)	Spanish	Español (Panamá)	1252	850	PAN	ESA
+    ${NSD_CB_AddString} $Locale "es-PY"      ; 0x3C0A	es-PY	Spanish (Paraguay)	Spanish	Español (Paraguay)	1252	850	PRY	ESZ
+    ${NSD_CB_AddString} $Locale "es-PE"      ; 0x280A	es-PE	Spanish (Peru)	Spanish	Español (Perú)	1252	850	PER	ESR
+    ${NSD_CB_AddString} $Locale "es-PR"      ; 0x500A	es-PR	Spanish (Puerto Rico)	Spanish	Español (Puerto Rico)	1252	850	PRI	ESU
+    ${NSD_CB_AddString} $Locale "es-ES"      ; 0x0C0A	es-ES	Spanish (Spain, International Sort)	Spanish	Español (España, alfabetización internacional)	1252	850	ESP	ESN
+    ${NSD_CB_AddString} $Locale "es-US"      ; 0x540A	es-US	Spanish (United States)	Spanish	Español (Estados Unidos)	1252	850	USA	EST
+    ${NSD_CB_AddString} $Locale "es-UY"      ; 0x380A	es-UY	Spanish (Uruguay)	Spanish	Español (Uruguay)	1252	850	URY	ESY
+    ${NSD_CB_AddString} $Locale "es-VE"      ; 0x200A	es-VE	Spanish (Venezuela)	Spanish	Español (Republica Bolivariana de Venezuela)	1252	850	VEN	ESV
+    ${NSD_CB_AddString} $Locale "sv"         ; 0x001D	sv	Swedish	Swedish	svenska	1252	850	SWE	SVE
+    ${NSD_CB_AddString} $Locale "sv-FI"      ; 0x081D	sv-FI	Swedish (Finland)	Swedish	svenska (Finland)	1252	850	FIN	SVF
+    ${NSD_CB_AddString} $Locale "sv-SE"      ; 0x041D	sv-SE	Swedish (Sweden)	Swedish	svenska (Sverige)	1252	850	SWE	SVE
+    ${NSD_CB_AddString} $Locale "syr"        ; 0x005A	syr	Syriac‎	Syriac	ܣܘܪܝܝܐ‏	0	1	SYR	SYR
+    ${NSD_CB_AddString} $Locale "syr-SY"     ; 0x045A	syr-SY	Syriac (Syria)‎	Syriac	ܣܘܪܝܝܐ (سوريا)‏	0	1	SYR	SYR
+    ${NSD_CB_AddString} $Locale "tg"         ; 0x0028	tg	Tajik (Cyrillic)	Tajik (Cyrillic)	Тоҷикӣ	1251	866	TAJ	TAJ
+    ${NSD_CB_AddString} $Locale "tg-Cyrl"    ; 0x7C28	tg-Cyrl	Tajik (Cyrillic)	Tajik (Cyrillic)	Тоҷикӣ	1251	866	TAJ	TAJ
+    ${NSD_CB_AddString} $Locale "tg-Cyrl-TJ" ; 0x0428	tg-Cyrl-TJ	Tajik (Cyrillic, Tajikistan)	Tajik (Cyrillic)	Тоҷикӣ (Тоҷикистон)	1251	866	TAJ	TAJ
+    ${NSD_CB_AddString} $Locale "tzm"        ; 0x005F	tzm	Tamazight	Tamazight (Latin)	Tamazight	1252	850	DZA	TZM
+    ${NSD_CB_AddString} $Locale "tzm-Latn"   ; 0x7C5F	tzm-Latn	Tamazight (Latin)	Tamazight (Latin)	Tamazight (Latin)	1252	850	DZA	TZM
+    ${NSD_CB_AddString} $Locale "tzm-Latn-DZ" ; 0x085F	tzm-Latn-DZ	Tamazight (Latin, Algeria)	Tamazight (Latin)	Tamazight (Djazaïr)	1252	850	DZA	TZM
+    ${NSD_CB_AddString} $Locale "ta"         ; 0x0049	ta	Tamil	Tamil	தமிழ்	0	1	IND	TAM
+    ${NSD_CB_AddString} $Locale "ta-IN"      ; 0x0449	ta-IN	Tamil (India)	Tamil	தமிழ் (இந்தியா)	0	1	IND	TAM
+    ${NSD_CB_AddString} $Locale "tt"         ; 0x0044	tt	Tatar	Tatar	Татар	1251	866	RUS	TTT
+    ${NSD_CB_AddString} $Locale "tt-RU"      ; 0x0444	tt-RU	Tatar (Russia)	Tatar	Татар (Россия)	1251	866	RUS	TTT
+    ${NSD_CB_AddString} $Locale "te"         ; 0x004A	te	Telugu	Telugu	తెలుగు	0	1	IND	TEL
+    ${NSD_CB_AddString} $Locale "te-IN"      ; 0x044A	te-IN	Telugu (India)	Telugu	తెలుగు (భారత దేశం)	0	1	IND	TEL
+    ${NSD_CB_AddString} $Locale "th"         ; 0x001E	th	Thai	Thai	ไทย	874	874	THA	THA
+    ${NSD_CB_AddString} $Locale "th-TH"      ; 0x041E	th-TH	Thai (Thailand)	Thai	ไทย (ไทย)	874	874	THA	THA
+    ${NSD_CB_AddString} $Locale "bo"         ; 0x0051	bo	Tibetan	Tibetan	བོད་ཡིག	0	1	CHN	BOB
+    ${NSD_CB_AddString} $Locale "bo-CN"      ; 0x0451	bo-CN	Tibetan (PRC)	Tibetan	བོད་ཡིག (ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།)	0	1	CHN	BOB
+    ${NSD_CB_AddString} $Locale "tr"         ; 0x001F	tr	Turkish	Turkish	Türkçe	1254	857	TUR	TRK
+    ${NSD_CB_AddString} $Locale "tr-TR"      ; 0x041F	tr-TR	Turkish (Turkey)	Turkish	Türkçe (Türkiye)	1254	857	TUR	TRK
+    ${NSD_CB_AddString} $Locale "tk"         ; 0x0042	tk	Turkmen	Turkmen	türkmençe	1250	852	TKM	TUK
+    ${NSD_CB_AddString} $Locale "tk-TM"      ; 0x0442	tk-TM	Turkmen (Turkmenistan)	Turkmen	türkmençe (Türkmenistan)	1250	852	TKM	TUK
+    ${NSD_CB_AddString} $Locale "uk"         ; 0x0022	uk	Ukrainian	Ukrainian	українська	1251	866	UKR	UKR
+    ${NSD_CB_AddString} $Locale "uk-UA"      ; 0x0422	uk-UA	Ukrainian (Ukraine)	Ukrainian	українська (Україна)	1251	866	UKR	UKR
+    ${NSD_CB_AddString} $Locale "hsb"        ; 0x002E	hsb	Upper Sorbian	Upper Sorbian	hornjoserbšćina	1252	850	GER	HSB
+    ${NSD_CB_AddString} $Locale "hsb-DE"     ; 0x042E	hsb-DE	Upper Sorbian (Germany)	Upper Sorbian	hornjoserbšćina (Němska)	1252	850	GER	HSB
+    ${NSD_CB_AddString} $Locale "ur"         ; 0x0020	ur	Urdu‎	Urdu	اُردو‏	1256	720	PAK	URD
+    ${NSD_CB_AddString} $Locale "ur-PK"      ; 0x0420	ur-PK	Urdu (Islamic Republic of Pakistan)‎	Urdu	اُردو (پاکستان)‏	1256	720	PAK	URD
+    ${NSD_CB_AddString} $Locale "ug"         ; 0x0080	ug	Uyghur‎	Uyghur	ئۇيغۇر يېزىقى‏	1256	720	CHN	UIG
+    ${NSD_CB_AddString} $Locale "ug-CN"      ; 0x0480	ug-CN	Uyghur (PRC)‎	Uyghur	(ئۇيغۇر يېزىقى (جۇڭخۇا خەلق جۇمھۇرىيىتى‏	1256	720	CHN	UIG
+    ${NSD_CB_AddString} $Locale "uz-Cyrl"    ; 0x7843	uz-Cyrl	Uzbek (Cyrillic)	Uzbek (Cyrillic)	Ўзбек	1251	866	UZB	UZB
+    ${NSD_CB_AddString} $Locale "uz-Cyrl-UZ" ; 0x0843	uz-Cyrl-UZ	Uzbek (Cyrillic, Uzbekistan)	Uzbek (Cyrillic)	Ўзбек (Ўзбекистон)	1251	866	UZB	UZB
+    ${NSD_CB_AddString} $Locale "uz"         ; 0x0043	uz	Uzbek (Latin)	Uzbek (Latin)	U'zbek	1254	857	UZB	UZB
+    ${NSD_CB_AddString} $Locale "uz-Latn"    ; 0x7C43	uz-Latn	Uzbek (Latin)	Uzbek (Latin)	U'zbek	1254	857	UZB	UZB
+    ${NSD_CB_AddString} $Locale "uz-Latn-UZ" ; 0x0443	uz-Latn-UZ	Uzbek (Latin, Uzbekistan)	Uzbek (Latin)	U'zbek (U'zbekiston Respublikasi)	1254	857	UZB	UZB
+    ${NSD_CB_AddString} $Locale "vi"         ; 0x002A	vi	Vietnamese	Vietnamese	Tiếng Việt	1258	1258	VNM	VIT
+    ${NSD_CB_AddString} $Locale "vi-VN"      ; 0x042A	vi-VN	Vietnamese (Vietnam)	Vietnamese	Tiếng Việt (Việt Nam)	1258	1258	VNM	VIT
+    ${NSD_CB_AddString} $Locale "cy"         ; 0x0052	cy	Welsh	Welsh	Cymraeg	1252	850	GBR	CYM
+    ${NSD_CB_AddString} $Locale "cy-GB"      ; 0x0452	cy-GB	Welsh (United Kingdom)	Welsh	Cymraeg (y Deyrnas Unedig)	1252	850	GBR	CYM
+    ${NSD_CB_AddString} $Locale "wo"         ; 0x0088	wo	Wolof	Wolof	Wolof	1252	850	SEN	WOL
+    ${NSD_CB_AddString} $Locale "wo-SN"      ; 0x0488	wo-SN	Wolof (Senegal)	Wolof	Wolof (Sénégal)	1252	850	SEN	WOL
+    ${NSD_CB_AddString} $Locale "sah"        ; 0x0085	sah	Yakut	Yakut	саха	1251	866	RUS	SAH
+    ${NSD_CB_AddString} $Locale "sah-RU"     ; 0x0485	sah-RU	Yakut (Russia)	Yakut	саха (Россия)	1251	866	RUS	SAH
+    ${NSD_CB_AddString} $Locale "ii"         ; 0x0078	ii	Yi	Yi	ꆈꌠꁱꂷ	0	1	CHN	III
+    ${NSD_CB_AddString} $Locale "ii-CN"      ; 0x0478	ii-CN	Yi (PRC)	Yi	ꆈꌠꁱꂷ (ꍏꉸꏓꂱꇭꉼꇩ)	0	1	CHN	III
+    ${NSD_CB_AddString} $Locale "yo"         ; 0x006A	yo	Yoruba	Yoruba	Yoruba	1252	437	NGA	YOR
+    ${NSD_CB_AddString} $Locale "yo-NG"      ; 0x046A	yo-NG	Yoruba (Nigeria)	Yoruba	Yoruba (Nigeria)	1252	437	NGA	YOR
+  ${else}
+    ${NSD_CB_AddString} $Locale "Afrikaans, South Africa"
+    ${NSD_CB_AddString} $Locale "Albanian, Albania"
+    ${NSD_CB_AddString} $Locale "Azeri (Cyrillic), Azerbaijan"
+    ${NSD_CB_AddString} $Locale "Azeri (Latin), Azerbaijan"
+    ${NSD_CB_AddString} $Locale "Basque, Spain"
+    ${NSD_CB_AddString} $Locale "Belarusian, Belarus"
+    ${NSD_CB_AddString} $Locale "Bosnian, Bosnia and Herzegovina"
+    ${NSD_CB_AddString} $Locale "Bosnian (Cyrillic), Bosnia and Herzegovina"
+    ${NSD_CB_AddString} $Locale "Bulgarian, Bulgaria"
+    ${NSD_CB_AddString} $Locale "Catalan, Spain"
+    ${NSD_CB_AddString} $Locale "Croatian, Bosnia and Herzegovina"
+    ${NSD_CB_AddString} $Locale "Croatian, Croatia"
+    ${NSD_CB_AddString} $Locale "Czech, Czech Republic"
+    ${NSD_CB_AddString} $Locale "Danish, Denmark"
+    ${NSD_CB_AddString} $Locale "Dutch, Belgium"
+    ${NSD_CB_AddString} $Locale "Dutch, Netherlands"
+    ${NSD_CB_AddString} $Locale "English, Australia"
+    ${NSD_CB_AddString} $Locale "English, Belize"
+    ${NSD_CB_AddString} $Locale "English, Canada"
+    ${NSD_CB_AddString} $Locale "English, Caribbean"
+    ${NSD_CB_AddString} $Locale "English, Ireland"
+    ${NSD_CB_AddString} $Locale "English, Jamaica"
+    ${NSD_CB_AddString} $Locale "English, New Zealand"
+    ${NSD_CB_AddString} $Locale "English, Republic of the Philippines"
+    ${NSD_CB_AddString} $Locale "English, South Africa"
+    ${NSD_CB_AddString} $Locale "English, Trinidad and Tobago"
+    ${NSD_CB_AddString} $Locale "English, United Kingdom"
+    ${NSD_CB_AddString} $Locale "English, United States"
+    ${NSD_CB_AddString} $Locale "English, Zimbabwe"
+    ${NSD_CB_AddString} $Locale "Estonian, Estonia"
+    ${NSD_CB_AddString} $Locale "FYRO Macedonian, Former Yugoslav Republic of Macedonia"
+    ${NSD_CB_AddString} $Locale "Faroese, Faroe Islands"
+    ${NSD_CB_AddString} $Locale "Filipino, Philippines"
+    ${NSD_CB_AddString} $Locale "Finnish, Finland"
+    ${NSD_CB_AddString} $Locale "French, Belgium"
+    ${NSD_CB_AddString} $Locale "French, Canada"
+    ${NSD_CB_AddString} $Locale "French, France"
+    ${NSD_CB_AddString} $Locale "French, Luxembourg"
+    ${NSD_CB_AddString} $Locale "French, Principality of Monaco"
+    ${NSD_CB_AddString} $Locale "French, Switzerland"
+    ${NSD_CB_AddString} $Locale "Frisian, Netherlands"
+    ${NSD_CB_AddString} $Locale "Galician, Spain"
+    ${NSD_CB_AddString} $Locale "German, Austria"
+    ${NSD_CB_AddString} $Locale "German, Germany"
+    ${NSD_CB_AddString} $Locale "German, Liechtenstein"
+    ${NSD_CB_AddString} $Locale "German, Luxembourg"
+    ${NSD_CB_AddString} $Locale "German, Switzerland"
+    ${NSD_CB_AddString} $Locale "Greek, Greece"
+    ${NSD_CB_AddString} $Locale "Hungarian, Hungary"
+    ${NSD_CB_AddString} $Locale "Icelandic, Iceland"
+    ${NSD_CB_AddString} $Locale "Indonesian, Indonesia"
+    ${NSD_CB_AddString} $Locale "Inuktitut (Latin), Canada"
+    ${NSD_CB_AddString} $Locale "Irish, Ireland"
+    ${NSD_CB_AddString} $Locale "Italian, Italy"
+    ${NSD_CB_AddString} $Locale "Italian, Switzerland"
+    ${NSD_CB_AddString} $Locale "Kazakh, Kazakhstan"
+    ${NSD_CB_AddString} $Locale "Kyrgyz, Kyrgyzstan"
+    ${NSD_CB_AddString} $Locale "Latvian, Latvia"
+    ${NSD_CB_AddString} $Locale "Lithuanian, Lithuania"
+    ${NSD_CB_AddString} $Locale "Luxembourgish, Luxembourg"
+    ${NSD_CB_AddString} $Locale "Malay, Brunei Darussalam"
+    ${NSD_CB_AddString} $Locale "Malay, Malaysia"
+    ${NSD_CB_AddString} $Locale "Maltese, Malta"
+    ${NSD_CB_AddString} $Locale "Maori, New Zealand"
+    ${NSD_CB_AddString} $Locale "Mapudungun, Chile"
+    ${NSD_CB_AddString} $Locale "Mohawk, Canada"
+    ${NSD_CB_AddString} $Locale "Mongolian, Mongolia"
+    ${NSD_CB_AddString} $Locale "Northern Sotho, South Africa"
+    ${NSD_CB_AddString} $Locale "Norwegian (Bokmal), Norway"
+    ${NSD_CB_AddString} $Locale "Norwegian (Nynorsk), Norway"
+    ${NSD_CB_AddString} $Locale "Polish, Poland"
+    ${NSD_CB_AddString} $Locale "Portuguese, Brazil"
+    ${NSD_CB_AddString} $Locale "Portuguese, Portugal"
+    ${NSD_CB_AddString} $Locale "Quechua, Bolivia"
+    ${NSD_CB_AddString} $Locale "Quechua, Ecuador"
+    ${NSD_CB_AddString} $Locale "Quechua, Peru"
+    ${NSD_CB_AddString} $Locale "Romanian, Romania"
+    ${NSD_CB_AddString} $Locale "Romansh, Switzerland"
+    ${NSD_CB_AddString} $Locale "Russian, Russia"
+    ${NSD_CB_AddString} $Locale "Sami (Inari), Finland"
+    ${NSD_CB_AddString} $Locale "Sami (Lule), Norway"
+    ${NSD_CB_AddString} $Locale "Sami (Lule), Sweden"
+    ${NSD_CB_AddString} $Locale "Sami (Northern), Finland"
+    ${NSD_CB_AddString} $Locale "Sami (Northern), Norway"
+    ${NSD_CB_AddString} $Locale "Sami (Northern), Sweden"
+    ${NSD_CB_AddString} $Locale "Sami (Skolt), Finland"
+    ${NSD_CB_AddString} $Locale "Sami (Southern), Norway"
+    ${NSD_CB_AddString} $Locale "Sami (Southern), Sweden"
+    ${NSD_CB_AddString} $Locale "Serbian (Cyrillic), Bosnia and Herzegovina"
+    ${NSD_CB_AddString} $Locale "Serbian (Cyrillic), Serbia and Montenegro"
+    ${NSD_CB_AddString} $Locale "Serbian (Latin), Bosnia and Herzegovina"
+    ${NSD_CB_AddString} $Locale "Serbian (Latin), Serbia and Montenegro"
+    ${NSD_CB_AddString} $Locale "Slovak, Slovakia"
+    ${NSD_CB_AddString} $Locale "Slovenian, Slovenia"
+    ${NSD_CB_AddString} $Locale "Spanish, Argentina"
+    ${NSD_CB_AddString} $Locale "Spanish, Bolivia"
+    ${NSD_CB_AddString} $Locale "Spanish, Chile"
+    ${NSD_CB_AddString} $Locale "Spanish, Colombia"
+    ${NSD_CB_AddString} $Locale "Spanish, Costa Rica"
+    ${NSD_CB_AddString} $Locale "Spanish, Dominican Republic"
+    ${NSD_CB_AddString} $Locale "Spanish, Ecuador"
+    ${NSD_CB_AddString} $Locale "Spanish, El Salvador"
+    ${NSD_CB_AddString} $Locale "Spanish, Guatemala"
+    ${NSD_CB_AddString} $Locale "Spanish, Honduras"
+    ${NSD_CB_AddString} $Locale "Spanish, Mexico"
+    ${NSD_CB_AddString} $Locale "Spanish, Nicaragua"
+    ${NSD_CB_AddString} $Locale "Spanish, Panama"
+    ${NSD_CB_AddString} $Locale "Spanish, Paraguay"
+    ${NSD_CB_AddString} $Locale "Spanish, Peru"
+    ${NSD_CB_AddString} $Locale "Spanish, Puerto Rico"
+    ${NSD_CB_AddString} $Locale "Spanish, Spain"
+    ${NSD_CB_AddString} $Locale "Spanish, Spain"
+    ${NSD_CB_AddString} $Locale "Spanish, Uruguay"
+    ${NSD_CB_AddString} $Locale "Spanish, Venezuela"
+    ${NSD_CB_AddString} $Locale "Swahili, Kenya"
+    ${NSD_CB_AddString} $Locale "Swedish, Finland"
+    ${NSD_CB_AddString} $Locale "Swedish, Sweden"
+    ${NSD_CB_AddString} $Locale "Tatar, Russia"
+    ${NSD_CB_AddString} $Locale "Tswana, South Africa"
+    ${NSD_CB_AddString} $Locale "Turkish, Turkey"
+    ${NSD_CB_AddString} $Locale "Ukrainian, Ukraine"
+    ${NSD_CB_AddString} $Locale "Uzbek (Cyrillic), Uzbekistan"
+    ${NSD_CB_AddString} $Locale "Uzbek (Latin), Uzbekistan"
+    ${NSD_CB_AddString} $Locale "Welsh, United Kingdom"
+    ${NSD_CB_AddString} $Locale "Xhosa, South Africa"
+    ${NSD_CB_AddString} $Locale "Zulu, South Africa"
   ${endif}
   ${NSD_CB_SelectString} $Locale $Locale_text
 
