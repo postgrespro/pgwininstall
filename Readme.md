@@ -10,7 +10,7 @@ Directory contains various build scripts.
 
 * Microsoft SDK 7.1 for build PostgreSQL
 * Active Perl <= 5.12
-* Python 2.7, 3.5
+* Python 2.7 or 3.5
 * msys2
 * 7-Zip
 * NSIS
