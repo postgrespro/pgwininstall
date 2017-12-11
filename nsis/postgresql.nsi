@@ -366,8 +366,10 @@ Section $(PostgreSQLString) sec1
     Pop $0 ;"ok" or "error" + error details
     ${if} ${WITH_1C} == "TRUE"
       DetailPrint "Running 1C installation. Using $Locale_text locale and UTF-8 encoding ..."
+	${if} "$Locale_text" != "$(DEF_LOCALE_NAME)"
+		StrCpy $tempVar '$(tempVar)--locale="$Locale_text" '
+	${endif}
         nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-          --locale="$Locale_text" \
           --encoding="UTF-8" \
           -U "$UserName_text" \
           -D "$DATA_DIR"'
@@ -406,10 +408,7 @@ Section $(PostgreSQLString) sec1
     ${if} $checkNoLocal_state == ${BST_CHECKED}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
 	  ; Add line to pg_hba.conf
-	  FileOpen $4 "$DATA_DIR\pg_hba.conf" a
-	  FileSeek $4 0 END
-	  FileWrite $4 "host$\tall$\tall$\t0.0.0.0/0$\tmd5$\r$\n"
-	  FileClose $4
+	  ${ConfigWrite} "$DATA_DIR\pg_hba.conf" "host$\tall$\tall$\t" "0.0.0.0/0$\tmd5" $R0
 	  ; Add postgres to Windows Firewall exceptions
 	  nsisFirewall::AddAuthorizedApplication "$INSTDIR\bin\postgres.exe" "PostgresPro server"
       pop $0
