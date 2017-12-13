@@ -60,6 +60,8 @@ LangString PostgreSQLString ${LANG_RUSSIAN} "Сервер PostgreSQL"
   LangString MESS_PASS3 ${LANG_RUSSIAN} "Вы использовали в пароле нелатинские символы. Это может вызвать  \
    проблемы с вводом пароля! Продолжить?"
 
+  LangString MESS_UNSUPPORTED_WINDOWS ${LANG_ENGLISH}  "Your Version of Windows is too old. At least Windows 2008 Server or Windows 7 is required to run this product." 
+  LangString MESS_UNSUPPORTED_WINDOWS ${LANG_RUSSIAN} "Ваша версия Window не поддерживается. Для данного продукта требуется Windows 2008 Server или Windows 7 и выше."
 
   LangString DLG_PORT ${LANG_ENGLISH} "Port:"
   LangString DLG_PORT ${LANG_RUSSIAN} "Порт:"

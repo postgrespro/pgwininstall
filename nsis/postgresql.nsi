@@ -152,6 +152,7 @@ Page custom nsDialogServer nsDialogsServerPageLeave
 Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 
 ;Start Menu Folder Page Configuration
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PG_DEF_BRANDING}"
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_DIR_REGKEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
@@ -1794,7 +1795,7 @@ FunctionEnd
 Function CheckWindowsVersion
   ${If} ${SDK} != "SDK71"
     ${Unless} ${AtLeastWin2008}
-	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. Use the specific SDK71 installer for this system"
+	MessageBox MB_OK|MB_ICONINFORMATION $(MESS_UNSUPPORTED_WINDOWS)
 	Abort
     ${EndUnless}
   ${EndIf}

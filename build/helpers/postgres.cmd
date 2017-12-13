@@ -122,9 +122,7 @@ cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER
 
 rem Copy msys shell and sed
 CD /D %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
-7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
-rem CD /D %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
-rem cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
+if exist pgpro_upgrade 7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
 
 rem download and build pg_repack extension
 SET WGET=wget --no-check-certificate
