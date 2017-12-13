@@ -107,7 +107,7 @@ Var checkBoxEnvVar
 Var isEnvVar
 
 ; Set 'install service' variable
-Var service
+;Var service
 
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
 !define MUI_COMPONENTSPAGE_SMALLDESC
@@ -211,11 +211,7 @@ Section $(PostgreSQLString) sec1
   ${endif}
 
   SetOutPath "$INSTDIR"
-
   File /r ${PG_INS_SOURCE_DIR}
-  File  "/oname=$INSTDIR\doc\installation-notes.html" "installation-notes.html"
-  File  "/oname=$INSTDIR\doc\installation-notes-ru.html" "installation-notes-ru.html"
-
   File "License.txt"
   File "3rd_party_licenses.txt"
 
@@ -354,17 +350,6 @@ Section $(PostgreSQLString) sec1
   pop $0
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
-  ${if} ${PG_MAJOR_VERSION} != "9.4"
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes" \
-    "$INSTDIR\doc\installation-notes.html" \
-    "$INSTDIR\doc\pg-help.ico" "0"
-
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes (RU)" \
-    "$INSTDIR\doc\installation-notes-ru.html" \
-    "$INSTDIR\doc\pg-help.ico" "0"
-
   !insertmacro CreateInternetShortcut \
     "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (EN)" \
     "$INSTDIR\doc\postgresql-en.chm" \
@@ -374,12 +359,6 @@ Section $(PostgreSQLString) sec1
     "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (RU)" \
     "$INSTDIR\doc\postgresql-ru.chm" \
     "$INSTDIR\doc\pg-help.ico" "0"
-  ${endif}
-  
-  ; !insertmacro CreateInternetShortcut \
-  ;   "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} release notes" \
-  ;   "$INSTDIR\doc\postgresql\html\release.html" \
-  ;   "$INSTDIR\doc\pg-help.ico" "0"
 
   !insertmacro MUI_STARTMENU_WRITE_END
   ; Create data dir begin
@@ -411,11 +390,11 @@ Section $(PostgreSQLString) sec1
     Pop $0 ;"ok" or "error" + error details
     ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
       ; Initialise the database cluster, and set the appropriate permissions/ownership
-      nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+      nsExec::ExecToLog /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR"'
     ${else}
-      nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+      nsExec::ExecToLog /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
         --locale="$Locale_text" \
         --encoding=$Coding_text \
         -U "$UserName_text" \
@@ -443,10 +422,7 @@ Section $(PostgreSQLString) sec1
     ${if} $checkNoLocal_state == ${BST_CHECKED}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
 	  ; Add line to pg_hba.conf
-	  FileOpen $4 "$DATA_DIR\pg_hba.conf" a
-	  FileSeek $4 0 END
-	  FileWrite $4 "host$\tall$\tall$\t0.0.0.0/0$\tmd5$\r$\n"
-	  FileClose $4
+	  ${ConfigWrite} "$DATA_DIR\pg_hba.conf"  "host$\tall$\tall$\t" "0.0.0.0/0$\tmd5" $R0
 	  ; Add postgres to Windows Firewall exceptions
 	  nsisFirewall::AddAuthorizedApplication "$INSTDIR\bin\postgres.exe" "PostgresPro server"
 	  pop $0
@@ -656,7 +632,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 !insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
 !insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
-!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
+;!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;check existing install
@@ -1772,15 +1748,15 @@ Function .onInit
     SectionSetFlags ${secMS} $3
   ${endif}
 
-  ReadINIStr $1 $0 options service
-  ${if} "$1" == "no"
-    SectionGetFlags ${secService} $3
-    IntOp $3 $3 & ${SECTION_OFF}
-    SectionSetFlags ${secService} $3
-  ${endif}
-   ${if} "$1" == "yes"
-    StrCpy $service "YES"
-  ${endif}
+; ReadINIStr $1 $0 options service
+;  ${if} "$1" == "no"
+;   SectionGetFlags ${secService} $3
+;   IntOp $3 $3 & ${SECTION_OFF}
+;   SectionSetFlags ${secService} $3
+; ${endif}
+;  ${if} "$1" == "yes"
+;   StrCpy $service "YES"
+; ${endif}
 
    ReadINIStr $1 $0 options pgserver
   ${if} "$1" == "no"

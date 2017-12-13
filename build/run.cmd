@@ -83,7 +83,7 @@ IF "%~1"=="12" (
   TITLE Building PostgresPro
   IF "%SDK%"=="" SET SDK=SDK71
   IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
-  IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=1.3
+  IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=1.1
   CMD.EXE /C %ROOT%\build\helpers\postgres.cmd || GOTO :ERROR
 )
 
