@@ -403,13 +403,12 @@ Section $(PostgreSQLString) sec1
     ${endif}
     pop $0
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
-    
-    FileOpen $R1 "$DATA_DIR\..\initdb.log" w
-    FileWrite $R1 $1
-    FileClose $R1
 
     ${if} $0 != 0
+      FileOpen $R1 "$DATA_DIR\..\initdb.log" w
       ${Utf8ToAnsi} $1 $2
+      FileWrite $R1 $2
+      FileClose $R1
       DetailPrint "initdb.exe return $0"
       DetailPrint "Output: $2"
       Sleep 5000
