@@ -391,11 +391,11 @@ Section $(PostgreSQLString) sec1
     Pop $0 ;"ok" or "error" + error details
     ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
       ; Initialise the database cluster, and set the appropriate permissions/ownership
-      nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+      nsExec::ExecToLog /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR"'
     ${else}
-      nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+      nsExec::ExecToLog /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
         --locale="$Locale_text" \
         --encoding=$Coding_text \
         -U "$UserName_text" \
@@ -405,12 +405,8 @@ Section $(PostgreSQLString) sec1
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
     ${if} $0 != 0
-      FileOpen $R1 "$DATA_DIR\..\initdb.log" w
-      ${Utf8ToAnsi} $1 $2
-      FileWrite $R1 $2
-      FileClose $R1
       DetailPrint "initdb.exe return $0"
-      DetailPrint "Output: $2"
+      DetailPrint "Output: $1"
       Sleep 5000
     ${else}
       DetailPrint "Database initialization OK"
