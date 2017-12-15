@@ -389,6 +389,7 @@ Section $(PostgreSQLString) sec1
     Pop $0 ; or "error"
     AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
     Pop $0 ;"ok" or "error" + error details
+    System::Call 'Kernel32::SetEnvironmentVariable(t, t)i ("LC_MESSAGES", "C").r0'	
     ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
       ; Initialise the database cluster, and set the appropriate permissions/ownership
       nsExec::ExecToLog /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
