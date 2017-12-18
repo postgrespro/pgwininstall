@@ -1,9 +1,9 @@
 @ECHO OFF
 
 REM What do you need to build PostgreSQL and PgAdmin
-REM 1. Microsoft Windows SDK 7.1 and Visual Studio 2015 for PgAdmin
-REM 2. Active Perl <= 5.14
-REM 3. Python 2.7, 3.5
+REM 1. Microsoft Windows SDK 7.1 or MSVC2013 and Visual Studio 2015 for PgAdmin
+REM 2. Active Perl 5.x
+REM 3. Python 2.7 or 3.5
 REM 4. MSYS2
 REM 5. 7z
 
@@ -34,8 +34,8 @@ IF DEFINED USG (
 :OK
 
 REM Set PostgreSQL version
-IF "%PG_MAJOR_VERSION%"=="" SET PG_MAJOR_VERSION=9.6
-IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=0
+IF "%PG_MAJOR_VERSION%"=="" SET PG_MAJOR_VERSION=10
+IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=1
 
 REM Set PgAdmin3 Version
 SET PGADMIN_VERSION=1.22.1
@@ -45,7 +45,7 @@ REM Set ONE_C for 1C Patching
 IF "%ONE_C%"=="" SET ONE_C=NO
 
 REM Set build architecture: X86 or X64
-IF "%ARCH%"=="" SET ARCH=X86
+IF "%ARCH%"=="" SET ARCH=X64
 IF "%ARCH%"=="x86" SET ARCH=X86
 IF "%ARCH%"=="x64" SET ARCH=X64
 
@@ -58,39 +58,48 @@ FOR %%i in ("%~dp0..") do set "ROOT=%%~fi"
 IF "%~1"=="1" (
   TITLE Building dependencies
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\dependencies.cmd
+  CMD.EXE /C %ROOT%\build\helpers\dependencies.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="2" (
   TITLE Building PostgreSQL
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd
+  CMD.EXE /C %ROOT%\build\helpers\postgres.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="3" (
   TITLE Building PostgreSQL installer
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd
+  CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="4" (
   TITLE Building PgAdmin
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd
+  CMD.EXE /C %ROOT%\build\helpers\pgadmin.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="5" (
   TITLE Building PgAdmin installer
   IF "%SDK%"=="" SET SDK=SDK71
-  CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd
+  CMD.EXE /C %ROOT%\build\helpers\pgadmin_installer.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="6" (
     TITLE Making Archives
-    CMD.EXE /C %ROOT%\build\helpers\make_zip.cmd
+    CMD.EXE /C %ROOT%\build\helpers\make_zip.cmd || GOTO :ERROR
 )
 
 IF "%~1"=="7" (
     TITLE Build PGBouncer
-    CMD.EXE /C %ROOT%\build\helpers\pgbouncer.cmd
+    CMD.EXE /C %ROOT%\build\helpers\pgbouncer.cmd || GOTO :ERROR
 )
+
+GOTO :DONE
+
+:ERROR
+ECHO Failed with error #%errorlevel%.
+EXIT /b %errorlevel%
+
+:DONE
+ECHO Done.
