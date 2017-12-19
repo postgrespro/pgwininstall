@@ -110,11 +110,10 @@ rem download help sources
 CD /D %DOWNLOADS_DIR%
 SET DOCURL=http://repo.postgrespro.ru/doc
 
-if %HAVE_PGSQL_DOC% == 1 (
+IF %HAVE_PGSQL_DOC% == 1 (
    if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
    if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
-)
-else (
+) ELSE (
      GOTO :NO_HELP_SOURCES
 )
 
