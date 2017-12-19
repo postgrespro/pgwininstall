@@ -1,0 +1,13 @@
+diff -Naur postgresql-10.1.orig/src/tools/msvc/MSBuildProject.pm postgresql-10.1/src/tools/msvc/MSBuildProject.pm
+--- postgresql-10.1.orig/src/tools/msvc/MSBuildProject.pm	2017-12-19 14:19:48.550029023 +0300
++++ postgresql-10.1/src/tools/msvc/MSBuildProject.pm	2017-12-19 14:29:11.074744896 +0300
+@@ -340,6 +340,9 @@
+ 		$d =~ s/__CFGNAME__/$cfgname/g;
+ 		print $f "      <ModuleDefinitionFile>$d</ModuleDefinitionFile>\n";
+ 	}
++	if ($self->{name} =~ /plperl/ and $self->{platform} eq 'Win32') {
++		print $f "      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>\n";
++	}
+ 	print $f <<EOF;
+     </Link>
+     <ResourceCompile>
