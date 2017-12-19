@@ -116,8 +116,8 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building zlib...
 CD /D %DOWNLOADS_DIR%
 wget -c http://zlib.net/zlib-%ZLIB_VER%.tar.gz -O zlib-%ZLIB_VER%.tar.gz
-rm -rf "%DEPENDENCIES_BIN_DIR%\zlib %DEPENDENCIES_SRC_DIR%\zlib*
-MKDIR "%DEPENDENCIES_BIN_DIR%\zlib
+rm -rf %DEPENDENCIES_BIN_DIR%\zlib %DEPENDENCIES_SRC_DIR%\zlib*
+MKDIR %DEPENDENCIES_BIN_DIR%\zlib
 tar xf zlib-%ZLIB_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\zlib*
 set CL=/MP
