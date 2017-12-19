@@ -57,6 +57,7 @@ Var Pass2
 
 Var DATA_DIR  ;path to data
 
+Var Chcp_text
 Var TextPort_text
 Var IsTextPortInIni
 Var checkNoLocal_state
@@ -228,7 +229,15 @@ Section $(PostgreSQLString) sec1
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "EstimatedSize" "$0"
-
+ 
+  StrCpy $Chcp_text ""
+  ${if} $LANGUAGE == ${LANG_RUSSIAN}
+    StrCpy $Chcp_text "chcp 1251"
+  ${endif}
+  ${if} ${WITH_1C} == "TRUE"
+    StrCpy $Chcp_text "chcp 1251"
+  ${endif}
+  
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\reload.bat w
   IfErrors creatBatErr
@@ -238,11 +247,7 @@ Section $(PostgreSQLString) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  ${if} ${WITH_1C} == "TRUE"
-    FileWrite $0 'echo off$\r$\nchcp 1251$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
-  ${else}
-    FileWrite $0 'echo off$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
-  ${endif}
+  FileWrite $0 'echo off$\r$\n$Chcp_text$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 
   creatBatErr2:
