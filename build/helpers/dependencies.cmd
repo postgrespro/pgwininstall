@@ -14,13 +14,13 @@ REM TO-DO: overwrite to build rules
 :DOWNLOAD_MSYS_UTILS
 TITLE Download msys utils...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
 
 :BUILD_ICONV
 TITLE Building iconv...
 CD /D %DOWNLOADS_DIR%
 REM wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
-wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -156,7 +156,7 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building gettext...
 CD /D %DOWNLOADS_DIR%
 REM wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
-wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libintl %DEPENDENCIES_SRC_DIR%\gettext-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
 tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
