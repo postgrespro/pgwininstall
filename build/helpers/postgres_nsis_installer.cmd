@@ -41,7 +41,7 @@ IF %ONE_C% == YES (
 SET PG_DEF_PORT="%DEFAULT_PORT%"
 SET PG_DEF_SUPERUSER="%DEFAULT_USER%"
 SET PG_DEF_SERVICEACCOUNT="NT AUTHORITY\NetworkService"
-SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_MAJOR_VERSION% (%ARCH%)"
+SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_MAJOR_VERSION% (%BITS%)"
 SET PG_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
 
 SET NSIS_RES_DIR=%~dp0
@@ -50,7 +50,7 @@ SET NSIS_RES_DIR=%NSIS_RES_DIR%\..\..\nsis
 
 REM PostgreSQL Section
 >%NSIS_RES_DIR%\postgres.def.nsh ECHO !addplugindir "%NSIS_RES_DIR%\Plugins"
->>%NSIS_RES_DIR%\postgres.def.nsh  ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME "%PRODUCT_NAME%"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_VERSION %PRODUCT_VERSION%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_PUBLISHER %PRODUCT_PUBLISHER%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_WEB_SITE %PRODUCT_WEB_SITE%
@@ -70,6 +70,7 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define WITH_1C %WITH_1C%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define BUILD_DIR %BUILD_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define SDK %SDK%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define HAVE_PGSQL_DOC %HAVE_PGSQL_DOC%
 
 IF "%ARCH%" == "X64" (
   >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit

@@ -104,10 +104,38 @@ cp -va %DEPENDENCIES_BIN_DIR%/openssl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 
-CD %BUILD_DIR%\postgresql\*%PGVER%*\doc\src\sgml
-cp -va html/* %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
+SET WGET=wget --no-check-certificate
 
-7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
+rem download help sources
+CD /D %DOWNLOADS_DIR%
+SET DOCURL=http://repo.postgrespro.ru/doc
+
+if %HAVE_PGSQL_DOC% == 1 (
+   if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
+   if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
+)
+else (
+     GOTO :NO_HELP_SOURCES
+)
+
+rem building help files
+CD /D %BUILD_DIR%\postgresql
+rm -rf help-ru help-en
+mkdir help-ru
+mkdir help-en
+CD help-ru
+7z x %DOWNLOADS_DIR%\help-sources-ru.zip
+CD help-ru
+"C:\Program Files (x86)\HTML Help Workshop\hhc" htmlhelp.hhp
+cp htmlhelp.chm %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc\postgresql-ru.chm || GOTO :ERROR
+CD ..\help-en
+7z x %DOWNLOADS_DIR%\help-sources-en.zip
+CD help-en
+"C:\Program Files (x86)\HTML Help Workshop\hhc" htmlhelp.hhp
+cp htmlhelp.chm %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc\postgresql-en.chm || GOTO :ERROR
+
+:NO_HELP_SOURCES
+7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 
 GOTO :DONE
 

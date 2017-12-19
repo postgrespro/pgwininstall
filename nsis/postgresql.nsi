@@ -3,6 +3,7 @@
 ; used plugins: AccessControl, UserMgr,
 ; and AddToPath plugin was created by Victor Spirin for this project
 
+!addplugindir Plugins
 !include "postgres.def.nsh"
 
 ;--------------------------------
@@ -164,7 +165,7 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 
 ;--------------------------------
 ;Installer Sections
-Section "Microsoft Visual C++ ${REDIST_YEAR} Redistibutable" secMS
+Section "Microsoft Visual C++ ${REDIST_YEAR} Redistributable" secMS
   GetTempFileName $1
   !ifdef PG_64bit
     File /oname=$1 "${BUILD_DIR}\vcredist\vcredist_x64_${REDIST_YEAR}.exe"
@@ -200,8 +201,6 @@ Section $(PostgreSQLString) sec1
   SetOutPath "$INSTDIR"
 
   File /r ${PG_INS_SOURCE_DIR}
-  File  "/oname=$INSTDIR\doc\installation-notes.html" "installation-notes.html"
-  File  "/oname=$INSTDIR\doc\installation-notes-ru.html" "installation-notes-ru.html"
 
   File "License.txt"
   File "3rd_party_licenses.txt"
@@ -230,14 +229,6 @@ Section $(PostgreSQLString) sec1
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "EstimatedSize" "$0"
  
-  StrCpy $Chcp_text ""
-  ${if} $LANGUAGE == ${LANG_RUSSIAN}
-    StrCpy $Chcp_text "chcp 1251"
-  ${endif}
-  ${if} ${WITH_1C} == "TRUE"
-    StrCpy $Chcp_text "chcp 1251"
-  ${endif}
-  
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\reload.bat w
   IfErrors creatBatErr
@@ -245,9 +236,19 @@ Section $(PostgreSQLString) sec1
   FileClose $0
   creatBatErr:
   ClearErrors
+    
+  StrCpy $Chcp_text ""
+  ${if} $LANGUAGE == ${LANG_RUSSIAN}
+    StrCpy $Chcp_text "chcp 1251"
+  ${endif}
+  ${if} ${WITH_1C} == "TRUE"
+    StrCpy $Chcp_text "chcp 1251"
+  ${endif} 
+  
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors creatBatErr2
-  FileWrite $0 'echo off$\r$\n$Chcp_text$\r$\n"$INSTDIR\bin\psql.exe" -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileWrite $0 '@echo off$\r$\n$Chcp_text$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+
   FileClose $0
 
   creatBatErr2:
@@ -316,30 +317,21 @@ Section $(PostgreSQLString) sec1
   push "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk"
   call ShellLinkSetRunAs
   pop $0
-  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
-  !insertmacro _ReplaceInFile "$INSTDIR\doc\installation-notes.html"    "{PG_MAJOR_VERSION}" "${PG_MAJOR_VERSION}"
-  !insertmacro _ReplaceInFile "$INSTDIR\doc\installation-notes-ru.html" "{PG_MAJOR_VERSION}" "${PG_MAJOR_VERSION}"
-  
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes" \
-    "$INSTDIR\doc\installation-notes.html" \
-    "$INSTDIR\doc\pg-help.ico" "0"
-
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\Installation notes (RU)" \
-    "$INSTDIR\doc\installation-notes-ru.html" \
-    "$INSTDIR\doc\pg-help.ico" "0"
-
-  ; !insertmacro CreateInternetShortcut \
-  ;   "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL documentation" \
-  ;   "$INSTDIR\doc\postgresql\html\index.html" \
-  ;   "$INSTDIR\doc\pg-help.ico" "0"
-
-  ; !insertmacro CreateInternetShortcut \
-  ;   "$SMPROGRAMS\$StartMenuFolder\Documentation\PostgreSQL release notes" \
-  ;   "$INSTDIR\doc\postgresql\html\release.html" \
-  ;   "$INSTDIR\doc\pg-help.ico" "0"
+  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+  ${if} ${HAVE_PGSQL_DOC} == 1
+    CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
+    !insertmacro CreateInternetShortcut \
+	"$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (EN)" \
+	"$INSTDIR\doc\postgresql-en.chm" \
+	"$INSTDIR\doc\pg-help.ico" "0"
+    
+    !insertmacro CreateInternetShortcut \
+	    "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (RU)" \
+	    "$INSTDIR\doc\postgresql-ru.chm" \
+	    "$INSTDIR\doc\pg-help.ico" "0"
+  ${endif}
+  ${endif}
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
@@ -631,7 +623,7 @@ Function ChecExistInstall
   ${endif}
 FunctionEnd
 
-;write to PG_REG_KEY - "SOFTWARE\PostgreSQL\Installations\postgresql-9.5"
+;write to PG_REG_KEY - "SOFTWARE\PostgreSQL\Installations\postgresql-${PG_MAJOR_VERSION}"
 Function WriteInstallOptions
   ;get exist options
   WriteRegStr HKLM "${PG_REG_KEY}" "Version" "${PG_DEF_VERSION}"
@@ -680,7 +672,7 @@ Function un.ChecExistInstall
     ;get exist options
     ReadRegStr $PG_OLD_VERSION HKLM "${PG_REG_KEY}" "Version"
     ReadRegStr $0 HKLM "${PG_REG_KEY}" "Base Directory"
-    ${if} $0! = ""
+    ${if} $0 != ""
       StrCpy $INSTDIR $0
     ${endif}
     ReadRegStr $DATA_DIR HKLM "${PG_REG_KEY}" "Data Directory"
