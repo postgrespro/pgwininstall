@@ -18,6 +18,7 @@
 !include "ReplaceInFile.nsh"
 !include "common_macro.nsh"
 !include "Utf8Converter.nsh"
+!include "Ports.nsh"
 
 !insertmacro VersionCompare
 
@@ -617,42 +618,6 @@ Function ChecExistInstall
   ReadRegDWORD $1 HKLM "${PG_REG_SERVICE_KEY}" "Port"
   ${if} $1 != "" ;we have install
     StrCpy $TextPort_text $1
-  ${else}
-    ;calculate free num port - use EnumRegKey
-    StrCpy $0 0
-    StrCpy $2 5432
-
-    ;SetRegView 32
-    SetRegView 64
-    ${While} 1 = 1
-      EnumRegKey $1 HKLM "SOFTWARE\PostgreSQL\Services" $0
-      ${if} $1 == ""
-        ${ExitWhile}
-      ${endif}
-      ReadRegDWORD $3 HKLM "SOFTWARE\PostgreSQL\Services\$1" "Port"
-      ${if} $3 >= $2
-        IntOp $2 $3 + 1
-      ${endif}
-      IntOp $0 $0 + 1
-    ${EndWhile}
-    SetRegView 32
-    StrCpy $0 0
-    ${While} 1 = 1
-      EnumRegKey $1 HKLM "SOFTWARE\PostgreSQL\Services" $0
-      ${if} $1 == ""
-        ${ExitWhile}
-      ${endif}
-      ReadRegDWORD $3 HKLM "SOFTWARE\PostgreSQL\Services\$1" "Port"
-      ${if} $3 >= $2
-        IntOp $2 $3 + 1
-      ${endif}
-
-      IntOp $0 $0 + 1
-    ${EndWhile}
-
-    ${if} $IsTextPortInIni != 1 ;port can be send in ini file
-      StrCpy $TextPort_text $2
-    ${endif}
   ${endif}
 
   ReadRegStr $1 HKLM "${PG_REG_SERVICE_KEY}" "Locale"
@@ -1128,12 +1093,24 @@ Function nsDialogsOptimizationPageLeave
   ${endif}
 FunctionEnd
 
+Function SetDefaultTcpPort
+  ; tcp-port auto selector
+  StrCpy $TextPort_text "${PG_DEF_PORT}"
+  ${while} 1 = 1
+    ${if} ${TCPPortOpen} $TextPort_text
+      IntOp $TextPort_text $TextPort_text + 1
+    ${else}
+      ${exitwhile}
+    ${endif}
+  ${endwhile}
+FunctionEnd
+
 Function .onInit
+  Call SetDefaultTcpPort
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
 
-  StrCpy $TextPort_text "${PG_DEF_PORT}"
   StrCpy $UserName_text "${PG_DEF_SUPERUSER}"
 
   StrCpy $ServiceAccount_text "${PG_DEF_SERVICEACCOUNT}"
