@@ -6,7 +6,6 @@
 65-1c_FULL_95-0.23.1
 65-1c_FULL_95-0.23.1-fulleq
 Mkvcbuild.pm.patch
-perl5.22.patch
 66-applock-1c-9.4.patch
 67-postgresql-1c-9.5.patch
 68-online_analyze-9.5.patch
