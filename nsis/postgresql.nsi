@@ -318,7 +318,7 @@ Section $(PostgreSQLString) sec1
   call ShellLinkSetRunAs
   pop $0
 
-  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+  ${if} "${PRODUCT_NAME}" == "PostgreSQL"
   ${if} ${HAVE_PGSQL_DOC} == 1
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
     !insertmacro CreateInternetShortcut \
