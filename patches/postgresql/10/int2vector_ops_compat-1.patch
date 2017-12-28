@@ -1,0 +1,54 @@
+diff -ruN a/contrib/fulleq/fulleq.c b/contrib/fulleq/fulleq.c
+--- a/contrib/fulleq/fulleq.c	2017-12-28 14:41:20.851524257 +0300
++++ b/contrib/fulleq/fulleq.c	2017-12-28 14:42:53.166399367 +0300
+@@ -43,15 +43,36 @@
+ }
+ 
+ 
++static Datum
++hashint2vector(PG_FUNCTION_ARGS)
++{
++	int2vector *key = (int2vector *) PG_GETARG_POINTER(0);
++
++	return hash_any((unsigned char *) key->values, key->dim1 * sizeof(int16));
++}
++
++/*
++ * We don't have a complete set of int2vector support routines,
++ * but we need int2vectoreq for catcache indexing.
++ */
++static Datum
++int2vectoreq(PG_FUNCTION_ARGS)
++{
++	int2vector *a = (int2vector *) PG_GETARG_POINTER(0);
++	int2vector *b = (int2vector *) PG_GETARG_POINTER(1);
++
++	if (a->dim1 != b->dim1)
++		PG_RETURN_BOOL(false);
++	PG_RETURN_BOOL(memcmp(a->values, b->values, a->dim1 * sizeof(int16)) == 0);
++}
++
++
+ FULLEQ_FUNC( bool        , booleq         , hashchar       );
+ FULLEQ_FUNC( bytea       , byteaeq        , hashvarlena    );
+ FULLEQ_FUNC( char        , chareq         , hashchar       );
+ FULLEQ_FUNC( name        , nameeq         , hashname       );
+ FULLEQ_FUNC( int8        , int8eq         , hashint8       );
+ FULLEQ_FUNC( int2        , int2eq         , hashint2       );
+-/* FULLEQ_FUNC( int2vector  , int2vectoreq   , hashint2vector );v10 drop
+- * support for int2vector equality and hash operator in commit
+- * 5c80642aa8de8393b08cd3cbf612b325cedd98dc */
+ FULLEQ_FUNC( int4        , int4eq         , hashint4       );
+ FULLEQ_FUNC( text        , texteq         , hashtext       );
+ FULLEQ_FUNC( oid         , oideq          , hashoid        );
+@@ -72,3 +93,10 @@
+ FULLEQ_FUNC( timestamptz , timestamp_eq   , hashfloat8     );
+ FULLEQ_FUNC( interval    , interval_eq    , interval_hash  );
+ FULLEQ_FUNC( timetz      , timetz_eq      , timetz_hash    );
++
++/*
++ * v10 drop * support for int2vector equality and hash operator in commit
++ * 5c80642aa8de8393b08cd3cbf612b325cedd98dc, but for compatibility
++ * we still add this operators
++ */
++FULLEQ_FUNC( int2vector  , int2vectoreq   , hashint2vector );
