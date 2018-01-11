@@ -11,6 +11,12 @@ SET DEFAULT_USER=postgres
 SET PRODUCT_PUBLISHER="Postgres Professional Russia"
 SET COMPANY_NAME=PostgresPro
 SET PRODUCT_WEB_SITE="http://postgrespro.ru"
+ 
+IF %ARCH% == X86 (
+   SET BITS=32bit
+) else (
+  SET BITS=64bit
+)
 
 IF "%PRODUCT_NAME%" == "" SET PRODUCT_NAME=PostgresPro
 
@@ -26,18 +32,18 @@ IF "%PRODUCT_NAME%" == "PostgresProEnterprise" SET PG_DEF_SERVICEID="postgrespro
 IF %ONE_C% == YES (
   SET PRODUCT_NAME=PostgresPro 1C
   SET PG_DEF_SERVICEID="postgrespro-1C-${PRODUCT_VERSION}"
-  SET PG_INS_SUFFIX="%ARCH%bit_1C_Setup.exe"
+  SET PG_INS_SUFFIX="%BITS%_1C_Setup.exe"
   SET PG_REG_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Installations\postgresql-${PRODUCT_VERSION}"
   SET PG_REG_SERVICE_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Services\postgresql-${PRODUCT_VERSION}"
   SET PRODUCT_DIR_REGKEY="Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}"
-  SET PRODUCT_VERSION="%PG_MAJOR_VERSION%"
+  SET PRODUCT_VERSION="%PG_MAJOR_VERSION% (%BITS%)"
 ) ELSE (
-  SET PG_INS_SUFFIX="%ARCH%bit_Setup.exe"
+  SET PG_INS_SUFFIX="%BITS%_Setup.exe"
   SET PG_REG_KEY="%PRODUCT_DIR_REGKEY%\Installations\postgresql-%PG_MAJOR_VERSION%"
   SET PG_REG_SERVICE_KEY="%PRODUCT_DIR_REGKEY%\Services\postgresql-%PG_MAJOR_VERSION%"
   SET PG_OLD_REG_KEY="%OLD_PRODUCT_DIR_REGKEY%\Installations\postgresql-%PG_MAJOR_VERSION%"
   SET PG_OLD_REG_SERVICE_KEY="%OLD_PRODUCT_DIR_REGKEY%\Services\postgresql-%PG_MAJOR_VERSION%"
-  SET PRODUCT_VERSION="%PG_MAJOR_VERSION% (%ARCH%)"
+  SET PRODUCT_VERSION="%PG_MAJOR_VERSION% (%BITS%)"
 )
 
 SET PG_DEF_PORT="%DEFAULT_PORT%"
