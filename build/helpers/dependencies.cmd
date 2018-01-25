@@ -161,13 +161,16 @@ rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
 tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libxml2-*
-patch -f -p1 < %ROOT%/patches/libxml2/libxml2.patch || GOTO :ERROR
+rem libxml2 2.9.7 doesn't need this patch
+rem patch -f -p1 < %ROOT%/patches/libxml2/libxml2.patch || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libxml2-*\win32
 cscript configure.js compiler=msvc include=%DEPENDENCIES_BIN_DIR%\iconv\include lib=%DEPENDENCIES_BIN_DIR%\iconv\lib
 sed -i /NOWIN98/d Makefile.msvc
 set CL=/MP
 nmake /f Makefile.msvc || GOTO :ERROR
 nmake /f Makefile.msvc install || GOTO :ERROR
+rem "override old libxml2.dll location with freshly build dll"
+cp bin\libxml2.dll lib || GOTO :ERROR
 cp -av bin %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
 cp -av lib %DEPENDENCIES_BIN_DIR%\libxml2 || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2\include || GOTO :ERROR
