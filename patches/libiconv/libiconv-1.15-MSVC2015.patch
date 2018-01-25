@@ -1,6 +1,6 @@
-diff -ruN config.h origin/config.h
---- config.h	1970-01-01 03:00:00.000000000 +0300
-+++ origin/config.h	2015-10-05 17:07:03.038087288 +0300
+diff -ruN "..\\libiconv-1.15.orig/config.h" ./config.h
+--- "..\\libiconv-1.15.orig/config.h"	1970-01-01 03:00:00.000000000 +0300
++++ ./config.h	2018-01-26 23:22:04.349969500 +0300
 @@ -0,0 +1,416 @@
 +/* config.h.  Generated from config.h.in by configure.  */
 +/* config.h.in.  Generated from configure.ac by autoheader.  */
@@ -418,9 +418,9 @@ diff -ruN config.h origin/config.h
 +#pragma warning(disable: 4018) // warning C4018: signed/unsigned mismatch
 +#pragma warning(disable: 4996) // warning C4996: The POSIX name for this item is deprecated.
 +
-diff -ruN iconv.h origin/iconv.h
---- iconv.h	1970-01-01 03:00:00.000000000 +0300
-+++ origin/iconv.h	2015-10-05 17:07:03.038087288 +0300
+diff -ruN "..\\libiconv-1.15.orig/iconv.h" ./iconv.h
+--- "..\\libiconv-1.15.orig/iconv.h"	1970-01-01 03:00:00.000000000 +0300
++++ ./iconv.h	2018-01-26 23:22:04.568781400 +0300
 @@ -0,0 +1,251 @@
 +/* Copyright (C) 1999-2003, 2005-2006, 2008-2011 Free Software Foundation, Inc.
 +   This file is part of the GNU LIBICONV Library.
@@ -673,9 +673,9 @@ diff -ruN iconv.h origin/iconv.h
 +
 +#endif /* _LIBICONV_H */
 +
-diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
---- libiconv.vcxproj	1970-01-01 03:00:00.000000000 +0300
-+++ origin/libiconv.vcxproj	2015-10-05 17:07:03.038087288 +0300
+diff -ruN "..\\libiconv-1.15.orig/libiconv.vcxproj" ./libiconv.vcxproj
+--- "..\\libiconv-1.15.orig/libiconv.vcxproj"	1970-01-01 03:00:00.000000000 +0300
++++ ./libiconv.vcxproj	2018-01-26 23:22:04.584353000 +0300
 @@ -0,0 +1,195 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -872,9 +872,9 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +  </ImportGroup>
 +</Project>
 +
-diff -ruN localcharset.h origin/localcharset.h
---- localcharset.h	1970-01-01 03:00:00.000000000 +0300
-+++ origin/localcharset.h	2015-10-05 17:07:03.038087288 +0300
+diff -ruN "..\\libiconv-1.15.orig/localcharset.h" ./localcharset.h
+--- "..\\libiconv-1.15.orig/localcharset.h"	1970-01-01 03:00:00.000000000 +0300
++++ ./localcharset.h	2018-01-26 23:22:04.615647500 +0300
 @@ -0,0 +1,43 @@
 +/* Determine a canonical name for the current locale's character encoding.
 +   Copyright (C) 2000-2003 Free Software Foundation, Inc.

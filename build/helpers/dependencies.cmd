@@ -13,6 +13,7 @@ MKDIR %DOWNLOADS_DIR%
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
 
+
 :ZSTD
 TITLE "Building libzstd"
 set ZSTD_RELEASE=1.1.0
@@ -89,8 +90,8 @@ COPY editline\readline.h %DEPENDENCIES_BIN_DIR%\wineditline\include\editline
 :BUILD_ICONV
 TITLE Building iconv...
 CD /D %DOWNLOADS_DIR%
-REM wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
-wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+rem wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
