@@ -69,6 +69,8 @@ ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
 )
 
 SET PGVER=%PG_DEF_VERSION%
+SET HAVE_PGURL=1
+IF "%PGURL%"=="" SET HAVE_PGURL=0
 IF "%PGURL%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
 
 REM Set useful directories paths so they're used in scripts

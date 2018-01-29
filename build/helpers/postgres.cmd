@@ -32,12 +32,14 @@ IF %ONE_C% == YES (
 
 :DONE_1C_PATCH
 
-cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
-IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
-FOR /F %%I IN (series) do (
-  ECHO %%I
-  cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/%%I .
-  patch -p1 < %%I || GOTO :ERROR
+IF %HAVE_PGURL% == 0 (
+  cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
+  IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
+  FOR /F %%I IN (series) do (
+    ECHO %%I
+    cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/%%I .
+    patch -p1 < %%I || GOTO :ERROR
+  )
 )
 
 :DONE_POSTGRESQL_PATCH
