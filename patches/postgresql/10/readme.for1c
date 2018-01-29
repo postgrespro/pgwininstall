@@ -1,0 +1,11 @@
+#
+# Now we can use custom tarball for 1C builds.
+#
+# For example, set before build:
+#
+#    SET PGURL=http://repo.postgrespro.ru/1c-10-beta/src/postgrespro-1c-10.x.tar.bz2
+#
+# This tarball builds from branch REL_10_1C that contains all 1C-specific patches.
+#
+#1C-FULL-10.patch
+#int2vector_ops_compat-1.patch
