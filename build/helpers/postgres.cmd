@@ -61,7 +61,7 @@ IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%', 
 IF %SDK% == SDK71 GOTO :DISABLE_PERL
 IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',   )
 GOTO :PERL_CONF_DONE
-:DISALBE_PERL
+:DISABLE_PERL
 IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> undef,   )
 :PERL_CONF_DONE
 IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON64_PATH%', )
