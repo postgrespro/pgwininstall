@@ -102,7 +102,7 @@ PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 %PERL_EXE% install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 
 REM remove test_* extensions after install
-rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\share\extensions\test_* || GOTO :ERROR
+rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\share\extension\test_* || GOTO :ERROR
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib\test_* || GOTO :ERROR
 
 IF EXIST ..\..\..\doc\buildinfo.txt COPY ..\..\..\doc\buildinfo.txt %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
