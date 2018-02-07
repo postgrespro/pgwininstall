@@ -101,8 +101,8 @@ PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 %PERL_EXE% install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 
 REM remove test_* extensions after install
-rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\share\extension\test_* || GOTO :ERROR
-rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib\test_* || GOTO :ERROR
+rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/share/extension/test_* || GOTO :ERROR
+rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/lib/test_* || GOTO :ERROR
 
 rem now actually copy DLLs of dependencies into our bindir
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
