@@ -1,0 +1,21 @@
+diff --git a/src/backend/optimizer/util/pathnode.c b/src/backend/optimizer/util/pathnode.c
+index f6209e24c0..f0ec4c06c1 100644
+--- a/src/backend/optimizer/util/pathnode.c
++++ b/src/backend/optimizer/util/pathnode.c
+@@ -1219,8 +1219,6 @@ create_append_path(RelOptInfo *rel, List *subpaths, Relids required_outer,
+ 	pathnode->path.parallel_workers = parallel_workers;
+ 	pathnode->path.pathkeys = pathkeys;     /* !=NIL in case of append OR index
+ 											   scans */
+-	pathnode->path.pathkeys = NIL;		/* result is always considered
+-										 * unsorted */
+ 	pathnode->subpaths = subpaths;
+ 	pathnode->pull_tlist = pull_tlist;
+ 
+@@ -3230,6 +3228,7 @@ reparameterize_path(PlannerInfo *root, Path *path,
+ 				return (Path *)
+ 					create_append_path(rel, childpaths,
+ 									   required_outer,
++									   apath->pull_tlist, apath->path.pathkeys,
+ 									   apath->path.parallel_workers);
+ 			}
+ 		default:

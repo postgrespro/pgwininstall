@@ -1,5 +1,6 @@
 1c_FULL_96-0.23
 1c_FULL_96-0.23-fulleq
+1c_fix_967.patch
 Mkvcbuild.pm.patch
 applock-1c-9.6.patch
 online_analyze.patch
