@@ -103,6 +103,7 @@ PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 REM remove test_* extensions after install
 rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/share/extension/test_* || GOTO :ERROR
 rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/lib/test_* || GOTO :ERROR
+rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/symbols/test_* || GOTO :ERROR
 
 REM remove python3 extensions
 rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/share/extension/*python3* || GOTO :ERROR
