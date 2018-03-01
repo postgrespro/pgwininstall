@@ -1,8 +1,7 @@
-diff --git a/contrib/fasttrun/Makefile b/contrib/fasttrun/Makefile
-new file mode 100644
-index 0000000..06c47a1
+Index: postgresql-9.6.8/contrib/fasttrun/Makefile
+===================================================================
 --- /dev/null
-+++ b/contrib/fasttrun/Makefile
++++ postgresql-9.6.8/contrib/fasttrun/Makefile
 @@ -0,0 +1,15 @@
 +MODULE_big = fasttrun
 +OBJS = fasttrun.o	
@@ -19,11 +18,10 @@ index 0000000..06c47a1
 +include $(top_builddir)/src/Makefile.global
 +include $(top_srcdir)/contrib/contrib-global.mk
 +endif
-diff --git a/contrib/fasttrun/README.fasttrun b/contrib/fasttrun/README.fasttrun
-new file mode 100644
-index 0000000..4b1dfdc
+Index: postgresql-9.6.8/contrib/fasttrun/README.fasttrun
+===================================================================
 --- /dev/null
-+++ b/contrib/fasttrun/README.fasttrun
++++ postgresql-9.6.8/contrib/fasttrun/README.fasttrun
 @@ -0,0 +1,17 @@
 +select fasttruncate('TABLE_NAME');
 +
@@ -42,11 +40,10 @@ index 0000000..4b1dfdc
 +end;
 +$$ language plpgsql;
 +
-diff --git a/contrib/fasttrun/expected/fasttrun.out b/contrib/fasttrun/expected/fasttrun.out
-new file mode 100644
-index 0000000..9914e77
+Index: postgresql-9.6.8/contrib/fasttrun/expected/fasttrun.out
+===================================================================
 --- /dev/null
-+++ b/contrib/fasttrun/expected/fasttrun.out
++++ postgresql-9.6.8/contrib/fasttrun/expected/fasttrun.out
 @@ -0,0 +1,115 @@
 +\set ECHO none
 +create table persist ( a int );
@@ -163,11 +160,10 @@ index 0000000..9914e77
 + temp2   | f        | f
 +(2 rows)
 +
-diff --git a/contrib/fasttrun/fasttrun.c b/contrib/fasttrun/fasttrun.c
-new file mode 100644
-index 0000000..20cf576
+Index: postgresql-9.6.8/contrib/fasttrun/fasttrun.c
+===================================================================
 --- /dev/null
-+++ b/contrib/fasttrun/fasttrun.c
++++ postgresql-9.6.8/contrib/fasttrun/fasttrun.c
 @@ -0,0 +1,77 @@
 +#include "postgres.h"
 +
@@ -246,11 +242,10 @@ index 0000000..20cf576
 +
 +	PG_RETURN_VOID();
 +}
-diff --git a/contrib/fasttrun/fasttrun.sql.in b/contrib/fasttrun/fasttrun.sql.in
-new file mode 100644
-index 0000000..0895c77
+Index: postgresql-9.6.8/contrib/fasttrun/fasttrun.sql.in
+===================================================================
 --- /dev/null
-+++ b/contrib/fasttrun/fasttrun.sql.in
++++ postgresql-9.6.8/contrib/fasttrun/fasttrun.sql.in
 @@ -0,0 +1,8 @@
 +BEGIN;
 +
@@ -260,11 +255,10 @@ index 0000000..0895c77
 +LANGUAGE C RETURNS NULL ON NULL INPUT VOLATILE;
 +
 +COMMIT;
-diff --git a/contrib/fasttrun/sql/fasttrun.sql b/contrib/fasttrun/sql/fasttrun.sql
-new file mode 100644
-index 0000000..73beaf4
+Index: postgresql-9.6.8/contrib/fasttrun/sql/fasttrun.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/fasttrun/sql/fasttrun.sql
++++ postgresql-9.6.8/contrib/fasttrun/sql/fasttrun.sql
 @@ -0,0 +1,50 @@
 +\set ECHO none
 +\i fasttrun.sql
@@ -316,11 +310,10 @@ index 0000000..73beaf4
 +select * from temp2 order by a;
 +
 +select relname,  relpages>0, reltuples>0 from pg_class where relname in ('temp1', 'temp2') order by relname;
-diff --git a/contrib/fulleq/Makefile b/contrib/fulleq/Makefile
-new file mode 100644
-index 0000000..bc8bdd2
+Index: postgresql-9.6.8/contrib/fulleq/Makefile
+===================================================================
 --- /dev/null
-+++ b/contrib/fulleq/Makefile
++++ postgresql-9.6.8/contrib/fulleq/Makefile
 @@ -0,0 +1,32 @@
 +MODULE_big = fulleq
 +OBJS = fulleq.o	
@@ -354,20 +347,18 @@ index 0000000..bc8bdd2
 +	done
 +	echo 'COMMIT;' >>  $@
 +
-diff --git a/contrib/fulleq/README.fulleq b/contrib/fulleq/README.fulleq
-new file mode 100644
-index 0000000..a677c49
+Index: postgresql-9.6.8/contrib/fulleq/README.fulleq
+===================================================================
 --- /dev/null
-+++ b/contrib/fulleq/README.fulleq
++++ postgresql-9.6.8/contrib/fulleq/README.fulleq
 @@ -0,0 +1,3 @@
 +Introduce operator == which returns true when
 +operands are equal or both are nulls.
 +
-diff --git a/contrib/fulleq/expected/fulleq.out b/contrib/fulleq/expected/fulleq.out
-new file mode 100644
-index 0000000..4842d8c
+Index: postgresql-9.6.8/contrib/fulleq/expected/fulleq.out
+===================================================================
 --- /dev/null
-+++ b/contrib/fulleq/expected/fulleq.out
++++ postgresql-9.6.8/contrib/fulleq/expected/fulleq.out
 @@ -0,0 +1,61 @@
 +\set ECHO none
 +select 4::int == 4;
@@ -430,11 +421,10 @@ index 0000000..4842d8c
 + t
 +(1 row)
 +
-diff --git a/contrib/fulleq/fulleq.c b/contrib/fulleq/fulleq.c
-new file mode 100644
-index 0000000..8e8e17b
+Index: postgresql-9.6.8/contrib/fulleq/fulleq.c
+===================================================================
 --- /dev/null
-+++ b/contrib/fulleq/fulleq.c
++++ postgresql-9.6.8/contrib/fulleq/fulleq.c
 @@ -0,0 +1,72 @@
 +#include "postgres.h"
 +#include "fmgr.h"
@@ -508,11 +498,10 @@ index 0000000..8e8e17b
 +FULLEQ_FUNC( timestamptz , timestamp_eq   , hashfloat8     );
 +FULLEQ_FUNC( interval    , interval_eq    , interval_hash  );
 +FULLEQ_FUNC( timetz      , timetz_eq      , timetz_hash    );
-diff --git a/contrib/fulleq/fulleq.sql.in.in b/contrib/fulleq/fulleq.sql.in.in
-new file mode 100644
-index 0000000..55e980e
+Index: postgresql-9.6.8/contrib/fulleq/fulleq.sql.in.in
+===================================================================
 --- /dev/null
-+++ b/contrib/fulleq/fulleq.sql.in.in
++++ postgresql-9.6.8/contrib/fulleq/fulleq.sql.in.in
 @@ -0,0 +1,26 @@
 +-- For ARGTYPE
 +
@@ -540,11 +529,10 @@ index 0000000..55e980e
 +	OPERATOR	1	==,
 +	FUNCTION	1	fullhash_ARGTYPE(ARGTYPE);
 +
-diff --git a/contrib/fulleq/sql/fulleq.sql b/contrib/fulleq/sql/fulleq.sql
-new file mode 100644
-index 0000000..02b192c
+Index: postgresql-9.6.8/contrib/fulleq/sql/fulleq.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/fulleq/sql/fulleq.sql
++++ postgresql-9.6.8/contrib/fulleq/sql/fulleq.sql
 @@ -0,0 +1,16 @@
 +\set ECHO none
 +\i fulleq.sql
@@ -562,11 +550,10 @@ index 0000000..02b192c
 +select NULL::text == '5';
 +select NULL::text == NULL;
 +
-diff --git a/contrib/mchar/Changes b/contrib/mchar/Changes
-new file mode 100644
-index 0000000..b597ee7
+Index: postgresql-9.6.8/contrib/mchar/Changes
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/Changes
++++ postgresql-9.6.8/contrib/mchar/Changes
 @@ -0,0 +1,19 @@
 +0.17  add == operation:
 +		a == b   =>   ( a = b or a is null and b is null )
@@ -587,11 +574,10 @@ index 0000000..b597ee7
 +0.7	hash indexes and enable a hash joins
 +0.6	implicit casting mchar-mvarchar
 +	cross type comparison operations
-diff --git a/contrib/mchar/Makefile b/contrib/mchar/Makefile
-new file mode 100644
-index 0000000..27302df
+Index: postgresql-9.6.8/contrib/mchar/Makefile
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/Makefile
++++ postgresql-9.6.8/contrib/mchar/Makefile
 @@ -0,0 +1,27 @@
 +MODULE_big = mchar
 +OBJS = mchar_io.o mchar_proc.o mchar_op.o mchar_recode.o \
@@ -620,11 +606,10 @@ index 0000000..27302df
 +endif
 +
 +SHLIB_LINK += -L/usr/local/lib -licuuc -l$(ICUNAME) -Wl,-rpath,'$$ORIGIN'
-diff --git a/contrib/mchar/README.mchar b/contrib/mchar/README.mchar
-new file mode 100644
-index 0000000..479a7d1
+Index: postgresql-9.6.8/contrib/mchar/README.mchar
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/README.mchar
++++ postgresql-9.6.8/contrib/mchar/README.mchar
 @@ -0,0 +1,20 @@
 +MCHAR & VARCHAR
 +	type modifier
@@ -646,11 +631,10 @@ index 0000000..479a7d1
 +	Teodor Sigaev <teodor@sigaev.ru>
 +
 +
-diff --git a/contrib/mchar/expected/compat.out b/contrib/mchar/expected/compat.out
-new file mode 100644
-index 0000000..480a286
+Index: postgresql-9.6.8/contrib/mchar/expected/compat.out
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/expected/compat.out
++++ postgresql-9.6.8/contrib/mchar/expected/compat.out
 @@ -0,0 +1,66 @@
 +--- table based checks
 +select '<' || ch || '>', '<' || vch || '>' from chvch;
@@ -718,11 +702,10 @@ index 0000000..480a286
 + Ee                              
 +(7 rows)
 +
-diff --git a/contrib/mchar/expected/init.out b/contrib/mchar/expected/init.out
-new file mode 100644
-index 0000000..19aa916
+Index: postgresql-9.6.8/contrib/mchar/expected/init.out
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/expected/init.out
++++ postgresql-9.6.8/contrib/mchar/expected/init.out
 @@ -0,0 +1,32 @@
 +--
 +-- first, define the datatype.  Turn off echoing so that expected file
@@ -756,11 +739,10 @@ index 0000000..19aa916
 +insert into chvch values('No spaces', 'No spaces');
 +insert into chvch values('One space ', 'One space ');
 +insert into chvch values('1 space', '1 space ');
-diff --git a/contrib/mchar/expected/like.out b/contrib/mchar/expected/like.out
-new file mode 100644
-index 0000000..3a57082
+Index: postgresql-9.6.8/contrib/mchar/expected/like.out
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/expected/like.out
++++ postgresql-9.6.8/contrib/mchar/expected/like.out
 @@ -0,0 +1,791 @@
 +-- simplest examples
 +-- E061-04 like predicate
@@ -1553,11 +1535,10 @@ index 0000000..3a57082
 + 1    
 +(1 row)
 +
-diff --git a/contrib/mchar/expected/mchar.out b/contrib/mchar/expected/mchar.out
-new file mode 100644
-index 0000000..c587424
+Index: postgresql-9.6.8/contrib/mchar/expected/mchar.out
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/expected/mchar.out
++++ postgresql-9.6.8/contrib/mchar/expected/mchar.out
 @@ -0,0 +1,363 @@
 +-- I/O tests
 +select '1'::mchar;
@@ -1922,11 +1903,10 @@ index 0000000..c587424
 + t
 +(1 row)
 +
-diff --git a/contrib/mchar/expected/mm.out b/contrib/mchar/expected/mm.out
-new file mode 100644
-index 0000000..fa2e924
+Index: postgresql-9.6.8/contrib/mchar/expected/mm.out
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/expected/mm.out
++++ postgresql-9.6.8/contrib/mchar/expected/mm.out
 @@ -0,0 +1,805 @@
 +select 'asd'::mchar::mvarchar;
 + mvarchar 
@@ -2733,11 +2713,10 @@ index 0000000..fa2e924
 +
 +DROP TABLE a;
 +DROP TABLE c;
-diff --git a/contrib/mchar/expected/mvarchar.out b/contrib/mchar/expected/mvarchar.out
-new file mode 100644
-index 0000000..5c866b4
+Index: postgresql-9.6.8/contrib/mchar/expected/mvarchar.out
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/expected/mvarchar.out
++++ postgresql-9.6.8/contrib/mchar/expected/mvarchar.out
 @@ -0,0 +1,363 @@
 +-- I/O tests
 +select '1'::mvarchar;
@@ -3102,11 +3081,10 @@ index 0000000..5c866b4
 + t
 +(1 row)
 +
-diff --git a/contrib/mchar/mchar.h b/contrib/mchar/mchar.h
-new file mode 100644
-index 0000000..8823169
+Index: postgresql-9.6.8/contrib/mchar/mchar.h
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/mchar.h
++++ postgresql-9.6.8/contrib/mchar/mchar.h
 @@ -0,0 +1,62 @@
 +#ifndef __MCHAR_H__
 +#define __MCHAR_H__
@@ -3170,11 +3148,10 @@ index 0000000..8823169
 +int m_isspace(UChar c); /* is == ' ' */
 +
 +#endif
-diff --git a/contrib/mchar/mchar.sql.in b/contrib/mchar/mchar.sql.in
-new file mode 100644
-index 0000000..b5ef4e6
+Index: postgresql-9.6.8/contrib/mchar/mchar.sql.in
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/mchar.sql.in
++++ postgresql-9.6.8/contrib/mchar/mchar.sql.in
 @@ -0,0 +1,1328 @@
 +SET search_path = public;
 +
@@ -4504,11 +4481,10 @@ index 0000000..b5ef4e6
 +COMMIT;
 +SET search_path = public;
 +
-diff --git a/contrib/mchar/mchar_io.c b/contrib/mchar/mchar_io.c
-new file mode 100644
-index 0000000..9179412
+Index: postgresql-9.6.8/contrib/mchar/mchar_io.c
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/mchar_io.c
++++ postgresql-9.6.8/contrib/mchar/mchar_io.c
 @@ -0,0 +1,372 @@
 +#include "mchar.h"
 +#include "mb/pg_wchar.h"
@@ -4882,11 +4858,10 @@ index 0000000..9179412
 +}
 +
 +
-diff --git a/contrib/mchar/mchar_like.c b/contrib/mchar/mchar_like.c
-new file mode 100644
-index 0000000..3af13d8
+Index: postgresql-9.6.8/contrib/mchar/mchar_like.c
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/mchar_like.c
++++ postgresql-9.6.8/contrib/mchar/mchar_like.c
 @@ -0,0 +1,862 @@
 +#include "mchar.h"
 +#include "mb/pg_wchar.h"
@@ -5750,11 +5725,10 @@ index 0000000..3af13d8
 +}
 +
 +#define RE_CACHE_SIZE	32
-diff --git a/contrib/mchar/mchar_op.c b/contrib/mchar/mchar_op.c
-new file mode 100644
-index 0000000..4694d9c
+Index: postgresql-9.6.8/contrib/mchar/mchar_op.c
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/mchar_op.c
++++ postgresql-9.6.8/contrib/mchar/mchar_op.c
 @@ -0,0 +1,449 @@
 +#include "mchar.h"
 +
@@ -6205,11 +6179,10 @@ index 0000000..4694d9c
 +FULLEQ_FUNC( mchar, mchar_icase_eq, mchar_hash );
 +FULLEQ_FUNC( mvarchar, mvarchar_icase_eq, mvarchar_hash );
 +
-diff --git a/contrib/mchar/mchar_proc.c b/contrib/mchar/mchar_proc.c
-new file mode 100644
-index 0000000..165d44c
+Index: postgresql-9.6.8/contrib/mchar/mchar_proc.c
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/mchar_proc.c
++++ postgresql-9.6.8/contrib/mchar/mchar_proc.c
 @@ -0,0 +1,339 @@
 +#include "mchar.h"
 +#include "mb/pg_wchar.h"
@@ -6550,11 +6523,10 @@ index 0000000..165d44c
 +}
 +
 +
-diff --git a/contrib/mchar/mchar_recode.c b/contrib/mchar/mchar_recode.c
-new file mode 100644
-index 0000000..d4f3659
+Index: postgresql-9.6.8/contrib/mchar/mchar_recode.c
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/mchar_recode.c
++++ postgresql-9.6.8/contrib/mchar/mchar_recode.c
 @@ -0,0 +1,142 @@
 +#include "mchar.h"
 +
@@ -6698,11 +6670,10 @@ index 0000000..d4f3659
 +		return (alen > blen) ? 1 : - 1;
 +	return res;
 +}
-diff --git a/contrib/mchar/sql/compat.sql b/contrib/mchar/sql/compat.sql
-new file mode 100644
-index 0000000..d5b6a98
+Index: postgresql-9.6.8/contrib/mchar/sql/compat.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/sql/compat.sql
++++ postgresql-9.6.8/contrib/mchar/sql/compat.sql
 @@ -0,0 +1,11 @@
 +--- table based checks
 +
@@ -6715,11 +6686,10 @@ index 0000000..d5b6a98
 +select * from ch where chcol > 'abcd' and chcol<'ee';
 +select * from ch order by chcol;
 +
-diff --git a/contrib/mchar/sql/init.sql b/contrib/mchar/sql/init.sql
-new file mode 100644
-index 0000000..a303feb
+Index: postgresql-9.6.8/contrib/mchar/sql/init.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/sql/init.sql
++++ postgresql-9.6.8/contrib/mchar/sql/init.sql
 @@ -0,0 +1,33 @@
 +
 +--
@@ -6754,11 +6724,10 @@ index 0000000..a303feb
 +insert into chvch values('One space ', 'One space ');
 +insert into chvch values('1 space', '1 space ');
 +
-diff --git a/contrib/mchar/sql/like.sql b/contrib/mchar/sql/like.sql
-new file mode 100644
-index 0000000..aebf924
+Index: postgresql-9.6.8/contrib/mchar/sql/like.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/sql/like.sql
++++ postgresql-9.6.8/contrib/mchar/sql/like.sql
 @@ -0,0 +1,216 @@
 +-- simplest examples
 +-- E061-04 like predicate
@@ -6976,11 +6945,10 @@ index 0000000..aebf924
 +SELECT * FROM test WHERE code LIKE ('%    ');
 +
 +
-diff --git a/contrib/mchar/sql/mchar.sql b/contrib/mchar/sql/mchar.sql
-new file mode 100644
-index 0000000..640f166
+Index: postgresql-9.6.8/contrib/mchar/sql/mchar.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/sql/mchar.sql
++++ postgresql-9.6.8/contrib/mchar/sql/mchar.sql
 @@ -0,0 +1,81 @@
 +-- I/O tests
 +
@@ -7063,11 +7031,10 @@ index 0000000..640f166
 +select 'asd'::mchar == NULL;
 +select NULL == 'aCd'::mchar;
 +select NULL::mchar == NULL;
-diff --git a/contrib/mchar/sql/mm.sql b/contrib/mchar/sql/mm.sql
-new file mode 100644
-index 0000000..c16aaa1
+Index: postgresql-9.6.8/contrib/mchar/sql/mm.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/sql/mm.sql
++++ postgresql-9.6.8/contrib/mchar/sql/mm.sql
 @@ -0,0 +1,185 @@
 +select 'asd'::mchar::mvarchar;
 +select 'asd '::mchar::mvarchar;
@@ -7254,11 +7221,10 @@ index 0000000..c16aaa1
 +DROP TABLE a;
 +DROP TABLE c;
 +
-diff --git a/contrib/mchar/sql/mvarchar.sql b/contrib/mchar/sql/mvarchar.sql
-new file mode 100644
-index 0000000..91b0981
+Index: postgresql-9.6.8/contrib/mchar/sql/mvarchar.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/sql/mvarchar.sql
++++ postgresql-9.6.8/contrib/mchar/sql/mvarchar.sql
 @@ -0,0 +1,82 @@
 +-- I/O tests
 +
@@ -7342,11 +7308,10 @@ index 0000000..91b0981
 +select NULL == 'aCd'::mvarchar;
 +select NULL::mvarchar == NULL;
 +
-diff --git a/contrib/mchar/uninstall_mchar.sql b/contrib/mchar/uninstall_mchar.sql
-new file mode 100644
-index 0000000..59f61e2
+Index: postgresql-9.6.8/contrib/mchar/uninstall_mchar.sql
+===================================================================
 --- /dev/null
-+++ b/contrib/mchar/uninstall_mchar.sql
++++ postgresql-9.6.8/contrib/mchar/uninstall_mchar.sql
 @@ -0,0 +1,9 @@
 +SET search_path = public;
 +BEGIN;
@@ -7357,11 +7322,11 @@ index 0000000..59f61e2
 +DROP TYPE MVARCHAR CASCADE;
 +
 +COMMIT;
-diff --git a/src/backend/nodes/outfuncs.c b/src/backend/nodes/outfuncs.c
-index 0ccd75b..04bb073 100644
---- a/src/backend/nodes/outfuncs.c
-+++ b/src/backend/nodes/outfuncs.c
-@@ -1740,6 +1740,7 @@ _outAppendPath(StringInfo str, const AppendPath *node)
+Index: postgresql-9.6.8/src/backend/nodes/outfuncs.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/nodes/outfuncs.c
++++ postgresql-9.6.8/src/backend/nodes/outfuncs.c
+@@ -1740,6 +1740,7 @@ _outAppendPath(StringInfo str, const App
  	_outPathInfo(str, (const Path *) node);
  
  	WRITE_NODE_FIELD(subpaths);
@@ -7369,10 +7334,10 @@ index 0ccd75b..04bb073 100644
  }
  
  static void
-diff --git a/src/backend/optimizer/path/Makefile b/src/backend/optimizer/path/Makefile
-index 6864a62..ef250e0 100644
---- a/src/backend/optimizer/path/Makefile
-+++ b/src/backend/optimizer/path/Makefile
+Index: postgresql-9.6.8/src/backend/optimizer/path/Makefile
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/path/Makefile
++++ postgresql-9.6.8/src/backend/optimizer/path/Makefile
 @@ -12,7 +12,7 @@ subdir = src/backend/optimizer/path
  top_builddir = ../../../..
  include $(top_builddir)/src/Makefile.global
@@ -7383,11 +7348,11 @@ index 6864a62..ef250e0 100644
 +       indxpath.o joinpath.o joinrels.o pathkeys.o tidpath.o
  
  include $(top_srcdir)/src/backend/common.mk
-diff --git a/src/backend/optimizer/path/allpaths.c b/src/backend/optimizer/path/allpaths.c
-index cceb27e..821f532 100644
---- a/src/backend/optimizer/path/allpaths.c
-+++ b/src/backend/optimizer/path/allpaths.c
-@@ -666,6 +666,9 @@ set_plain_rel_pathlist(PlannerInfo *root, RelOptInfo *rel, RangeTblEntry *rte)
+Index: postgresql-9.6.8/src/backend/optimizer/path/allpaths.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/path/allpaths.c
++++ postgresql-9.6.8/src/backend/optimizer/path/allpaths.c
+@@ -666,6 +666,9 @@ set_plain_rel_pathlist(PlannerInfo *root
  	/* Consider index scans */
  	create_index_paths(root, rel);
  
@@ -7397,7 +7362,7 @@ index cceb27e..821f532 100644
  	/* Consider TID scans */
  	create_tidscan_paths(root, rel);
  }
-@@ -1268,7 +1271,8 @@ set_append_rel_pathlist(PlannerInfo *root, RelOptInfo *rel,
+@@ -1268,7 +1271,8 @@ set_append_rel_pathlist(PlannerInfo *roo
  	 * if we have zero or one live subpath due to constraint exclusion.)
  	 */
  	if (subpaths_valid)
@@ -7407,7 +7372,7 @@ index cceb27e..821f532 100644
  
  	/*
  	 * Consider an append of partial unordered, unparameterized partial paths.
-@@ -1295,7 +1299,7 @@ set_append_rel_pathlist(PlannerInfo *root, RelOptInfo *rel,
+@@ -1295,7 +1299,7 @@ set_append_rel_pathlist(PlannerInfo *roo
  
  		/* Generate a partial append path. */
  		appendpath = create_append_path(rel, partial_subpaths, NULL,
@@ -7416,7 +7381,7 @@ index cceb27e..821f532 100644
  		add_partial_path(rel, (Path *) appendpath);
  	}
  
-@@ -1347,7 +1351,8 @@ set_append_rel_pathlist(PlannerInfo *root, RelOptInfo *rel,
+@@ -1347,7 +1351,8 @@ set_append_rel_pathlist(PlannerInfo *roo
  
  		if (subpaths_valid)
  			add_path(rel, (Path *)
@@ -7435,11 +7400,10 @@ index cceb27e..821f532 100644
  
  	/*
  	 * We set the cheapest path immediately, to ensure that IS_DUMMY_REL()
-diff --git a/src/backend/optimizer/path/appendorpath.c b/src/backend/optimizer/path/appendorpath.c
-new file mode 100644
-index 0000000..08dbb59
+Index: postgresql-9.6.8/src/backend/optimizer/path/appendorpath.c
+===================================================================
 --- /dev/null
-+++ b/src/backend/optimizer/path/appendorpath.c
++++ postgresql-9.6.8/src/backend/optimizer/path/appendorpath.c
 @@ -0,0 +1,969 @@
 +/*
 + * support Append plan for ORed clauses
@@ -8410,10 +8374,10 @@ index 0000000..08dbb59
 +
 +	return idxpath;
 +}
-diff --git a/src/backend/optimizer/path/indxpath.c b/src/backend/optimizer/path/indxpath.c
-index 2952bfb..c3ecbe8 100644
---- a/src/backend/optimizer/path/indxpath.c
-+++ b/src/backend/optimizer/path/indxpath.c
+Index: postgresql-9.6.8/src/backend/optimizer/path/indxpath.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/path/indxpath.c
++++ postgresql-9.6.8/src/backend/optimizer/path/indxpath.c
 @@ -39,6 +39,14 @@
  #include "utils/pg_locale.h"
  #include "utils/selfuncs.h"
@@ -8429,7 +8393,7 @@ index 2952bfb..c3ecbe8 100644
  
  #define IsBooleanOpfamily(opfamily) \
  	((opfamily) == BOOL_BTREE_FAM_OID || (opfamily) == BOOL_HASH_FAM_OID)
-@@ -116,8 +124,6 @@ static List *build_index_paths(PlannerInfo *root, RelOptInfo *rel,
+@@ -116,8 +124,6 @@ static List *build_index_paths(PlannerIn
  				  bool *skip_lower_saop);
  static List *build_paths_for_OR(PlannerInfo *root, RelOptInfo *rel,
  				   List *clauses, List *other_clauses);
@@ -8438,7 +8402,7 @@ index 2952bfb..c3ecbe8 100644
  static Path *choose_bitmap_and(PlannerInfo *root, RelOptInfo *rel,
  				  List *paths);
  static int	path_usage_comparator(const void *a, const void *b);
-@@ -1196,7 +1202,7 @@ build_paths_for_OR(PlannerInfo *root, RelOptInfo *rel,
+@@ -1196,7 +1202,7 @@ build_paths_for_OR(PlannerInfo *root, Re
   * for the purpose of generating indexquals, but are not to be searched for
   * ORs.  (See build_paths_for_OR() for motivation.)
   */
@@ -8656,7 +8620,7 @@ index 2952bfb..c3ecbe8 100644
   *			----  ROUTINES FOR "SPECIAL" INDEXABLE OPERATORS  ----
   ****************************************************************************/
  
-@@ -3301,9 +3509,16 @@ match_special_index_operator(Expr *clause, Oid opfamily, Oid idxcollation,
+@@ -3301,9 +3509,16 @@ match_special_index_operator(Expr *claus
  		pfree(prefix);
  	}
  
@@ -8675,7 +8639,7 @@ index 2952bfb..c3ecbe8 100644
  
  	/*
  	 * Must also check that index's opfamily supports the operators we will
-@@ -3554,6 +3769,14 @@ expand_indexqual_opclause(RestrictInfo *rinfo, Oid opfamily, Oid idxcollation)
+@@ -3554,6 +3769,14 @@ expand_indexqual_opclause(RestrictInfo *
  	Const	   *patt = (Const *) rightop;
  	Const	   *prefix = NULL;
  	Pattern_Prefix_Status pstatus;
@@ -8690,10 +8654,10 @@ index 2952bfb..c3ecbe8 100644
  
  	/*
  	 * LIKE and regex operators are not members of any btree index opfamily,
-diff --git a/src/backend/optimizer/path/joinrels.c b/src/backend/optimizer/path/joinrels.c
-index 01d4fea..c20ae73 100644
---- a/src/backend/optimizer/path/joinrels.c
-+++ b/src/backend/optimizer/path/joinrels.c
+Index: postgresql-9.6.8/src/backend/optimizer/path/joinrels.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/path/joinrels.c
++++ postgresql-9.6.8/src/backend/optimizer/path/joinrels.c
 @@ -1197,7 +1197,7 @@ mark_dummy_rel(RelOptInfo *rel)
  	rel->partial_pathlist = NIL;
  
@@ -8703,11 +8667,11 @@ index 01d4fea..c20ae73 100644
  
  	/* Set or update cheapest_total_path and related fields */
  	set_cheapest(rel);
-diff --git a/src/backend/optimizer/path/pathkeys.c b/src/backend/optimizer/path/pathkeys.c
-index 4436ac1..103d96a 100644
---- a/src/backend/optimizer/path/pathkeys.c
-+++ b/src/backend/optimizer/path/pathkeys.c
-@@ -1452,7 +1452,7 @@ right_merge_direction(PlannerInfo *root, PathKey *pathkey)
+Index: postgresql-9.6.8/src/backend/optimizer/path/pathkeys.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/path/pathkeys.c
++++ postgresql-9.6.8/src/backend/optimizer/path/pathkeys.c
+@@ -1544,7 +1544,7 @@ right_merge_direction(PlannerInfo *root,
   * no good to order by just the first key(s) of the requested ordering.
   * So the result is always either 0 or list_length(root->query_pathkeys).
   */
@@ -8716,11 +8680,11 @@ index 4436ac1..103d96a 100644
  pathkeys_useful_for_ordering(PlannerInfo *root, List *pathkeys)
  {
  	if (root->query_pathkeys == NIL)
-diff --git a/src/backend/optimizer/plan/createplan.c b/src/backend/optimizer/plan/createplan.c
-index 47158f6..0ee3855 100644
---- a/src/backend/optimizer/plan/createplan.c
-+++ b/src/backend/optimizer/plan/createplan.c
-@@ -151,7 +151,6 @@ static void process_subquery_nestloop_params(PlannerInfo *root,
+Index: postgresql-9.6.8/src/backend/optimizer/plan/createplan.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/plan/createplan.c
++++ postgresql-9.6.8/src/backend/optimizer/plan/createplan.c
+@@ -151,7 +151,6 @@ static void process_subquery_nestloop_pa
  								 List *subplan_params);
  static List *fix_indexqual_references(PlannerInfo *root, IndexPath *index_path);
  static List *fix_indexorderby_references(PlannerInfo *root, IndexPath *index_path);
@@ -8728,7 +8692,7 @@ index 47158f6..0ee3855 100644
  static List *get_switched_clauses(List *clauses, Relids outerrelids);
  static List *order_qual_clauses(PlannerInfo *root, List *clauses);
  static void copy_generic_path_info(Plan *dest, Path *src);
-@@ -954,7 +953,7 @@ static Plan *
+@@ -966,7 +965,7 @@ static Plan *
  create_append_plan(PlannerInfo *root, AppendPath *best_path)
  {
  	Append	   *plan;
@@ -8737,7 +8701,7 @@ index 47158f6..0ee3855 100644
  	List	   *subplans = NIL;
  	ListCell   *subpaths;
  
-@@ -972,6 +971,7 @@ create_append_plan(PlannerInfo *root, AppendPath *best_path)
+@@ -984,6 +983,7 @@ create_append_plan(PlannerInfo *root, Ap
  		/* Generate a Result plan with constant-FALSE gating qual */
  		Plan	   *plan;
  
@@ -8745,7 +8709,7 @@ index 47158f6..0ee3855 100644
  		plan = (Plan *) make_result(tlist,
  									(Node *) list_make1(makeBoolConst(false,
  																	  false)),
-@@ -1001,6 +1001,11 @@ create_append_plan(PlannerInfo *root, AppendPath *best_path)
+@@ -1013,6 +1013,11 @@ create_append_plan(PlannerInfo *root, Ap
  	 * parent-rel Vars it'll be asked to emit.
  	 */
  
@@ -8757,7 +8721,7 @@ index 47158f6..0ee3855 100644
  	plan = make_append(subplans, tlist);
  
  	copy_generic_path_info(&plan->plan, (Path *) best_path);
-@@ -4368,7 +4373,7 @@ fix_indexorderby_references(PlannerInfo *root, IndexPath *index_path)
+@@ -4375,7 +4380,7 @@ fix_indexorderby_references(PlannerInfo
   * Most of the code here is just for sanity cross-checking that the given
   * expression actually matches the index column it's claimed to.
   */
@@ -8766,11 +8730,11 @@ index 47158f6..0ee3855 100644
  fix_indexqual_operand(Node *node, IndexOptInfo *index, int indexcol)
  {
  	Var		   *result;
-diff --git a/src/backend/optimizer/plan/planner.c b/src/backend/optimizer/plan/planner.c
-index b265628..1ee5523 100644
---- a/src/backend/optimizer/plan/planner.c
-+++ b/src/backend/optimizer/plan/planner.c
-@@ -3383,6 +3383,7 @@ create_grouping_paths(PlannerInfo *root,
+Index: postgresql-9.6.8/src/backend/optimizer/plan/planner.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/plan/planner.c
++++ postgresql-9.6.8/src/backend/optimizer/plan/planner.c
+@@ -3360,6 +3360,7 @@ create_grouping_paths(PlannerInfo *root,
  				create_append_path(grouped_rel,
  								   paths,
  								   NULL,
@@ -8778,11 +8742,11 @@ index b265628..1ee5523 100644
  								   0);
  			path->pathtarget = target;
  		}
-diff --git a/src/backend/optimizer/plan/setrefs.c b/src/backend/optimizer/plan/setrefs.c
-index d10a983..38737bc 100644
---- a/src/backend/optimizer/plan/setrefs.c
-+++ b/src/backend/optimizer/plan/setrefs.c
-@@ -2128,6 +2128,10 @@ fix_join_expr_mutator(Node *node, fix_join_expr_context *context)
+Index: postgresql-9.6.8/src/backend/optimizer/plan/setrefs.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/plan/setrefs.c
++++ postgresql-9.6.8/src/backend/optimizer/plan/setrefs.c
+@@ -2150,6 +2150,10 @@ fix_join_expr_mutator(Node *node, fix_jo
  	{
  		Var		   *var = (Var *) node;
  
@@ -8793,7 +8757,7 @@ index d10a983..38737bc 100644
  		/* Look for the var in the input tlists, first in the outer */
  		if (context->outer_itlist)
  		{
-@@ -2142,6 +2146,9 @@ fix_join_expr_mutator(Node *node, fix_join_expr_context *context)
+@@ -2164,6 +2168,9 @@ fix_join_expr_mutator(Node *node, fix_jo
  		/* then in the inner. */
  		if (context->inner_itlist)
  		{
@@ -8803,11 +8767,11 @@ index d10a983..38737bc 100644
  			newvar = search_indexed_tlist_for_var(var,
  												  context->inner_itlist,
  												  INNER_VAR,
-diff --git a/src/backend/optimizer/prep/prepunion.c b/src/backend/optimizer/prep/prepunion.c
-index b714783..f7994ea 100644
---- a/src/backend/optimizer/prep/prepunion.c
-+++ b/src/backend/optimizer/prep/prepunion.c
-@@ -567,7 +567,7 @@ generate_union_path(SetOperationStmt *op, PlannerInfo *root,
+Index: postgresql-9.6.8/src/backend/optimizer/prep/prepunion.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/prep/prepunion.c
++++ postgresql-9.6.8/src/backend/optimizer/prep/prepunion.c
+@@ -580,7 +580,7 @@ generate_union_path(SetOperationStmt *op
  	/*
  	 * Append the child results together.
  	 */
@@ -8816,7 +8780,7 @@ index b714783..f7994ea 100644
  
  	/* We have to manually jam the right tlist into the path; ick */
  	path->pathtarget = create_pathtarget(root, tlist);
-@@ -679,7 +679,7 @@ generate_nonunion_path(SetOperationStmt *op, PlannerInfo *root,
+@@ -692,7 +692,7 @@ generate_nonunion_path(SetOperationStmt
  	/*
  	 * Append the child results together.
  	 */
@@ -8825,11 +8789,11 @@ index b714783..f7994ea 100644
  
  	/* We have to manually jam the right tlist into the path; ick */
  	path->pathtarget = create_pathtarget(root, tlist);
-diff --git a/src/backend/optimizer/util/pathnode.c b/src/backend/optimizer/util/pathnode.c
-index ce7ad54..a7b7c4e 100644
---- a/src/backend/optimizer/util/pathnode.c
-+++ b/src/backend/optimizer/util/pathnode.c
-@@ -1203,6 +1203,7 @@ create_tidscan_path(PlannerInfo *root, RelOptInfo *rel, List *tidquals,
+Index: postgresql-9.6.8/src/backend/optimizer/util/pathnode.c
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/optimizer/util/pathnode.c
++++ postgresql-9.6.8/src/backend/optimizer/util/pathnode.c
+@@ -1203,6 +1203,7 @@ create_tidscan_path(PlannerInfo *root, R
   */
  AppendPath *
  create_append_path(RelOptInfo *rel, List *subpaths, Relids required_outer,
@@ -8837,7 +8801,7 @@ index ce7ad54..a7b7c4e 100644
  				   int parallel_workers)
  {
  	AppendPath *pathnode = makeNode(AppendPath);
-@@ -1216,9 +1217,12 @@ create_append_path(RelOptInfo *rel, List *subpaths, Relids required_outer,
+@@ -1216,9 +1217,12 @@ create_append_path(RelOptInfo *rel, List
  	pathnode->path.parallel_aware = false;
  	pathnode->path.parallel_safe = rel->consider_parallel;
  	pathnode->path.parallel_workers = parallel_workers;
@@ -8850,11 +8814,11 @@ index ce7ad54..a7b7c4e 100644
  
  	/*
  	 * We don't bother with inventing a cost_append(), but just do it here.
-diff --git a/src/backend/parser/gram.y b/src/backend/parser/gram.y
-index 6a0f7b3..bb656ab 100644
---- a/src/backend/parser/gram.y
-+++ b/src/backend/parser/gram.y
-@@ -11649,7 +11649,7 @@ a_expr:		c_expr									{ $$ = $1; }
+Index: postgresql-9.6.8/src/backend/parser/gram.y
+===================================================================
+--- postgresql-9.6.8.orig/src/backend/parser/gram.y
++++ postgresql-9.6.8/src/backend/parser/gram.y
+@@ -11667,7 +11667,7 @@ a_expr:		c_expr									{ $$ = $1; }
  				}
  			| a_expr LIKE a_expr ESCAPE a_expr					%prec LIKE
  				{
@@ -8863,7 +8827,7 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($3, $5),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_LIKE, "~~",
-@@ -11662,7 +11662,7 @@ a_expr:		c_expr									{ $$ = $1; }
+@@ -11680,7 +11680,7 @@ a_expr:		c_expr									{ $$ = $1; }
  				}
  			| a_expr NOT_LA LIKE a_expr ESCAPE a_expr			%prec NOT_LA
  				{
@@ -8872,7 +8836,7 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($4, $6),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_LIKE, "!~~",
-@@ -11675,7 +11675,7 @@ a_expr:		c_expr									{ $$ = $1; }
+@@ -11693,7 +11693,7 @@ a_expr:		c_expr									{ $$ = $1; }
  				}
  			| a_expr ILIKE a_expr ESCAPE a_expr					%prec ILIKE
  				{
@@ -8881,7 +8845,7 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($3, $5),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_ILIKE, "~~*",
-@@ -11688,7 +11688,7 @@ a_expr:		c_expr									{ $$ = $1; }
+@@ -11706,7 +11706,7 @@ a_expr:		c_expr									{ $$ = $1; }
  				}
  			| a_expr NOT_LA ILIKE a_expr ESCAPE a_expr			%prec NOT_LA
  				{
@@ -8890,7 +8854,7 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($4, $6),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_ILIKE, "!~~*",
-@@ -11697,7 +11697,7 @@ a_expr:		c_expr									{ $$ = $1; }
+@@ -11715,7 +11715,7 @@ a_expr:		c_expr									{ $$ = $1; }
  
  			| a_expr SIMILAR TO a_expr							%prec SIMILAR
  				{
@@ -8899,7 +8863,7 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($4, makeNullAConst(-1)),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_SIMILAR, "~",
-@@ -11705,7 +11705,7 @@ a_expr:		c_expr									{ $$ = $1; }
+@@ -11723,7 +11723,7 @@ a_expr:		c_expr									{ $$ = $1; }
  				}
  			| a_expr SIMILAR TO a_expr ESCAPE a_expr			%prec SIMILAR
  				{
@@ -8908,7 +8872,7 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($4, $6),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_SIMILAR, "~",
-@@ -11713,7 +11713,7 @@ a_expr:		c_expr									{ $$ = $1; }
+@@ -11731,7 +11731,7 @@ a_expr:		c_expr									{ $$ = $1; }
  				}
  			| a_expr NOT_LA SIMILAR TO a_expr					%prec NOT_LA
  				{
@@ -8917,7 +8881,7 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($5, makeNullAConst(-1)),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_SIMILAR, "!~",
-@@ -11721,7 +11721,7 @@ a_expr:		c_expr									{ $$ = $1; }
+@@ -11739,7 +11739,7 @@ a_expr:		c_expr									{ $$ = $1; }
  				}
  			| a_expr NOT_LA SIMILAR TO a_expr ESCAPE a_expr		%prec NOT_LA
  				{
@@ -8926,11 +8890,11 @@ index 6a0f7b3..bb656ab 100644
  											   list_make2($5, $7),
  											   @2);
  					$$ = (Node *) makeSimpleA_Expr(AEXPR_SIMILAR, "!~",
-diff --git a/src/include/nodes/relation.h b/src/include/nodes/relation.h
-index 2be8908..cd088de 100644
---- a/src/include/nodes/relation.h
-+++ b/src/include/nodes/relation.h
-@@ -1104,6 +1104,11 @@ typedef struct AppendPath
+Index: postgresql-9.6.8/src/include/nodes/relation.h
+===================================================================
+--- postgresql-9.6.8.orig/src/include/nodes/relation.h
++++ postgresql-9.6.8/src/include/nodes/relation.h
+@@ -1105,6 +1105,11 @@ typedef struct AppendPath
  {
  	Path		path;
  	List	   *subpaths;		/* list of component Paths */
@@ -8942,11 +8906,11 @@ index 2be8908..cd088de 100644
  } AppendPath;
  
  #define IS_DUMMY_PATH(p) \
-diff --git a/src/include/optimizer/pathnode.h b/src/include/optimizer/pathnode.h
-index 71d9154..ce6d497 100644
---- a/src/include/optimizer/pathnode.h
-+++ b/src/include/optimizer/pathnode.h
-@@ -62,7 +62,8 @@ extern BitmapOrPath *create_bitmap_or_path(PlannerInfo *root,
+Index: postgresql-9.6.8/src/include/optimizer/pathnode.h
+===================================================================
+--- postgresql-9.6.8.orig/src/include/optimizer/pathnode.h
++++ postgresql-9.6.8/src/include/optimizer/pathnode.h
+@@ -62,7 +62,8 @@ extern BitmapOrPath *create_bitmap_or_pa
  extern TidPath *create_tidscan_path(PlannerInfo *root, RelOptInfo *rel,
  					List *tidquals, Relids required_outer);
  extern AppendPath *create_append_path(RelOptInfo *rel, List *subpaths,
@@ -8956,11 +8920,11 @@ index 71d9154..ce6d497 100644
  extern MergeAppendPath *create_merge_append_path(PlannerInfo *root,
  						 RelOptInfo *rel,
  						 List *subpaths,
-diff --git a/src/include/optimizer/paths.h b/src/include/optimizer/paths.h
-index 44abe83..7904b11 100644
---- a/src/include/optimizer/paths.h
-+++ b/src/include/optimizer/paths.h
-@@ -63,6 +63,8 @@ extern void debug_print_rel(PlannerInfo *root, RelOptInfo *rel);
+Index: postgresql-9.6.8/src/include/optimizer/paths.h
+===================================================================
+--- postgresql-9.6.8.orig/src/include/optimizer/paths.h
++++ postgresql-9.6.8/src/include/optimizer/paths.h
+@@ -63,6 +63,8 @@ extern void debug_print_rel(PlannerInfo
   *	  routines to generate index paths
   */
  extern void create_index_paths(PlannerInfo *root, RelOptInfo *rel);
@@ -8969,12 +8933,15 @@ index 44abe83..7904b11 100644
  extern bool relation_has_unique_index_for(PlannerInfo *root, RelOptInfo *rel,
  							  List *restrictlist,
  							  List *exprlist, List *oprlist);
-@@ -211,10 +213,12 @@ extern List *select_outer_pathkeys_for_merge(PlannerInfo *root,
+@@ -210,6 +212,7 @@ extern List *select_outer_pathkeys_for_m
  extern List *make_inner_pathkeys_for_merge(PlannerInfo *root,
  							  List *mergeclauses,
  							  List *outer_pathkeys);
 +extern int pathkeys_useful_for_ordering(PlannerInfo *root, List *pathkeys);
- extern List *truncate_useless_pathkeys(PlannerInfo *root,
+ extern List *trim_mergeclauses_for_inner_pathkeys(PlannerInfo *root,
+ 									 List *mergeclauses,
+ 									 List *pathkeys);
+@@ -217,6 +220,7 @@ extern List *truncate_useless_pathkeys(P
  						  RelOptInfo *rel,
  						  List *pathkeys);
  extern bool has_useful_pathkeys(PlannerInfo *root, RelOptInfo *rel);
@@ -8982,11 +8949,11 @@ index 44abe83..7904b11 100644
  extern PathKey *make_canonical_pathkey(PlannerInfo *root,
  					   EquivalenceClass *eclass, Oid opfamily,
  					   int strategy, bool nulls_first);
-diff --git a/src/include/optimizer/planmain.h b/src/include/optimizer/planmain.h
-index 4fbb6cc..f335992 100644
---- a/src/include/optimizer/planmain.h
-+++ b/src/include/optimizer/planmain.h
-@@ -56,6 +56,9 @@ extern Plan *materialize_finished_plan(Plan *subplan);
+Index: postgresql-9.6.8/src/include/optimizer/planmain.h
+===================================================================
+--- postgresql-9.6.8.orig/src/include/optimizer/planmain.h
++++ postgresql-9.6.8/src/include/optimizer/planmain.h
+@@ -56,6 +56,9 @@ extern Plan *materialize_finished_plan(P
  extern bool is_projection_capable_path(Path *path);
  extern bool is_projection_capable_plan(Plan *plan);
  
@@ -8996,10 +8963,10 @@ index 4fbb6cc..f335992 100644
  /* External use of these functions is deprecated: */
  extern Sort *make_sort_from_sortclauses(List *sortcls, Plan *lefttree);
  extern Agg *make_agg(List *tlist, List *qual,
-diff --git a/src/test/regress/expected/create_index.out b/src/test/regress/expected/create_index.out
-index 76593e1..667c9d7 100644
---- a/src/test/regress/expected/create_index.out
-+++ b/src/test/regress/expected/create_index.out
+Index: postgresql-9.6.8/src/test/regress/expected/create_index.out
+===================================================================
+--- postgresql-9.6.8.orig/src/test/regress/expected/create_index.out
++++ postgresql-9.6.8/src/test/regress/expected/create_index.out
 @@ -2803,18 +2803,12 @@ DROP TABLE onek_with_null;
  EXPLAIN (COSTS OFF)
  SELECT * FROM tenk1
@@ -9025,10 +8992,10 @@ index 76593e1..667c9d7 100644
  
  SELECT * FROM tenk1
    WHERE thousand = 42 AND (tenthous = 1 OR tenthous = 3 OR tenthous = 42);
-diff --git a/src/test/regress/expected/select.out b/src/test/regress/expected/select.out
-index f84f8ac..ade65ce 100644
---- a/src/test/regress/expected/select.out
-+++ b/src/test/regress/expected/select.out
+Index: postgresql-9.6.8/src/test/regress/expected/select.out
+===================================================================
+--- postgresql-9.6.8.orig/src/test/regress/expected/select.out
++++ postgresql-9.6.8/src/test/regress/expected/select.out
 @@ -518,6 +518,124 @@ TABLE int8_tbl;
  (9 rows)
  
@@ -9154,10 +9121,10 @@ index f84f8ac..ade65ce 100644
  -- Test ORDER BY options
  --
  CREATE TEMP TABLE foo (f1 int);
-diff --git a/src/test/regress/sql/select.sql b/src/test/regress/sql/select.sql
-index abdd785..fe19bee 100644
---- a/src/test/regress/sql/select.sql
-+++ b/src/test/regress/sql/select.sql
+Index: postgresql-9.6.8/src/test/regress/sql/select.sql
+===================================================================
+--- postgresql-9.6.8.orig/src/test/regress/sql/select.sql
++++ postgresql-9.6.8/src/test/regress/sql/select.sql
 @@ -149,6 +149,33 @@ UNION ALL
  TABLE int8_tbl;
  
@@ -9192,11 +9159,11 @@ index abdd785..fe19bee 100644
  -- Test ORDER BY options
  --
  
-diff --git a/src/tools/msvc/Mkvcbuild.pm b/src/tools/msvc/Mkvcbuild.pm
-index fe905d3..3fc3213 100644
---- a/src/tools/msvc/Mkvcbuild.pm
-+++ b/src/tools/msvc/Mkvcbuild.pm
-@@ -63,6 +63,7 @@ my $frontend_extralibs = {
+Index: postgresql-9.6.8/src/tools/msvc/Mkvcbuild.pm
+===================================================================
+--- postgresql-9.6.8.orig/src/tools/msvc/Mkvcbuild.pm
++++ postgresql-9.6.8/src/tools/msvc/Mkvcbuild.pm
+@@ -64,6 +64,7 @@ my $frontend_extralibs = {
  	'initdb'     => ['ws2_32.lib'],
  	'pg_restore' => ['ws2_32.lib'],
  	'pgbench'    => ['ws2_32.lib'],
