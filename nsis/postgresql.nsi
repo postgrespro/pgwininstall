@@ -390,7 +390,8 @@ Section $(PostgreSQLString) sec1
     ${if} $0 != 0
       DetailPrint "initdb.exe return $0"
       DetailPrint "Output: $1"
-      Sleep 5000
+      MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB)
+      Abort
     ${else}
       DetailPrint "Database initialization OK"
     ${endif}
