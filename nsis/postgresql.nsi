@@ -372,6 +372,7 @@ Section $(PostgreSQLString) sec1
     ;;;Pop $0 ;"ok" or "error" + error details
     ;;;AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
     ;;;Pop $0 ;"ok" or "error" + error details
+    DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUserShort"
     AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess"
     Pop $0
 
@@ -387,6 +388,7 @@ Section $(PostgreSQLString) sec1
     DetailPrint "Database initialization ..."
     AccessControl::GetCurrentUserName
     Pop $0 ; or "error"
+    DetailPrint "GRANT FullAccess ON $DATA_DIR TO $0"
     AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
     Pop $0 ;"ok" or "error" + error details
     System::Call 'Kernel32::SetEnvironmentVariable(t, t)i ("LC_MESSAGES", "C").r0'	
@@ -466,24 +468,33 @@ Section $(PostgreSQLString) sec1
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "DisplayName" "$ServiceID_text - PostgreSQL Server ${PG_MAJOR_VERSION}"
   WriteRegStr HKLM "SYSTEM\CurrentControlSet\Services\$ServiceID_text" "Description" "Provides relational database storage."
 
+  DetailPrint "GRANT FullAccess ON $DATA_DIR TO $ServiceAccount_text"
   AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
+  DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUser"
   AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
   Pop $0 ;"ok" or "error" + error details
+  DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUserShort"
   AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess" ;GenericWrite
   Pop $0 ;"ok" or "error" + error details
 
+  DetailPrint "GRANT GenericRead + GenericExecute ON $INSTDIR TO $ServiceAccount_text"
   AccessControl::GrantOnFile "$INSTDIR" "$ServiceAccount_text" "GenericRead + GenericExecute"
   Pop $0 ;"ok" or "error" + error details
 
+  DetailPrint "GRANT FullAccess ON $DATA_DIR\postgresql.conf TO $ServiceAccount_text"
   AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$ServiceAccount_text" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
+  DetailPrint "GRANT FullAccess ON $DATA_DIR\postgresql.conf TO $loggedInUser"
   AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUser" "FullAccess" ;"GenericRead + GenericExecute" ;GenericWrite
   Pop $0 ;"ok" or "error" + error details
+  DetailPrint "GRANT FullAccess ON $DATA_DIR\postgresql.conf TO $loggedInUserShort"
   AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUserShort" "FullAccess" ;GenericWrite
   Pop $0 ;"ok" or "error" + error details
 
+  DetailPrint "GRANT FullAccess ON $INSTDIR\scripts TO $loggedInUser"
   AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
+  DetailPrint "GRANT GenericRead + GenericExecute ON $INSTDIR\scripts\pgpro_upgrade.cmd TO $loggedInUser"
   AccessControl::GrantOnFile "$INSTDIR\scripts\pgpro_upgrade.cmd" "$loggedInUser" "GenericRead + GenericExecute"
   Pop $0 ;"ok" or "error" + error details
   ${if} $isDataDirExist == 1
@@ -559,7 +570,7 @@ Section $(PostgreSQLString) sec1
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGUSER" "$UserName_text"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGPORT" "$TextPort_text"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
-	AddToPath::AddToPath "$INSTDIR\bin"
+    AddToPath::AddToPath "$INSTDIR\bin"
   ${endif}
 SectionEnd
 
