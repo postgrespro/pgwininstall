@@ -1651,6 +1651,7 @@ Function SetDefaultTcpPort
 FunctionEnd
 
 Function .onInit
+  LogSet on
   Call CheckWindowsVersion
   Call SetDefaultTcpPort
   
