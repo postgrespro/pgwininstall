@@ -368,10 +368,8 @@ Section $(PostgreSQLString) sec1
     ;AccessControl::GrantOnFile "$DATA_DIR" "(BU)" "FullAccess" ;GenericWrite
     ;Pop $0 ;"ok" or "error" + error details
 
-    ;;;AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"
-    ;;;Pop $0 ;"ok" or "error" + error details
-    ;;;AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
-    ;;;Pop $0 ;"ok" or "error" + error details
+    DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUser"
+    AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
     DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUserShort"
     AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess"
     Pop $0
@@ -471,12 +469,6 @@ Section $(PostgreSQLString) sec1
   DetailPrint "GRANT FullAccess ON $DATA_DIR TO $ServiceAccount_text"
   AccessControl::GrantOnFile "$DATA_DIR" "$ServiceAccount_text" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
-  DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUser"
-  AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
-  Pop $0 ;"ok" or "error" + error details
-  DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUserShort"
-  AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUserShort" "FullAccess" ;GenericWrite
-  Pop $0 ;"ok" or "error" + error details
 
   DetailPrint "GRANT GenericRead + GenericExecute ON $INSTDIR TO $ServiceAccount_text"
   AccessControl::GrantOnFile "$INSTDIR" "$ServiceAccount_text" "GenericRead + GenericExecute"
@@ -486,10 +478,10 @@ Section $(PostgreSQLString) sec1
   AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$ServiceAccount_text" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
   DetailPrint "GRANT FullAccess ON $DATA_DIR\postgresql.conf TO $loggedInUser"
-  AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUser" "FullAccess" ;"GenericRead + GenericExecute" ;GenericWrite
+  AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUser" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
   DetailPrint "GRANT FullAccess ON $DATA_DIR\postgresql.conf TO $loggedInUserShort"
-  AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUserShort" "FullAccess" ;GenericWrite
+  AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUserShort" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
 
   DetailPrint "GRANT FullAccess ON $INSTDIR\scripts TO $loggedInUser"
@@ -497,6 +489,7 @@ Section $(PostgreSQLString) sec1
   DetailPrint "GRANT GenericRead + GenericExecute ON $INSTDIR\scripts\pgpro_upgrade.cmd TO $loggedInUser"
   AccessControl::GrantOnFile "$INSTDIR\scripts\pgpro_upgrade.cmd" "$loggedInUser" "GenericRead + GenericExecute"
   Pop $0 ;"ok" or "error" + error details
+  
   ${if} $isDataDirExist == 1
     ; there exist data directory. We need to stop service,
     ; run pgpro-upgrade script and
