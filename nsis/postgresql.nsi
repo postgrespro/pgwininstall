@@ -1311,9 +1311,9 @@ Function .onInit
 
   ReadINIStr $1 $0 options service
   ${if} "$1" == "no"
-    SectionGetFlags ${secService} $3
+    SectionGetFlags ${SecService} $3
     IntOp $3 $3 & ${SECTION_OFF}
-    SectionSetFlags ${secService} $3
+    SectionSetFlags ${SecService} $3
   ${endif}
    ${if} "$1" == "yes"
     StrCpy $service "YES"
