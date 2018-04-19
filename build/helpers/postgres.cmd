@@ -126,7 +126,7 @@ REM Copy needed executables
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/less/*.exe           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
-REM Copy libraries headers to "include" directory for a God sake
+REM Copy libraries headers  to "include" directory for a God sake
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/include/*    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
@@ -134,7 +134,14 @@ cp -va %DEPENDENCIES_BIN_DIR%/libxslt/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/include/*     %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
-
+REM Copy import libraries to "lib' directory
+cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/libxml2/lib/libxml2.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*t.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*eay32.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/zdll.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/uuid/lib/uuid.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 rem Copy msys shell and sed
 CD /D %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
 if exist pgpro_upgrade 7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
