@@ -1,0 +1,20 @@
+diff --git a/src/editline.c b/src/editline.c
+index 27b3c80..008b234 100644
+--- a/src/editline.c
++++ b/src/editline.c
+@@ -1113,7 +1113,14 @@ char *readline(const char *prompt)
+       return NULL;
+     }
+     if (count) {
+-      if ((irBuffer.EventType == KEY_EVENT) && irBuffer.Event.KeyEvent.bKeyDown) {
++      if ((irBuffer.EventType == KEY_EVENT) /* && irBuffer.Event.KeyEvent.bKeyDown */) {
++		  if (!irBuffer.Event.KeyEvent.bKeyDown && irBuffer.Event.KeyEvent.wVirtualKeyCode != VK_MENU) {
++			  if (!ReadConsoleInput(_el_h_in, &irBuffer, 1, &count)) {
++				  _el_clean_exit();
++				  return NULL;
++			  }
++			  continue;
++		  }
+         /*
+         the user pressed a key
+         */
