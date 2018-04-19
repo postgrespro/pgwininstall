@@ -44,6 +44,7 @@ wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/wineditline-
 CD /D %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\wineditline-%EDITLINE_VER%.zip
 CD /D wineditline-%EDITLINE_VER%\src
+patch -p2 < %ROOT%/patches/wineditline/clipboard_paste.patch || goto :ERROR
 CL -I. -c history.c editline.c fn_complete.c || goto :ERROR
 LIB /out:edit.lib *.obj || goto :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\wineditline
