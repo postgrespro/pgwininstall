@@ -156,7 +156,8 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_XML
 TITLE Building xml...
 CD /D %DOWNLOADS_DIR%
-wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
+REM wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
+wget -c http://repo.postgrespro.ru/depends/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
 tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
