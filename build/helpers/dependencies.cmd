@@ -110,7 +110,8 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_XSLT
 TITLE Building xslt...
 CD /D %DOWNLOADS_DIR%
-wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
+REM wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
+wget -c http://repo.postgrespro.ru/depends/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxslt %DEPENDENCIES_SRC_DIR%\libxslt-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxslt
 tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
