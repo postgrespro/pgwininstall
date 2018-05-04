@@ -1,0 +1,323 @@
+diff --git a/contrib/mchar/expected/mm.out b/contrib/mchar/expected/mm.out
+index fa2e924d8e..bad59b4155 100644
+--- a/contrib/mchar/expected/mm.out
++++ b/contrib/mchar/expected/mm.out
+@@ -803,3 +803,44 @@ SELECT * FROM a, c WHERE mvarchar255 = mchar2;
+ 
+ DROP TABLE a;
+ DROP TABLE c;
++select * from (values ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её')) z order by 1;
++ column1 
++---------
++ е
++ еа
++ еб
++ ее
++ её
++ еж
++ ё
++ ёа
++ ёб
++ ёе
++ ёё
++ ёж
++(12 rows)
++
++select mvarchar_icase_cmp('ё', 'е');
++ mvarchar_icase_cmp 
++--------------------
++                  1
++(1 row)
++
++select mvarchar_icase_cmp('Ё', 'Е');
++ mvarchar_icase_cmp 
++--------------------
++                  1
++(1 row)
++
++select mvarchar_icase_cmp('й', 'и');
++ mvarchar_icase_cmp 
++--------------------
++                  1
++(1 row)
++
++select mvarchar_icase_cmp('Й', 'И');
++ mvarchar_icase_cmp 
++--------------------
++                  1
++(1 row)
++
+diff --git a/contrib/mchar/mchar_recode.c b/contrib/mchar/mchar_recode.c
+index d4f365954a..aa3bef398a 100644
+--- a/contrib/mchar/mchar_recode.c
++++ b/contrib/mchar/mchar_recode.c
+@@ -31,6 +31,7 @@ createUObjs() {
+ 			elog(ERROR,"ICU ucol_open returns %d (%s)", err,  u_errorName(err));
+ 		}
+ 
++		/* UCOL_PRIMARY doesn't distinguish И & Й, Е & Ё */
+ 		ucol_setStrength( colCaseInsensitive, UCOL_SECONDARY );
+ 	}
+ 
+@@ -114,29 +115,49 @@ FillWhiteSpace( UChar *dst, int n ) {
+ int 
+ UCharCaseCompare(UChar * a, int alen, UChar *b, int blen) {
+ 	int len = Min(alen, blen);
+-	int res;
++	int i, res;
+ 
+ 	createUObjs();
+ 
+-	res = (int)ucol_strcoll( colCaseInsensitive,
+-							  a, len,
+-							  b, len);
+-	if ( res == 0 && alen != blen )
++	/*
++	 * Preventing any influence of following characters to
++	 * current one, try
++	 * select * from (values ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),
++	 *						 ('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её')) z
++	 * order by 1;
++	 */
++	for (i=0; i<len; i++)
++	{
++		res = (int)ucol_strcoll(colCaseInsensitive,
++								a + i, 1,
++								b + i, 1);
++		if (res)
++			return res;
++	}
++
++	if (alen != blen)
+ 		return (alen > blen) ? 1 : - 1;
+-	return res;
++	return 0;
+ }
+ 
+ int 
+ UCharCompare(UChar * a, int alen, UChar *b, int blen) {
+ 	int len = Min(alen, blen);
+-	int res;
++	int i, res;
+ 	
+ 	createUObjs();
+ 
+-	res =  (int)ucol_strcoll( colCaseSensitive,
+-							  a, len,
+-							  b, len);
+-	if ( res == 0 && alen != blen )
++	/* see above */
++	for (i=0; i<len; i++)
++	{
++		res = (int)ucol_strcoll(colCaseSensitive,
++								a + i, 1,
++								b + i, 1);
++		if (res)
++			return res;
++	}
++
++	if (alen != blen)
+ 		return (alen > blen) ? 1 : - 1;
+-	return res;
++	return 0;
+ }
+diff --git a/contrib/mchar/sql/mm.sql b/contrib/mchar/sql/mm.sql
+index c16aaa1d2c..606409e0ed 100644
+--- a/contrib/mchar/sql/mm.sql
++++ b/contrib/mchar/sql/mm.sql
+@@ -183,3 +183,8 @@ SELECT * FROM a, c WHERE mvarchar255 = mchar2;
+ DROP TABLE a;
+ DROP TABLE c;
+ 
++select * from (values ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её')) z order by 1;
++select mvarchar_icase_cmp('ё', 'е');
++select mvarchar_icase_cmp('Ё', 'Е');
++select mvarchar_icase_cmp('й', 'и');
++select mvarchar_icase_cmp('Й', 'И');
+diff --git a/contrib/mchar/expected/mm.out b/contrib/mchar/expected/mm.out
+index bad59b4155..c5b36c2161 100644
+--- a/contrib/mchar/expected/mm.out
++++ b/contrib/mchar/expected/mm.out
+@@ -803,44 +803,53 @@ SELECT * FROM a, c WHERE mvarchar255 = mchar2;
+ 
+ DROP TABLE a;
+ DROP TABLE c;
+-select * from (values ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её')) z order by 1;
++select * from (values
++    ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её'))
++    z order by 1;
+  column1 
+ ---------
+  е
++ ё
+  еа
++ ёа
+  еб
++ ёб
+  ее
+  её
+- еж
+- ё
+- ёа
+- ёб
+  ёе
+  ёё
++ еж
+  ёж
+ (12 rows)
+ 
+-select mvarchar_icase_cmp('ё', 'е');
+- mvarchar_icase_cmp 
+---------------------
+-                  1
++select 'ё'::mchar = 'е';
++ ?column? 
++----------
++ f
++(1 row)
++
++select 'Ё'::mchar = 'Е';
++ ?column? 
++----------
++ f
+ (1 row)
+ 
+-select mvarchar_icase_cmp('Ё', 'Е');
+- mvarchar_icase_cmp 
+---------------------
+-                  1
++select 'й'::mchar = 'и';
++ ?column? 
++----------
++ f
+ (1 row)
+ 
+-select mvarchar_icase_cmp('й', 'и');
+- mvarchar_icase_cmp 
+---------------------
+-                  1
++select 'Й'::mchar = 'И';
++ ?column? 
++----------
++ f
+ (1 row)
+ 
+-select mvarchar_icase_cmp('Й', 'И');
+- mvarchar_icase_cmp 
+---------------------
+-                  1
++select mvarchar_icase_cmp('ёа','еб'), mvarchar_icase_cmp('еб','ё'),
++    mvarchar_icase_cmp('ё', 'ёа');
++ mvarchar_icase_cmp | mvarchar_icase_cmp | mvarchar_icase_cmp 
++--------------------+--------------------+--------------------
++                 -1 |                  1 |                 -1
+ (1 row)
+ 
+diff --git a/contrib/mchar/mchar_recode.c b/contrib/mchar/mchar_recode.c
+index aa3bef398a..12413ac61d 100644
+--- a/contrib/mchar/mchar_recode.c
++++ b/contrib/mchar/mchar_recode.c
+@@ -31,7 +31,6 @@ createUObjs() {
+ 			elog(ERROR,"ICU ucol_open returns %d (%s)", err,  u_errorName(err));
+ 		}
+ 
+-		/* UCOL_PRIMARY doesn't distinguish И & Й, Е & Ё */
+ 		ucol_setStrength( colCaseInsensitive, UCOL_SECONDARY );
+ 	}
+ 
+@@ -114,50 +113,20 @@ FillWhiteSpace( UChar *dst, int n ) {
+ 
+ int 
+ UCharCaseCompare(UChar * a, int alen, UChar *b, int blen) {
+-	int len = Min(alen, blen);
+-	int i, res;
+ 
+ 	createUObjs();
+ 
+-	/*
+-	 * Preventing any influence of following characters to
+-	 * current one, try
+-	 * select * from (values ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),
+-	 *						 ('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её')) z
+-	 * order by 1;
+-	 */
+-	for (i=0; i<len; i++)
+-	{
+-		res = (int)ucol_strcoll(colCaseInsensitive,
+-								a + i, 1,
+-								b + i, 1);
+-		if (res)
+-			return res;
+-	}
+-
+-	if (alen != blen)
+-		return (alen > blen) ? 1 : - 1;
+-	return 0;
++	return (int)ucol_strcoll( colCaseInsensitive,
++							  a, alen,
++							  b, blen);
+ }
+ 
+ int 
+ UCharCompare(UChar * a, int alen, UChar *b, int blen) {
+-	int len = Min(alen, blen);
+-	int i, res;
+ 	
+ 	createUObjs();
+ 
+-	/* see above */
+-	for (i=0; i<len; i++)
+-	{
+-		res = (int)ucol_strcoll(colCaseSensitive,
+-								a + i, 1,
+-								b + i, 1);
+-		if (res)
+-			return res;
+-	}
+-
+-	if (alen != blen)
+-		return (alen > blen) ? 1 : - 1;
+-	return 0;
++	return  (int)ucol_strcoll( colCaseSensitive,
++							  a, alen,
++							  b, blen);
+ }
+diff --git a/contrib/mchar/sql/mm.sql b/contrib/mchar/sql/mm.sql
+index 606409e0ed..2e11b93704 100644
+--- a/contrib/mchar/sql/mm.sql
++++ b/contrib/mchar/sql/mm.sql
+@@ -183,8 +183,14 @@ SELECT * FROM a, c WHERE mvarchar255 = mchar2;
+ DROP TABLE a;
+ DROP TABLE c;
+ 
+-select * from (values ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её')) z order by 1;
+-select mvarchar_icase_cmp('ё', 'е');
+-select mvarchar_icase_cmp('Ё', 'Е');
+-select mvarchar_icase_cmp('й', 'и');
+-select mvarchar_icase_cmp('Й', 'И');
++select * from (values
++    ('е'::mchar),('ё'),('еа'),('еб'),('ее'),('еж'),('ёа'),('ёб'),('ёё'),('ёж'),('ёе'),('её'))
++    z order by 1;
++
++select 'ё'::mchar = 'е';
++select 'Ё'::mchar = 'Е';
++select 'й'::mchar = 'и';
++select 'Й'::mchar = 'И';
++
++select mvarchar_icase_cmp('ёа','еб'), mvarchar_icase_cmp('еб','ё'),
++    mvarchar_icase_cmp('ё', 'ёа');
+
+diff --git a/contrib/mchar/Makefile b/contrib/mchar/Makefile
+index 27302df5cc..851b766478 100644
+--- a/contrib/mchar/Makefile
++++ b/contrib/mchar/Makefile
+@@ -5,6 +5,7 @@ DATA_built = mchar.sql
+ DATA = uninstall_mchar.sql
+ DOCS = README.mchar
+ REGRESS = init mchar mvarchar mm like compat
++ENCODING = UTF8
+ 
+ PG_CPPFLAGS=-I/usr/local/include
+ 
+
+ 

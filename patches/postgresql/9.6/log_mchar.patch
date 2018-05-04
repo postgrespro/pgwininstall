@@ -1,0 +1,73 @@
+diff --git a/src/backend/optimizer/path/indxpath.c b/src/backend/optimizer/path/indxpath.c
+index b60dec3d64..dfe6e88b8b 100644
+--- a/src/backend/optimizer/path/indxpath.c
++++ b/src/backend/optimizer/path/indxpath.c
+@@ -3139,6 +3139,38 @@ static Oid mmGTOid = InvalidOid;
+ static Oid mcharOid = InvalidOid; 
+ static Oid mvarcharOid = InvalidOid;
+ 
++static Oid
++findTypeOid(char *typname)
++{
++	CatCList	*catlist;
++	HeapTuple	tup;
++	int			n_members;
++	Oid			typoid;
++
++	catlist = SearchSysCacheList(TYPENAMENSP, 1,
++								 CStringGetDatum(typname),
++								 0, 0, 0);
++
++	n_members = catlist->n_members;
++
++	if (n_members != 1)
++	{
++		ReleaseSysCacheList(catlist);
++		if (n_members > 1)
++			elog(ERROR,"There are %d candidates for '%s' type",
++				 n_members, typname);
++		return InvalidOid;
++	}
++
++	tup = &catlist->members[0]->tuple;
++
++	typoid = HeapTupleGetOid(tup);
++
++	ReleaseSysCacheList(catlist);
++
++	return typoid;
++}
++
+ static bool
+ fillMCharOIDS() {
+ 	CatCList    *catlist;
+@@ -3161,27 +3193,13 @@ fillMCharOIDS() {
+ 	tup = &catlist->members[0]->tuple;
+ 
+ 	if ( HeapTupleGetOid(tup) != mmPFPOid ) {
+-		TypeName	*typename;
+-		Type		typtup;
+ 		char        *quals_funcname = "mchar_greaterstring";
+ 		Oid			tmp_mmPFPOid = HeapTupleGetOid(tup);
+ 
+ 		ReleaseSysCacheList(catlist);
+ 
+-		typename = makeTypeName("mchar");
+-		typtup = LookupTypeName(NULL, typename, NULL, true);
+-		if ( typtup ) {
+-			mcharOid = typeTypeId(typtup);
+-			ReleaseSysCache(typtup);
+-		}
+-
+-		typename = makeTypeName("mvarchar");
+-		typtup = LookupTypeName(NULL, typename, NULL, true);
+-		if ( typtup ) {
+-			mvarcharOid = typeTypeId(typtup);
+-			ReleaseSysCache(typtup);
+-		}
+-
++		mcharOid = findTypeOid("mchar");
++		mvarcharOid = findTypeOid("mvarchar");
+ 
+ 		if ( mcharOid == InvalidOid || mvarcharOid == InvalidOid ) {
+ 			elog(LOG,"Can't find mchar/mvarvarchar types: mchar=%d mvarchar=%d", 
