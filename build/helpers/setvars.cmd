@@ -7,7 +7,7 @@ SET OPENSSL_VER=1.0.2n
 SET GETTEXT_VER=0.19.8
 SET LIBSSH2_VER=1.6.0
 SET WXWIDGETS_VER=3.0.2
-SET EDITLINE_VER=2.102
+SET EDITLINE_VER=2.205
 SET ZSTD_RELEASE=1.1.0
 
 SET PG_REPACK_VER=1.4.2
@@ -72,7 +72,7 @@ SET PGVER=%PG_DEF_VERSION%
 IF "%PGURL%"=="" (
    IF "%PRODUCT_NAME%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
    IF "%PRODUCT_NAME%"=="PostgreSQL" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
-   IF "%PRODUCT_NAME%"=="PostgresPro" SET PGURL="http://repo.l.postgrespro.ru/pgpro-%PG_MAJOR_VERSION%-beta/src/postgrespro-%PGVER%.tar.bz2"
+   IF "%PRODUCT_NAME%"=="PostgresPro" SET PGURL="http://repo.l.postgrespro.ru/pgpro-%PG_MAJOR_VERSION%-beta/src/postgrespro-standard-%PGVER%.tar.bz2"
 )
 
 REM Set useful directories paths so they're used in scripts
