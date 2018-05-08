@@ -220,7 +220,7 @@ Section $(PostgreSQLString) sec1
   File "License.txt"
   File "3rd_party_licenses.txt"
 
-FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
+  FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
 
 
   CreateDirectory "$INSTDIR\scripts"
@@ -231,12 +231,12 @@ FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" $INSTDIR
 
   ;Create uninstaller
-FileWrite $LogFile "Create uninstaller$\r$\n"
+  FileWrite $LogFile "Create uninstaller$\r$\n"
 
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   ; write uninstall strings
-FileWrite $LogFile "Write to register\r$\n"
+  FileWrite $LogFile "Write to register\r$\n"
 
   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "DisplayName" "$StartMenuFolder"
@@ -251,7 +251,7 @@ FileWrite $LogFile "Write to register\r$\n"
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "EstimatedSize" "$0"
 
-FileWrite $LogFile "Create BAT files$\r$\n"
+  FileWrite $LogFile "Create BAT files$\r$\n"
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\reload.bat w
   IfErrors creatBatErr
@@ -321,7 +321,7 @@ FileWrite $LogFile "Create BAT files$\r$\n"
     SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 
-FileWrite $LogFile "Create shortcuts$\r$\n"
+  FileWrite $LogFile "Create shortcuts$\r$\n"
 
   ;Create shortcuts
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
@@ -334,7 +334,7 @@ FileWrite $LogFile "Create shortcuts$\r$\n"
   ${endif}
 
   ; set font Lucida Console for shortcut psql
-FileWrite $LogFile "set font Lucida Console for shortcut psql$\r$\n"
+  FileWrite $LogFile "set font Lucida Console for shortcut psql$\r$\n"
   ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
   ${if} $0 == ""
     WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Consolas"
@@ -378,14 +378,14 @@ FileWrite $LogFile "set font Lucida Console for shortcut psql$\r$\n"
 
   !insertmacro MUI_STARTMENU_WRITE_END
   ; Create data dir begin
-FileWrite $LogFile "Create data dir begin$\r$\n"
+  FileWrite $LogFile "Create data dir begin$\r$\n"
 
   ${if} $isDataDirExist == 0
     CreateDirectory "$DATA_DIR"
     ;AccessControl::GrantOnFile "$DATA_DIR" "(BU)" "FullAccess" ;GenericWrite
     ;Pop $0 ;"ok" or "error" + error details
 
-FileWrite $LogFile "GRANT Access $\r$\n"
+    FileWrite $LogFile "GRANT Access $\r$\n"
 
     DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUser"
     AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
@@ -409,10 +409,11 @@ FileWrite $LogFile "GRANT Access $\r$\n"
     AccessControl::GrantOnFile "$DATA_DIR" "$0" "FullAccess" ;GenericWrite
     Pop $0 ;"ok" or "error" + error details
     System::Call 'Kernel32::SetEnvironmentVariable(t, t)i ("LC_MESSAGES", "C").r0'	
-FileWrite $LogFile "Database initialization ...$\r$\n"
+
+    FileWrite $LogFile "Database initialization ...$\r$\n"
 
     ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
-FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
+    FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR" $\r$\n' 
       ; Initialise the database cluster, and set the appropriate permissions/ownership
@@ -420,7 +421,7 @@ FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR"'
     ${else}
-FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
+    FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
         --locale="$Locale_text" \
         --encoding=$Coding_text \
         -U "$UserName_text" \
@@ -437,16 +438,16 @@ FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
     ${if} $0 != 0
       DetailPrint "initdb.exe return $0"
       DetailPrint "Output: $1"
-FileWrite $LogFile "initdb.exe return $0 $\r$\n"
-FileWrite $LogFile "Output: $1 $\r$\n"
-FileClose $LogFile ;Closes the filled file
+      FileWrite $LogFile "initdb.exe return $0 $\r$\n"
+      FileWrite $LogFile "Output: $1 $\r$\n"
+      FileClose $LogFile ;Closes the filled file
 
       MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB)
 
       Abort
     ${else}
       DetailPrint "Database initialization OK"
-FileWrite $LogFile "Database initialization OK $\r$\n"
+      FileWrite $LogFile "Database initialization OK $\r$\n"
     ${endif}
     ;Delete the password file
     ${if} "$Pass1_text" != ""
@@ -456,7 +457,7 @@ FileWrite $LogFile "Database initialization OK $\r$\n"
     ${EndIf}
   ${endif}
   ; Create data dir end
-FileWrite $LogFile "Create postgresql.conf $\r$\n"
+  FileWrite $LogFile "Create postgresql.conf $\r$\n"
   ${if} $isDataDirExist == 0
     ${if} $checkNoLocal_state == ${BST_CHECKED}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
@@ -521,12 +522,7 @@ FileWrite $LogFile "Create postgresql.conf $\r$\n"
         FileClose $0
         
         ErrFileCfg1:
-/* shared_preload_libraries = 'online_analyze, plantuner'
-online_analyze.table_type = 'temporary'
-online_analyze.verbose = 'off'
-online_analyze.local_tracking = 'on'
-plantuner.fix_empty_table = 'on'
-online_analyze.enable = off */
+
     ${endif}
   ${EndIf}
   Delete "$DATA_DIR\postgresql.conf.old"
@@ -534,8 +530,8 @@ online_analyze.enable = off */
   ;# Add line to pg_hba.conf
   Call WriteInstallOptions
   DetailPrint "Service $ServiceID_text registration ..."
-FileWrite $LogFile "Service $ServiceID_text registration ... $\r$\n"
-FileWrite $LogFile '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w $\r$\n'
+  FileWrite $LogFile "Service $ServiceID_text registration ... $\r$\n"
+  FileWrite $LogFile '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w $\r$\n'
 
   nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
   Pop $0 # return value/error/timeout
@@ -544,13 +540,13 @@ FileWrite $LogFile '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "
   ${if} $0 != 0
     DetailPrint "pg_ctl.exe register return $0"
     DetailPrint "Output: $1"
-FileWrite $LogFile "pg_ctl.exe register return $0 $\r$\n"
-FileWrite $LogFile "Output: $1 $\r$\n"
+    FileWrite $LogFile "pg_ctl.exe register return $0 $\r$\n"
+    FileWrite $LogFile "Output: $1 $\r$\n"
 
     Sleep 5000
   ${else}
     DetailPrint "Service registration OK"
-FileWrite $LogFile "Service registration OK $\r$\n"
+    FileWrite $LogFile "Service registration OK $\r$\n"
   ${endif}
 
   ;Write the DisplayName manually
@@ -608,8 +604,8 @@ FileWrite $LogFile "Service registration OK $\r$\n"
   ${endif}
 
   DetailPrint "Start server service..."
-FileWrite $LogFile "Start server service... $\r$\n"
-FileWrite $LogFile 'sc start "$ServiceID_text" $\r$\n'
+  FileWrite $LogFile "Start server service... $\r$\n"
+  FileWrite $LogFile 'sc start "$ServiceID_text" $\r$\n'
 
   Sleep 1000
 
@@ -621,12 +617,12 @@ FileWrite $LogFile 'sc start "$ServiceID_text" $\r$\n'
   ${if} $0 != 0
     DetailPrint "Start service return $0"
     DetailPrint "Output: $1"
-FileWrite $LogFile "Start service return $0 $\r$\n"
-FileWrite $LogFile "Output: $1 $\r$\n"
+    FileWrite $LogFile "Start service return $0 $\r$\n"
+    FileWrite $LogFile "Output: $1 $\r$\n"
     Sleep 5000
   ${else}
     DetailPrint "Start service OK"
-FileWrite $LogFile "Start service OK $\r$\n"
+    FileWrite $LogFile "Start service OK $\r$\n"
 
   ${endif}
 
@@ -638,8 +634,8 @@ FileWrite $LogFile "Start service OK $\r$\n"
     ${endif}
 
     DetailPrint "Create adminpack ..."
-FileWrite $LogFile "Create adminpack ... $\r$\n"
-FileWrite $LogFile '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres $\r$\n'
+    FileWrite $LogFile "Create adminpack ... $\r$\n"
+    FileWrite $LogFile '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres $\r$\n'
     Sleep 5000
     nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres'
     pop $0
@@ -647,14 +643,14 @@ FileWrite $LogFile '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text
     ${if} $0 != 0
       DetailPrint "Create adminpack return $0"
       DetailPrint "Output: $1"
-FileWrite $LogFile "Create adminpack return $0 $\r$\n"
-FileWrite $LogFile "Output: $1 $\r$\n"
+      FileWrite $LogFile "Create adminpack return $0 $\r$\n"
+      FileWrite $LogFile "Output: $1 $\r$\n"
 
       ;MessageBox MB_OK "Create adminpack error: $1"
       MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
     ${else}
       DetailPrint "Create adminpack OK"
-FileWrite $LogFile "Create adminpack OK $\r$\n"
+      FileWrite $LogFile "Create adminpack OK $\r$\n"
     ${endif}
     ${if} "$Pass1_text" != ""
       StrCpy $R0 ""
@@ -669,7 +665,7 @@ FileWrite $LogFile "Create adminpack OK $\r$\n"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
     AddToPath::AddToPath "$INSTDIR\bin"
   ${endif}
-FileClose $LogFile ;Closes the filled file
+  FileClose $LogFile ;Closes the filled file
 
 SectionEnd
 
