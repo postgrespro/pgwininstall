@@ -112,6 +112,9 @@ rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/lib/*python3* || GOTO :ERROR
 
 IF EXIST ..\..\..\doc\buildinfo.txt COPY ..\..\..\doc\buildinfo.txt %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc
 rem now actually copy DLLs of dependencies into our bindir
+
+SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
+
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.lib    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
