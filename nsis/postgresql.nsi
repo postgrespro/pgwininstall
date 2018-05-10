@@ -1144,14 +1144,19 @@ Function makeOptimization
 
   ${if} $AllMem > 16000 ;>16gb
     StrCpy $work_mem "128MB"
+!ifdef PG_64bit
     StrCpy $shared_buffers "1GB"
+!else
+    StrCpy $shared_buffers "768MB"
+!endif
+
     StrCpy $effective_cache_size "16GB"
     return
   ${endif}
 
   ${if} $AllMem > 8090 ;>8gb
     StrCpy $work_mem "128MB"
-    StrCpy $shared_buffers "1GB"
+    StrCpy $shared_buffers "768MB"
     StrCpy $effective_cache_size "8GB"
     return
   ${endif}
