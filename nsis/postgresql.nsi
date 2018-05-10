@@ -20,6 +20,7 @@
 !include "common_macro.nsh"
 !include "Utf8Converter.nsh"
 !include "Ports.nsh"
+!include "x64.nsh"
 
 !insertmacro VersionCompare
 
@@ -98,8 +99,11 @@ Var rButton2
 Var checkBoxEnvVar
 Var isEnvVar
 
+Var LogFile
+Var effective_cache_size
+
 ; Set 'install service' variable
-Var service
+;Var service
 
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
 !define MUI_COMPONENTSPAGE_SMALLDESC
@@ -204,6 +208,7 @@ Section $(PostgreSQLString) sec1
 
   File "License.txt"
   File "3rd_party_licenses.txt"
+  FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
 
   CreateDirectory "$INSTDIR\scripts"
   File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
@@ -213,9 +218,12 @@ Section $(PostgreSQLString) sec1
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" $INSTDIR
 
   ;Create uninstaller
+  FileWrite $LogFile "Create uninstaller$\r$\n"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   ; write uninstall strings
+  FileWrite $LogFile "Write to register\r$\n"
+
   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "DisplayName" "$StartMenuFolder"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
@@ -229,6 +237,7 @@ Section $(PostgreSQLString) sec1
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "EstimatedSize" "$0"
  
+  FileWrite $LogFile "Create BAT files$\r$\n"
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\reload.bat w
   IfErrors creatBatErr
@@ -278,6 +287,8 @@ Section $(PostgreSQLString) sec1
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 
   ;Create shortcuts
+  FileWrite $LogFile "Create shortcuts$\r$\n"
+
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
@@ -288,6 +299,7 @@ Section $(PostgreSQLString) sec1
   ${endif}
 
   ; set font Lucida Console for shortcut psql
+  FileWrite $LogFile "set font Lucida Console for shortcut psql$\r$\n"
   ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
   ${if} $0 == ""
     WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Consolas"
@@ -336,11 +348,13 @@ Section $(PostgreSQLString) sec1
   !insertmacro MUI_STARTMENU_WRITE_END
 
   ; Create data dir begin
+  FileWrite $LogFile "Create data dir begin$\r$\n"
   ${if} $isDataDirExist == 0
     CreateDirectory "$DATA_DIR"
     ;AccessControl::GrantOnFile "$DATA_DIR" "(BU)" "FullAccess" ;GenericWrite
     ;Pop $0 ;"ok" or "error" + error details
 
+    FileWrite $LogFile "GRANT Access $\r$\n"
     DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUser"
     AccessControl::GrantOnFile "$DATA_DIR" "$loggedInUser" "FullAccess" ;GenericWrite
     DetailPrint "GRANT FullAccess ON $DATA_DIR TO $loggedInUserShort"
@@ -357,6 +371,8 @@ Section $(PostgreSQLString) sec1
       StrCpy $tempVar ' --pwfile "$tempFileName"  -A md5 '
     ${endif}
     DetailPrint "Database initialization ..."
+    FileWrite $LogFile "Database initialization ...$\r$\n"
+
     AccessControl::GetCurrentUserName
     Pop $0 ; or "error"
     DetailPrint "GRANT FullAccess ON $DATA_DIR TO $0"
@@ -364,9 +380,18 @@ Section $(PostgreSQLString) sec1
     Pop $0 ;"ok" or "error" + error details
     ${if} ${WITH_1C} == "TRUE"
       DetailPrint "Running 1C installation. Using $Locale_text locale and UTF-8 encoding ..."
+      FileWrite $LogFile "Running 1C installation. Using $Locale_text locale and UTF-8 encoding ...$\r$\n"
+
 	${if} "$Locale_text" != "$(DEF_LOCALE_NAME)"
 		StrCpy $tempVar '$(tempVar)--locale="$Locale_text" '
 	${endif}
+	
+    FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
+          --encoding="UTF-8" \
+          -U "$UserName_text" \
+        -D "$DATA_DIR" $\r$\n'
+
+	
         nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
           --encoding="UTF-8" \
           -U "$UserName_text" \
@@ -374,10 +399,24 @@ Section $(PostgreSQLString) sec1
     ${else}
       ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
         ; Initialise the database cluster, and set the appropriate permissions/ownership
+        
+        FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
+        --encoding=$Coding_text -U "$UserName_text" \
+        -D "$DATA_DIR" $\r$\n'
+
+        
         nsExec::ExecToStack /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
           --encoding=$Coding_text -U "$UserName_text" \
           -D "$DATA_DIR"'
       ${else}
+      
+             FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
+                     --locale="$Locale_text" \
+                     -U "$UserName_text" \
+                     -D "$DATA_DIR" $\r$\n'
+
+
+        ;--encoding=$Coding_text ?VVS
         nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
           --locale="$Locale_text" \
           -U "$UserName_text" \
@@ -390,10 +429,15 @@ Section $(PostgreSQLString) sec1
     ${if} $0 != 0
       DetailPrint "initdb.exe return $0"
       DetailPrint "Output: $1"
+      FileWrite $LogFile "initdb.exe return $0 $\r$\n"
+      FileWrite $LogFile "Output: $1 $\r$\n"
+      FileClose $LogFile ;Closes the filled file
+
       MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB)
       Abort
     ${else}
       DetailPrint "Database initialization OK"
+      FileWrite $LogFile "Database initialization OK $\r$\n"
     ${endif}
     ;Delete the password file
     ${if} "$Pass1_text" != ""
@@ -403,6 +447,7 @@ Section $(PostgreSQLString) sec1
     ${EndIf}
   ${endif}
   ; Create data dir end
+  FileWrite $LogFile "Create postgresql.conf $\r$\n"
   ${if} $isDataDirExist == 0
     ${if} $checkNoLocal_state == ${BST_CHECKED}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
@@ -427,11 +472,57 @@ Section $(PostgreSQLString) sec1
         ;#work_mem = 4MB				# min 64kB
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#work_mem = 4MB" "work_mem = $work_mem"
       ${endif}
+      ${if} $effective_cache_size != ""
+        ;#work_mem = 4MB				# min 64kB
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#effective_cache_size = 4GB" "effective_cache_size = $effective_cache_size"
+      ${endif}
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#temp_buffers = 8MB" "temp_buffers = 32MB"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#maintenance_work_mem = 64MB" "maintenance_work_mem = 128MB"
+
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#autovacuum_max_workers = 3" "autovacuum_max_workers = 6"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#autovacuum_naptime = 1min" "autovacuum_naptime = 20s"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#autovacuum_vacuum_cost_limit = -1" "autovacuum_vacuum_cost_limit = 400"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#bgwriter_delay = 200ms" "bgwriter_delay = 20ms"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#bgwriter_lru_multiplier = 2.0" "bgwriter_lru_multiplier = 4.0"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#bgwriter_lru_maxpages = 100" "bgwriter_lru_maxpages = 400"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#synchronous_commit = on" "synchronous_commit = off"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#checkpoint_completion_target = 0.5" "checkpoint_completion_target = 0.9"
+
+        ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#effective_io_concurrency = 0" "effective_io_concurrency = 2"
+
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#random_page_cost = 4.0" "random_page_cost = 1.5"
+
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "max_connections = 100" "max_connections = 500"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#escape_string_warning = on" "escape_string_warning = off"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#standard_conforming_strings = on" "standard_conforming_strings = off"
+        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#max_locks_per_transaction = 64" "max_locks_per_transaction = 256"
+        ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#shared_preload_libraries = ''" "shared_preload_libraries = 'online_analyze, plantuner'"
+        ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "" ""
+        ${if} ${WITH_1C} == "TRUE"
+               ClearErrors
+               FileOpen $0 $DATA_DIR\postgresql.conf a
+               IfErrors ErrFileCfg1
+               FileSeek $0 0 END
+               FileWrite $0 "shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
+               FileWrite $0 "online_analyze.table_type = 'temporary'$\r$\n"
+               FileWrite $0 "online_analyze.verbose = 'off'$\r$\n"
+               FileWrite $0 "online_analyze.local_tracking = 'on'$\r$\n"
+               FileWrite $0 "plantuner.fix_empty_table = 'on'  $\r$\n"
+               FileWrite $0 "online_analyze.enable = off$\r$\n"
+               FileClose $0
+        
+               ErrFileCfg1:
+        ${endif}
+
     ${endif}
   ${EndIf}
+  Delete "$DATA_DIR\postgresql.conf.old"
 
   Call WriteInstallOptions
   DetailPrint "Service $ServiceID_text registration ..."
+  FileWrite $LogFile "Service $ServiceID_text registration ... $\r$\n"
+  FileWrite $LogFile '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w $\r$\n'
+
   nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
   Pop $0 # return value/error/timeout
   Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
@@ -439,9 +530,13 @@ Section $(PostgreSQLString) sec1
   ${if} $0 != 0
     DetailPrint "pg_ctl.exe register return $0"
     DetailPrint "Output: $1"
+    FileWrite $LogFile "pg_ctl.exe register return $0 $\r$\n"
+    FileWrite $LogFile "Output: $1 $\r$\n"
+
     Sleep 5000
   ${else}
     DetailPrint "Service registration OK"
+    FileWrite $LogFile "Service registration OK $\r$\n"
   ${endif}
 
   ;Write the DisplayName manually
@@ -471,6 +566,9 @@ Section $(PostgreSQLString) sec1
   Pop $0 ;"ok" or "error" + error details
 
   DetailPrint "Start server service..."
+  FileWrite $LogFile "Start server service... $\r$\n"
+  FileWrite $LogFile 'sc start "$ServiceID_text" $\r$\n'
+
   Sleep 1000
 
   nsExec::ExecToStack /TIMEOUT=60000 'sc start "$ServiceID_text"'
@@ -481,9 +579,14 @@ Section $(PostgreSQLString) sec1
   ${if} $0 != 0
     DetailPrint "Start service return $0"
     DetailPrint "Output: $1"
+    FileWrite $LogFile "Start service return $0 $\r$\n"
+    FileWrite $LogFile "Output: $1 $\r$\n"
+
     Sleep 5000
   ${else}
     DetailPrint "Start service OK"
+    FileWrite $LogFile "Start service OK $\r$\n"
+
   ${endif}
 
   ${if} $isDataDirExist == 0
@@ -494,6 +597,9 @@ Section $(PostgreSQLString) sec1
     ${endif}
 
     DetailPrint "Create adminpack ..."
+    FileWrite $LogFile "Create adminpack ... $\r$\n"
+    FileWrite $LogFile '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres $\r$\n'
+
     Sleep 5000
     nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "CREATE EXTENSION adminpack;" postgres'
     pop $0
@@ -501,10 +607,15 @@ Section $(PostgreSQLString) sec1
     ${if} $0 != 0
       DetailPrint "Create adminpack return $0"
       DetailPrint "Output: $1"
+      FileWrite $LogFile "Create adminpack return $0 $\r$\n"
+      FileWrite $LogFile "Output: $1 $\r$\n"
+
       ;MessageBox MB_OK "Create adminpack error: $1"
       MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
     ${else}
       DetailPrint "Create adminpack OK"
+      FileWrite $LogFile "Create adminpack OK $\r$\n"
+
     ${endif}
     ${if} "$Pass1_text" != ""
       StrCpy $R0 ""
@@ -519,6 +630,7 @@ Section $(PostgreSQLString) sec1
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGLOCALEDIR" "$INSTDIR\share\locale\"
     AddToPath::AddToPath "$INSTDIR\bin"
   ${endif}
+  FileClose $LogFile ;Closes the filled file
 SectionEnd
 
 ;Uninstaller Section
@@ -541,6 +653,7 @@ Section "Uninstall"
   Delete "$INSTDIR\Uninstall.exe"
   Delete "$INSTDIR\license.txt"
   Delete "$INSTDIR\3rd_party_licenses.txt"
+  Delete "$INSTDIR\install.log"
 
   RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\doc"
@@ -593,7 +706,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 !insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
 !insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
-!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
+; !insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;check existing install
@@ -1029,6 +1142,19 @@ Function makeOptimization
   ;512MB = 65536 = 536870912
   ;256MB = 32768 = 268435456
 
+  ${if} $AllMem > 16000 ;>16gb
+    StrCpy $work_mem "128MB"
+    StrCpy $shared_buffers "1GB"
+    StrCpy $effective_cache_size "16GB"
+    return
+  ${endif}
+
+  ${if} $AllMem > 8090 ;>8gb
+    StrCpy $work_mem "128MB"
+    StrCpy $shared_buffers "1GB"
+    StrCpy $effective_cache_size "8GB"
+    return
+  ${endif}
   ${if} $AllMem > 4090 ;>4gb
     StrCpy $work_mem "128MB"
     StrCpy $shared_buffers "512MB"
@@ -1108,6 +1234,15 @@ FunctionEnd
 
 Function .onInit
   Call SetDefaultTcpPort
+
+  !ifdef PG_64bit
+    ${IfNot} ${RunningX64}
+      MessageBox MB_OK|MB_ICONSTOP "This version can be installed only on 64-bit Windows!"
+      Abort
+    ${EndIf}
+  !endif
+
+
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
@@ -1204,15 +1339,15 @@ Function .onInit
     SectionSetFlags ${secMS} $3
   ${endif}
 
-  ReadINIStr $1 $0 options service
-  ${if} "$1" == "no"
-    SectionGetFlags ${SecService} $3
-    IntOp $3 $3 & ${SECTION_OFF}
-    SectionSetFlags ${SecService} $3
-  ${endif}
-   ${if} "$1" == "yes"
-    StrCpy $service "YES"
-  ${endif}
+;  ReadINIStr $1 $0 options service
+;  ${if} "$1" == "no"
+;    SectionGetFlags ${SecService} $3
+;    IntOp $3 $3 & ${SECTION_OFF}
+;    SectionSetFlags ${SecService} $3
+;  ${endif}
+;   ${if} "$1" == "yes"
+;    StrCpy $service "YES"
+;  ${endif}
 
    ReadINIStr $1 $0 options pgserver
   ${if} "$1" == "no"

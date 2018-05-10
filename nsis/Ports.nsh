@@ -67,7 +67,12 @@ Function IsPortOpen
       IntOp $4 $4 + $5 # skip to entry
       System::Call *$4(i,i.r4)
     ${EndIf}
+!if "${NSIS_PACKEDVERSION}" >= 50343936 ; v3.3+
+    System::Call ws2_32::ntohs(hr4)h.r4
+!else
     System::Call ws2_32::ntohs(ir4)i.r4
+    IntOp $4 $4 & 0xffff ; Truncate to 16-bits
+!endif
  
     ${If} $4 = $R0
       StrCpy $R0 "open"

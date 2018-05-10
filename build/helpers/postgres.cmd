@@ -79,6 +79,7 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 REM IF %ONE_C% == YES (
 REM   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
 REM )
+SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
 
 cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
@@ -92,9 +93,9 @@ CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll  %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll    %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\libintl\lib\libintl.dll	%BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\libiconv.dll    %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.dll       %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/libintl.dll	%BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/libiconv.dll    %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/iconv.dll       %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
 
 perl install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
