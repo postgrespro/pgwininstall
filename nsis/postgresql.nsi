@@ -493,12 +493,13 @@ Section $(PostgreSQLString) sec1
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#random_page_cost = 4.0" "random_page_cost = 1.5"
 
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "max_connections = 100" "max_connections = 500"
-        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#escape_string_warning = on" "escape_string_warning = off"
-        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#standard_conforming_strings = on" "standard_conforming_strings = off"
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#max_locks_per_transaction = 64" "max_locks_per_transaction = 256"
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#shared_preload_libraries = ''" "shared_preload_libraries = 'online_analyze, plantuner'"
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "" ""
         ${if} ${WITH_1C} == "TRUE"
+               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#escape_string_warning = on" "escape_string_warning = off"
+               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#standard_conforming_strings = on" "standard_conforming_strings = off"
+
                ClearErrors
                FileOpen $0 $DATA_DIR\postgresql.conf a
                IfErrors ErrFileCfg1
