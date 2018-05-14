@@ -501,10 +501,7 @@ Section $(PostgreSQLString) sec1
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#effective_io_concurrency = 0" "effective_io_concurrency = 2"
 
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#random_page_cost = 4.0" "random_page_cost = 1.5"
-
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "max_connections = 100" "max_connections = 500"
-        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#escape_string_warning = on" "escape_string_warning = off"
-        !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#standard_conforming_strings = on" "standard_conforming_strings = off"
         !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#max_locks_per_transaction = 64" "max_locks_per_transaction = 256"
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#shared_preload_libraries = ''" "shared_preload_libraries = 'online_analyze, plantuner'"
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "" ""
@@ -513,6 +510,10 @@ Section $(PostgreSQLString) sec1
         FileOpen $0 $DATA_DIR\postgresql.conf a
         IfErrors ErrFileCfg1
         FileSeek $0 0 END
+
+        FileWrite $0 "#Options for 1C:$\r$\n"
+        FileWrite $0 "#escape_string_warning = off$\r$\n"
+        FileWrite $0 "#standard_conforming_strings = off$\r$\n"
         FileWrite $0 "#shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
         FileWrite $0 "#online_analyze.table_type = 'temporary'$\r$\n"
         FileWrite $0 "#online_analyze.verbose = 'off'$\r$\n"
