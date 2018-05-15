@@ -100,7 +100,7 @@ Var AllMem
 Var FreeMem
 Var shared_buffers
 Var work_mem
-Var needOptimiztion
+Var needOptimization
 Var rButton1
 Var rButton2
 
@@ -474,7 +474,7 @@ Section $(PostgreSQLString) sec1
     !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#logging_collector = off" "logging_collector = on"
     !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#log_line_prefix = ''" "log_line_prefix = '%t '"
 
-    ${if} $needOptimiztion == "1"
+    ${if} $needOptimization == "1"
       ${if} $shared_buffers != ""
         ${ConfigWrite} "$DATA_DIR\postgresql.conf" "shared_buffers = " "$shared_buffers$\t$\t# min 128kB" $R0
       ${endif}
@@ -1743,7 +1743,7 @@ Function nsDialogOptimization
   ${NSD_CreateRadioButton} 0 70u 200u 24U "$(DLG_OPT3)"
   Pop $rButton1
 
-  ${if} $needOptimiztion == "1"
+  ${if} $needOptimization == "1"
     ${NSD_SetState} $rButton2  ${BST_CHECKED}
   ${else}
     ${NSD_SetState} $rButton1  ${BST_CHECKED}
@@ -1759,9 +1759,9 @@ Function nsDialogsOptimizationPageLeave
   ${NSD_GetState} $rButton2 $0
   
   ${if} $0 == ${BST_CHECKED}
-    StrCpy  $needOptimiztion "1"
+    StrCpy  $needOptimization "1"
   ${else}
-    StrCpy $needOptimiztion "0"
+    StrCpy $needOptimization "0"
   ${endif}
 FunctionEnd
 
@@ -1816,7 +1816,7 @@ ${EndIf}
   ;AccessControl::GetCurrentUserName
   ;Pop $0 ; or "error"
   ;MessageBox MB_OK "$0"
-  StrCpy $needOptimiztion "1"
+  StrCpy $needOptimization "1"
 
   StrCpy $isDataDirExist 0
 
@@ -1905,6 +1905,11 @@ ${EndIf}
   ReadINIStr $1 $0 options envvar
   ${if} "$1" != ""
     StrCpy $isEnvVar $1
+  ${endif}
+  
+  ReadINIStr $1 $0 options needoptimization
+  ${if} "$1" != ""
+    StrCpy $needOptimization "$1"
   ${endif}
 FunctionEnd
 
