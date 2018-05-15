@@ -85,6 +85,7 @@ SET DOWNLOADS_DIR=%BUILD_DIR%\downloads
 REM Convert paths for Unix utilites
 SET BUILD_UDIR=%BUILD_DIR:\=/%
 SET DEPENDENCIES_SRC_UDIR=%DEPENDENCIES_SRC_DIR:\=/%
+SET DEPENDENCIES_BIN_UDIR=%DEPENDENCIES_BIN_DIR:\=/%
 
 REM Magic to set root directory of those scripts (Where Readme.md lies)
 

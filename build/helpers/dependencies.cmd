@@ -253,11 +253,11 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building libssh2...
 CD /D %DOWNLOADS_DIR%
 wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-%LIBSSH2_VER%.tar.gz -O libssh2-%LIBSSH2_VER%.tar.gz
-rm -rf %DEPENDENCIES_BIN_DIR%\libssh2 %DEPENDENCIES_SRC_DIR%/libssh2-*
+rm -rf %DEPENDENCIES_BIN_UDIR%/libssh2 %DEPENDENCIES_SRC_UDIR%/libssh2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libssh2
 tar xf libssh2-%LIBSSH2_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
-cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/include %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
-cp -va %DEPENDENCIES_SRC_DIR%/libssh2-*/win32/libssh2_config.h %DEPENDENCIES_BIN_DIR%\libssh2\include  || GOTO :ERROR
+cp -va %DEPENDENCIES_SRC_UDIR%/libssh2-*/include %DEPENDENCIES_BIN_UDIR%/libssh2/include  || GOTO :ERROR
+cp -va %DEPENDENCIES_SRC_UDIR%/libssh2-*/win32/libssh2_config.h %DEPENDENCIES_BIN_UDIR%/libssh2/include  || GOTO :ERROR
 CD /D %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libssh2 -y
 
