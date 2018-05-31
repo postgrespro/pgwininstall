@@ -113,6 +113,7 @@ Var effective_cache_size
 ; Set 'install service' variable
 ;Var service
 
+
 ;MUI_COMPONENTSPAGE_SMALLDESC or MUI_COMPONENTSPAGE_NODESC
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
@@ -150,6 +151,7 @@ PageEx directory
   DirText $(DATADIR_MESS) $(DATADIR_TITLE) $(BROWSE_BUTTON)
 PageExEnd
 
+
 Page custom ChecExistDataDir
 
 Page custom nsDialogServer nsDialogsServerPageLeave
@@ -169,6 +171,7 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !define MUI_FINISHPAGE_TITLE_3LINES
 !insertmacro MUI_UNPAGE_WELCOME
+;!insertmacro MUI_UNPAGE_COMPONENTS
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
@@ -194,6 +197,85 @@ Section "Microsoft Visual C++ ${REDIST_YEAR} Redistributable" secMS
   Delete $1
 SectionEnd
 
+SectionGroup /e $(PostgreSQLString) serverGroup
+
+Section "Client components" secClient
+
+  /*${If} ${FileExists} "$INSTDIR\*.*"
+  ${orif} ${FileExists} "$INSTDIR"
+    MessageBox MB_OK|MB_ICONINFORMATION 'Can not install clients components to this path! The installation was found on the path "$PG_OLD_DIR" '
+    Return
+  ${EndIf} */
+
+MessageBox MB_OK|MB_ICONINFORMATION "pg_old_dir: $PG_OLD_DIR"
+  ;Call ChecExistInstall ;get port number for  psql
+
+  !include clientlist.nsi
+  ;SetOutPath "$INSTDIR\bin"
+  ;File /r ${PG_INS_SOURCE_DIR}\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
+  ;SetOutPath "$INSTDIR\doc"
+  ;File /r ${PG_INS_SOURCE_DIR}\doc\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\include\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\lib\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\share\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\symbols\*.*
+
+  File "License.txt"
+  File "3rd_party_licenses.txt"
+
+  CreateDirectory "$INSTDIR\scripts"
+  File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
+  File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
+
+  ;Store installation folder
+  WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" $INSTDIR
+
+
+
+  WriteUninstaller "$INSTDIR\Uninstall.exe"
+  Call writeUnistallReg
+  Call createRunPsql
+
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+
+  ;Create shortcuts
+  CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+
+  ${if} ${FileExists} "$INSTDIR\scripts\runpgsql.bat"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\scripts\runpgsql.bat" "" "$INSTDIR\scripts\pg-psql.ico" "0" "" "" "PostgreSQL command line utility"
+  ${else}
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\bin\psql.exe" "-h localhost -U $UserName_text -d postgres -p $TextPort_text" "" "" "" "" "PostgreSQL command line utility"
+  ${endif}
+
+
+  ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
+  ${if} $0 == ""
+    WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Consolas"
+    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontWeight" "400"
+    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontSize" "917504"
+    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontFamily" "54"
+  ${endif}
+
+
+  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
+
+  !insertmacro CreateInternetShortcut \
+    "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (EN)" \
+    "$INSTDIR\doc\postgresql-en.chm" \
+    "$INSTDIR\doc\pg-help.ico" "0"
+
+  !insertmacro CreateInternetShortcut \
+    "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (RU)" \
+    "$INSTDIR\doc\postgresql-ru.chm" \
+    "$INSTDIR\doc\pg-help.ico" "0"
+
+  !insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
 Section $(PostgreSQLString) sec1
 
   ${if} $PG_OLD_DIR != "" ; exist PG install
@@ -216,8 +298,16 @@ Section $(PostgreSQLString) sec1
     ${endif}
   ${endif}
 
-  SetOutPath "$INSTDIR"
-  File /r ${PG_INS_SOURCE_DIR}
+  !include serverlist.nsi
+  ;SetOutPath "$INSTDIR"
+  ;File /r ${PG_INS_SOURCE_DIR}\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\doc\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\include\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\lib\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\share\*.*
+  ;File /r ${PG_INS_SOURCE_DIR}\symbols\*.*
+
   File "License.txt"
   File "3rd_party_licenses.txt"
 
@@ -670,6 +760,12 @@ Section $(PostgreSQLString) sec1
 
 SectionEnd
 
+
+SectionGroupEnd
+
+
+
+
 ;Uninstaller Section
 Section "Uninstall"
   Call un.ChecExistInstall
@@ -701,6 +797,10 @@ Section "Uninstall"
   RMDir /r "$INSTDIR\symbols"
   RMDir /r "$INSTDIR\StackBuilder"
   RMDir /r "$INSTDIR\scripts"
+
+ 
+
+
   RMDir "$INSTDIR"
 
   Call un.DeleteInstallOptions
@@ -747,6 +847,48 @@ SectionEnd
 ;!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
+
+Function writeUnistallReg
+  WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "DisplayName" "$StartMenuFolder"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "DisplayVersion" "${PG_DEF_VERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "HelpLink" "${PRODUCT_WEB_SITE}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "Comments" "Packaged by PostgresPro.ru"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "UrlInfoAbout" "${PRODUCT_WEB_SITE}"
+
+  ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+  IntFmt $0 "0x%08X" $0
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "EstimatedSize" "$0"
+
+FunctionEnd
+
+Function createRunPsql
+  ${If} ${AtLeastWin2008}
+    StrCpy $Chcp_text "chcp 65001"
+  ${Else}
+    StrCpy $Chcp_text ""
+  ${Endif}
+
+  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+    StrCpy $Chcp_text ""
+
+    DetailPrint "Language settings:"
+    DetailPrint "LANG_RUSSIAN=${LANG_RUSSIAN}"
+    DetailPrint "LANG_ENGLISH=${LANG_ENGLISH}"
+    DetailPrint "LANGUAGE=$LANGUAGE"
+
+    ${if} $LANGUAGE == ${LANG_RUSSIAN}
+      StrCpy $Chcp_text "chcp 1251"
+    ${endif}
+  ${endif}
+
+  FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
+  IfErrors +2 0
+  FileWrite $0 '@echo off$\r$\n$Chcp_text$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
+  FileClose $0
+FunctionEnd
 ;check existing install
 ;if exist then get install options to vars
 Function ChecExistInstall
@@ -985,7 +1127,10 @@ Function un.ChecExistInstall
     ReadRegStr $ServiceID_text HKLM "${PG_REG_KEY}" "Service ID"
     ReadRegStr $UserName_text HKLM "${PG_REG_KEY}" "Super User"
     ReadRegStr $Branding_text HKLM "${PG_REG_KEY}" "Branding"
+    
+    
   ${endif}
+  
 FunctionEnd
 
 Function getServerDataFromDlg
@@ -1029,6 +1174,7 @@ FunctionEnd
 ;say that PG is exist
 Function nsDialogServerExist
   ${Unless} ${SectionIsSelected} ${sec1}
+  ${AndUnless} ${SectionIsSelected} ${secClient}
     Abort
   ${EndUnless}
   ${if} $PG_OLD_DIR == "" ;no PG install
@@ -1787,12 +1933,15 @@ MessageBox MB_OK|MB_ICONSTOP "This version can be installed only on 64-bit Windo
 Abort
 ${EndIf}
 !endif
+  IntOp $3 ${SF_SELECTED} | ${SF_RO}
+  SectionSetFlags ${secClient} $3
+  ;SectionSetFlags ${secClient} ${SF_RO}
   
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
   StrCpy $OLD_DATA_DIR ""
-  
+
   StrCpy $UserName_text "${PG_DEF_SUPERUSER}"
 
   StrCpy $ServiceAccount_text "${PG_DEF_SERVICEACCOUNT}"
@@ -1924,8 +2073,14 @@ Function func1
   is5:
 FunctionEnd
 
+
 Function dirPre
+  ;${if} ${SectionIsSelected} ${secClient}
+  ;      return
+  ;${endif}
+  
   ${Unless} ${SectionIsSelected} ${sec1}
+  ${AndUnless} ${SectionIsSelected} ${secClient}
     Abort
   ${EndUnless}
   ${if} $PG_OLD_DIR != "" ;exist PG install
@@ -1940,4 +2095,23 @@ Function CheckWindowsVersion
 	Abort
     ${EndUnless}
   ${EndIf}
+FunctionEnd
+
+
+Function  .onSelChange
+  ;MessageBox MB_OK|MB_ICONINFORMATION $0
+  ${if} $0 == ${sec1}
+  ${orif} $0 == ${serverGroup}
+        SectionGetFlags ${sec1} $1
+        ;IntOp $1 ${SF_SELECTED}
+        ;SectionSetFlags 2 ${SF_SELECTED} | ${SF_RO}
+        ${if} $1 == ${SF_SELECTED}
+              IntOp $3 ${SF_SELECTED} | ${SF_RO}
+              SectionSetFlags ${secClient} $3
+              ;SectionSetFlags ${secClient} ${SF_RO}
+        ${else}
+              SectionSetFlags ${secClient} ${SF_SELECTED}
+        ${endif}
+         
+  ${endif}
 FunctionEnd
