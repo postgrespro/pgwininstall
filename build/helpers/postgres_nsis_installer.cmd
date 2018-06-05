@@ -97,6 +97,10 @@ IF "%ARCH%" == "X64" (
 
 
 CD /D %NSIS_RES_DIR% || GOTO :ERROR
+rem Genarate file lists
+%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py client.files devel.files plperl.files plpython2.files plpython3.files unneeded.files server.files
+
+rem generate installer itself
 makensis postgresql.nsi || GOTO :ERROR
 
 GOTO :DONE

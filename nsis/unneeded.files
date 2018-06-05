@@ -1,0 +1,6 @@
+./bin/pg_regress*.exe
+./bin/pg_isolation_regress.exe
+./bin/isolationtester.exe
+./doc/contrib/README*
+./doc/extension/README*
+./share/locale/*/LC_MESSAGES/pltcl-*.mo

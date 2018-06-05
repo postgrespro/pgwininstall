@@ -210,7 +210,7 @@ Section "Client components" secClient
 MessageBox MB_OK|MB_ICONINFORMATION "pg_old_dir: $PG_OLD_DIR"
   ;Call ChecExistInstall ;get port number for  psql
 
-  !include clientlist.nsi
+  !include client_list.nsi
   ;SetOutPath "$INSTDIR\bin"
   ;File /r ${PG_INS_SOURCE_DIR}\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
@@ -298,7 +298,7 @@ Section $(PostgreSQLString) sec1
     ${endif}
   ${endif}
 
-  !include serverlist.nsi
+  !include server_list.nsi
   ;SetOutPath "$INSTDIR"
   ;File /r ${PG_INS_SOURCE_DIR}\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
