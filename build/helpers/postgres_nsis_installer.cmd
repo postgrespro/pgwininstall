@@ -56,7 +56,8 @@ SET PG_DEF_PORT="%DEFAULT_PORT%"
 SET PG_DEF_SUPERUSER="%DEFAULT_USER%"
 SET PG_DEF_SERVICEACCOUNT="NT AUTHORITY\NetworkService"
 SET PG_DEF_BRANDING="%PRODUCT_NAME% %PG_MAJOR_VERSION% (%BITS%)"
-SET PG_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
+rem SET PG_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\postgresql\*.*"
+SET PG_INS_SOURCE_DIR="%BUILD_DIR%\distr_%ARCH%_%PG_DEF_VERSION%\postgresql"
 
 SET NSIS_RES_DIR=%~dp0
 SET NSIS_RES_DIR=%NSIS_RES_DIR:~0,-1%
@@ -98,7 +99,7 @@ IF "%ARCH%" == "X64" (
 
 CD /D %NSIS_RES_DIR% || GOTO :ERROR
 rem Genarate file lists
-%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %INSTDIR% client.files devel.files plperl.files plpython2.files plpython3.files unneeded.files server.files
+%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% client.files devel.files plperl.files plpython2.files plpython3.files unneeded.files server.files
 
 rem generate installer itself
 makensis postgresql.nsi || GOTO :ERROR

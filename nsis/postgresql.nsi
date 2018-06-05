@@ -303,6 +303,9 @@ Section $(PostgreSQLString) sec1
   ${endif}
 
   !include server_list.nsi
+  !include plperl_list.nsi
+  !include plpython2_list.nsi
+
   ;SetOutPath "$INSTDIR"
   ;File /r ${PG_INS_SOURCE_DIR}\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*

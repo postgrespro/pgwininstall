@@ -42,9 +42,9 @@ for module in sys.argv[1:]:
         for f in sorted(found):
             filedir=os.path.dirname(f)
             if filedir !=curdir:
-                print >>out,"SetOutDir ${INSTDIR}"+filedir[1:]
+                print >>out,"SetOutPath $INSTDIR"+filedir[1:].replace("/","\\")
                 curdir=filedir
-            print >>out, "File ${PG_INS_SOURCE_DIR}"+f[1:]
+            print >>out, "File ${PG_INS_SOURCE_DIR}"+f[1:].replace("/","\\")
 
 # When all module files are processed:
 if len(filelist):
