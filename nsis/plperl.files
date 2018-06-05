@@ -1,0 +1,3 @@
+./lib/*plperl.dll
+./share/extension/*plperl.*
+./share/locale/*/plperl-*.mo

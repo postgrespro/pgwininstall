@@ -1,0 +1,7 @@
+# For future plpython3 builds.
+# This file should be processed before server.files and filelist
+# generated, but later ignored by installer. Thus plpython3 related
+# files wouldn't be included into installation
+./lib/*plpython3.dll
+./share/extension/*plpython3u*
+
