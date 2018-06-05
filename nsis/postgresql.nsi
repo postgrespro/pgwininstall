@@ -199,6 +199,11 @@ SectionEnd
 
 SectionGroup /e $(PostgreSQLString) serverGroup
 
+Function writeUnIsn
+FunctionEnd
+
+
+
 Section "Client components" secClient
 
   /*${If} ${FileExists} "$INSTDIR\*.*"
@@ -207,10 +212,10 @@ Section "Client components" secClient
     Return
   ${EndIf} */
 
-MessageBox MB_OK|MB_ICONINFORMATION "pg_old_dir: $PG_OLD_DIR"
+  ;MessageBox MB_OK|MB_ICONINFORMATION "pg_old_dir: $PG_OLD_DIR"
   ;Call ChecExistInstall ;get port number for  psql
 
-  !include clientlist.nsi
+  !include client_list.nsi
   ;SetOutPath "$INSTDIR\bin"
   ;File /r ${PG_INS_SOURCE_DIR}\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
@@ -230,7 +235,6 @@ MessageBox MB_OK|MB_ICONINFORMATION "pg_old_dir: $PG_OLD_DIR"
 
   ;Store installation folder
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" $INSTDIR
-
 
 
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -298,7 +302,7 @@ Section $(PostgreSQLString) sec1
     ${endif}
   ${endif}
 
-  !include serverlist.nsi
+  !include server_list.nsi
   ;SetOutPath "$INSTDIR"
   ;File /r ${PG_INS_SOURCE_DIR}\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
@@ -328,6 +332,9 @@ Section $(PostgreSQLString) sec1
   ; write uninstall strings
   FileWrite $LogFile "Write to register\r$\n"
 
+  Call writeUnistallReg
+
+  /*
   WriteRegExpandStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "DisplayName" "$StartMenuFolder"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "UninstallString" '"$INSTDIR\Uninstall.exe"'
@@ -340,7 +347,7 @@ Section $(PostgreSQLString) sec1
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PG_DEF_BRANDING}" "EstimatedSize" "$0"
-
+  */
   FileWrite $LogFile "Create BAT files$\r$\n"
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\reload.bat w
@@ -353,7 +360,7 @@ Section $(PostgreSQLString) sec1
   ;System::Call "kernel32::GetACP() i .r2"
   ;StrCpy $Codepage_text $2
   ;DetailPrint "Set codepage $Codepage_text"
-
+/*
   ${If} ${AtLeastWin2008}
     StrCpy $Chcp_text "chcp 65001"
   ${Else}
@@ -379,6 +386,7 @@ Section $(PostgreSQLString) sec1
   FileClose $0
 
   creatBatErr2:
+*/
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\restart.bat w
   IfErrors creatBatErr3
@@ -416,7 +424,7 @@ Section $(PostgreSQLString) sec1
   ;Create shortcuts
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-
+/*
   ${if} ${FileExists} "$INSTDIR\scripts\runpgsql.bat"
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\scripts\runpgsql.bat" "" "$INSTDIR\scripts\pg-psql.ico" "0" "" "" "PostgreSQL command line utility"
   ${else}
@@ -424,6 +432,7 @@ Section $(PostgreSQLString) sec1
   ${endif}
 
   ; set font Lucida Console for shortcut psql
+
   FileWrite $LogFile "set font Lucida Console for shortcut psql$\r$\n"
   ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
   ${if} $0 == ""
@@ -432,7 +441,7 @@ Section $(PostgreSQLString) sec1
     WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontSize" "917504"
     WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontFamily" "54"
   ${endif}
-
+  */
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\scripts\reload.bat" ""  "" "" "" "" "Reload PostgreSQL configuration"
   ;run as administrator
   push "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk"
@@ -454,6 +463,8 @@ Section $(PostgreSQLString) sec1
   push "$SMPROGRAMS\$StartMenuFolder\Start Server.lnk"
   call ShellLinkSetRunAs
   pop $0
+  
+  /*
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
 
   !insertmacro CreateInternetShortcut \
@@ -465,7 +476,7 @@ Section $(PostgreSQLString) sec1
     "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (RU)" \
     "$INSTDIR\doc\postgresql-ru.chm" \
     "$INSTDIR\doc\pg-help.ico" "0"
-
+*/
   !insertmacro MUI_STARTMENU_WRITE_END
   ; Create data dir begin
   FileWrite $LogFile "Create data dir begin$\r$\n"
@@ -889,6 +900,8 @@ Function createRunPsql
   FileWrite $0 '@echo off$\r$\n$Chcp_text$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif not exist "%APPDATA%\postgresql" md "%APPDATA%\postgresql"$\r$\npsql.exe -h localhost -U "$UserName_text" -d postgres -p $TextPort_text $\r$\npause'
   FileClose $0
 FunctionEnd
+
+
 ;check existing install
 ;if exist then get install options to vars
 Function ChecExistInstall
