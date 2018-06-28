@@ -24,8 +24,8 @@
 !include "WinVer.nsh"
 !include "Ports.nsh"
 !include "x64.nsh"
+!include "StrContains.nsh"
 !insertmacro VersionCompare
-
 ;--------------------------------
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
@@ -199,12 +199,9 @@ SectionEnd
 
 SectionGroup /e $(PostgreSQLString) serverGroup
 
-Function writeUnIsn
-FunctionEnd
 
 
-
-Section "Client components" secClient
+Section $(componentClient) secClient
 
   /*${If} ${FileExists} "$INSTDIR\*.*"
   ${orif} ${FileExists} "$INSTDIR"
@@ -280,7 +277,7 @@ Section "Client components" secClient
 
 SectionEnd
 
-Section $(PostgreSQLString) sec1
+Section $(componentServer) sec1
 
   ${if} $PG_OLD_DIR != "" ; exist PG install
     MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
@@ -624,6 +621,10 @@ Section $(PostgreSQLString) sec1
         FileWrite $0 "#online_analyze.local_tracking = 'on'$\r$\n"
         FileWrite $0 "#plantuner.fix_empty_table = 'on'  $\r$\n"
         FileWrite $0 "#online_analyze.enable = off$\r$\n"
+        
+        ;debug for unstarted server:
+        ;FileWrite $0 "effective_io_concurrency = 2$\r$\n"
+        
         FileClose $0
         
         ErrFileCfg1:
@@ -730,6 +731,63 @@ Section $(PostgreSQLString) sec1
     FileWrite $LogFile "Start service OK $\r$\n"
 
   ${endif}
+  
+  ;check that service is running
+  ;sc query "postgrespro-X64-10" | find "RUNNING"
+
+  DetailPrint "Check service is running ..."
+  call checkServiceIsRunning
+  pop $0
+  ${if} $0 == ""
+        Sleep 5000
+        call checkServiceIsRunning
+        pop $0
+        ${if} $0 == ""
+              DetailPrint "Error: service is not running!"
+              MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
+              FileWrite $LogFile "Error: service $ServiceID_text is not running!$\r$\n"
+              FileClose $LogFile
+              Abort
+        ${endif}
+  ${endif}
+  
+
+  ;check connection to the server
+  DetailPrint "Check connection ..."
+  ;Sleep 1000
+
+  FileWrite $LogFile "Check connection ... $\r$\n"
+  FileWrite $LogFile '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "SELECT 1;" postgres $\r$\n'
+
+  ;send password to Environment Variable PGPASSWORD
+  ${if} "$Pass1_text" != ""
+        StrCpy $R0 $Pass1_text
+        System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
+  ${endif}
+
+  nsExec::ExecToStack /TIMEOUT=10000 '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "SELECT 1;" postgres'
+  
+  pop $0
+  pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
+  ${if} $0 != 0
+      DetailPrint "Checking connection has return $0"
+      DetailPrint "Output: $1"
+      FileWrite $LogFile "Checking connection has return $0 $\r$\n"
+      FileWrite $LogFile "Output: $1 $\r$\n"
+
+      ;MessageBox MB_OK "Create adminpack error: $1"
+      MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
+      FileClose $LogFile
+      return
+  ${else}
+      DetailPrint "Checking connection is OK"
+      FileWrite $LogFile "Checking connection is OK $\r$\n"
+  ${endif}
+  ${if} "$Pass1_text" != ""
+      StrCpy $R0 ""
+      System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
+  ${endif}
+  ;end check connection to the server
 
   ${if} $isDataDirExist == 0
     ;send password to Environment Variable PGPASSWORD
@@ -774,6 +832,9 @@ Section $(PostgreSQLString) sec1
 
 SectionEnd
 
+Section $(componentDeveloper) secDev
+!include devel_list.nsi
+SectionEnd
 
 SectionGroupEnd
 
@@ -858,6 +919,11 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 !insertmacro MUI_DESCRIPTION_TEXT ${SecMS} $(DESC_SecMS)
 !insertmacro MUI_DESCRIPTION_TEXT ${Sec1} $(DESC_Sec1)
+!insertmacro MUI_DESCRIPTION_TEXT ${secClient} $(DESC_componentClient)
+!insertmacro MUI_DESCRIPTION_TEXT ${secDev} $(DESC_componentDeveloper)
+
+
+
 ;!insertmacro MUI_DESCRIPTION_TEXT ${SecService} $(DESC_SecService)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -1952,7 +2018,7 @@ ${EndIf}
   IntOp $3 ${SF_SELECTED} | ${SF_RO}
   SectionSetFlags ${secClient} $3
   ;SectionSetFlags ${secClient} ${SF_RO}
-  
+  !define MUI_LANGDLL_ALLLANGUAGES
   !insertmacro MUI_LANGDLL_DISPLAY ;select language
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
@@ -2131,3 +2197,22 @@ Function  .onSelChange
          
   ${endif}
 FunctionEnd
+
+Function checkServiceIsRunning
+  nsExec::ExecToStack /TIMEOUT=10000 'sc query "$ServiceID_text"'
+  pop $0
+  pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
+  ${if} $0 != '0'
+        push ""
+        return
+  ${endif}
+
+  ${StrContains} $2 "RUNNING" "$1"
+  ${if} $2 == ""
+        push ""
+        return
+  ${endif}
+  push "1"
+
+FunctionEnd
+

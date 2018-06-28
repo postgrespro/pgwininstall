@@ -116,3 +116,20 @@ The parameters are written to the file $DATA_DIR\postgresql.conf"
 
   LangString MESS_ERROR_INITDB ${LANG_ENGLISH} "An error occurred while initializing the database!"
   LangString MESS_ERROR_INITDB ${LANG_RUSSIAN} "При инициализации базы данных произошла ошибка!"
+
+
+LangString componentServer ${LANG_ENGLISH} "Server components"
+LangString componentServer ${LANG_RUSSIAN} "Компоненты сервера"
+
+
+LangString componentClient ${LANG_ENGLISH} "Client components"
+LangString componentClient ${LANG_RUSSIAN} "Компоненты клиента"
+
+LangString componentDeveloper ${LANG_ENGLISH} "Developer components"
+LangString componentDeveloper ${LANG_RUSSIAN} "Компоненты разработчика"
+
+LangString DESC_componentClient ${LANG_ENGLISH} "Install PostgreSQL clients components and documetation"
+LangString DESC_componentClient ${LANG_RUSSIAN} "Установка файлов клиента PostgreSQL и документации"
+
+LangString DESC_componentDeveloper ${LANG_ENGLISH} "Install PostgreSQL developer components"
+LangString DESC_componentDeveloper ${LANG_RUSSIAN} "Установка файлов PostgreSQL для разработчика"
