@@ -543,7 +543,11 @@ Section $(componentServer) sec1
       FileWrite $LogFile "Output: $1 $\r$\n"
       FileClose $LogFile ;Closes the filled file
 
-      MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB)
+      ${if} $0 != 1
+            MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB2)
+      ${else}
+            MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB)
+     ${endif}
 
       Abort
     ${else}

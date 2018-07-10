@@ -117,6 +117,9 @@ The parameters are written to the file $DATA_DIR\postgresql.conf"
   LangString MESS_ERROR_INITDB ${LANG_ENGLISH} "An error occurred while initializing the database!"
   LangString MESS_ERROR_INITDB ${LANG_RUSSIAN} "При инициализации базы данных произошла ошибка!"
 
+  LangString MESS_ERROR_INITDB2 ${LANG_ENGLISH} "An error occurred while initializing the database! Is Microsoft Visual C++ Redistributable installed?"
+  LangString MESS_ERROR_INITDB2 ${LANG_RUSSIAN} "При инициализации базы данных произошла ошибка! Установлен ли пакет Microsoft Visual C ++ Redistributable?"
+
 
 LangString componentServer ${LANG_ENGLISH} "Server components"
 LangString componentServer ${LANG_RUSSIAN} "Компоненты сервера"
