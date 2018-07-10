@@ -538,7 +538,7 @@ Section $(componentServer) sec1
 
     ${if} $0 != 0
       DetailPrint "initdb.exe return $0"
-      DetailPrint "Output: $1"
+      ;DetailPrint "Output: $1"
       FileWrite $LogFile "initdb.exe return $0 $\r$\n"
       FileWrite $LogFile "Output: $1 $\r$\n"
       FileClose $LogFile ;Closes the filled file
@@ -778,7 +778,7 @@ Section $(componentServer) sec1
       ;MessageBox MB_OK "Create adminpack error: $1"
       MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
       FileClose $LogFile
-      return
+      Abort
   ${else}
       DetailPrint "Checking connection is OK"
       FileWrite $LogFile "Checking connection is OK $\r$\n"
