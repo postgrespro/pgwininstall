@@ -14,6 +14,7 @@
 ./bin/postmaster.*
 ./bin/pg_standby.*
 ./bin/zic.*
+./bin/pg_probackup.*
 ./doc/extension/*.example
 ./doc/buildinfo.txt
 ./lib/*.dll

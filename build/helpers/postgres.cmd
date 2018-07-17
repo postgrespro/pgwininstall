@@ -91,6 +91,9 @@ IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
 
 %PERL_EXE% src\tools\msvc\build.pl || GOTO :ERROR
 
+%PERL_EXE% contrib\pg_probackup\gen_probackup_project.pl || GOTO :ERROR
+
+
 rm -rf %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 MKDIR %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
 CD /D %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
@@ -114,6 +117,11 @@ IF EXIST ..\..\..\doc\buildinfo.txt COPY ..\..\..\doc\buildinfo.txt %BUILD_DIR%\
 rem now actually copy DLLs of dependencies into our bindir
 
 SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
+
+SET PRO_BACKUP=%BUILD_DIR%\postgresql\*%PGVER%*\Release\pg_probackup\pg_probackup.exe
+SET PRO_BACKUP=%PRO_BACKUP:\=/%
+
+cp -va %PRO_BACKUP% %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.lib    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
