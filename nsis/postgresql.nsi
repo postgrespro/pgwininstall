@@ -136,7 +136,9 @@ Var effective_cache_size
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !define MUI_FINISHPAGE_TITLE_3LINES
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "License.txt"
+; !insertmacro MUI_PAGE_LICENSE "License.txt"
+!insertmacro MUI_PAGE_LICENSE $(myLicenseData)
+
 
 Page custom ChecExistInstall ;PG_OLD_DIR !="" if exist
 !insertmacro MUI_PAGE_COMPONENTS
@@ -183,6 +185,20 @@ Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
 
 !include translates.nsi
 
+!ifndef myLicenseFile_ru
+!define  myLicenseFile_ru "license.txt"
+!endif
+!ifndef myLicenseFile_en
+!define  myLicenseFile_en "license.txt"
+!endif
+
+
+
+LicenseLangString myLicenseData ${LANG_RUSSIAN} ${myLicenseFile_ru}
+LicenseLangString myLicenseData ${LANG_ENGLISH} ${myLicenseFile_en}
+LicenseData $(myLicenseData)
+
+
 ;--------------------------------
 ;Installer Sections
 Section "Microsoft Visual C++ ${REDIST_YEAR} Redistributable" secMS
@@ -211,6 +227,26 @@ Section $(componentClient) secClient
 
   ;MessageBox MB_OK|MB_ICONINFORMATION "pg_old_dir: $PG_OLD_DIR"
   ;Call ChecExistInstall ;get port number for  psql
+  var /GLOBAL isStopped
+  StrCpy $isStopped 0
+  
+
+  ${if} $PG_OLD_DIR != "" ; exist PG install
+    MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
+    noyetStop:
+    Return
+    doitStop:
+    DetailPrint "Stop the server ..."
+    ${if} $OLD_DATA_DIR != ""
+      nsExec::Exec '"$PG_OLD_DIR\bin\pg_ctl.exe" stop -D "$OLD_DATA_DIR" -m fast -w'
+      pop $0
+      DetailPrint "pg_ctl.exe stop return $0"
+      StrCpy $isStopped 1
+    ${endif}
+    ;unregister
+  ${endif}
+
+
 
   !include client_list.nsi
   ;SetOutPath "$INSTDIR\bin"
@@ -275,11 +311,27 @@ Section $(componentClient) secClient
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
+  ${if} $isStopped = 1
+        ;SectionGetFlags ${sec1} $1
+        ; start server
+        call IsServerSection
+        pop $0
+        ${if} $0 == "0"
+                DetailPrint "Start server ..."
+                Sleep 1000
+                nsExec::ExecToStack /TIMEOUT=60000 'sc start "$ServiceID_text"'
+                Sleep 5000
+                StrCpy $isStopped 0
+        ${endif}
+
+  ${endif}
+
 SectionEnd
 
 Section $(componentServer) sec1
 
   ${if} $PG_OLD_DIR != "" ; exist PG install
+   ${if} $isStopped == 0
     MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
     noyetStop:
     Return
@@ -290,6 +342,8 @@ Section $(componentServer) sec1
       pop $0
       DetailPrint "pg_ctl.exe stop return $0"
     ${endif}
+   ${endif}
+   
     ;unregister
     DetailPrint "Unregister the service ..."
     ${if} $OldServiceID_text != ""
@@ -757,8 +811,10 @@ Section $(componentServer) sec1
   
 
   ;check connection to the server
+ ${if} $OLD_DATA_DIR == "" ;if server war running we do not know password
+
   DetailPrint "Check connection ..."
-  ;Sleep 1000
+  Sleep 1000
 
   FileWrite $LogFile "Check connection ... $\r$\n"
   FileWrite $LogFile '"$INSTDIR\bin\psql.exe" -p $TextPort_text -U "$UserName_text" -c "SELECT 1;" postgres $\r$\n'
@@ -787,6 +843,8 @@ Section $(componentServer) sec1
       DetailPrint "Checking connection is OK"
       FileWrite $LogFile "Checking connection is OK $\r$\n"
   ${endif}
+  
+  
   ${if} "$Pass1_text" != ""
       StrCpy $R0 ""
       System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
@@ -824,6 +882,10 @@ Section $(componentServer) sec1
       System::Call 'Kernel32::SetEnvironmentVariableA(t, t) i("PGPASSWORD", R0).r0'
     ${endif}
   ${endif}
+  
+ ${endif} ; end: if server war running we do not know password?
+  
+  
   ${if} $isEnvVar == ${BST_CHECKED}
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATA" "$DATA_DIR"
     WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "PGDATABASE" "postgres"
@@ -2220,3 +2282,12 @@ Function checkServiceIsRunning
 
 FunctionEnd
 
+Function IsServerSection
+        SectionGetFlags ${sec1} $1
+        ${if} $1 == ${SF_SELECTED}
+              push "1"
+        ${else}
+               push "0"
+        ${endif}
+
+FunctionEnd

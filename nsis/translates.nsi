@@ -34,8 +34,8 @@ LangString PostgreSQLString ${LANG_RUSSIAN} "—ервер PostgreSQL"
   LangString SERVER_EXIST_TEXT1 ${LANG_ENGLISH} "An existing PostgresSQL installation has been found at "
   LangString SERVER_EXIST_TEXT1 ${LANG_RUSSIAN} "Ќайдена инсталл€ци€ сервера PostgresSQL в каталоге "
 
-  LangString SERVER_EXIST_TEXT2 ${LANG_ENGLISH} "This instalation will be upgraded.$\n$\nIn order to upgrade, we may need to restart the server "
-  LangString SERVER_EXIST_TEXT2 ${LANG_RUSSIAN} "Ёта установка будет обновлена.$\n$\nƒл€ завершени€ обновлени€ может потребоватьс€ перезапустить сервер "
+  LangString SERVER_EXIST_TEXT2 ${LANG_ENGLISH} "This instalation will be upgraded.$\n$\nIn order to upgrade, we may need to restart the PostgreSQL server "
+  LangString SERVER_EXIST_TEXT2 ${LANG_RUSSIAN} "Ёта установка будет обновлена.$\n$\nƒл€ завершени€ обновлени€ может потребоватьс€ перезапустить PostgreSQL сервер"
 
   LangString DATADIR_EXIST_TITLE ${LANG_ENGLISH} "Existing data directory"
   LangString DATADIR_EXIST_TITLE ${LANG_RUSSIAN} "”же имеетс€ каталог с данными"

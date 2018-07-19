@@ -93,9 +93,28 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !addplugindir Plugins
 
 IF "%ARCH%" == "X64" (
-  >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_64bit
 )
 
+IF "%PRODUCT_NAME%" == "PostgreSQL" (
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+GOTO :ENDLIC
+)
+IF "%PRODUCT_NAME%" == "PostgresPro" (
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+GOTO :ENDLIC
+)
+IF "%PRODUCT_NAME%" == "PostgresProEnterprise" (
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+GOTO :ENDLIC
+)
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+
+:ENDLIC
 
 CD /D %NSIS_RES_DIR% || GOTO :ERROR
 rem Genarate file lists
