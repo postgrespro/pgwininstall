@@ -99,20 +99,24 @@ IF "%ARCH%" == "X64" (
 IF "%PRODUCT_NAME%" == "PostgreSQL" (
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "PostgreSQL"
 GOTO :ENDLIC
 )
 IF "%PRODUCT_NAME%" == "PostgresPro" (
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "Postgres Pro"
 GOTO :ENDLIC
 )
 IF "%PRODUCT_NAME%" == "PostgresProEnterprise" (
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "Postgres Pro"
 GOTO :ENDLIC
 )
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "PostgreSQL"
 
 :ENDLIC
 
