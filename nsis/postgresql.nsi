@@ -259,7 +259,10 @@ Section $(componentClient) secClient
   ;File /r ${PG_INS_SOURCE_DIR}\share\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\symbols\*.*
 
-  File "License.txt"
+  ;File "License.txt"
+  File ${myLicenseFile_ru}
+  File ${myLicenseFile_en}
+
   File "3rd_party_licenses.txt"
 
   CreateDirectory "$INSTDIR\scripts"
