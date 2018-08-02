@@ -1,0 +1,33 @@
+# This file contains some quite broad catch-all wildcard patterns, so
+# it should be last of all modules
+./bin/initdb.*
+./bin/pg_archivecleanup.*
+./bin/pg_controldata.*
+./bin/pg_ctl.*
+./bin/pg_resetwal.*
+./bin/pg_rewind.*
+./bin/pg_test_fsync.*
+./bin/pg_test_timing.*
+./bin/pg_upgrade.*
+./bin/pg_waldump.*
+./bin/postgres.*
+./bin/postmaster.*
+./bin/pg_standby.*
+./bin/zic.*
+./bin/pg_probackup.*
+./doc/extension/*.example
+./doc/buildinfo.txt
+./lib/*.dll
+./share/extension/*
+./share/*.sample
+./share/*.sql
+./share/postgres.bki
+./share/*.description
+./share/*.shdescription
+./share/sql_features.txt
+./share/extension/plpgsql*
+./share/locale/*/LC_MESSAGES/plpgsql*
+./share/timezonesets/*
+./share/timezone/*
+./share/tsearch_data/*
+

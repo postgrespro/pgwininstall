@@ -1,0 +1,5 @@
+./include/*
+./lib/*.lib
+./bin/pg_config.*
+./bin/ecpg.*
+./symbols/*.pdb

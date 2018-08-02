@@ -1,0 +1,4 @@
+./lib/*plpython2.dll
+./share/extension/*plpython2u*
+./share/extension/*plpythonu*
+./share/locale/*/LC_MESSAGES/plpython-*.mo
