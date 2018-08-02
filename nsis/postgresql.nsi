@@ -110,6 +110,11 @@ Var isEnvVar
 
 Var LogFile
 Var effective_cache_size
+
+Var checkBoxDataChecksums
+Var isDataChecksums
+
+
 ; Set 'install service' variable
 ;Var service
 
@@ -530,6 +535,13 @@ Section $(componentServer) sec1
       FileClose $R0
       StrCpy $tempVar ' --pwfile "$tempFileName"  -A md5 '
     ${endif}
+    
+
+    ${if} $isDataChecksums == ${BST_CHECKED}
+      StrCpy $tempVar '$tempVar --data-checksums '
+    ${endif}
+    
+
     DetailPrint "Database initialization ..."
     AccessControl::GetCurrentUserName
     Pop $0 ; or "error"
@@ -1269,6 +1281,10 @@ Function getServerDataFromDlg
   ${NSD_GetText} $Locale $Locale_text
 
   ${NSD_GetState} $checkBoxEnvVar $isEnvVar
+
+  ${NSD_GetState} $checkBoxDataChecksums $isDataChecksums
+
+
 FunctionEnd
 
 Function nsDialogsServerPageLeave
@@ -1906,6 +1922,12 @@ Function nsDialogServer
   ${NSD_CreatePassword} 62u 88u 100u 12u $Pass2_text
   Pop $Pass2
 
+
+  ${NSD_CreateCheckBox} 62u 105u 100% 12u "$(DLG_data-checksums)"
+  Pop $checkBoxDataChecksums
+  ${NSD_SetState} $checkBoxDataChecksums $isDataChecksums
+
+
   ;env vars
   ${NSD_CreateCheckBox} 62u 120u 100% 12u "$(DLG_ENVVAR)"
   Pop $checkBoxEnvVar
@@ -2076,6 +2098,8 @@ ${EndIf}
 
   StrCpy $checkNoLocal_state ${BST_CHECKED}
   StrCpy $isEnvVar ${BST_UNCHECKED} ;${BST_CHECKED}
+  StrCpy $isDataChecksums ${BST_CHECKED} ;${BST_CHECKED}
+
 
   StrCpy $Coding_text "UTF8" ;"UTF-8"
 
@@ -2185,6 +2209,15 @@ ${EndIf}
   ${if} "$1" != ""
     StrCpy $needOptimization "$1"
   ${endif}
+  
+
+  ReadINIStr $1 $0 options datachecksums
+  ${if} "$1" != ""
+    StrCpy $isDataChecksums "$1"
+  ${endif}
+
+
+  
 FunctionEnd
 
 Function func1

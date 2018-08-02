@@ -136,3 +136,7 @@ LangString DESC_componentClient ${LANG_RUSSIAN} "Установка файлов клиента ${PROD
 
 LangString DESC_componentDeveloper ${LANG_ENGLISH} "Install ${PRODUCT_NAME_SHORT} developer components"
 LangString DESC_componentDeveloper ${LANG_RUSSIAN} "Установка файлов ${PRODUCT_NAME_SHORT} для разработчика."
+
+
+LangString DLG_data-checksums ${LANG_ENGLISH} "Enable data checksums"
+LangString DLG_data-checksums ${LANG_RUSSIAN} "Включить контрольные суммы для страниц"
