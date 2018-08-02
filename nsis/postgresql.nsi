@@ -260,6 +260,8 @@ Section $(componentClient) secClient
   ;File /r ${PG_INS_SOURCE_DIR}\symbols\*.*
 
   ;File "License.txt"
+  SetOutPath $INSTDIR
+  ;File /nonfatal "/oname=$INSTDIR\License.txt"  ${myLicenseFile_ru}
   File ${myLicenseFile_ru}
   File ${myLicenseFile_en}
 
@@ -277,10 +279,12 @@ Section $(componentClient) secClient
   Call writeUnistallReg
   Call createRunPsql
 
-
+  ;for all users
+  SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 
   ;Create shortcuts
+  ; create common shortcuts for client and server
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
@@ -369,8 +373,7 @@ Section $(componentServer) sec1
   ;File /r ${PG_INS_SOURCE_DIR}\share\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\symbols\*.*
 
-  File "License.txt"
-  File "3rd_party_licenses.txt"
+  ;File "License.txt"
 
   FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
 
@@ -473,32 +476,12 @@ Section $(componentServer) sec1
 
   creatBatErr6:
   ;for all users
-    SetShellVarContext all
+  SetShellVarContext all
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 
   FileWrite $LogFile "Create shortcuts$\r$\n"
 
   ;Create shortcuts
-  CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-/*
-  ${if} ${FileExists} "$INSTDIR\scripts\runpgsql.bat"
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\scripts\runpgsql.bat" "" "$INSTDIR\scripts\pg-psql.ico" "0" "" "" "PostgreSQL command line utility"
-  ${else}
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\SQL Shell (psql).lnk" "$INSTDIR\bin\psql.exe" "-h localhost -U $UserName_text -d postgres -p $TextPort_text" "" "" "" "" "PostgreSQL command line utility"
-  ${endif}
-
-  ; set font Lucida Console for shortcut psql
-
-  FileWrite $LogFile "set font Lucida Console for shortcut psql$\r$\n"
-  ReadRegStr $0 HKCU "Console\SQL Shell (psql)" "FaceName"
-  ${if} $0 == ""
-    WriteRegStr HKCU "Console\SQL Shell (psql)" "FaceName" "Consolas"
-    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontWeight" "400"
-    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontSize" "917504"
-    WriteRegDWORD HKCU "Console\SQL Shell (psql)" "FontFamily" "54"
-  ${endif}
-  */
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk" "$INSTDIR\scripts\reload.bat" ""  "" "" "" "" "Reload PostgreSQL configuration"
   ;run as administrator
   push "$SMPROGRAMS\$StartMenuFolder\Reload Configuration.lnk"
@@ -521,19 +504,6 @@ Section $(componentServer) sec1
   call ShellLinkSetRunAs
   pop $0
   
-  /*
-  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\Documentation"
-
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (EN)" \
-    "$INSTDIR\doc\postgresql-en.chm" \
-    "$INSTDIR\doc\pg-help.ico" "0"
-
-  !insertmacro CreateInternetShortcut \
-    "$SMPROGRAMS\$StartMenuFolder\Documentation\${PRODUCT_NAME} documentation (RU)" \
-    "$INSTDIR\doc\postgresql-ru.chm" \
-    "$INSTDIR\doc\pg-help.ico" "0"
-*/
   !insertmacro MUI_STARTMENU_WRITE_END
   ; Create data dir begin
   FileWrite $LogFile "Create data dir begin$\r$\n"
@@ -928,7 +898,11 @@ Section "Uninstall"
   ${endif}
 
   Delete "$INSTDIR\Uninstall.exe"
-  Delete "$INSTDIR\license.txt"
+  ;Delete "$INSTDIR\license.txt"
+  Delete "$INSTDIR\${myLicenseFile_ru}"
+  Delete "$INSTDIR\${myLicenseFile_en}"
+
+  
   Delete "$INSTDIR\3rd_party_licenses.txt"
   Delete "$INSTDIR\install.log"
 
@@ -2294,3 +2268,5 @@ Function IsServerSection
         ${endif}
 
 FunctionEnd
+
+
