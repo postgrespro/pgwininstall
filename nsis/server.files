@@ -4,17 +4,17 @@
 ./bin/pg_archivecleanup.*
 ./bin/pg_controldata.*
 ./bin/pg_ctl.*
+./bin/pg_probackup.*
 ./bin/pg_resetwal.*
 ./bin/pg_rewind.*
+./bin/pg_standby.*
 ./bin/pg_test_fsync.*
 ./bin/pg_test_timing.*
 ./bin/pg_upgrade.*
 ./bin/pg_waldump.*
 ./bin/postgres.*
 ./bin/postmaster.*
-./bin/pg_standby.*
 ./bin/zic.*
-./bin/pg_probackup.*
 ./doc/extension/*.example
 ./doc/buildinfo.txt
 ./lib/*.dll
@@ -30,4 +30,3 @@
 ./share/timezonesets/*
 ./share/timezone/*
 ./share/tsearch_data/*
-
