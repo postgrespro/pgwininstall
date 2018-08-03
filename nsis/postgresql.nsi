@@ -432,7 +432,7 @@ Section $(componentServer) sec1
     StrCpy $Chcp_text ""
   ${Endif}
 
-  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+  ${if} "${PRODUCT_NAME}" == "PostgreSQL"
     StrCpy $Chcp_text ""
 
     DetailPrint "Language settings:"
@@ -1006,7 +1006,7 @@ Function createRunPsql
     StrCpy $Chcp_text ""
   ${Endif}
 
-  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+  ${if} "${PRODUCT_NAME}" == "PostgreSQL"
     StrCpy $Chcp_text ""
 
     DetailPrint "Language settings:"
