@@ -365,7 +365,7 @@ Section $(componentServer) sec1
     ${endif}
   ${endif}
 
-  !include server_list.nsi
+  !include allserver_list.nsi
   !include plperl_list.nsi
   !include plpython2_list.nsi
 
