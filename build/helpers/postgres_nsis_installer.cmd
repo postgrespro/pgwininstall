@@ -123,17 +123,16 @@ GOTO :ENDLIC
 CD /D %NSIS_RES_DIR% || GOTO :ERROR
 rem Genarate file lists
 
+type server.files > allserver.files
 IF NOT "%PG_MAJOR_VERSION%" == "9.6" GOTO :NO_PGPRO_UPGRADE
 IF "%PRODUCT_NAME%" == "PostgresPro" GOTO :ADD_PGPRO_UPGRADE
-IF "%PRODUCT_NAME%" == "PostgresProEnterprise" GOTO :ADD_PGPRO_UPGADE
-GOTO :NO_PGPRO_UPGADE
-:ADD_PGPRO_UPDATE
-type server.files pgpro_upgrade.files > newserver.files
-type newserver.files > server.files
-del newserver.files
+IF "%PRODUCT_NAME%" == "PostgresProEnterprise" GOTO :ADD_PGPRO_UPGRADE
+GOTO :NO_PGPRO_UPGRADE
+:ADD_PGPRO_UPGRADE
+type server.files pgpro_upgrade.files > allserver.files
 :NO_PGPRO_UPGRADE
 
-%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% client.files devel.files plperl.files plpython2.files plpython3.files unneeded.files server.files
+%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% client.files devel.files plperl.files plpython2.files plpython3.files unneeded.files allserver.files
 
 rem generate installer itself
 makensis postgresql.nsi || GOTO :ERROR
