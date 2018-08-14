@@ -476,7 +476,7 @@ Section $(componentServer) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\pgpro_upgrade.cmd w
   IfErrors creatBatErr6
-  FileWrite $0 '@echo off$\r$\nif "%PGDATA%"=="" set PGDATA=%~1$\r$\nif "%PGDATA%"=="" set PGDATA=$DATA_DIR$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nif exist "$INSTDIR\bin\pgpro_upgrade" sh.exe "$INSTDIR\bin\pgpro_upgrade"$\r$\n'
+  FileWrite $0 '@echo off$\r$\nif "%PGDATA%"=="" set PGDATA=%~1$\r$\nif "%PGDATA%"=="" set PGDATA=$DATA_DIR$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nrem if exist "$INSTDIR\bin\pgpro_upgrade" sh.exe "$INSTDIR\bin\pgpro_upgrade"$\r$\n'
   FileClose $0
 
   creatBatErr6:
