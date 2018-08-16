@@ -99,7 +99,7 @@ SectionEnd
 Section "PgAdmin3" pgAdmin
   SetOutPath "$INSTDIR"
   File /r ${ADMIN_INS_SOURCE_DIR}
-  File "License.txt"
+  File "pgadmin_license.txt"
   File "3rd_party_licenses.txt"
   ;Store installation folder
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" $INSTDIR
@@ -144,7 +144,7 @@ SectionEnd
   section "uninstall"
   	Delete "$SMPROGRAMS\$StartMenuFolder\pgAdmin3.lnk"
   	RMDir "$SMPROGRAMS\$StartMenuFolder"
-    Delete "$INSTDIR\license.txt"
+    Delete "$INSTDIR\pgadmin_license.txt"
     Delete "$INSTDIR\3rd_party_licenses.txt"
     RMDir /r "$INSTDIR\bin"
     RMDir /r "$INSTDIR\lib"
