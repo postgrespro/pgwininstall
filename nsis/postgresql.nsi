@@ -1400,24 +1400,24 @@ Function nsDialogServer
     Abort
   ${EndIf}
 
-  ${NSD_CreateLabel} 0 2u 60u 12u "$(DLG_PORT)"
+  ${NSD_CreateLabel} 0 2u 70u 12u "$(DLG_PORT)"
   Pop $Label
 
-  ${NSD_CreateText} 62u 0 100u 12u "$TextPort_text"
+  ${NSD_CreateText} 72u 0 100u 12u "$TextPort_text"
   Pop $TextPort
 
-  ${NSD_CreateLabel} 0 16u 60u 12u "$(DLG_ADR1)"
+  ${NSD_CreateLabel} 0 16u 70u 12u "$(DLG_ADR1)"
   Pop $Label2
 
-  ${NSD_CreateCheckBox} 62u 15u 100% 12u "$(DLG_ADR2)"
+  ${NSD_CreateCheckBox} 72u 15u 100% 12u "$(DLG_ADR2)"
 
   Pop $checkNoLocal
   ${NSD_SetState} $checkNoLocal $checkNoLocal_state
 
-  ${NSD_CreateLabel} 0 32u 60u 12u "$(DLG_LOCALE)"
+  ${NSD_CreateLabel} 0 32u 70u 12u "$(DLG_LOCALE)"
   Pop $Label2
 
-  ${NSD_CreateDropList} 62u 30u 100u 12u ""
+  ${NSD_CreateDropList} 72u 30u 100u 12u ""
   Pop $Locale
 
   ${NSD_CB_AddString} $Locale "$(DEF_LOCALE_NAME)"
@@ -1904,32 +1904,32 @@ Function nsDialogServer
   ${endif}
   ${NSD_CB_SelectString} $Locale $Locale_text
 
-  ${NSD_CreateLabel} 0 54u 60u 24u "$(DLG_SUPERUSER)"
+  ${NSD_CreateLabel} 0 54u 70u 24u "$(DLG_SUPERUSER)"
   Pop $Label2
 
-  ${NSD_CreateText} 62u 57u 100u 12u "$UserName_text"
+  ${NSD_CreateText} 72u 57u 100u 12u "$UserName_text"
   Pop $UserName
 
-  ${NSD_CreateLabel} 0 74u 60u 12u "$(DLG_PASS1)"
+  ${NSD_CreateLabel} 0 74u 70u 12u "$(DLG_PASS1)"
   Pop $Label2
 
-  ${NSD_CreatePassword} 62u 72u 100u 12u $Pass1_text
+  ${NSD_CreatePassword} 72u 72u 100u 12u $Pass1_text
   Pop $Pass1
 
-  ${NSD_CreateLabel} 0 90u 60u 12u "$(DLG_PASS2)"
+  ${NSD_CreateLabel} 0 90u 70u 12u "$(DLG_PASS2)"
   Pop $Label2
 
-  ${NSD_CreatePassword} 62u 88u 100u 12u $Pass2_text
+  ${NSD_CreatePassword} 72u 88u 100u 12u $Pass2_text
   Pop $Pass2
 
 
-  ${NSD_CreateCheckBox} 62u 105u 100% 12u "$(DLG_data-checksums)"
+  ${NSD_CreateCheckBox} 72u 105u 100% 12u "$(DLG_data-checksums)"
   Pop $checkBoxDataChecksums
   ${NSD_SetState} $checkBoxDataChecksums $isDataChecksums
 
 
   ;env vars
-  ${NSD_CreateCheckBox} 62u 120u 100% 12u "$(DLG_ENVVAR)"
+  ${NSD_CreateCheckBox} 72u 120u 100% 12u "$(DLG_ENVVAR)"
   Pop $checkBoxEnvVar
   ${NSD_SetState} $checkBoxEnvVar $isEnvVar
 
