@@ -32,8 +32,8 @@ IF %ARCH% == X86 (
 	SET BITS=64bit
 )
 IF %ONE_C% == YES (
-  SET PRODUCT_NAME=PostgresPro 1C
-  SET PG_DEF_SERVICEID="postgrespro-1C-${PRODUCT_VERSION}"
+  SET PRODUCT_NAME=PostgreSQL 1C
+  SET PG_DEF_SERVICEID="postgresql-1C-${PRODUCT_VERSION}"
   SET PG_INS_SUFFIX="%ARCH%bit_1C_Setup.exe"
   SET PG_REG_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Installations\postgresql-${PRODUCT_VERSION}"
   SET PG_REG_SERVICE_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Services\postgresql-${PRODUCT_VERSION}"
@@ -97,6 +97,12 @@ IF "%ARCH%" == "X64" (
 )
 
 IF "%PRODUCT_NAME%" == "PostgreSQL" (
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "PostgreSQL"
+GOTO :ENDLIC
+)
+IF "%PRODUCT_NAME%" == "PostgreSQL 1C" (
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "PostgreSQL"
