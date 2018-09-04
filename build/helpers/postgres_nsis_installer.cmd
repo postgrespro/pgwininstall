@@ -34,7 +34,7 @@ IF %ARCH% == X86 (
 IF %ONE_C% == YES (
   SET PRODUCT_NAME=PostgreSQL 1C
   SET PG_DEF_SERVICEID="postgresql-1C-${PRODUCT_VERSION}"
-  SET PG_INS_SUFFIX="%ARCH%bit_1C_Setup.exe"
+  SET PG_INS_SUFFIX="%BITS%bit_1C_Setup.exe"
   SET PG_REG_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Installations\postgresql-${PRODUCT_VERSION}"
   SET PG_REG_SERVICE_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Services\postgresql-${PRODUCT_VERSION}"
   SET PRODUCT_DIR_REGKEY="Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}"
