@@ -37,7 +37,7 @@ IF %ONE_C% == YES (
   SET PG_INS_SUFFIX="%BITS%_1C_Setup.exe"
   SET PG_REG_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Installations\postgresql-${PRODUCT_VERSION}"
   SET PG_REG_SERVICE_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Services\postgresql-${PRODUCT_VERSION}"
-  SET PRODUCT_DIR_REGKEY="Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}"
+  SET PRODUCT_DIR_REGKEY=Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}
   SET PRODUCT_VERSION="%PG_MAJOR_VERSION%"
 ) ELSE (
   SET PG_INS_SUFFIX="%BITS%_Setup.exe"

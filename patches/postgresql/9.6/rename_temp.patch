@@ -1,0 +1,159 @@
+diff --git a/src/backend/postmaster/pgstat.c b/src/backend/postmaster/pgstat.c
+index 64b32d8..6f2d14b 100644
+--- a/src/backend/postmaster/pgstat.c
++++ b/src/backend/postmaster/pgstat.c
+@@ -3732,7 +3732,7 @@ pgstat_write_statsfiles(bool permanent, bool allDbs)
+ 					  tmpfile)));
+ 		unlink(tmpfile);
+ 	}
+-	else if (rename(tmpfile, statfile) < 0)
++	else if (rename_temp(tmpfile, statfile) < 0)
+ 	{
+ 		ereport(LOG,
+ 				(errcode_for_file_access(),
+@@ -3867,7 +3867,7 @@ pgstat_write_db_statsfile(PgStat_StatDBEntry *dbentry, bool permanent)
+ 					  tmpfile)));
+ 		unlink(tmpfile);
+ 	}
+-	else if (rename(tmpfile, statfile) < 0)
++	else if (rename_temp(tmpfile, statfile) < 0)
+ 	{
+ 		ereport(LOG,
+ 				(errcode_for_file_access(),
+diff --git a/src/include/port.h b/src/include/port.h
+index 86941f7..3cd0702 100644
+--- a/src/include/port.h
++++ b/src/include/port.h
+@@ -240,13 +240,27 @@ extern int	pclose_check(FILE *stream);
+ extern int	pgrename(const char *from, const char *to);
+ extern int	pgunlink(const char *path);
+ 
++#ifdef WIN32
++extern int	pgrename_temp(const char *from, const char *to);
++#endif
++
+ /* Include this first so later includes don't see these defines */
+ #ifdef WIN32_ONLY_COMPILER
+ #include <io.h>
+ #endif
+ 
++#ifdef WIN32
++#define rename_temp(from, to)	pgrename_temp(from, to)
++#else
++#define rename_temp(from, to)	pgrename(from, to)
++#endif
++
+ #define rename(from, to)		pgrename(from, to)
+ #define unlink(path)			pgunlink(path)
++#else							/* defined(WIN32) || defined(__CYGWIN__) */
++
++#define rename_temp(from, to)	rename(from, to)
++
+ #endif   /* defined(WIN32) || defined(__CYGWIN__) */
+ 
+ /*
+diff --git a/src/port/dirmod.c b/src/port/dirmod.c
+index 9731857..7e5be6f 100644
+--- a/src/port/dirmod.c
++++ b/src/port/dirmod.c
+@@ -57,13 +57,21 @@ pgrename(const char *from, const char *to)
+ 	 * and blocking other backends.
+ 	 */
+ #if defined(WIN32) && !defined(__CYGWIN__)
++	DWORD		err;
++
++	/*
++	 * On Windows we use ReplaceFile() to rename while concurrent processes
++	 * have file open.  However, ReplaceFile() is to be used only when target
++	 * file is already exists.  Thus, we check for file existence and then
++	 * choose between MoveFileEx() and ReplaceFile() functions.
++	 */
+ 	while (!MoveFileEx(from, to, MOVEFILE_REPLACE_EXISTING))
+ #else
+ 	while (rename(from, to) < 0)
+ #endif
+ 	{
+ #if defined(WIN32) && !defined(__CYGWIN__)
+-		DWORD		err = GetLastError();
++		err = GetLastError();
+ 
+ 		_dosmaperr(err);
+ 
+@@ -91,6 +99,77 @@ pgrename(const char *from, const char *to)
+ 	return 0;
+ }
+ 
++#ifdef WIN32
++
++/*
++ *	pgrename
++ */
++int
++pgrename_temp(const char *from, const char *to)
++{
++	int			loops = 0;
++
++	/*
++	 * We need to loop because even though PostgreSQL uses flags that allow
++	 * rename while the file is open, other applications might have the file
++	 * open without those flags.  However, we won't wait indefinitely for
++	 * someone else to close the file, as the caller might be holding locks
++	 * and blocking other backends.
++	 */
++	DWORD		err;
++
++	/*
++	 * On Windows we use ReplaceFile() to rename while concurrent processes
++	 * have file open.  However, ReplaceFile() is to be used only when target
++	 * file is already exists.  Thus, we check for file existence and then
++	 * choose between MoveFileEx() and ReplaceFile() functions.
++	 */
++	while (true)
++	{
++		DWORD		dwAttrib;
++		bool		filePresent;
++
++		dwAttrib = GetFileAttributes(to);
++		filePresent = (dwAttrib != INVALID_FILE_ATTRIBUTES) &&
++					 !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY);
++
++		if (filePresent)
++		{
++			if (ReplaceFile(to, from, NULL, REPLACEFILE_IGNORE_MERGE_ERRORS, 0, 0))
++				break;
++		}
++		else
++		{
++			if (MoveFileEx(from, to, MOVEFILE_REPLACE_EXISTING))
++				break;
++		}
++		err = GetLastError();
++
++		_dosmaperr(err);
++
++		/*
++		 * Modern NT-based Windows versions return ERROR_SHARING_VIOLATION if
++		 * another process has the file open without FILE_SHARE_DELETE.
++		 * ERROR_LOCK_VIOLATION has also been seen with some anti-virus
++		 * software. This used to check for just ERROR_ACCESS_DENIED, so
++		 * presumably you can get that too with some OS versions. We don't
++		 * expect real permission errors where we currently use rename().
++		 */
++		if (err != ERROR_ACCESS_DENIED &&
++			err != ERROR_SHARING_VIOLATION &&
++			err != ERROR_LOCK_VIOLATION)
++			return -1;
++
++		if (++loops > 100)		/* time out after 10 sec */
++			return -1;
++		pg_usleep(100000);		/* us */
++	}
++	return 0;
++}
++
++#endif
++
++
+ 
+ /*
+  *	pgunlink
