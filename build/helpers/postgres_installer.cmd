@@ -12,13 +12,13 @@ REM Download VC Redistibutable packages
 TITLE Downloading VC Redistibutable packages
 MKDIR "%BUILD_DIR%\vcredist"
 IF %REDIST_YEAR% == 2010 (
-wget -c https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "%BUILD_DIR%\vcredist\vcredist_x86_2010.exe" || GOTO :ERROR
-wget -c https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "%BUILD_DIR%\vcredist\vcredist_x64_2010.exe" || GOTO :ERROR
+wget -c --no-check-certificate https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe -O "%BUILD_DIR%\vcredist\vcredist_x86_2010.exe" || GOTO :ERROR
+wget -c --no-check-certificate https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe -O "%BUILD_DIR%\vcredist\vcredist_x64_2010.exe" || GOTO :ERROR
 )
 
 IF %REDIST_YEAR% == 2013 (
-wget -c https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe -O "%BUILD_DIR%\vcredist\vcredist_x86_2013.exe" || GOTO :ERROR
-wget -c https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe -O "%BUILD_DIR%\vcredist\vcredist_x64_2013.exe" || GOTO :ERROR
+wget -c --no-check-certificate https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe -O "%BUILD_DIR%\vcredist\vcredist_x86_2013.exe" || GOTO :ERROR
+wget -c --no-check-certificate https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe -O "%BUILD_DIR%\vcredist\vcredist_x64_2013.exe" || GOTO :ERROR
 )
 
 IF %REDIST_YEAR% == 2015 (

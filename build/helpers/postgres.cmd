@@ -14,7 +14,7 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
+rem wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql || GOTO :ERROR
@@ -72,6 +72,7 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" >>src\tools\msvc\config.pl ECHO zstd    ^=^> '%DEPENDENCIES_BIN_DIR%\zstd',
 >>src\tools\msvc\config.pl ECHO icu     ^=^> '%DEPENDENCIES_BIN_DIR%\icu',
 >>src\tools\msvc\config.pl ECHO libedit ^=^> '%DEPENDENCIES_BIN_DIR%\wineditline'
+>>src\tools\msvc\config.pl ECHO gss     ^=^> 'C:\Program Files\MIT\Kerberos',
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 
@@ -130,6 +131,11 @@ cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGV
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+if %ARCH% == X64 (
+copy "%PROGRAMFILES%\MIT\Kerberos\bin\*64.dll" %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin 
+) else (
+copy "%PROGRAMFILES%\MIT\Kerberos\bin\*32.dll" %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin 
+)
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" cp -va %DEPENDENCIES_BIN_DIR%/zstd/*.dll           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 REM Copy needed executables
