@@ -57,9 +57,9 @@ IF %HAVE_PGURL% == 0 (
 >>src\tools\msvc\config.pl ECHO ldap    ^=^> 1,
 >>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_BIN_DIR%\libintl',
 >>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
-IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
 IF %SDK% == SDK71 GOTO :DISABLE_PERL
-IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',   )
+IF %ARCH% == X86  GOTO :DISABLE_PERL
+IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
 GOTO :PERL_CONF_DONE
 :DISABLE_PERL
 IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> undef,   )
