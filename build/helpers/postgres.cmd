@@ -76,7 +76,7 @@ if "%PRODUCT_NAME%" == "PostgresProEnterprise" >>src\tools\msvc\config.pl ECHO z
 >>src\tools\msvc\config.pl ECHO 1^;
 
 rem Setting pager
->>src\include\pg_config.h.win32 ECHO #define DEFAULT_PAGER "less -X"
+>>src\include\pg_config.h.win32 ECHO #define DEFAULT_PAGER "less -XE"
 
 IF %ONE_C% == YES (
   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
