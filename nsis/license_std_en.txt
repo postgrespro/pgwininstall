@@ -1,20 +1,180 @@
-Postgres Pro Standard License
--------------------------------------------------------
+LICENSE AGREEMENT
+ON THE USE OF THE PRODUCT DBMS POSTGRES PRO
+AND ALL ITS VERSIONS
 
-Postgres Pro Standard is distributed under the terms of PostgreSQL license with additions by Postgres Professional:
+PLEASE REVIEW THE FOLLOWING TERMS CAREFULLY BEFORE YOU START DOWNLOADING AND/OR
+SETTING UP, AND/OR COPYING AND/OR INSTALLATION, AND/OR ANY USE OF THE DBMS POSTGRES
+PRO ON YOUR COMPUTER/SERVER/PROCESSOR. ANY USE OF DBMS POSTGRES PRO MEANS YOUR
+UNDERSTANDING OF THE TEXT OF THE AGREEMENT AND CONSENT, FULL AND UNCONDITIONAL
+ACCEPTANCE OF ALL THE TERMS OF THIS AGREEMENT.
 
-Portions Copyright © 2015-2018, Postgres Professional
+This License Agreement (hereinafter referred to as - Agreement) for the right to use DBMS POSTGRES
+PRO and all its versions (hereinafter referred to as - the Product) is a legal agreement between you -
+natural person or legal entity (hereinafter referred to as - the User) and LLC PPG (Postgres
+Professional) the Russian Federation, the Republic of Tatarstan, Innopolis (hereinafter referred to as
+- the Rights Holder). This Agreement determines the terms, procedure, restrictions and other rules
+for the use of the Product. This Agreement is legally valid as any other written agreement signed by
+you. The Rights Holder reserves the right to amend this Agreement, an updated version of this
+document is available at: https://postgrespro.ru.
+If you do not agree with the terms of the Agreement, you must, without installation of the Product,
+return the Product to the Rights Holder or its authorized representative or stop the installation of the
+Product. Herewith, the refusal to install/download the Product does not exempt you, without
+limitation, from the fulfillment of other terms of this Agreement, specified in Section 3.
 
-Portions Copyright © 1996-2018, The PostgreSQL Global Development Group
+1. EXCLUSIVE INTELLECTUAL PROPERTY RIGHTS
+1.1. The product of DBMS POSTGRES PRO (and all its versions), systems, methods, algorithms,
+structure, libraries, applications (additional software), components/parts of the Product (including
+texts and fonts), all modules, other component parts of the Product, copied and/or included in all
+working software of the Hardware and software system or any part thereof, any copies,
+documentation, authorship, logos and other information contained in the Product are objects of
+intellectual property and commercial secret of the Rights Holder-Company Postgres Professional (LLC
+PPG, Postgres Professional) and/or its affiliates, and are protected according to the current legislation
+of the Russian Federation on intellectual property, commercial secret, and the provisions of this
+Agreement.
+1.2. Name Postgres / Postgres, logos Postgres / Postgres are registered trademarks of LLC PPG and
+are protected by the Copyright Law of the Russian Federation. The Rights Holder guarantees that he
+is authorized to use these logos and trademarks.
+1.3. The use of the Product in violation of the terms of this Agreement is deemed to be a violation
+of the current Copyright Law of the Russian Federation and is a sufficient reason for depriving you of
+the rights granted with respect to the Product.
+1.4. The Rights Holder shall assist in protecting the User from all claims of the third parties with
+respect to intellectual or industrial ownership of the Product package. In the event of such a claim, 
+the User shall inform promptly the Rights Holder of all claims made by the third party, and provide
+all necessary information concerning this dispute.
+1.5. The Rights Holder declares that at the time of the transfer of the rights to use the Product, he
+is not aware of the rights of the third parties that could be violated by granting a non-exclusive right
+of the User to use the Product under this Agreement.
+1.6. During the term of this Agreement, the Rights Holder is obliged to refrain from any actions that
+could complicate the User's implementation of the right to use the result of intellectual activity within
+the limits established by the Agreement.
+2. SUBJECT OF THE AGREEMENT
+2.1. The subject of this Agreement is the granting by the Rights Holder to you - the User (under
+compliance with all technical requirements described in the technical and user documentation, as
+well as all the conditions and restrictions specified in this Agreement) of non-exclusive rights to use
+the software product DBMS POSTGRES PRO and all its subsequent versions within and by the
+methods specified in this Agreement. Description and instructions for the use of the Product are
+included in the Product, and are also available on the website of the Rights Holder at:
+https://postgrespro.ru.
+2.2. All updates to the Product shall be submitted in accordance with the terms of the technical
+support of the Product. Technical support depends on the type of license used and is carried out
+according to the rules for providing technical support on the website of the Rights Holder
+https://postgrespro.ru.
+2.3. The terms and procedure for remuneration for granting the rights to use the Product in case of
+its commercial use, depending on the type of license, shall be determined in separately concluded
+contracts with the Rights Holder or its authorized representatives/partners.
+3. VOLUME OF TRANSFERABLE RIGHTS AND METHODS OF USE
+3.1. The user shall be granted a non-exclusive right to use the Product and the user documentation
+thereto with the limitation of the total number of installations, processors, processor cores or users
+(determined in accordance with separate agreements with the Rights Holder or with the Rights
+Holder's Partners), within the limits specified in this Agreement (simple (non-exclusive) license): the
+right to install and reproduce provided for the installation and startup of software products in
+accordance with the documentation accompanying the delivery of the Product and establishing the
+rules for its use;
+3.2. The right received by the User does not include the following rights:
+3.2.1. To transfer the received right of using the Product, including media and documentation, by
+legal entities or natural persons, by selling, leasing, renting, lending or other ways of disposition.
+3.2.2. To transfer activation and access codes (or their copies) for use of the Product to the third
+parties.
+3.2.3. To use the Product on behalf of the third party.
+3.2.4. To carry out the following activities:
+3.2.4.1.To decompile (to convert object code to source code) and to modify programs and other
+components of the Product.
+3.2.4.2.To make any changes to the object code of the programs, except those that are made by
+means included in the Product package and described in the documentation.
+3.2.4.3.To perform other actions in relation to the Product that violate Russian and international
+standards of the copyright and software laws.
+3.3. The right received by the User for the use of the Product shall be valid during the period of
+validity of exclusive rights to the Product and within the territory of the Russian Federation, unless
+otherwise specified in separate agreements with the Rights Holder or with the Rights Holder's
+Partners.
+3.4. The following ways of using the Product with the technical specifications provided by the Rights
+Holder on "as is" basis are:
+3.4.1. Use of the Product for the development of applied solutions, for conducting tests, experiments
+and exploring the opportunities of the Product.
+3.4.2. The rights to use the Product for other purposes, taking into account the limitations of the use
+of the Product, within the framework of separately licensed contracts concluded by the User and the
+Rights Holder shall be determined by the terms of these agreements.
 
-Portions Copyright © 1994, The Regents of the University of California
-
-Permission is granted to use, copy, modify and distribute this software and its documentation for testing, software development, evaluation, education for free and without a written agreement is hereby granted, provided that the above copyright notice and this paragraph and the following four paragraphs appear in all copies. Use for other purposes, embedding in other products, distribution and other activities require purchasing of a separate license.
-
-IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-
-IN NO EVENT SHALL POSTGRES PROFESSIONAL BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF POSTGRES PROFESSIONAL HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-POSTGRES PROFESSIONAL SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND POSTGRES PROFESSIONAL HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+4. TRANSFER PROCEDURE
+4.1. Transfer of a copy of the Product to the User shall be carried out by providing access for
+downloading on the website of the Rights Holder. User documentation shall be transferred to the
+User in electronic form on the website of the Rights Holder.
+4.2. Any changes, additions and other actions related to the transfer, activation, access provision
+to the Product are carried out exclusively by the Rights Holder directly or through his authorized
+representatives.
+5. WARRANTY LIABILITIES
+5.1. The Rights Holder guarantees that upon the transfer of rights to the Product, the copyrights,
+closely-related or any other rights of the third parties shall not be violated.
+5.2. The product with the rights of use specified in the Agreement is provided on "as is" basis, with
+the absence of obligations of the Rights Holder about his/her suitability for the purposes of the User
+or multiple use with certain software.
+5.3. The Rights Holder does not provide any guarantees with respect to software and equipment of
+other manufacturers that may be supplied to the User with the Product either as a part of the Product
+or with which the Product is supplied.
+5.4. Additionally, the Rights Holder declares as follows:
+5.4.1. Additional conditions:
+Portions Copyright (c) 2015-2018, Postgres Professional
+Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
+Portions Copyright (c) 1994 Regents of the University of California
+5.4.2. In no event shall the University of California be liable to any party for direct, indirect, special,
+incidental, or consequential damages, including lost profits, arising out of the use of this software
+and its documentation, even if the University of California has been advised of the possibility of such
+damage.
+5.4.3. The University of California specifically disclaims any warranties, including, but not limited to,
+the implied warranties of merchantability and fitness for a particular purpose. The software provided
+hereunder is on an "as is" basis, and the University of California has no obligations to provide
+maintenance, support, updates, enhancements, or modifications.
+5.4.4. A limited liability company under the laws of Russian Federation «Postgres Professional»
+(Postgres Professional) incurs no liability for any damage, including loss of income, caused by direct
+or indirect, special or incidental use of this software or its documentation, even if a limited liability
+company under the laws of Russian Federation «Postgres Professional» was informed of the
+possibility of such damages.
+5.4.5. A limited liability company under the laws of Russian Federation «Postgres Professional»
+(Postgres Professional) specifically refuses to provide any guarantees, including, but not limited to,
+these warranties: implicit warranties of merchantability or suitability for a particular purpose. This
+software shall be provided on "as is" basis and a limited liability company under the laws of Russian
+Federation «Postgres Professional» is not obliged to provide maintenance, support, updates,
+expansion or changes.
+6. LIABILITY
+6.1. The Rights Holder and his affiliated persons shall not be liable or compensate for direct or
+indirect damages, including lost profit, loss of the User's confidential information, caused by
+violations and/or errors in the operation of the Product, resulting from misconduct of the User's
+personnel, or third parties, as well as malfunctions of the technical means and electrical equipment.
+6.2. The Rights Holder also shall not incur any liability and shall not give any guarantees with respect
+to any consumer qualities of the Product, except for those declared and listed in the user
+documentation, if the Product was purchased by the User not from the Rights Holder or his
+authorized representatives.
+6.3. The User is liable for recovering any damage resulting from and following from the use of the
+Product and the information contained therein or created by the Product, and also resulting from the
+interaction (or inability to interact properly) with any other equipment, complex or software provided
+by the Rights Holder and/or a third party.
+6.4. The User undertakes to compensate for any expenses to the Rights Holder, including legal
+costs, remuneration to lawyers/legal officers/representatives, and to protect the Rights Holder from
+any claims, disputes, litigation, losses, damages, costs, expenses, any other liability arising from
+improper, unlawful use of the Product (including any party related to the User, as well as persons
+authorized by the User's instruction to act in clear breach of the terms of this Agreement and
+applicable law).
+7. SPECIAL ADDITIONAL CONDITIONS
+7.1. The rights to use the Product are valid only if the Product is genuine. Purchased on a legal basis,
+the Product shall be accompanied by a unique identification number and User data specified when
+purchasing the Product. The user shall incur full liability for the data integrity transferred directly to
+the Rights Holder or his authorized representative. The User undertakes to notify the Rights Holder
+or his authorized representative about the discrepancies in the information provided by him, changes
+in his details.
+7.2. This Agreement, as described above, shall be deemed to be concluded and shall come into
+force from the moment of the beginning of the installation and/or use of the Product, and constitutes
+the entire agreement between the User and the Rights Holder on its terms and conditions. If any of
+its provisions are recognized by the competent court as invalid, illegal, the remaining provisions of
+the Agreement shall remain in full force and effect. All disputes and disagreements between the
+parties to this Agreement shall be settled through negotiations, and if the positive result of the
+negotiations is not achieved - by judicial procedure in accordance with the current legislation of the
+Russian Federation.
+7.3. Violation of the terms of this Agreement shall entail liability in accordance with the current
+legislation of the Russian Federation and this Agreement. Without prejudice to any of its rights, the
+Rights Holder has the right to unilaterally terminate this Agreement if the User does not comply with
+its terms and conditions. Cash paid by the User for the use of the Product is non-refundable.
+7.4. If the User has become aware of any information indicating copyright infringement of the
+Rights Holder (illegal resale of the Product, reference links to unauthorized sites), please send this
+information to: info@postgrespro.ru.
+7.5. For additional information on emerging issues regarding this Agreement, other explanations
+on the use of the Product, the User may contact: info@postgrespro.ru.
