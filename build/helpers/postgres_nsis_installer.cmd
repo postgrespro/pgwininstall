@@ -132,7 +132,7 @@ GOTO :NO_PGPRO_UPGRADE
 type server.files pgpro_upgrade.files > allserver.files
 :NO_PGPRO_UPGRADE
 
-%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% client.files devel.files plperl.files plpython2.files plpython3.files unneeded.files allserver.files
+%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %%PG_INS_SOURCE_DIR% client.files devel.files plperl.files %plpython2.files plpython3.files unneeded.files allserver.files || GOTO :ERROR
 
 rem generate installer itself
 makensis postgresql.nsi || GOTO :ERROR

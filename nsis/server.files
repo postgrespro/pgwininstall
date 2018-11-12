@@ -5,7 +5,7 @@
 ./bin/pg_controldata.*
 ./bin/pg_ctl.*
 ./bin/pg_probackup.*
-./bin/pg_resetwal.*
+./bin/pg_reset*.*
 ./bin/pg_rewind.*
 ./bin/pg_standby.*
 ./bin/pg_test_fsync.*
