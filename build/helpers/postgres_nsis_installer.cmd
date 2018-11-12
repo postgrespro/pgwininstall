@@ -109,8 +109,8 @@ IF "%PRODUCT_NAME%" == "PostgresPro" (
 GOTO :ENDLIC
 )
 IF "%PRODUCT_NAME%" == "PostgresProEnterprise" (
->>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
->>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license_ee_ru.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license_ee_en.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "Postgres Pro"
 GOTO :ENDLIC
 )

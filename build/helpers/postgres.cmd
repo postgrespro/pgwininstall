@@ -54,9 +54,9 @@ if "%PRODUCT_NAME%" == "PostgreSQL" (
 >>src\tools\msvc\config.pl ECHO ldap    ^=^> 1,
 >>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_BIN_DIR%\libintl',
 >>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
-IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
 IF %SDK% == SDK71 GOTO :DISABLE_PERL
-IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',   )
+IF %ARCH% == X86  GOTO :DISABLE_PERL
+IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
 GOTO :PERL_CONF_DONE
 :DISABLE_PERL
 IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> undef,   )
@@ -76,7 +76,7 @@ if "%PRODUCT_NAME%" == "PostgresProEnterprise" >>src\tools\msvc\config.pl ECHO z
 >>src\tools\msvc\config.pl ECHO 1^;
 
 rem Setting pager
->>src\include\pg_config.h.win32 ECHO #define DEFAULT_PAGER "less -X"
+>>src\include\pg_config.h.win32 ECHO #define DEFAULT_PAGER "less -XE"
 
 IF %ONE_C% == YES (
   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
