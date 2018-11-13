@@ -3,3 +3,4 @@
 ./bin/pg_config.*
 ./bin/ecpg.*
 ./symbols/*.pdb
+./share/errcodes.txt

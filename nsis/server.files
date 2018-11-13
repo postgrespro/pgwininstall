@@ -5,14 +5,14 @@
 ./bin/pg_controldata.*
 ./bin/pg_ctl.*
 ./bin/pg_probackup.*
-./bin/pg_reset*.*
+./bin/pg_resetwal.*
 ./bin/pg_rewind.*
 ./bin/pg_standby.*
 ./bin/pg_test_fsync.*
 ./bin/pg_test_timing.*
 ./bin/pg_upgrade.*
 ./bin/pg_waldump.*
-./bin/pg_verifychecksums.*
+./bin/pg_verify_checksums.*
 ./bin/postgres.*
 ./bin/postmaster.*
 ./bin/zic.*
