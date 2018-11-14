@@ -142,6 +142,15 @@ GOTO :NO_PGPRO_UPGRADE
 type pgpro_upgrade.files >> allserver.files
 :NO_PGPRO_UPGRADE
 
+rem pg_repack binary should be in serever section
+rem It is included into PostgresProEnterpise only
+rem pg_repack extension is included by same pattern as
+rem all other contrib extensions
+
+IF "%PRODUCT_NAME%" == "PostgresProEnterprise" (
+	echo ./bin/pg_repack.* >> allserver.files
+)
+
 rem expand pattern lists to actual file lists
 %PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% allclient.files devel.files plperl.files plpython2.files plpython3.files unneeded.files allserver.files || GOTO :ERROR
 
