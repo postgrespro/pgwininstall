@@ -109,8 +109,8 @@ IF "%PRODUCT_NAME%" == "PostgresPro" (
 GOTO :ENDLIC
 )
 IF "%PRODUCT_NAME%" == "PostgresProEnterprise" (
->>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license.txt"
->>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_ru "license_ee_ru.txt"
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define  myLicenseFile_en "license_ee_en.txt"
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PRODUCT_NAME_SHORT "Postgres Pro"
 GOTO :ENDLIC
 )
@@ -122,17 +122,37 @@ GOTO :ENDLIC
 
 CD /D %NSIS_RES_DIR% || GOTO :ERROR
 rem Genarate file lists
-
-type server.files > allserver.files
+rem Remove old filelists first
+rm -f *_list.nsi
+rem tune pattern lists to major version and product
+IF "%PG_MAJOR_VERSION%" == "9.6" (
+	sed "s/wal/xlog/" server.files > allserver.files
+	sed  "s/wal/xlog/" client.files > allclient.files
+	echo ./bin/createlang.* >> allclient.files
+	echo ./bin/droplang.* >> allclient.files
+) ELSE (
+    cat server.files > allserver.files
+	type client.files > allclient.files
+)
 IF NOT "%PG_MAJOR_VERSION%" == "9.6" GOTO :NO_PGPRO_UPGRADE
 IF "%PRODUCT_NAME%" == "PostgresPro" GOTO :ADD_PGPRO_UPGRADE
 IF "%PRODUCT_NAME%" == "PostgresProEnterprise" GOTO :ADD_PGPRO_UPGRADE
 GOTO :NO_PGPRO_UPGRADE
 :ADD_PGPRO_UPGRADE
-type server.files pgpro_upgrade.files > allserver.files
+type pgpro_upgrade.files >> allserver.files
 :NO_PGPRO_UPGRADE
 
-%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% client.files devel.files plperl.files plpython2.files plpython3.files unneeded.files allserver.files
+rem pg_repack binary should be in serever section
+rem It is included into PostgresProEnterpise only
+rem pg_repack extension is included by same pattern as
+rem all other contrib extensions
+
+IF "%PRODUCT_NAME%" == "PostgresProEnterprise" (
+	echo ./bin/pg_repack.* >> allserver.files
+)
+
+rem expand pattern lists to actual file lists
+%PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% allclient.files devel.files plperl.files plpython2.files plpython3.files unneeded.files allserver.files || GOTO :ERROR
 
 rem generate installer itself
 makensis postgresql.nsi || GOTO :ERROR

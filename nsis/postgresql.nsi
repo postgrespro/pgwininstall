@@ -253,7 +253,7 @@ Section $(componentClient) secClient
 
 
 
-  !include client_list.nsi
+  !include allclient_list.nsi
   ;SetOutPath "$INSTDIR\bin"
   ;File /r ${PG_INS_SOURCE_DIR}\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
