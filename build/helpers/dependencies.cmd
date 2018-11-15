@@ -72,7 +72,7 @@ CD /D %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\wineditline-%EDITLINE_VER%.zip
 CD /D wineditline-%EDITLINE_VER%\src
 patch -p2 < %ROOT%/patches/wineditline/clipboard_paste.patch || goto :ERROR
-CL -I. -c history.c editline.c fn_complete.c || goto :ERROR
+CL -I. /MD -c history.c editline.c fn_complete.c || goto :ERROR
 LIB /out:edit.lib *.obj || goto :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\wineditline
 MKDIR %DEPENDENCIES_BIN_DIR%\wineditline\include 
@@ -140,6 +140,7 @@ rm -rf %DEPENDENCIES_BIN_DIR%\uuid %DEPENDENCIES_SRC_DIR%\ossp_uuid
 MKDIR %DEPENDENCIES_BIN_DIR%\uuid
 7z x %DOWNLOADS_DIR%\ossp_uuid_1.6.2_win32_source_120608.7z -o%DEPENDENCIES_SRC_DIR%\ -y || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\ossp_uuid
+patch -p1 < %ROOT%/patches/uuid/oosp_uuid.patch || goto :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' ossp_uuid.sln || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' ossp_uuid\ossp_uuid.vcxproj || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' example\example.vcxproj || GOTO :ERROR

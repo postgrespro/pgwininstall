@@ -1,0 +1,66 @@
+diff --git a/example/example.vcxproj b/example/example.vcxproj
+index 66d5a2a..4c1d0cf 100644
+--- a/example/example.vcxproj
++++ b/example/example.vcxproj
+@@ -41,7 +41,7 @@
+     <ClCompile>
+       <WarningLevel>Level3</WarningLevel>
+       <Optimization>Disabled</Optimization>
+-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <AdditionalIncludeDirectories>$(SolutionDir)\include</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+@@ -56,7 +56,7 @@
+       <Optimization>MaxSpeed</Optimization>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+       <IntrinsicFunctions>true</IntrinsicFunctions>
+-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <AdditionalIncludeDirectories>$(SolutionDir)\include</AdditionalIncludeDirectories>
+     </ClCompile>
+     <Link>
+diff --git a/ossp_uuid/ossp_uuid.vcxproj b/ossp_uuid/ossp_uuid.vcxproj
+index 357f009..36babd7 100644
+--- a/ossp_uuid/ossp_uuid.vcxproj
++++ b/ossp_uuid/ossp_uuid.vcxproj
+@@ -41,7 +41,7 @@
+     <ClCompile>
+       <WarningLevel>Level3</WarningLevel>
+       <Optimization>Disabled</Optimization>
+-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+@@ -53,7 +53,7 @@
+       <Optimization>MaxSpeed</Optimization>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+       <IntrinsicFunctions>true</IntrinsicFunctions>
+-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+diff --git a/uuid_cli/uuid_cli.vcxproj b/uuid_cli/uuid_cli.vcxproj
+index 3c3c29a..18c12dd 100644
+--- a/uuid_cli/uuid_cli.vcxproj
++++ b/uuid_cli/uuid_cli.vcxproj
+@@ -42,7 +42,7 @@
+       <WarningLevel>Level3</WarningLevel>
+       <Optimization>Disabled</Optimization>
+       <AdditionalIncludeDirectories>$(SolutionDir)\ossp_uuid</AdditionalIncludeDirectories>
+-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
++      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+@@ -57,7 +57,7 @@
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+       <IntrinsicFunctions>true</IntrinsicFunctions>
+       <AdditionalIncludeDirectories>$(SolutionDir)\ossp_uuid</AdditionalIncludeDirectories>
+-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+     </ClCompile>
+     <Link>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
