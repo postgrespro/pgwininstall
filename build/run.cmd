@@ -98,7 +98,7 @@ IF "%~1"=="13" (
   TITLE Building PostgresPro installer
   IF "%SDK%"=="" SET SDK=SDK71
   IF "%PRODUCT_NAME%"=="" SET PRODUCT_NAME=PostgresPro
-  IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=1.3
+  IF "%PG_PATCH_VERSION%"=="" SET PG_PATCH_VERSION=1.1
   CMD.EXE /C %ROOT%\build\helpers\postgres_installer.cmd || GOTO :ERROR
 )
 
