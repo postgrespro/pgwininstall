@@ -342,6 +342,7 @@ SectionEnd
 
 Section $(componentServer) sec1
 
+
   ${if} $PG_OLD_DIR != "" ; exist PG install
    ${if} $isStopped == 0
     MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
@@ -583,8 +584,10 @@ Section $(componentServer) sec1
       FileClose $LogFile ;Closes the filled file
 
       ${if} $0 != 1
+	IfSilent +2
             MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB2)
       ${else}
+	IfSilent +2
             MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB)
      ${endif}
 
@@ -782,14 +785,15 @@ Section $(componentServer) sec1
   call checkServiceIsRunning
   pop $0
   ${if} $0 == ""
-        Sleep 5000
+        Sleep 7000
         call checkServiceIsRunning
         pop $0
         ${if} $0 == ""
               DetailPrint "Error: service is not running!"
-              MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
               FileWrite $LogFile "Error: service $ServiceID_text is not running!$\r$\n"
               FileClose $LogFile
+	      IfSilent +2
+              MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
               Abort
         ${endif}
   ${endif}
@@ -819,10 +823,11 @@ Section $(componentServer) sec1
       DetailPrint "Output: $1"
       FileWrite $LogFile "Checking connection has return $0 $\r$\n"
       FileWrite $LogFile "Output: $1 $\r$\n"
+      FileClose $LogFile
 
       ;MessageBox MB_OK "Create adminpack error: $1"
-      MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
-      FileClose $LogFile
+      IfSilent +2
+	MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
       Abort
   ${else}
       DetailPrint "Checking connection is OK"
@@ -857,6 +862,7 @@ Section $(componentServer) sec1
       FileWrite $LogFile "Output: $1 $\r$\n"
 
       ;MessageBox MB_OK "Create adminpack error: $1"
+     IfSilent +2
       MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
     ${else}
       DetailPrint "Create adminpack OK"
