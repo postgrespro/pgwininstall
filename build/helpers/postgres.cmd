@@ -107,12 +107,12 @@ rem cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
 )
 :NOLOAD
-IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc
-IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc
+IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc;.
+IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
 
-CD /D %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc || GOTO :ERROR
-rem %PERL_EXE% src\tools\msvc\build.pl || GOTO :ERROR
-%PERL_EXE% build.pl || GOTO :ERROR
+rem CD /D %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc || GOTO :ERROR
+rem %PERL_EXE% build.pl || GOTO :ERROR
+%PERL_EXE% src\tools\msvc\build.pl || GOTO :ERROR
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 IF EXIST contrib\pg_probackup\gen_probackup_project.pl %PERL_EXE% contrib\pg_probackup\gen_probackup_project.pl || GOTO :ERROR
 
