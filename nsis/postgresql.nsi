@@ -509,7 +509,7 @@ Section $(PostgreSQLString) sec1
                FileWrite $0 "online_analyze.verbose = 'off'$\r$\n"
                FileWrite $0 "online_analyze.local_tracking = 'on'$\r$\n"
                FileWrite $0 "plantuner.fix_empty_table = 'on'  $\r$\n"
-               FileWrite $0 "online_analyze.enable = off$\r$\n"
+               FileWrite $0 "online_analyze.enable = on$\r$\n"
                FileClose $0
         
                ErrFileCfg1:
