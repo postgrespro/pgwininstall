@@ -650,29 +650,28 @@ Section $(componentServer) sec1
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#shared_preload_libraries = ''" "shared_preload_libraries = 'online_analyze, plantuner'"
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "" ""
 
-        ClearErrors
-        FileOpen $0 $DATA_DIR\postgresql.conf a
-        IfErrors ErrFileCfg1
-        FileSeek $0 0 END
+        ${if} ${WITH_1C} == "TRUE"
+               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#escape_string_warning = on" "escape_string_warning = off"
+               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#standard_conforming_strings = on" "standard_conforming_strings = off"
 
-        FileWrite $0 "#Options for 1C:$\r$\n"
-        FileWrite $0 "#escape_string_warning = off$\r$\n"
-        FileWrite $0 "#standard_conforming_strings = off$\r$\n"
-        FileWrite $0 "#shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
-        FileWrite $0 "#online_analyze.table_type = 'temporary'$\r$\n"
-        FileWrite $0 "#online_analyze.verbose = 'off'$\r$\n"
-        FileWrite $0 "#online_analyze.local_tracking = 'on'$\r$\n"
-        FileWrite $0 "#plantuner.fix_empty_table = 'on'  $\r$\n"
-        FileWrite $0 "#online_analyze.enable = off$\r$\n"
+               ClearErrors
+               FileOpen $0 $DATA_DIR\postgresql.conf a
+               IfErrors ErrFileCfg1
+               FileSeek $0 0 END
+               FileWrite $0 "shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
+               FileWrite $0 "online_analyze.table_type = 'temporary'$\r$\n"
+               FileWrite $0 "online_analyze.verbose = 'off'$\r$\n"
+               FileWrite $0 "online_analyze.local_tracking = 'on'$\r$\n"
+               FileWrite $0 "plantuner.fix_empty_table = 'on'  $\r$\n"
+               FileWrite $0 "online_analyze.enable = on$\r$\n"
+               FileClose $0
         
-        ;debug for unstarted server:
-        ;FileWrite $0 "effective_io_concurrency = 2$\r$\n"
+        	;debug for unstarted server:
+        	;FileWrite $0 "effective_io_concurrency = 2$\r$\n"
         
-        FileClose $0
-        
-        ErrFileCfg1:
-
-    ${endif}
+               FileClose $0
+               ErrFileCfg1:
+    	${endif}
   ${EndIf}
   Delete "$DATA_DIR\postgresql.conf.old"
   

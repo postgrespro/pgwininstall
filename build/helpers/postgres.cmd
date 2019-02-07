@@ -94,13 +94,10 @@ CD %BUILD_DIR%\postgresql\*%PGVER%*\src\tools\msvc
 
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\libintl\lib\*.dll  %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
 REM xcopy /Y %DEPENDENCIES_BIN_DIR%\iconv\lib\*.dll    %BUILD_DIR%\postgresql\*%PGVER%*\ || GOTO :ERROR
-rem cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/libintl.dll	%BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
-rem cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/libiconv.dll    %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
-rem cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/iconv.dll       %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/libintl.dll	%BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/libiconv.dll    %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/iconv.dll       %BUILD_DIR%\postgresql\%PGTARNAME%-%PGVER%\ || GOTO :ERROR
 
-rem We need ICONV and LibIntl DLLS available during install for ZIC to work
-rem no need to copy them, just add to PATH
-PATH %PATH%;%DEPENDENCIES_BIN_DIR%\libintl\lib;%DEPENDENCIES_BIN_DIR%\iconv\lib
 %PERL_EXE% install.pl %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
