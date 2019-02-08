@@ -6,7 +6,6 @@
 
 !addplugindir Plugins
 !include "postgres.def.nsh"
-
 ;--------------------------------
 ;Include "Modern UI"
 !include "MUI2.nsh"
@@ -114,6 +113,19 @@ Var effective_cache_size
 Var checkBoxDataChecksums
 Var isDataChecksums
 
+Var checkBoxMoreOptions
+Var isShowMoreOptions
+
+Var servicePassword_text
+Var servicePassword_editor
+
+Var ServiceAccount_editor
+Var ServiceID_editor
+
+Var Collation_editor
+Var Collation_text
+
+Var currCommand
 
 ; Set 'install service' variable
 ;Var service
@@ -163,6 +175,7 @@ Page custom ChecExistDataDir
 
 Page custom nsDialogServer nsDialogsServerPageLeave
 Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
+Page custom nsDialogMore nsDialogsMorePageLeave
 
 ;Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PG_DEF_BRANDING}"
@@ -537,12 +550,6 @@ Section $(componentServer) sec1
       StrCpy $tempVar ' --pwfile "$tempFileName"  -A md5 '
     ${endif}
     
-
-    ${if} $isDataChecksums == ${BST_CHECKED}
-      StrCpy $tempVar '$tempVar --data-checksums '
-    ${endif}
-    
-
     DetailPrint "Database initialization ..."
     AccessControl::GetCurrentUserName
     Pop $0 ; or "error"
@@ -553,26 +560,30 @@ Section $(componentServer) sec1
 
     FileWrite $LogFile "Database initialization ...$\r$\n"
 
-    ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
-    FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --encoding=$Coding_text -U "$UserName_text" \
-        -D "$DATA_DIR" $\r$\n' 
-      ; Initialise the database cluster, and set the appropriate permissions/ownership
-      nsExec::ExecToLog /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+
+    StrCpy $currCommand '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR"'
-    ${else}
-    FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --locale="$Locale_text" \
-        --encoding=$Coding_text \
-        -U "$UserName_text" \
-        -D "$DATA_DIR" $\r$\n'
-      nsExec::ExecToLog /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --locale="$Locale_text" \
-        --encoding=$Coding_text \
-        -U "$UserName_text" \
-        -D "$DATA_DIR"'
+    ${if} $isDataChecksums == ${BST_CHECKED}
+          StrCpy $currCommand '$currCommand --data-checksums'
     ${endif}
+
+    ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
+          ${if} "$Collation_text" != "$(DEF_COLATE_NAME)"
+                    StrCpy $currCommand '$currCommand --locale="@$Collation_text"'
+          ${endif}
+    ${else}
+          StrCpy $currCommand '$currCommand --locale="$Locale_text"'
+          ${if} "$Collation_text" != "$(DEF_COLATE_NAME)"
+                    StrCpy $currCommand '$currCommand --locale="$Locale_text@$Collation_text"'
+          ${else}
+                    StrCpy $currCommand '$currCommand --locale="$Locale_text"'
+          ${endif}
+    ${endif}
+    FileWrite $LogFile '$currCommand $\r$\n'
+      ; Initialise the database cluster, and set the appropriate permissions/ownership
+      nsExec::ExecToLog /TIMEOUT=90000 '$currCommand'
+
     pop $0
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
@@ -683,9 +694,16 @@ Section $(componentServer) sec1
   Call WriteInstallOptions
   DetailPrint "Service $ServiceID_text registration ..."
   FileWrite $LogFile "Service $ServiceID_text registration ... $\r$\n"
-  FileWrite $LogFile '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w $\r$\n'
 
-  nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
+  StrCpy $currCommand '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
+  ;save without password here
+  FileWrite $LogFile '$currCommand $\r$\n'
+  ${if} $servicePassword_text != ""
+        StrCpy $currCommand '$currCommand -P "$servicePassword_text"'
+  ${endif}
+  ;FileWrite $LogFile '$currCommand $\r$\n'
+  nsExec::ExecToLog /TIMEOUT=60000 '$currCommand'
+
   Pop $0 # return value/error/timeout
   Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
@@ -1288,6 +1306,7 @@ Function getServerDataFromDlg
 
   ${NSD_GetState} $checkBoxEnvVar $isEnvVar
 
+
   ${NSD_GetState} $checkBoxDataChecksums $isDataChecksums
 
 
@@ -1427,7 +1446,7 @@ Function nsDialogServer
   Pop $Locale
 
   ${NSD_CB_AddString} $Locale "$(DEF_LOCALE_NAME)"
-  ${if} ${PG_MAJOR_VERSION} == "10"
+  ${if} ${PG_MAJOR_VERSION} >= "10"
     ;; Source URL: https://www.microsoft.com/resources/msdn/goglobal/default.mspx (windows 7)
     ${NSD_CB_AddString} $Locale "af"         ; 0x0036	af	Afrikaans	Afrikaans	Afrikaans	1252	850	ZAF	AFK
     ${NSD_CB_AddString} $Locale "af-ZA"      ; 0x0436	af-ZA	Afrikaans (South Africa)	Afrikaans	Afrikaans (Suid Afrika)	1252	850	ZAF	AFK
@@ -1910,7 +1929,7 @@ Function nsDialogServer
   ${endif}
   ${NSD_CB_SelectString} $Locale $Locale_text
 
-  ${NSD_CreateLabel} 0 54u 70u 24u "$(DLG_SUPERUSER)"
+  ${NSD_CreateLabel} 0 59u 70u 24u "$(DLG_SUPERUSER)"
   Pop $Label2
 
   ${NSD_CreateText} 72u 57u 100u 12u "$UserName_text"
@@ -1938,7 +1957,7 @@ Function nsDialogServer
   ${NSD_CreateCheckBox} 72u 120u 100% 12u "$(DLG_ENVVAR)"
   Pop $checkBoxEnvVar
   ${NSD_SetState} $checkBoxEnvVar $isEnvVar
-
+  
   GetFunctionAddress $0 getServerDataFromDlg
   nsDialogs::OnBack $0
 
@@ -2048,6 +2067,11 @@ Function nsDialogOptimization
     ${NSD_SetState} $rButton1  ${BST_CHECKED}
   ${endif}
 
+  ${NSD_CreateCheckBox} 20u 100u 100% 12u "$(MORE_SHOW_MORE)"
+  Pop $checkBoxMoreOptions
+  ${NSD_SetState} $checkBoxMoreOptions $isShowMoreOptions
+
+
   GetFunctionAddress $0 nsDialogsOptimizationPageLeave
   nsDialogs::OnBack $0
 
@@ -2062,6 +2086,8 @@ Function nsDialogsOptimizationPageLeave
   ${else}
     StrCpy $needOptimization "0"
   ${endif}
+  
+  ${NSD_GetState} $checkBoxMoreOptions $isShowMoreOptions
 FunctionEnd
 
 Function SetDefaultTcpPort
@@ -2105,9 +2131,11 @@ ${EndIf}
   StrCpy $checkNoLocal_state ${BST_CHECKED}
   StrCpy $isEnvVar ${BST_UNCHECKED} ;${BST_CHECKED}
   StrCpy $isDataChecksums ${BST_CHECKED} ;${BST_CHECKED}
-
+  StrCpy $isShowMoreOptions ${BST_UNCHECKED} ;${BST_CHECKED}
 
   StrCpy $Coding_text "UTF8" ;"UTF-8"
+  
+  StrCpy $Collation_text $(DEF_COLATE_NAME)
 
   UserMgr::GetCurrentDomain
   Pop $0
@@ -2309,3 +2337,73 @@ Function IsServerSection
 FunctionEnd
 
 
+Function nsDialogMore
+
+  ${Unless} ${SectionIsSelected} ${sec1}
+    Abort
+  ${EndUnless}
+
+  ${if} $isShowMoreOptions != ${BST_CHECKED}
+    Abort
+  ${endif}
+
+  nsDialogs::Create 1018
+  Pop $Dialog
+
+  ${If} $Dialog == error
+    Abort
+  ${EndIf}
+
+#!define PG_DEF_SERVICEACCOUNT "NT AUTHORITY\NetworkService"
+#!define PG_DEF_SERVICEID "postgrespro-enterprise-X64-9.6"
+#isu
+
+${NSD_CreateGroupBox} 0 0 100% 70u "$(MORE_SERVICE_TITLE)"
+    Pop $0
+
+  ${NSD_CreateLabel} 10u 12u 120u 16u "$(MORE_WINUSER)"
+  Pop $Label
+
+  ${NSD_CreateText} 130u 14u 160u 12u "$ServiceAccount_text"
+  Pop $ServiceAccount_editor
+
+  ${NSD_CreateLabel} 10u 32u 120u 12u "$(MORE_WINPASS)"
+  Pop $Label
+
+  ${NSD_CreatePassword} 130u 30u 160u 12u $servicePassword_text
+  Pop $servicePassword_editor
+
+
+  ${NSD_CreateLabel} 10u 52u 120u 16u "$(MORE_SERVICE_NAME)"
+  Pop $Label
+
+  ${NSD_CreateText} 130u 50u 160u 12u "$ServiceID_text"
+  Pop $ServiceID_editor
+
+  
+  ${if} ${PG_MAJOR_VERSION} >= "10"
+        ${NSD_CreateLabel} 10u 82u 120u 16u "$(MORE_COLATION)"
+        Pop $Label
+
+        ${NSD_CreateDropList} 130u 80u 100u 12u ""
+        Pop $Collation_editor
+        ${NSD_CB_AddString} $Collation_editor "$(DEF_COLATE_NAME)"
+        ${NSD_CB_AddString} $Collation_editor "icu"
+        ${NSD_CB_AddString} $Collation_editor "libc"
+        ${NSD_CB_SelectString} $Collation_editor $Collation_text
+  ${endif}
+
+  nsDialogs::Show
+  
+FunctionEnd
+
+Function nsDialogsMorePageLeave
+  ${NSD_GetText} $ServiceAccount_editor $ServiceAccount_text
+  ${NSD_GetText} $servicePassword_editor $servicePassword_text
+  ${NSD_GetText} $ServiceID_editor $ServiceID_text
+  ${if} ${PG_MAJOR_VERSION} >= "10"
+      ${NSD_GetText} $Collation_editor $Collation_text
+  ${endif}
+
+
+FunctionEnd

@@ -140,3 +140,26 @@ LangString DESC_componentDeveloper ${LANG_RUSSIAN} "Установка файлов ${PRODUCT_N
 
 LangString DLG_data-checksums ${LANG_ENGLISH} "Enable data checksums"
 LangString DLG_data-checksums ${LANG_RUSSIAN} "Включить контрольные суммы для страниц"
+
+
+LangString DEF_COLATE_NAME ${LANG_ENGLISH} "Default"
+LangString DEF_COLATE_NAME ${LANG_RUSSIAN} "По умолчанию"
+
+LangString MORE_WINUSER ${LANG_ENGLISH} "Windows existing user name:"
+LangString MORE_WINUSER ${LANG_RUSSIAN} "Существующий пользователь Windows:"
+
+
+LangString MORE_WINPASS ${LANG_ENGLISH} "Windows user password:"
+LangString MORE_WINPASS ${LANG_RUSSIAN} "Пароль пользователя Windows:"
+
+LangString MORE_SERVICE_TITLE ${LANG_ENGLISH} "System service settings"
+LangString MORE_SERVICE_TITLE ${LANG_RUSSIAN} "Параметры системной службы"
+
+LangString MORE_SERVICE_NAME ${LANG_ENGLISH} "System service name:"
+LangString MORE_SERVICE_NAME ${LANG_RUSSIAN} "Имя системной службы:"
+
+LangString MORE_COLATION ${LANG_ENGLISH} "Collation provider:"
+LangString MORE_COLATION ${LANG_RUSSIAN} "Провайдер правил сортировки:"
+
+LangString MORE_SHOW_MORE ${LANG_ENGLISH} "Show advanced options..."
+LangString MORE_SHOW_MORE ${LANG_RUSSIAN} "Показать дополнительные параметры ..."
