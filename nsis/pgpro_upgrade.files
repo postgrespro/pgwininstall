@@ -1,0 +1,5 @@
+./bin/sh.*
+./bin/mv.*
+./bin/sed.*
+./bin/pgpro_upgrade
+./share/pgpro-upgrade/*

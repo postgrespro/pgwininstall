@@ -6,7 +6,6 @@
 
 !addplugindir Plugins
 !include "postgres.def.nsh"
-
 ;--------------------------------
 ;Include "Modern UI"
 !include "MUI2.nsh"
@@ -114,6 +113,19 @@ Var effective_cache_size
 Var checkBoxDataChecksums
 Var isDataChecksums
 
+Var checkBoxMoreOptions
+Var isShowMoreOptions
+
+Var servicePassword_text
+Var servicePassword_editor
+
+Var ServiceAccount_editor
+Var ServiceID_editor
+
+Var Collation_editor
+Var Collation_text
+
+Var currCommand
 
 ; Set 'install service' variable
 ;Var service
@@ -163,6 +175,7 @@ Page custom ChecExistDataDir
 
 Page custom nsDialogServer nsDialogsServerPageLeave
 Page custom nsDialogOptimization nsDialogsOptimizationPageLeave
+Page custom nsDialogMore nsDialogsMorePageLeave
 
 ;Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PG_DEF_BRANDING}"
@@ -253,7 +266,7 @@ Section $(componentClient) secClient
 
 
 
-  !include client_list.nsi
+  !include allclient_list.nsi
   ;SetOutPath "$INSTDIR\bin"
   ;File /r ${PG_INS_SOURCE_DIR}\*.*
   ;File /r ${PG_INS_SOURCE_DIR}\bin\*.*
@@ -274,6 +287,7 @@ Section $(componentClient) secClient
 
   CreateDirectory "$INSTDIR\scripts"
   File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
+  CreateDirectory "$INSTDIR\doc"
   File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
 
   ;Store installation folder
@@ -342,6 +356,7 @@ SectionEnd
 
 Section $(componentServer) sec1
 
+
   ${if} $PG_OLD_DIR != "" ; exist PG install
    ${if} $isStopped == 0
     MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
@@ -365,7 +380,7 @@ Section $(componentServer) sec1
     ${endif}
   ${endif}
 
-  !include server_list.nsi
+  !include allserver_list.nsi
   !include plperl_list.nsi
   !include plpython2_list.nsi
 
@@ -385,6 +400,7 @@ Section $(componentServer) sec1
 
   CreateDirectory "$INSTDIR\scripts"
   File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
+  CreateDirectory "$INSTDIR\doc"
   File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
 
   ;Store installation folder
@@ -432,7 +448,7 @@ Section $(componentServer) sec1
     StrCpy $Chcp_text ""
   ${Endif}
 
-  ${if} "${PRODUCT_NAME}" == "PostgreSQL"
+  ${if} ${PRODUCT_NAME} == "PostgreSQL"
     StrCpy $Chcp_text ""
 
     DetailPrint "Language settings:"
@@ -476,7 +492,7 @@ Section $(componentServer) sec1
   ClearErrors
   FileOpen $0 $INSTDIR\scripts\pgpro_upgrade.cmd w
   IfErrors creatBatErr6
-  FileWrite $0 '@echo off$\r$\nif "%PGDATA%"=="" set PGDATA=%~1$\r$\nif "%PGDATA%"=="" set PGDATA=$DATA_DIR$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nsh.exe "$INSTDIR\bin\pgpro_upgrade"$\r$\n'
+  FileWrite $0 '@echo off$\r$\nif "%PGDATA%"=="" set PGDATA=%~1$\r$\nif "%PGDATA%"=="" set PGDATA=$DATA_DIR$\r$\nPATH $INSTDIR\bin;%PATH%$\r$\nrem if exist "$INSTDIR\bin\pgpro_upgrade" sh.exe "$INSTDIR\bin\pgpro_upgrade"$\r$\n'
   FileClose $0
 
   creatBatErr6:
@@ -536,12 +552,6 @@ Section $(componentServer) sec1
       StrCpy $tempVar ' --pwfile "$tempFileName"  -A md5 '
     ${endif}
     
-
-    ${if} $isDataChecksums == ${BST_CHECKED}
-      StrCpy $tempVar '$tempVar --data-checksums '
-    ${endif}
-    
-
     DetailPrint "Database initialization ..."
     AccessControl::GetCurrentUserName
     Pop $0 ; or "error"
@@ -552,26 +562,30 @@ Section $(componentServer) sec1
 
     FileWrite $LogFile "Database initialization ...$\r$\n"
 
-    ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
-    FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --encoding=$Coding_text -U "$UserName_text" \
-        -D "$DATA_DIR" $\r$\n' 
-      ; Initialise the database cluster, and set the appropriate permissions/ownership
-      nsExec::ExecToLog /TIMEOUT=90000 '"$INSTDIR\bin\initdb.exe" $tempVar \
+
+    StrCpy $currCommand '"$INSTDIR\bin\initdb.exe" $tempVar \
         --encoding=$Coding_text -U "$UserName_text" \
         -D "$DATA_DIR"'
-    ${else}
-    FileWrite $LogFile '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --locale="$Locale_text" \
-        --encoding=$Coding_text \
-        -U "$UserName_text" \
-        -D "$DATA_DIR" $\r$\n'
-      nsExec::ExecToLog /TIMEOUT=60000 '"$INSTDIR\bin\initdb.exe" $tempVar \
-        --locale="$Locale_text" \
-        --encoding=$Coding_text \
-        -U "$UserName_text" \
-        -D "$DATA_DIR"'
+    ${if} $isDataChecksums == ${BST_CHECKED}
+          StrCpy $currCommand '$currCommand --data-checksums'
     ${endif}
+
+    ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
+          ${if} "$Collation_text" != "$(DEF_COLATE_NAME)"
+                    StrCpy $currCommand '$currCommand --locale="@$Collation_text"'
+          ${endif}
+    ${else}
+          StrCpy $currCommand '$currCommand --locale="$Locale_text"'
+          ${if} "$Collation_text" != "$(DEF_COLATE_NAME)"
+                    StrCpy $currCommand '$currCommand --locale="$Locale_text@$Collation_text"'
+          ${else}
+                    StrCpy $currCommand '$currCommand --locale="$Locale_text"'
+          ${endif}
+    ${endif}
+    FileWrite $LogFile '$currCommand $\r$\n'
+      ; Initialise the database cluster, and set the appropriate permissions/ownership
+      nsExec::ExecToLog /TIMEOUT=90000 '$currCommand'
+
     pop $0
     Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
@@ -583,8 +597,10 @@ Section $(componentServer) sec1
       FileClose $LogFile ;Closes the filled file
 
       ${if} $0 != 1
+	IfSilent +2
             MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB2)
       ${else}
+	IfSilent +2
             MessageBox MB_OK|MB_ICONINFORMATION $(MESS_ERROR_INITDB)
      ${endif}
 
@@ -650,28 +666,29 @@ Section $(componentServer) sec1
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#shared_preload_libraries = ''" "shared_preload_libraries = 'online_analyze, plantuner'"
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "" ""
 
-        ${if} ${WITH_1C} == "TRUE"
-               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#escape_string_warning = on" "escape_string_warning = off"
-               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#standard_conforming_strings = on" "standard_conforming_strings = off"
+        ClearErrors
+        FileOpen $0 $DATA_DIR\postgresql.conf a
+        IfErrors ErrFileCfg1
+        FileSeek $0 0 END
 
-               ClearErrors
-               FileOpen $0 $DATA_DIR\postgresql.conf a
-               IfErrors ErrFileCfg1
-               FileSeek $0 0 END
-               FileWrite $0 "shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
-               FileWrite $0 "online_analyze.table_type = 'temporary'$\r$\n"
-               FileWrite $0 "online_analyze.verbose = 'off'$\r$\n"
-               FileWrite $0 "online_analyze.local_tracking = 'on'$\r$\n"
-               FileWrite $0 "plantuner.fix_empty_table = 'on'  $\r$\n"
-               FileWrite $0 "online_analyze.enable = on$\r$\n"
-               FileClose $0
+        FileWrite $0 "#Options for 1C:$\r$\n"
+        FileWrite $0 "#escape_string_warning = off$\r$\n"
+        FileWrite $0 "#standard_conforming_strings = off$\r$\n"
+        FileWrite $0 "#shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
+        FileWrite $0 "#online_analyze.table_type = 'temporary'$\r$\n"
+        FileWrite $0 "#online_analyze.verbose = 'off'$\r$\n"
+        FileWrite $0 "#online_analyze.local_tracking = 'on'$\r$\n"
+        FileWrite $0 "#plantuner.fix_empty_table = 'on'  $\r$\n"
+        FileWrite $0 "#online_analyze.enable = on$\r$\n"
         
-        	;debug for unstarted server:
-        	;FileWrite $0 "effective_io_concurrency = 2$\r$\n"
+        ;debug for unstarted server:
+        ;FileWrite $0 "effective_io_concurrency = 2$\r$\n"
         
-               FileClose $0
-               ErrFileCfg1:
-    	${endif}
+        FileClose $0
+        
+        ErrFileCfg1:
+
+    ${endif}
   ${EndIf}
   Delete "$DATA_DIR\postgresql.conf.old"
   
@@ -679,9 +696,16 @@ Section $(componentServer) sec1
   Call WriteInstallOptions
   DetailPrint "Service $ServiceID_text registration ..."
   FileWrite $LogFile "Service $ServiceID_text registration ... $\r$\n"
-  FileWrite $LogFile '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w $\r$\n'
 
-  nsExec::ExecToStack /TIMEOUT=60000 '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
+  StrCpy $currCommand '"$INSTDIR\bin\pg_ctl.exe" register -N "$ServiceID_text" -U "$ServiceAccount_text" -D "$DATA_DIR" -w'
+  ;save without password here
+  FileWrite $LogFile '$currCommand $\r$\n'
+  ${if} $servicePassword_text != ""
+        StrCpy $currCommand '$currCommand -P "$servicePassword_text"'
+  ${endif}
+  ;FileWrite $LogFile '$currCommand $\r$\n'
+  nsExec::ExecToLog /TIMEOUT=60000 '$currCommand'
+
   Pop $0 # return value/error/timeout
   Pop $1 # printed text, up to ${NSIS_MAX_STRLEN}
 
@@ -781,14 +805,15 @@ Section $(componentServer) sec1
   call checkServiceIsRunning
   pop $0
   ${if} $0 == ""
-        Sleep 5000
+        Sleep 7000
         call checkServiceIsRunning
         pop $0
         ${if} $0 == ""
               DetailPrint "Error: service is not running!"
-              MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
               FileWrite $LogFile "Error: service $ServiceID_text is not running!$\r$\n"
               FileClose $LogFile
+	      IfSilent +2
+              MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
               Abort
         ${endif}
   ${endif}
@@ -818,10 +843,11 @@ Section $(componentServer) sec1
       DetailPrint "Output: $1"
       FileWrite $LogFile "Checking connection has return $0 $\r$\n"
       FileWrite $LogFile "Output: $1 $\r$\n"
+      FileClose $LogFile
 
       ;MessageBox MB_OK "Create adminpack error: $1"
-      MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
-      FileClose $LogFile
+      IfSilent +2
+	MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
       Abort
   ${else}
       DetailPrint "Checking connection is OK"
@@ -856,6 +882,7 @@ Section $(componentServer) sec1
       FileWrite $LogFile "Output: $1 $\r$\n"
 
       ;MessageBox MB_OK "Create adminpack error: $1"
+     IfSilent +2
       MessageBox MB_OK|MB_ICONSTOP "$(MESS_ERROR_SERVER)"
     ${else}
       DetailPrint "Create adminpack OK"
@@ -999,13 +1026,6 @@ Function writeUnistallReg
 FunctionEnd
 
 Function createRunPsql
-  ${If} ${AtLeastWin2008}
-    StrCpy $Chcp_text "chcp 65001"
-  ${Else}
-    StrCpy $Chcp_text ""
-  ${Endif}
-
-  ${if} "${PRODUCT_NAME}" == "PostgreSQL"
     StrCpy $Chcp_text ""
 
     DetailPrint "Language settings:"
@@ -1016,7 +1036,6 @@ Function createRunPsql
     ${if} $LANGUAGE == ${LANG_RUSSIAN}
       StrCpy $Chcp_text "chcp 1251"
     ${endif}
-  ${endif}
 
   FileOpen $0 $INSTDIR\scripts\runpgsql.bat w
   IfErrors +2 0
@@ -1281,6 +1300,7 @@ Function getServerDataFromDlg
 
   ${NSD_GetState} $checkBoxEnvVar $isEnvVar
 
+
   ${NSD_GetState} $checkBoxDataChecksums $isDataChecksums
 
 
@@ -1399,28 +1419,28 @@ Function nsDialogServer
     Abort
   ${EndIf}
 
-  ${NSD_CreateLabel} 0 2u 60u 12u "$(DLG_PORT)"
+  ${NSD_CreateLabel} 0 2u 70u 12u "$(DLG_PORT)"
   Pop $Label
 
-  ${NSD_CreateText} 62u 0 100u 12u "$TextPort_text"
+  ${NSD_CreateText} 72u 0 100u 12u "$TextPort_text"
   Pop $TextPort
 
-  ${NSD_CreateLabel} 0 16u 60u 12u "$(DLG_ADR1)"
+  ${NSD_CreateLabel} 0 16u 70u 12u "$(DLG_ADR1)"
   Pop $Label2
 
-  ${NSD_CreateCheckBox} 62u 15u 100% 12u "$(DLG_ADR2)"
+  ${NSD_CreateCheckBox} 72u 15u 100% 12u "$(DLG_ADR2)"
 
   Pop $checkNoLocal
   ${NSD_SetState} $checkNoLocal $checkNoLocal_state
 
-  ${NSD_CreateLabel} 0 32u 60u 12u "$(DLG_LOCALE)"
+  ${NSD_CreateLabel} 0 32u 70u 12u "$(DLG_LOCALE)"
   Pop $Label2
 
-  ${NSD_CreateDropList} 62u 30u 100u 12u ""
+  ${NSD_CreateDropList} 72u 30u 100u 12u ""
   Pop $Locale
 
   ${NSD_CB_AddString} $Locale "$(DEF_LOCALE_NAME)"
-  ${if} ${PG_MAJOR_VERSION} == "10"
+  ${if} ${PG_MAJOR_VERSION} >= "10"
     ;; Source URL: https://www.microsoft.com/resources/msdn/goglobal/default.mspx (windows 7)
     ${NSD_CB_AddString} $Locale "af"         ; 0x0036	af	Afrikaans	Afrikaans	Afrikaans	1252	850	ZAF	AFK
     ${NSD_CB_AddString} $Locale "af-ZA"      ; 0x0436	af-ZA	Afrikaans (South Africa)	Afrikaans	Afrikaans (Suid Afrika)	1252	850	ZAF	AFK
@@ -1903,35 +1923,35 @@ Function nsDialogServer
   ${endif}
   ${NSD_CB_SelectString} $Locale $Locale_text
 
-  ${NSD_CreateLabel} 0 54u 60u 24u "$(DLG_SUPERUSER)"
+  ${NSD_CreateLabel} 0 59u 70u 24u "$(DLG_SUPERUSER)"
   Pop $Label2
 
-  ${NSD_CreateText} 62u 57u 100u 12u "$UserName_text"
+  ${NSD_CreateText} 72u 57u 100u 12u "$UserName_text"
   Pop $UserName
 
-  ${NSD_CreateLabel} 0 74u 60u 12u "$(DLG_PASS1)"
+  ${NSD_CreateLabel} 0 74u 70u 12u "$(DLG_PASS1)"
   Pop $Label2
 
-  ${NSD_CreatePassword} 62u 72u 100u 12u $Pass1_text
+  ${NSD_CreatePassword} 72u 72u 100u 12u $Pass1_text
   Pop $Pass1
 
-  ${NSD_CreateLabel} 0 90u 60u 12u "$(DLG_PASS2)"
+  ${NSD_CreateLabel} 0 90u 70u 12u "$(DLG_PASS2)"
   Pop $Label2
 
-  ${NSD_CreatePassword} 62u 88u 100u 12u $Pass2_text
+  ${NSD_CreatePassword} 72u 88u 100u 12u $Pass2_text
   Pop $Pass2
 
 
-  ${NSD_CreateCheckBox} 62u 105u 100% 12u "$(DLG_data-checksums)"
+  ${NSD_CreateCheckBox} 72u 105u 100% 12u "$(DLG_data-checksums)"
   Pop $checkBoxDataChecksums
   ${NSD_SetState} $checkBoxDataChecksums $isDataChecksums
 
 
   ;env vars
-  ${NSD_CreateCheckBox} 62u 120u 100% 12u "$(DLG_ENVVAR)"
+  ${NSD_CreateCheckBox} 72u 120u 100% 12u "$(DLG_ENVVAR)"
   Pop $checkBoxEnvVar
   ${NSD_SetState} $checkBoxEnvVar $isEnvVar
-
+  
   GetFunctionAddress $0 getServerDataFromDlg
   nsDialogs::OnBack $0
 
@@ -2041,6 +2061,11 @@ Function nsDialogOptimization
     ${NSD_SetState} $rButton1  ${BST_CHECKED}
   ${endif}
 
+  ${NSD_CreateCheckBox} 20u 100u 100% 12u "$(MORE_SHOW_MORE)"
+  Pop $checkBoxMoreOptions
+  ${NSD_SetState} $checkBoxMoreOptions $isShowMoreOptions
+
+
   GetFunctionAddress $0 nsDialogsOptimizationPageLeave
   nsDialogs::OnBack $0
 
@@ -2055,6 +2080,8 @@ Function nsDialogsOptimizationPageLeave
   ${else}
     StrCpy $needOptimization "0"
   ${endif}
+  
+  ${NSD_GetState} $checkBoxMoreOptions $isShowMoreOptions
 FunctionEnd
 
 Function SetDefaultTcpPort
@@ -2098,9 +2125,11 @@ ${EndIf}
   StrCpy $checkNoLocal_state ${BST_CHECKED}
   StrCpy $isEnvVar ${BST_UNCHECKED} ;${BST_CHECKED}
   StrCpy $isDataChecksums ${BST_CHECKED} ;${BST_CHECKED}
-
+  StrCpy $isShowMoreOptions ${BST_UNCHECKED} ;${BST_CHECKED}
 
   StrCpy $Coding_text "UTF8" ;"UTF-8"
+  
+  StrCpy $Collation_text $(DEF_COLATE_NAME)
 
   UserMgr::GetCurrentDomain
   Pop $0
@@ -2302,3 +2331,73 @@ Function IsServerSection
 FunctionEnd
 
 
+Function nsDialogMore
+
+  ${Unless} ${SectionIsSelected} ${sec1}
+    Abort
+  ${EndUnless}
+
+  ${if} $isShowMoreOptions != ${BST_CHECKED}
+    Abort
+  ${endif}
+
+  nsDialogs::Create 1018
+  Pop $Dialog
+
+  ${If} $Dialog == error
+    Abort
+  ${EndIf}
+
+#!define PG_DEF_SERVICEACCOUNT "NT AUTHORITY\NetworkService"
+#!define PG_DEF_SERVICEID "postgrespro-enterprise-X64-9.6"
+#isu
+
+${NSD_CreateGroupBox} 0 0 100% 70u "$(MORE_SERVICE_TITLE)"
+    Pop $0
+
+  ${NSD_CreateLabel} 10u 12u 120u 16u "$(MORE_WINUSER)"
+  Pop $Label
+
+  ${NSD_CreateText} 130u 14u 160u 12u "$ServiceAccount_text"
+  Pop $ServiceAccount_editor
+
+  ${NSD_CreateLabel} 10u 32u 120u 12u "$(MORE_WINPASS)"
+  Pop $Label
+
+  ${NSD_CreatePassword} 130u 30u 160u 12u $servicePassword_text
+  Pop $servicePassword_editor
+
+
+  ${NSD_CreateLabel} 10u 52u 120u 16u "$(MORE_SERVICE_NAME)"
+  Pop $Label
+
+  ${NSD_CreateText} 130u 50u 160u 12u "$ServiceID_text"
+  Pop $ServiceID_editor
+
+  
+  ${if} ${PG_MAJOR_VERSION} >= "10"
+        ${NSD_CreateLabel} 10u 82u 120u 16u "$(MORE_COLATION)"
+        Pop $Label
+
+        ${NSD_CreateDropList} 130u 80u 100u 12u ""
+        Pop $Collation_editor
+        ${NSD_CB_AddString} $Collation_editor "$(DEF_COLATE_NAME)"
+        ${NSD_CB_AddString} $Collation_editor "icu"
+        ${NSD_CB_AddString} $Collation_editor "libc"
+        ${NSD_CB_SelectString} $Collation_editor $Collation_text
+  ${endif}
+
+  nsDialogs::Show
+  
+FunctionEnd
+
+Function nsDialogsMorePageLeave
+  ${NSD_GetText} $ServiceAccount_editor $ServiceAccount_text
+  ${NSD_GetText} $servicePassword_editor $servicePassword_text
+  ${NSD_GetText} $ServiceID_editor $ServiceID_text
+  ${if} ${PG_MAJOR_VERSION} >= "10"
+      ${NSD_GetText} $Collation_editor $Collation_text
+  ${endif}
+
+
+FunctionEnd
