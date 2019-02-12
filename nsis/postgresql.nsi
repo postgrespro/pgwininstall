@@ -570,17 +570,8 @@ Section $(componentServer) sec1
           StrCpy $currCommand '$currCommand --data-checksums'
     ${endif}
 
-    ${if} "$Locale_text" == "$(DEF_LOCALE_NAME)"
-          ${if} "$Collation_text" != "$(DEF_COLATE_NAME)"
-                    StrCpy $currCommand '$currCommand --locale="@$Collation_text"'
-          ${endif}
-    ${else}
+    ${if} "$Locale_text" != "$(DEF_LOCALE_NAME)"
           StrCpy $currCommand '$currCommand --locale="$Locale_text"'
-          ${if} "$Collation_text" != "$(DEF_COLATE_NAME)"
-                    StrCpy $currCommand '$currCommand --locale="$Locale_text@$Collation_text"'
-          ${else}
-                    StrCpy $currCommand '$currCommand --locale="$Locale_text"'
-          ${endif}
     ${endif}
     FileWrite $LogFile '$currCommand $\r$\n'
       ; Initialise the database cluster, and set the appropriate permissions/ownership
@@ -666,26 +657,41 @@ Section $(componentServer) sec1
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#shared_preload_libraries = ''" "shared_preload_libraries = 'online_analyze, plantuner'"
         ;!insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "" ""
 
-        ClearErrors
-        FileOpen $0 $DATA_DIR\postgresql.conf a
-        IfErrors ErrFileCfg1
-        FileSeek $0 0 END
+        ${if} ${WITH_1C} == "TRUE"
+               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#escape_string_warning = on" "escape_string_warning = off"
+               !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#standard_conforming_strings = on" "standard_conforming_strings = off"
+               ClearErrors
+               FileOpen $0 $DATA_DIR\postgresql.conf a
+               IfErrors ErrFileCfg1
+               FileSeek $0 0 END
+               FileWrite $0 "shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
+               FileWrite $0 "online_analyze.table_type = 'temporary'$\r$\n"
+               FileWrite $0 "online_analyze.verbose = 'off'$\r$\n"
+               FileWrite $0 "online_analyze.local_tracking = 'on'$\r$\n"
+               FileWrite $0 "plantuner.fix_empty_table = 'on'  $\r$\n"
+               FileWrite $0 "online_analyze.enable = on$\r$\n"
+               FileClose $0
+        ${else}
+               ClearErrors
+               FileOpen $0 $DATA_DIR\postgresql.conf a
+               IfErrors ErrFileCfg1
+               FileSeek $0 0 END
+               FileWrite $0 "#Options for 1C:$\r$\n"
+               FileWrite $0 "#escape_string_warning = off$\r$\n"
+               FileWrite $0 "#standard_conforming_strings = off$\r$\n"
+               FileWrite $0 "#shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
+               FileWrite $0 "#online_analyze.table_type = 'temporary'$\r$\n"
+               FileWrite $0 "#online_analyze.verbose = 'off'$\r$\n"
+               FileWrite $0 "#online_analyze.local_tracking = 'on'$\r$\n"
+               FileWrite $0 "#plantuner.fix_empty_table = 'on'  $\r$\n"
+               FileWrite $0 "#online_analyze.enable = on$\r$\n"
 
-        FileWrite $0 "#Options for 1C:$\r$\n"
-        FileWrite $0 "#escape_string_warning = off$\r$\n"
-        FileWrite $0 "#standard_conforming_strings = off$\r$\n"
-        FileWrite $0 "#shared_preload_libraries = 'online_analyze, plantuner'$\r$\n"
-        FileWrite $0 "#online_analyze.table_type = 'temporary'$\r$\n"
-        FileWrite $0 "#online_analyze.verbose = 'off'$\r$\n"
-        FileWrite $0 "#online_analyze.local_tracking = 'on'$\r$\n"
-        FileWrite $0 "#plantuner.fix_empty_table = 'on'  $\r$\n"
-        FileWrite $0 "#online_analyze.enable = on$\r$\n"
-        
-        ;debug for unstarted server:
-        ;FileWrite $0 "effective_io_concurrency = 2$\r$\n"
-        
-        FileClose $0
-        
+               ;debug for unstarted server:
+               ;FileWrite $0 "effective_io_concurrency = 2$\r$\n"
+
+               FileClose $0
+
+        ${endif}
         ErrFileCfg1:
 
     ${endif}
@@ -2374,18 +2380,17 @@ ${NSD_CreateGroupBox} 0 0 100% 70u "$(MORE_SERVICE_TITLE)"
   ${NSD_CreateText} 130u 50u 160u 12u "$ServiceID_text"
   Pop $ServiceID_editor
 
-  
-  ${if} ${PG_MAJOR_VERSION} >= "10"
-        ${NSD_CreateLabel} 10u 82u 120u 16u "$(MORE_COLATION)"
-        Pop $Label
+;  ${if} ${PG_MAJOR_VERSION} >= "10"
+;        ${NSD_CreateLabel} 10u 82u 120u 16u "$(MORE_COLATION)"
+;        Pop $Label
 
-        ${NSD_CreateDropList} 130u 80u 100u 12u ""
-        Pop $Collation_editor
-        ${NSD_CB_AddString} $Collation_editor "$(DEF_COLATE_NAME)"
-        ${NSD_CB_AddString} $Collation_editor "icu"
-        ${NSD_CB_AddString} $Collation_editor "libc"
-        ${NSD_CB_SelectString} $Collation_editor $Collation_text
-  ${endif}
+;        ${NSD_CreateDropList} 130u 80u 100u 12u ""
+;        Pop $Collation_editor
+;        ${NSD_CB_AddString} $Collation_editor "$(DEF_COLATE_NAME)"
+;        ${NSD_CB_AddString} $Collation_editor "icu"
+;        ${NSD_CB_AddString} $Collation_editor "libc"
+;        ${NSD_CB_SelectString} $Collation_editor $Collation_text
+;  ${endif}
 
   nsDialogs::Show
   
@@ -2395,9 +2400,9 @@ Function nsDialogsMorePageLeave
   ${NSD_GetText} $ServiceAccount_editor $ServiceAccount_text
   ${NSD_GetText} $servicePassword_editor $servicePassword_text
   ${NSD_GetText} $ServiceID_editor $ServiceID_text
-  ${if} ${PG_MAJOR_VERSION} >= "10"
-      ${NSD_GetText} $Collation_editor $Collation_text
-  ${endif}
+;  ${if} ${PG_MAJOR_VERSION} >= "10"
+;      ${NSD_GetText} $Collation_editor $Collation_text
+;  ${endif}
 
 
 FunctionEnd
