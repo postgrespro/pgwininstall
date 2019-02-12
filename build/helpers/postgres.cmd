@@ -11,15 +11,34 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
 
 :BUILD_ALL
 
+IF NOT "%NOLOAD_SRC%"=="" (
+CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
+GOTO :NOLOAD
+)
+
+
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
+IF "%GIT_PATH%"=="" (
+SET GIT_PATH=https://git.postgrespro.ru/pgpro-dev/postgrespro.git
+)
+IF NOT "%GIT_BRANCH%"=="" (
+rm -rf %BUILD_DIR%\postgresql
+MKDIR %BUILD_DIR%\postgresql
+MKDIR %BUILD_DIR%\postgresql\postgresql-%PGVER%
+git clone -b %GIT_BRANCH% %GIT_PATH% %BUILD_DIR%\postgresql\postgresql-%PGVER%
+CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
+
+GOTO :NOTAR
+)
 wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql
 CD /D %BUILD_DIR%\postgresql\*%PGVER%*
 
+:NOTAR
 IF %ONE_C% == YES (
   IF %HAVE_PGURL% == 1 SET PGTARNAME=postgrespro-1c
   IF NOT EXIST %ROOT%\patches\postgresql\%PG_MAJOR_VERSION%\series.for1c GOTO :DONE_1C_PATCH
@@ -84,7 +103,9 @@ SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
 cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
-SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
+:NOLOAD
+IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc;.
+IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
 
 %PERL_EXE% src\tools\msvc\build.pl || GOTO :ERROR
 
