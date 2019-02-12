@@ -287,6 +287,7 @@ Section $(componentClient) secClient
 
   CreateDirectory "$INSTDIR\scripts"
   File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
+  CreateDirectory "$INSTDIR\doc"
   File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
 
   ;Store installation folder
@@ -399,6 +400,7 @@ Section $(componentServer) sec1
 
   CreateDirectory "$INSTDIR\scripts"
   File  "/oname=$INSTDIR\scripts\pg-psql.ico" "pg-psql.ico"
+  CreateDirectory "$INSTDIR\doc"
   File  "/oname=$INSTDIR\doc\pg-help.ico" "pg-help.ico"
 
   ;Store installation folder
@@ -573,7 +575,6 @@ Section $(componentServer) sec1
                     StrCpy $currCommand '$currCommand --locale="@$Collation_text"'
           ${endif}
     ${else}
-          StrCpy $currCommand '$currCommand --locale="$Locale_text"'
           ${if} "$Collation_text" != "$(DEF_COLATE_NAME)"
                     StrCpy $currCommand '$currCommand --locale="$Locale_text@$Collation_text"'
           ${else}
@@ -1030,7 +1031,7 @@ Function createRunPsql
     StrCpy $Chcp_text ""
   ${Endif}
 
-  ${if} ${PRODUCT_NAME} == "PostgreSQL"
+  ${if} "${PRODUCT_NAME}" == "PostgreSQL"
     StrCpy $Chcp_text ""
 
     DetailPrint "Language settings:"
