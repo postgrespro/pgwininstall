@@ -21,7 +21,7 @@ GOTO :NOLOAD
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
 IF "%GIT_PATH%"=="" (
-SET GIT_PATH=https://git.postgrespro.ru/pgpro-dev/postgrespro.git
+SET GIT_PATH=git://git.postgresql.org/git/postgresql.git 
 )
 IF NOT "%GIT_BRANCH%"=="" (
 rm -rf %BUILD_DIR%\postgresql
@@ -178,6 +178,9 @@ cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*t.lib %BUILD_DIR%\distr_%ARCH%_%PGVER
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*eay32.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/zdll.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/lib/uuid.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
+
+cp -va %BUILD_DIR%/postgresql/*%PGVER%*/Release/libpgfeutils/libpgfeutils.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
+
 rem Copy msys shell and sed
 CD /D %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
 if exist pgpro_upgrade 7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
