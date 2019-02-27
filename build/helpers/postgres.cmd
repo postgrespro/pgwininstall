@@ -148,7 +148,8 @@ cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*eay32.lib %BUILD_DIR%\distr_%ARCH%
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/zdll.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/lib/uuid.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 
-cp -va %BUILD_DIR%/postgresql/*%PGVER%*/Release/libpgfeutils/libpgfeutils.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
+SET LIBPGFEUTILS=%BUILD_DIR%/postgresql/*%PGVER%*/Release/libpgfeutils/libpgfeutils.lib
+IF EXIST %LIBPGFEUTILS% cp -va %LIBPGFEUTILS% %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 
 REM remove test_* extensions after install
 rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/share/extension/test_* || GOTO :ERROR
