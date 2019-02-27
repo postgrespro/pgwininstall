@@ -14,13 +14,13 @@ REM TO-DO: overwrite to build rules
 :DOWNLOAD_MSYS_UTILS
 TITLE Download msys utils...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://repo.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip || GOTO :ERROR
 
 :BUILD_ICONV
 TITLE Building iconv...
 CD /D %DOWNLOADS_DIR%
 REM wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
-wget --no-check-certificate -c http://repo.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -45,7 +45,7 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_ZLIB
 TITLE Building zlib...
 CD /D %DOWNLOADS_DIR%
-wget -c http://zlib.net/zlib-%ZLIB_VER%.tar.gz -O zlib-%ZLIB_VER%.tar.gz
+wget -c http://zlib.net/zlib-%ZLIB_VER%.tar.gz -O zlib-%ZLIB_VER%.tar.gz || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\zlib %DEPENDENCIES_SRC_DIR%\zlib*
 MKDIR %DEPENDENCIES_BIN_DIR%\zlib
 tar xf zlib-%ZLIB_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -64,7 +64,7 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_UUID
 TITLE Building uuid...
 CD /D %DOWNLOADS_DIR%
-wget -c http://netcologne.dl.sourceforge.net/project/osspuuidwin32/src/ossp_uuid_1.6.2_win32_source_120608.7z -O ossp_uuid_1.6.2_win32_source_120608.7z
+wget -c http://netcologne.dl.sourceforge.net/project/osspuuidwin32/src/ossp_uuid_1.6.2_win32_source_120608.7z -O ossp_uuid_1.6.2_win32_source_120608.7z || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\uuid %DEPENDENCIES_SRC_DIR%\ossp_uuid
 MKDIR %DEPENDENCIES_BIN_DIR%\uuid
 7z x %DOWNLOADS_DIR%\ossp_uuid_1.6.2_win32_source_120608.7z -o%DEPENDENCIES_SRC_DIR%\ -y || GOTO :ERROR
@@ -87,7 +87,7 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building xml...
 CD /D %DOWNLOADS_DIR%
 REM wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
-wget -c http://repo.postgrespro.ru/depends/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
+wget -c http://repo.postgrespro.ru/depends/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
 tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -111,7 +111,7 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building xslt...
 CD /D %DOWNLOADS_DIR%
 REM wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
-wget -c http://repo.postgrespro.ru/depends/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
+wget -c http://repo.postgrespro.ru/depends/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz  || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\libxslt %DEPENDENCIES_SRC_DIR%\libxslt-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxslt
 tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -131,7 +131,7 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_OPENSSL
 TITLE Building OpenSSL...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
+wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz  || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\openssl %DEPENDENCIES_SRC_DIR%\openssl-*
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl
 tar zxf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR%
@@ -158,7 +158,7 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building gettext...
 CD /D %DOWNLOADS_DIR%
 REM wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
-wget --no-check-certificate -c http://repo.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz  || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\libintl %DEPENDENCIES_SRC_DIR%\gettext-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
 tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -180,7 +180,7 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_LIBSSH2
 TITLE Building libssh2...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-%LIBSSH2_VER%.tar.gz -O libssh2-%LIBSSH2_VER%.tar.gz
+wget --no-check-certificate -c http://www.libssh2.org/download/libssh2-%LIBSSH2_VER%.tar.gz -O libssh2-%LIBSSH2_VER%.tar.gz || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_UDIR%/libssh2 %DEPENDENCIES_SRC_UDIR%/libssh2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libssh2
 tar xf libssh2-%LIBSSH2_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -193,7 +193,7 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_ICU
 TITLE Building icu...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip
+wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip || GOTO :ERROR
 rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
 7z x icu4c-56_1-src.zip -o%DEPENDENCIES_SRC_DIR% -y
