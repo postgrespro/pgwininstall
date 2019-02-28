@@ -25,3 +25,8 @@
 ./doc/postgresql-ru.chm
 ./share/locale/*/libpq*.mo
 ./share/locale/*/pgscripts*.mo
+./bin/pg_receivexlog.*
+./bin/droplang.*
+./bin/pg_resetxlog.*
+./bin/createlang.*
+./bin/pg_xlogdump.*
