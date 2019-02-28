@@ -142,8 +142,8 @@ LangString DLG_data-checksums ${LANG_ENGLISH} "Enable data checksums"
 LangString DLG_data-checksums ${LANG_RUSSIAN} "Включить контрольные суммы для страниц"
 
 
-LangString DEF_COLATE_NAME ${LANG_ENGLISH} "Default"
-LangString DEF_COLATE_NAME ${LANG_RUSSIAN} "По умолчанию"
+LangString DEF_COLATE_NAME ${LANG_ENGLISH} "icu"
+LangString DEF_COLATE_NAME ${LANG_RUSSIAN} "icu"
 
 LangString MORE_WINUSER ${LANG_ENGLISH} "Windows existing user name:"
 LangString MORE_WINUSER ${LANG_RUSSIAN} "Существующий пользователь Windows:"

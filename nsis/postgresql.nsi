@@ -2389,7 +2389,7 @@ ${NSD_CreateGroupBox} 0 0 100% 70u "$(MORE_SERVICE_TITLE)"
         ${NSD_CreateDropList} 130u 80u 100u 12u ""
         Pop $Collation_editor
         ${NSD_CB_AddString} $Collation_editor "$(DEF_COLATE_NAME)"
-        ${NSD_CB_AddString} $Collation_editor "icu"
+        ;${NSD_CB_AddString} $Collation_editor "icu"
         ${NSD_CB_AddString} $Collation_editor "libc"
         ${NSD_CB_SelectString} $Collation_editor $Collation_text
   ${endif}
