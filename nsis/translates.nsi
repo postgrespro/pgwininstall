@@ -145,8 +145,8 @@ LangString DLG_data-checksums ${LANG_RUSSIAN} "Включить контрольные суммы для ст
 LangString DEF_COLATE_NAME ${LANG_ENGLISH} "icu"
 LangString DEF_COLATE_NAME ${LANG_RUSSIAN} "icu"
 
-LangString MORE_WINUSER ${LANG_ENGLISH} "Windows existing user name:"
-LangString MORE_WINUSER ${LANG_RUSSIAN} "Существующий пользователь Windows:"
+LangString MORE_WINUSER ${LANG_ENGLISH} "Windows user name:"
+LangString MORE_WINUSER ${LANG_RUSSIAN} "Пользователь Windows:"
 
 
 LangString MORE_WINPASS ${LANG_ENGLISH} "Windows user password:"
@@ -163,3 +163,9 @@ LangString MORE_COLATION ${LANG_RUSSIAN} "Провайдер правил сортировки:"
 
 LangString MORE_SHOW_MORE ${LANG_ENGLISH} "Show advanced options..."
 LangString MORE_SHOW_MORE ${LANG_RUSSIAN} "Показать дополнительные параметры ..."
+
+LangString MORE_ICU_HELP ${LANG_ENGLISH} "Postgres Pro uses icu collation by default. If you are upgrading from vanilla PostgreSQL, choose libc."
+LangString MORE_ICU_HELP ${LANG_RUSSIAN} "Postgres Pro по умолчанию использует правила сортировки icu. При переходе с ванильной версии PostgreSQL, выберите libc."
+
+LangString MORE_USER_HELP ${LANG_ENGLISH} "Specify a Windows user that will start ${PRODUCT_NAME_SHORT} service."
+LangString MORE_USER_HELP ${LANG_RUSSIAN} "Укажите пользователя Windows, который запустит службу ${PRODUCT_NAME_SHORT}."

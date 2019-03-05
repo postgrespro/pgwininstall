@@ -126,7 +126,6 @@ Var Collation_editor
 Var Collation_text
 
 Var currCommand
-
 ; Set 'install service' variable
 ;Var service
 
@@ -2359,44 +2358,55 @@ Function nsDialogMore
 #!define PG_DEF_SERVICEID "postgrespro-enterprise-X64-9.6"
 #isu
 
-${NSD_CreateGroupBox} 0 0 100% 70u "$(MORE_SERVICE_TITLE)"
+${NSD_CreateGroupBox} 0 0 100% 80u "$(MORE_SERVICE_TITLE)"
     Pop $0
 
-  ${NSD_CreateLabel} 10u 12u 120u 16u "$(MORE_WINUSER)"
+  ${NSD_CreateLabel} 10u 12u 360u 16u "$(MORE_USER_HELP)"
   Pop $Label
 
-  ${NSD_CreateText} 130u 14u 160u 12u "$ServiceAccount_text"
+
+  ${NSD_CreateLabel} 10u 32u 120u 16u "$(MORE_WINUSER)"
+  Pop $Label
+
+  ${NSD_CreateText} 130u 30u 160u 12u "$ServiceAccount_text"
   Pop $ServiceAccount_editor
 
-  ${NSD_CreateLabel} 10u 32u 120u 12u "$(MORE_WINPASS)"
+  ${NSD_CreateLabel} 10u 47u 120u 12u "$(MORE_WINPASS)"
   Pop $Label
 
-  ${NSD_CreatePassword} 130u 30u 160u 12u $servicePassword_text
+  ${NSD_CreatePassword} 130u 45u 160u 12u $servicePassword_text
   Pop $servicePassword_editor
 
 
-  ${NSD_CreateLabel} 10u 52u 120u 16u "$(MORE_SERVICE_NAME)"
+  ${NSD_CreateLabel} 10u 62u 120u 16u "$(MORE_SERVICE_NAME)"
   Pop $Label
 
-  ${NSD_CreateText} 130u 50u 160u 12u "$ServiceID_text"
+  ${NSD_CreateText} 130u 60u 160u 12u "$ServiceID_text"
   Pop $ServiceID_editor
 
   
   ${if} ${PG_MAJOR_VERSION} >= "10"
-        ${NSD_CreateLabel} 10u 82u 120u 16u "$(MORE_COLATION)"
+  
+  
+        ${NSD_CreateLabel} 10u 92u 100% 26u "$(MORE_ICU_HELP)"
         Pop $Label
 
-        ${NSD_CreateDropList} 130u 80u 100u 12u ""
+        ${NSD_CreateLabel} 10u 122u 120u 16u "$(MORE_COLATION)"
+        Pop $Label
+        ${NSD_CreateDropList} 130u 120u 100u 12u ""
         Pop $Collation_editor
+
         ${NSD_CB_AddString} $Collation_editor "$(DEF_COLATE_NAME)"
         ;${NSD_CB_AddString} $Collation_editor "icu"
         ${NSD_CB_AddString} $Collation_editor "libc"
         ${NSD_CB_SelectString} $Collation_editor $Collation_text
   ${endif}
-
+  
+  
   nsDialogs::Show
   
 FunctionEnd
+
 
 Function nsDialogsMorePageLeave
   ${NSD_GetText} $ServiceAccount_editor $ServiceAccount_text
