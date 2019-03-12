@@ -31,3 +31,14 @@
 ./share/timezonesets/*
 ./share/timezone/*
 ./share/tsearch_data/*
+./bin/droplang.*
+./bin/mv.*
+./bin/pg_receivexlog.*
+./bin/pg_resetxlog.*
+./bin/pg_xlogdump.*
+./bin/pgpro_upgrade
+./bin/sed.*
+./bin/sh.*
+./bin/createlang.*
+./share/pgpro-upgrade/*.*
+
