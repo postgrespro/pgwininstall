@@ -623,6 +623,7 @@ Section $(componentServer) sec1
 	  ${ConfigWrite} "$DATA_DIR\pg_hba.conf"  "host$\tall$\tall$\t" "0.0.0.0/0$\tmd5" $R0
 	  ; Add postgres to Windows Firewall exceptions
 	  nsisFirewall::AddAuthorizedApplication "$INSTDIR\bin\postgres.exe" "PostgresPro server"
+
 	  pop $0
     ${else}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = 'localhost'"
@@ -957,6 +958,8 @@ Section "Uninstall"
 
   RMDir "$INSTDIR"
 
+  nsisFirewall::RemoveAuthorizedApplication "$INSTDIR\bin\postgres.exe"
+ 
   Call un.DeleteInstallOptions
   SetShellVarContext all
 
