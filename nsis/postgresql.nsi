@@ -965,6 +965,8 @@ Section "Uninstall"
 
   RMDir "$INSTDIR"
 
+  nsisFirewall::RemoveAuthorizedApplication "$INSTDIR\bin\postgres.exe"
+
   Call un.DeleteInstallOptions
   SetShellVarContext all
 
