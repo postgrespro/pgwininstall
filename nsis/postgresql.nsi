@@ -2104,11 +2104,14 @@ Function SetDefaultTcpPort
   ${endwhile}
 FunctionEnd
 
-
-Function GetUIId
+!macro GetUIId UN
+Function ${UN}GetUIId
   System::Call 'kernel32::GetUserDefaultUILanguage() i.r10'
   Push $R0
 FunctionEnd
+!macroend
+!insertmacro GetUIId ""
+!insertmacro GetUIId "un."
 
 Function .onInit
   Call CheckWindowsVersion
@@ -2422,5 +2425,15 @@ Function nsDialogsMorePageLeave
 ;      ${NSD_GetText} $Collation_editor $Collation_text
 ;  ${endif}
 
+
+FunctionEnd
+
+Function un.onInit
+  Call un.GetUIId
+  pop $R0
+  ${if} $R0 == "1049"
+        ;!define MUI_LANGDLL_ALLLANGUAGES
+        !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  ${endif}
 
 FunctionEnd
