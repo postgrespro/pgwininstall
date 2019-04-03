@@ -2104,6 +2104,12 @@ Function SetDefaultTcpPort
   ${endwhile}
 FunctionEnd
 
+
+Function GetUIId
+  System::Call 'kernel32::GetUserDefaultUILanguage() i.r10'
+  Push $R0
+FunctionEnd
+
 Function .onInit
   Call CheckWindowsVersion
   Call SetDefaultTcpPort
@@ -2116,9 +2122,19 @@ ${EndIf}
 !endif
   IntOp $3 ${SF_SELECTED} | ${SF_RO}
   SectionSetFlags ${secClient} $3
+
+
   ;SectionSetFlags ${secClient} ${SF_RO}
-  !define MUI_LANGDLL_ALLLANGUAGES
-  !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  Call GetUIId
+  pop $R0
+
+  ${if} $R0 == "1049"
+        !define MUI_LANGDLL_ALLLANGUAGES
+        !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  ${endif}
+
+
+
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
   StrCpy $OLD_DATA_DIR ""
