@@ -21,7 +21,7 @@ GOTO :NOLOAD
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
 IF "%GIT_PATH%"=="" (
-SET GIT_PATH=https://git.postgrespro.ru/pgpro-dev/postgrespro.git
+SET GIT_PATH=git://git.postgresql.org/git/postgresql.git
 )
 IF NOT "%GIT_BRANCH%"=="" (
 rm -rf %BUILD_DIR%\postgresql

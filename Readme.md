@@ -28,3 +28,10 @@ You can specify several environmental variables depending on desirable result:
 * SDK=[SDK71/MSVC2013/MSVC2015] -- MSVC version, default SDK71
 * PG_MAJOR_VERSION=[9.4/9.5/9.6/10] - major PostgreSQL version, default 10
 * PG_PATCH_VERSION=[1/7] - minor PostgreSQL version, default 1
+
+* NOLOAD_SRC=[1] -- if variable has any value we will not download source
+
+If you want to use GIT:
+
+* GIT_BRANCH=[git branch name] -- if you sets this variables we will download source from git
+* GIT_PATH=[git path] -- git URL, git://git.postgresql.org/git/postgresql.git by default
