@@ -2104,6 +2104,7 @@ Function SetDefaultTcpPort
   ${endwhile}
 FunctionEnd
 
+/*
 !macro GetUIId UN
 Function ${UN}GetUIId
   System::Call 'kernel32::GetUserDefaultUILanguage() i.r10'
@@ -2112,6 +2113,7 @@ FunctionEnd
 !macroend
 !insertmacro GetUIId ""
 !insertmacro GetUIId "un."
+*/
 
 Function .onInit
   Call CheckWindowsVersion
@@ -2128,10 +2130,16 @@ ${EndIf}
 
 
   ;SectionSetFlags ${secClient} ${SF_RO}
-  Call GetUIId
+/*  Call GetUIId
   pop $R0
-
   ${if} $R0 == "1049"
+        !define MUI_LANGDLL_ALLLANGUAGES
+        !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  ${endif}
+*/
+  CheckLang::CheckLang "0419"
+  pop $R0
+  ${if} $R0 == "1"
         !define MUI_LANGDLL_ALLLANGUAGES
         !insertmacro MUI_LANGDLL_DISPLAY ;select language
   ${endif}
@@ -2429,11 +2437,17 @@ Function nsDialogsMorePageLeave
 FunctionEnd
 
 Function un.onInit
-  Call un.GetUIId
+  CheckLang::CheckLang "0419"
+  pop $R0
+  ${if} $R0 == "1"
+        !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  ${endif}
+
+  /*Call un.GetUIId
   pop $R0
   ${if} $R0 == "1049"
         ;!define MUI_LANGDLL_ALLLANGUAGES
         !insertmacro MUI_LANGDLL_DISPLAY ;select language
-  ${endif}
+  ${endif}*/
 
 FunctionEnd
