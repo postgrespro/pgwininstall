@@ -26,6 +26,7 @@
 !include "StrContains.nsh"
 !insertmacro VersionCompare
 ;--------------------------------
+!define LANGFILE_LANGDLL_FMT "%ENGNAME%" ; or %NATIVEASCIINAME%, %NATIVENAME% can also be used but it will display ? in some cases.
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "${BUILD_DIR}\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
@@ -200,6 +201,7 @@ Page custom nsDialogMore nsDialogsMorePageLeave
 ;Languages
 !insertmacro MUI_LANGUAGE "English" ;first language is the default language
 !insertmacro MUI_LANGUAGE "Russian"
+
 
 !include translates.nsi
 
@@ -2115,6 +2117,16 @@ FunctionEnd
 !insertmacro GetUIId "un."
 */
 
+!macro GetUIId UN
+Function ${UN}GetUIId
+  ;System::Call 'kernel32::GetSystemDefaultLCID() i.r10'
+  System::Call 'kernel32::GetACP() i.r10'
+  Push $R0
+FunctionEnd
+!macroend
+!insertmacro GetUIId ""
+!insertmacro GetUIId "un."
+
 Function .onInit
   Call CheckWindowsVersion
   Call SetDefaultTcpPort
@@ -2130,20 +2142,23 @@ ${EndIf}
 
 
   ;SectionSetFlags ${secClient} ${SF_RO}
-/*  Call GetUIId
+  Call GetUIId
   pop $R0
-  ${if} $R0 == "1049"
+  ${if} $R0 == "1251"
         !define MUI_LANGDLL_ALLLANGUAGES
         !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  ${else}
+         StrCpy $LANGUAGE ${LANG_ENGLISH}
   ${endif}
-*/
+
+/*
   CheckLang::CheckLang "0419"
   pop $R0
   ${if} $R0 == "1"
         !define MUI_LANGDLL_ALLLANGUAGES
         !insertmacro MUI_LANGDLL_DISPLAY ;select language
   ${endif}
-
+*/
 
 
   StrCpy $PG_OLD_DIR ""
@@ -2437,17 +2452,21 @@ Function nsDialogsMorePageLeave
 FunctionEnd
 
 Function un.onInit
+/*
   CheckLang::CheckLang "0419"
   pop $R0
   ${if} $R0 == "1"
         !insertmacro MUI_LANGDLL_DISPLAY ;select language
   ${endif}
-
-  /*Call un.GetUIId
+*/
+  Call un.GetUIId
   pop $R0
-  ${if} $R0 == "1049"
+  ${if} $R0 == "1251"
         ;!define MUI_LANGDLL_ALLLANGUAGES
         !insertmacro MUI_LANGDLL_DISPLAY ;select language
-  ${endif}*/
+  ${else}
+         StrCpy $LANGUAGE ${LANG_ENGLISH}
+
+  ${endif}
 
 FunctionEnd
