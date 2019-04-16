@@ -26,6 +26,7 @@
 !include "StrContains.nsh"
 !insertmacro VersionCompare
 ;--------------------------------
+!define LANGFILE_LANGDLL_FMT "%ENGNAME%"
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "${BUILD_DIR}\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
@@ -2105,6 +2106,16 @@ Function SetDefaultTcpPort
   ${endwhile}
 FunctionEnd
 
+!macro GetUIId UN
+Function ${UN}GetUIId
+  System::Call 'kernel32::GetACP() i.r10'
+  Push $R0
+FunctionEnd
+!macroend
+!insertmacro GetUIId ""
+!insertmacro GetUIId "un."
+
+
 Function .onInit
   Call CheckWindowsVersion
   Call SetDefaultTcpPort
@@ -2118,8 +2129,18 @@ ${EndIf}
   IntOp $3 ${SF_SELECTED} | ${SF_RO}
   SectionSetFlags ${secClient} $3
   ;SectionSetFlags ${secClient} ${SF_RO}
-  !define MUI_LANGDLL_ALLLANGUAGES
-  !insertmacro MUI_LANGDLL_DISPLAY ;select language
+;  !define MUI_LANGDLL_ALLLANGUAGES
+;  !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  Call GetUIId
+  pop $R0
+  ${if} $R0 == "1251"
+        !define MUI_LANGDLL_ALLLANGUAGES
+        !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  ${else}
+         StrCpy $LANGUAGE ${LANG_ENGLISH}
+  ${endif}
+
+
   StrCpy $PG_OLD_DIR ""
   StrCpy $DATA_DIR "$INSTDIR\data"
   StrCpy $OLD_DATA_DIR ""
@@ -2419,5 +2440,18 @@ Function nsDialogsMorePageLeave
       ${NSD_GetText} $Collation_editor $Collation_text
   ${endif}
 
+
+FunctionEnd
+
+Function un.onInit
+  Call un.GetUIId
+  pop $R0
+  ${if} $R0 == "1251"
+        ;!define MUI_LANGDLL_ALLLANGUAGES
+        !insertmacro MUI_LANGDLL_DISPLAY ;select language
+  ${else}
+         StrCpy $LANGUAGE ${LANG_ENGLISH}
+
+  ${endif}
 
 FunctionEnd
