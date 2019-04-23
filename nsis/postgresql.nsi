@@ -247,14 +247,20 @@ Section $(componentClient) secClient
 
   ;MessageBox MB_OK|MB_ICONINFORMATION "pg_old_dir: $PG_OLD_DIR"
   ;Call ChecExistInstall ;get port number for  psql
+  
+  IfSilent 0 +2
+  Call ChecExistInstall
+
   var /GLOBAL isStopped
   StrCpy $isStopped 0
   
 
   ${if} $PG_OLD_DIR != "" ; exist PG install
-    MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
+    MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" /SD IDYES IDYES doitStop IDNO noyetStop
+
     noyetStop:
-    Return
+    ;Return
+    Abort
     doitStop:
     DetailPrint "Stop the server ..."
     ${if} $OLD_DATA_DIR != ""
@@ -358,26 +364,38 @@ SectionEnd
 
 Section $(componentServer) sec1
 
+  IfSilent 0 +2
+  Call CheckDataDir
+
+   FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
 
   ${if} $PG_OLD_DIR != "" ; exist PG install
    ${if} $isStopped == 0
-    MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" IDYES doitStop IDNO noyetStop
+    MessageBox MB_YESNO|MB_ICONQUESTION  "$(MESS_STOP_SERVER)" /SD IDYES IDYES doitStop IDNO noyetStop
     noyetStop:
-    Return
+    ;Return
+             FileClose $LogFile
+             Abort
     doitStop:
     DetailPrint "Stop the server ..."
+                 FileWrite $LogFile "Stop the server ...$\r$\n"
+                 FileWrite $LogFile '"$PG_OLD_DIR\bin\pg_ctl.exe" stop -D "$OLD_DATA_DIR" -m fast -w$\r$\n'
     ${if} $OLD_DATA_DIR != ""
       nsExec::Exec '"$PG_OLD_DIR\bin\pg_ctl.exe" stop -D "$OLD_DATA_DIR" -m fast -w'
       pop $0
-      DetailPrint "pg_ctl.exe stop return $0"
+        FileWrite $LogFile "pg_ctl.exe stop return $0 $\r$\n"
+  	DetailPrint "pg_ctl.exe stop return $0"
     ${endif}
    ${endif}
    
     ;unregister
+    FileWrite $LogFile "Unregister the service ...$\r$\n"
     DetailPrint "Unregister the service ..."
     ${if} $OldServiceID_text != ""
+          FileWrite $LogFile '"$PG_OLD_DIR\bin\pg_ctl.exe" unregister -N "$OldServiceID_text"$\r$\n'
      nsExec::Exec '"$PG_OLD_DIR\bin\pg_ctl.exe" unregister -N "$OldServiceID_text"'
       pop $0
+      FileWrite $LogFile "pg_ctl.exe unregister return $0 $\r$\n"
       DetailPrint "pg_ctl.exe unregister return $0"
     ${endif}
   ${endif}
@@ -397,7 +415,7 @@ Section $(componentServer) sec1
 
   ;File "License.txt"
 
-  FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
+  ;FileOpen $LogFile $INSTDIR\install.log w ;Opens a Empty File an fills it
 
 
   CreateDirectory "$INSTDIR\scripts"
@@ -413,7 +431,7 @@ Section $(componentServer) sec1
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   ; write uninstall strings
-  FileWrite $LogFile "Write to register\r$\n"
+  FileWrite $LogFile "Write to register$\r$\n"
 
   Call writeUnistallReg
 
@@ -529,9 +547,9 @@ Section $(componentServer) sec1
   
   !insertmacro MUI_STARTMENU_WRITE_END
   ; Create data dir begin
-  FileWrite $LogFile "Create data dir begin$\r$\n"
 
   ${if} $isDataDirExist == 0
+    FileWrite $LogFile "Create data dir begin$\r$\n"
     CreateDirectory "$DATA_DIR"
     ;AccessControl::GrantOnFile "$DATA_DIR" "(BU)" "FullAccess" ;GenericWrite
     ;Pop $0 ;"ok" or "error" + error details
@@ -610,8 +628,8 @@ Section $(componentServer) sec1
     ${EndIf}
   ${endif}
   ; Create data dir end
-  FileWrite $LogFile "Create postgresql.conf $\r$\n"
   ${if} $isDataDirExist == 0
+    FileWrite $LogFile "Create postgresql.conf $\r$\n"
     ${if} $checkNoLocal_state == ${BST_CHECKED}
       !insertmacro _ReplaceInFile "$DATA_DIR\postgresql.conf" "#listen_addresses = 'localhost'" "listen_addresses = '*'"
 	  ; Add line to pg_hba.conf
@@ -1362,25 +1380,22 @@ Function nsDialogServerExist
   nsDialogs::Show
 FunctionEnd
 
-Function ChecExistDataDir
-  ${Unless} ${SectionIsSelected} ${sec1}
-    Abort
-  ${EndUnless}
+
+;check existing datadir function
+Function CheckDataDir
   ${If} ${FileExists} "$DATA_DIR\*.*"
     StrCpy $isDataDirExist 1
   ${ElseIf} ${FileExists} "$DATA_DIR"
     StrCpy $isDataDirExist -1
   ${Else}
     StrCpy $isDataDirExist 0
-    Abort
   ${EndIf}
-
+  
   ${If} ${FileExists} "$DATA_DIR\postgresql.conf"
     ClearErrors
     ${ConfigRead} "$DATA_DIR\postgresql.conf" "port" $R0
     ${if} ${Errors}
       StrCpy $isDataDirExist 0
-      Abort
     ${EndIf}
     ${StrRep} '$0' '$R0' '=' ''
     ${StrRep} '$1' '$0' ' ' ''
@@ -1392,8 +1407,20 @@ Function ChecExistDataDir
     StrCpy $TextPort_text $0
   ${Else}
     StrCpy $isDataDirExist 0
-    Abort
   ${EndIf}
+
+  
+FunctionEnd
+
+
+Function ChecExistDataDir
+  ${Unless} ${SectionIsSelected} ${sec1}
+    Abort
+  ${EndUnless}
+  Call CheckDataDir
+  ${if} $isDataDirExist = 0
+      Abort
+  ${endif}
 
   ${if} $PG_OLD_DIR != "" ;exist PG install
     Abort
@@ -2294,6 +2321,18 @@ ${EndIf}
     StrCpy $isDataChecksums "$1"
   ${endif}
 
+  ReadINIStr $1 $0 options servicesccount
+  ${if} "$1" != ""
+    StrCpy $ServiceAccount_text "$1"
+  ${endif}
+  ReadINIStr $1 $0 options servicepassword
+  ${if} "$1" != ""
+    StrCpy $servicePassword_text "$1"
+  ${endif}
+  ReadINIStr $1 $0 options serviceid
+  ${if} "$1" != ""
+    StrCpy $ServiceID_text "$1"
+  ${endif}
 
   
 FunctionEnd
