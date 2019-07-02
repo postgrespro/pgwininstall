@@ -2332,7 +2332,7 @@ ${EndIf}
     StrCpy $isDataChecksums "$1"
   ${endif}
 
-  ReadINIStr $1 $0 options servicesccount
+  ReadINIStr $1 $0 options serviceaccount
   ${if} "$1" != ""
     StrCpy $ServiceAccount_text "$1"
   ${endif}
