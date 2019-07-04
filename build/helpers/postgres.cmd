@@ -185,18 +185,7 @@ rem Copy msys shell and sed
 CD /D %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
 if exist pgpro_upgrade 7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
 
-rem download and build pg_repack extension
 SET WGET=wget -N --no-check-certificate
-
-set PG_REPACK_URL=https://repo.postgrespro.ru/pgproee-%PG_MAJOR_VERSION%-beta/src/pg_repack-%PG_REPACK_VER%.tar.bz2
-if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
-	CD /D %DOWNLOADS_DIR%
-	%WGET% %PG_REPACK_URL% || goto :ERROR
-	tar xf pg_repack*%PG_REPACK_VER%.tar.bz2 -C %BUILD_UDIR%/postgresql|| goto :ERROR
-	CD /D %BUILD_DIR%\postgresql
-	CD pg_repack-%PG_REPACK_VER%
-	perl win32build.pl  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql
-)
 
 rem download help sources
 CD /D %DOWNLOADS_DIR%
