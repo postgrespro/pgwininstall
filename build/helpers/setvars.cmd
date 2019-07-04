@@ -34,6 +34,7 @@ IF EXIST "%PERL64_BIN%" SET PERL_EXE=%PERL64_BIN%\perl
 
 IF %ARCH% == X86 SET Platform=Win32
 IF %ARCH% == X64 SET Platform=X64
+
 IF %SDK% == SDK71 (
   SET REDIST_YEAR=2010
   SET PlatformToolset=v100

@@ -188,7 +188,7 @@ if exist pgpro_upgrade 7z x %DOWNLOADS_DIR%\min_msys_%ARCH%.zip
 rem download and build pg_repack extension
 SET WGET=wget -N --no-check-certificate
 
-set PG_REPACK_URL=https://repo.postgrespro.ru/pgproee-%PG_MAJOR_VERSION%-beta/src/pg_repack-%PG_REPACK_VER%.tar.bz2
+set PG_REPACK_URL=http://repo.l.postgrespro.ru/pgproee-%PG_MAJOR_VERSION%-beta/src/pg_repack-%PG_REPACK_VER%.tar.gz
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" (
 	CD /D %DOWNLOADS_DIR%
 	%WGET% %PG_REPACK_URL% || goto :ERROR
@@ -222,12 +222,12 @@ CD /D %BUILD_DIR%\postgresql
 mkdir help-ru
 mkdir help-en
 CD help-ru
-7z x %DOWNLOADS_DIR%\help-sources-ru.zip
+7z x -y %DOWNLOADS_DIR%\help-sources-ru.zip
 CD help-ru
 "C:\Program Files (x86)\HTML Help Workshop\hhc" htmlhelp.hhp
 cp htmlhelp.chm %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc\postgresql-ru.chm
 CD ..\help-en
-7z x %DOWNLOADS_DIR%\help-sources-en.zip
+7z x -y %DOWNLOADS_DIR%\help-sources-en.zip
 CD help-en
 "C:\Program Files (x86)\HTML Help Workshop\hhc" htmlhelp.hhp 
 cp htmlhelp.chm %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc\postgresql-en.chm
