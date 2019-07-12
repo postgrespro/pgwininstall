@@ -92,7 +92,7 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 >>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_BIN_DIR%\zlib',
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" >>src\tools\msvc\config.pl ECHO zstd    ^=^> '%DEPENDENCIES_BIN_DIR%\zstd',
 >>src\tools\msvc\config.pl ECHO icu     ^=^> '%DEPENDENCIES_BIN_DIR%\icu',
-IF "%WITHTAPTESTS%" == 1 >>src\tools\msvc\config.pl ECHO tap_tests ^=^> 1,
+IF "%WITHTAPTESTS%" == "1" >>src\tools\msvc\config.pl ECHO tap_tests ^=^> 1,
 >>src\tools\msvc\config.pl ECHO libedit ^=^> '%DEPENDENCIES_BIN_DIR%\wineditline'
 
 >>src\tools\msvc\config.pl ECHO ^};
