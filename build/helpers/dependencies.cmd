@@ -224,6 +224,9 @@ MKDIR %DEPENDENCIES_BIN_DIR%\openssl\lib\VC
 cp -av out32dll/*           %DEPENDENCIES_BIN_DIR%\openssl\lib\VC || GOTO :ERROR
 cp -v out32dll/ssleay32.lib %DEPENDENCIES_BIN_DIR%\openssl\lib\VC\ssleay32MD.lib || GOTO :ERROR
 cp -v out32dll/libeay32.lib %DEPENDENCIES_BIN_DIR%\openssl\lib\VC\libeay32MD.lib || GOTO :ERROR
+MKDIR %DEPENDENCIES_BIN_DIR%\openssl\bin
+cp -av out32dll/openssl.exe %DEPENDENCIES_BIN_DIR%\openssl\bin || GOTO :ERROR
+cp -av out32dll/*32.dll %DEPENDENCIES_BIN_DIR%\openssl\bin || GOTO :ERROR
 CD /D %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\openssl -y
 
