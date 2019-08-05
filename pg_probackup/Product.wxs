@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<?include Variables.wxi?>
+  <!-- Product details -->
+
+<Product Id="$(var.ProductCode)"
+    Name="$(var.APPNAME) $(var.APPVERSION) for $(var.PG_DEF_BRANDING)"
+    Language="1049" 
+    Version="$(var.APPVERSION)" 
+    Manufacturer="$(var.APPVENDOR)" 
+    UpgradeCode="$(var.UpgradeCode)" >
+    
+    <!-- Package details -->
+	<!-- Id ="c5311991-bf45-4bde-b5d0-1212c13b160e" -->
+	<!-- Id ="88aa1355-9eb8-422c-ac4f-8ddce5ddec26" -->
+
+ <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"
+	Keywords="$(var.APPKEYWORDS)"
+	Comments="$(var.APPCOMMENTS)"
+	Manufacturer="$(var.APPVENDOR)"
+	Languages="1049" 
+	Platform ='$(var.Platform)'
+
+    />
+
+<Property Id="INSTALLLOCATION">
+        <!-- <RegistrySearch Id="my_app_dir" Root="HKCU" Key="Software\VVS\VvsCommerceSQL" Type="raw" /> -->
+        <RegistrySearch Id="my_app_dir" Root="HKLM" Key="$(var.PG_REG_KEY)"  Name ="Base Directory" Type="raw" Win64="no"/> 
+        <!-- <RegistrySearch Id="my_app_dir" Root="HKLM" Key="SOFTWARE\WOW6432Node\PostgresPro\X64\PostgresPro\10\Installations\postgresql-10" Name ="Base Directory" Type="raw" /> OK -->
+        
+</Property>
+
+<Condition Message="Инсталляция $(var.PG_DEF_BRANDING) не найдена!">
+<!--	<![CDATA[Installed OR (VersionNT >= 600)]]>  VersionNT64  -->
+<![CDATA[Installed OR (INSTALLLOCATION <> "")]]>
+</Condition>
+
+
+<!-- Directories -->
+<Directory Id="TARGETDIR" Name="SourceDir">
+	<Directory Id="INSTALLLOCATION" Name="[INSTALLLOCATION]"/>
+</Directory>
+
+
+
+<!-- Features -->
+      <Feature Id="base" Title="$(var.APPNAME) - $(var.APPCOMMENTS)" Level="1" Description="$(var.APPDESCRIPTION)" Display="expand"  AllowAdvertise="no" Absent="disallow">
+        <ComponentRef Id="ProductComponent" />
+    </Feature>
+
+
+    <Media Id="1" EmbedCab="yes" Cabinet="installer.cab"/>
+<!-- Properties -->
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+<!-- UI <UIRef Id="WixUI_FeatureTree" /> -->
+<UIRef Id="WixUI_InstallDir" />
+<!--        <UIRef Id="WixUI_Minimal" /> -->
+        
+<!--
+        <WixVariable Id="WixUILicenseRtf" Value="$(var.SRCPATH)/bin/licence.rtf" />
+        <WixVariable Id="WixUIDialogBmp" Value="$(var.SRCPATH)/bin/background.bmp" />
+        <WixVariable Id="WixUIBannerBmp" Value="$(var.SRCPATH)/bin/banner.bmp" />
+-->
+        <WixVariable Id="WixUILicenseRtf" Value="licence.rtf" />
+        <WixVariable Id="WixUIDialogBmp" Value="background.bmp" />
+        <WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
+
+
+<!--    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." /> -->
+<!--OK - but 2 call <InstallUISequence>
+         <Custom Action='BrowseForFile' After='PrepareDlg'/>
+
+</InstallUISequence>     AllowSameVersionUpgrades-->
+<InstallUISequence>
+</InstallUISequence>
+
+<!--
+   <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion Minimum="$(var.APPVERSION)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
+      <UpgradeVersion Minimum="0.0.1" IncludeMinimum="yes" Maximum="$(var.APPVERSION)" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
+   <UpgradeVersion Minimum="1.0.0" IncludeMinimum="yes" Maximum="10.0.0" IncludeMaximum="yes" Property="OLDERVERSIONBEINGUPGRADED" />
+
+-->
+
+   <!--
+      <UpgradeVersion Property="UPGRADE" OnlyDetect="yes" Maximum="$(var.APPVERSION)" />
+      <UpgradeVersion Property="DOWNGRADE" OnlyDetect="yes" Minimum="$(var.APPVERSION)" IncludeMinimum="no" />
+      <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" MigrateFeatures="yes" Minimum="0.0.0" />
+-->
+   <!--
+
+    </Upgrade>
+-->
+
+<!--
+<MajorUpgrade 
+	AllowDowngrades="yes" />
+-->
+
+</Product>
+  
+
+</Wix>

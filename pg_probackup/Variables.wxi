@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Include>
+<?define APPNAME="pg_probackup" ?>
+<?define ProductCode="{CBE0BAA5-E1D0-49B8-AF6B-942B77B3477A}"?>
+<?define UpgradeCode="{ECAF8334-18B0-42D4-81D1-2A8C6DD1CC03}"?>
+<?define ComponentCode="{BE8D32ED-54F7-406E-9967-DCE3CBAD679E}"?>
+<?define ComponentCode2="{905B24CF-3433-4830-B068-BB4A1AC60CF6}"?>
+<?define APPCOMMENTS="pg_probackup"?>    
+<?define APPKEYWORDS="PostgreSQL, pg_probackup"?>    
+<?define APPVENDOR="Postgres Professional Russia"?>
+<?define APPDESCRIPTION="pg_probackup"?>
+<?define Win64 = "yes" ?>
+<!--
+<?define APPVERSION="2.0.26" ?>
+<?define PRODUCT_DIR_REGKEY="SOFTWARE\PostgresPro\X64\PostgresProEnterprise\11\Installations\postgresql-11"?>
+<?define PG_DEF_BRANDING="PostgresProEnterprise 11 (64bit)"?> -->
+<?define Platform="x64" ?>
+</Include>

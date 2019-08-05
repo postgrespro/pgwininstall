@@ -1,0 +1,19 @@
+diff --git a/src/port/dirent.c b/src/port/dirent.c
+index 7a91450..284bf27 100644
+--- a/src/port/dirent.c
++++ b/src/port/dirent.c
+@@ -83,7 +83,13 @@ readdir(DIR *d)
+ 		d->handle = FindFirstFile(d->dirname, &fd);
+ 		if (d->handle == INVALID_HANDLE_VALUE)
+ 		{
+-			errno = ENOENT;
++			if (GetLastError() == ERROR_FILE_NOT_FOUND)
++			{
++				/* No more files, force errno=0 (unlike mingw) */
++				errno = 0;
++				return NULL;
++			}
++			_dosmaperr(GetLastError());
+ 			return NULL;
+ 		}
+ 	}

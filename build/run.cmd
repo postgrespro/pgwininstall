@@ -27,6 +27,8 @@ IF DEFINED USG (
   ECHO 5: Build installer PgAdmin3
   ECHO 6: Make PostgreSQL and PgAdmin3 archives
   ECHO 7: Build pgbouncer
+  ECHO 8: Build pg_probackup
+  ECHO 8: Build pg_probackup installer
   PAUSE
   EXIT /b 1
 )
@@ -93,6 +95,16 @@ IF "%~1"=="6" (
 IF "%~1"=="7" (
     TITLE Build PGBouncer
     CMD.EXE /C %ROOT%\build\helpers\pgbouncer.cmd || GOTO :ERROR
+)
+
+IF "%~1"=="8" (
+    TITLE Build PG_PROBACKUP
+    CMD.EXE /C %ROOT%\build\helpers\probackup.cmd || GOTO :ERROR
+)
+
+IF "%~1"=="9" (
+    TITLE Build PG_PROBACKUP installer
+    CMD.EXE /C %ROOT%\build\helpers\probackup_installer.cmd || GOTO :ERROR
 )
 
 GOTO :DONE

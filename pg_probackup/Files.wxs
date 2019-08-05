@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<?include Variables.wxi?>
+<Fragment>
+<DirectoryRef Id = "INSTALLLOCATION">
+    		<Component Id="ProductComponent" Guid="$(var.ComponentCode)" Win64="$(var.Win64)">
+<File Id='libeay32.dll' DiskId='1' Source='./out_full/libeay32.dll'/>
+<File Id='libiconv.dll' DiskId='1' Source='./out_full/libiconv.dll'/>
+<File Id='libintl.dll' DiskId='1' Source='./out_full/libintl.dll'/>
+<File Id='libpq.dll' DiskId='1' Source='./out_full/libpq.dll'/>
+<File Id='pg_probackup.exe' DiskId='1' Source='./out_full/pg_probackup.exe'/>
+<File Id='ssleay32.dll' DiskId='1' Source='./out_full/ssleay32.dll'/>
+<File Id='zlib1.dll' DiskId='1' Source='./out_full/zlib1.dll'/>
+		</Component>
+</DirectoryRef>
+</Fragment>
+</Wix>
