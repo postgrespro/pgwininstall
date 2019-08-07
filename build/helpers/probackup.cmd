@@ -35,7 +35,7 @@ rm -rf %BIN_DIR% || GOTO :ERROR
 MKDIR %BIN_DIR% || GOTO :ERROR
 
 rem copy pg_probackup binaries and dependencies
-copy %BUILD_DIR%\postgresql\postgresql-%PGVER%\Release\pg_probackup.exe %BIN_DIR% || GOTO :ERROR
+copy %BUILD_DIR%\postgresql\postgresql-%PGVER%\Release\pg_probackup\pg_probackup.exe %BIN_DIR% || GOTO :ERROR
 copy %BUILD_DIR%\postgresql\postgresql-%PGVER%\Release\libpq\libpq.dll %BIN_DIR% || GOTO :ERROR
 copy %DEPENDENCIES_BIN_DIR%\zlib\lib\zlib1.dll %BIN_DIR% || GOTO :ERROR
 copy %DEPENDENCIES_BIN_DIR%\openssl\lib\libeay32.dll %BIN_DIR% || GOTO :ERROR
