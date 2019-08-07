@@ -15,6 +15,8 @@ Directory contains various build scripts.
 * 7-Zip
 * NSIS
 * HTML Help Workshop (for PgAdmin documentation, included in Visual Studio)
+* .NET 3.5 (for pg_probackup only)
+* WiX toolset (for pg_probackup only)
 
 ## Patches
 
@@ -35,3 +37,9 @@ If you want to use GIT:
 
 * GIT_BRANCH=[git branch name] -- if you sets this variables we will download source from git
 * GIT_PATH=[git path] -- git URL, git://git.postgresql.org/git/postgresql.git by default
+
+### probackup build
+You can specify several environmental variables depending on desirable result:
+
+* PROBACKUP_VERSION=[2.1.3/2.1.5] - pg_probackup full version
+
