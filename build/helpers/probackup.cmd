@@ -1,14 +1,5 @@
 CALL %ROOT%\build\helpers\setvars.cmd
 
-IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
-  7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
-  REM Go to last build
-  GOTO :BUILD_ALL
-) ELSE (
-  ECHO "You need to build dependencies first!"
-  EXIT /B 1 || GOTO :ERROR
-)
-
 SET PROBACKUP_URL=https://github.com/postgrespro/pg_probackup/tarball/%PROBACKUP_VERSION%
 SET BIN_DIR=%BUILD_DIR%\pg_probackup_%PG_MAJOR_VERSION%_%PROBACKUP_VERSION%_%ARCH%
 SET PRODUCT_NAME=PostgreSQL
