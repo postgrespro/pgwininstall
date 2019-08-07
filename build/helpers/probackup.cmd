@@ -31,6 +31,7 @@ rem CD /D %BUILD_DIR%\pg_probackup\*%PROBACKUP_VERSION%* || GOTO :ERROR
 
 gen_probackup_project.pl %BUILD_DIR%\postgresql\postgresql-%PGVER%
 
+rm -rf %BIN_DIR% || GOTO :ERROR
 MKDIR %BIN_DIR% || GOTO :ERROR
 
 rem copy pg_probackup binaries and dependencies
