@@ -72,25 +72,15 @@ IF %HAVE_PGURL% == 0 (
 >>src\tools\msvc\config.pl ECHO ^# blocksize ^=^> 8,
 >>src\tools\msvc\config.pl ECHO ^# wal_blocksize ^=^> 8,
 >>src\tools\msvc\config.pl ECHO ^# wal_segsize ^=^> 16,
->>src\tools\msvc\config.pl ECHO ldap    ^=^> 1,
->>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_BIN_DIR%\libintl',
+>>src\tools\msvc\config.pl ECHO ldap    ^=^> undef,
+>>src\tools\msvc\config.pl ECHO nls     ^=^> undef,
 >>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
-IF %SDK% == SDK71 GOTO :DISABLE_PERL
-IF %ARCH% == X86  GOTO :DISABLE_PERL
-IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
-GOTO :PERL_CONF_DONE
-:DISABLE_PERL
-IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> undef,   )
-:PERL_CONF_DONE
-IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON64_PATH%', )
-IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%', )
 >>src\tools\msvc\config.pl ECHO openssl ^=^> '%DEPENDENCIES_BIN_DIR%\openssl',
->>src\tools\msvc\config.pl ECHO uuid    ^=^> '%DEPENDENCIES_BIN_DIR%\uuid',
->>src\tools\msvc\config.pl ECHO xml     ^=^> '%DEPENDENCIES_BIN_DIR%\libxml2',
->>src\tools\msvc\config.pl ECHO xslt    ^=^> '%DEPENDENCIES_BIN_DIR%\libxslt',
->>src\tools\msvc\config.pl ECHO iconv   ^=^> '%DEPENDENCIES_BIN_DIR%\iconv',
->>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_BIN_DIR%\zlib',
->>src\tools\msvc\config.pl ECHO icu     ^=^> '%DEPENDENCIES_BIN_DIR%\icu'
+>>src\tools\msvc\config.pl ECHO uuid    ^=^> undef,
+>>src\tools\msvc\config.pl ECHO xml     ^=^> undef,
+>>src\tools\msvc\config.pl ECHO xslt    ^=^> undef,
+>>src\tools\msvc\config.pl ECHO iconv   ^=^> undef,
+>>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_BIN_DIR%\zlib'
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 
