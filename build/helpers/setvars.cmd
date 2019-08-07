@@ -17,7 +17,7 @@ SET PYTHON32_PATH=C:\Python27x86
 SET PYTHON64_PATH=C:\Python27x64
 SET ZIP_PATH=C:\Program Files\7-Zip;C:\Program Files (x86)\7-Zip
 SET NSIS_PATH=C:\Program Files (x86)\NSIS
-SET MSYS2_PATH=C:\msys64\mingw32\bin;C:\msys64\mingw64\bin;C:\msys32\usr\bin;C:\msys64\usr\bin
+SET MSYS2_PATH=D:\msys64\mingw32\bin;D:\msys64\mingw64\bin;C:\msys32\usr\bin;D:\msys64\usr\bin
 SET PATH=%PATH%;%ZIP_PATH%;%MSYS2_PATH%;%NSIS_PATH%
 SET PERL5LIB=.
 
