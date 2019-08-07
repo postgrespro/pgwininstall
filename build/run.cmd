@@ -14,6 +14,8 @@ IF "%~1" == "4" GOTO :OK
 IF "%~1" == "5" GOTO :OK
 IF "%~1" == "6" GOTO :OK
 IF "%~1" == "7" GOTO :OK
+IF "%~1" == "8" GOTO :OK
+IF "%~1" == "9" GOTO :OK
 
 SET USG=1
 
@@ -28,7 +30,7 @@ IF DEFINED USG (
   ECHO 6: Make PostgreSQL and PgAdmin3 archives
   ECHO 7: Build pgbouncer
   ECHO 8: Build pg_probackup
-  ECHO 8: Build pg_probackup installer
+  ECHO 9: Build pg_probackup installer
   PAUSE
   EXIT /b 1
 )
