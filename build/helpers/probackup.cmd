@@ -29,7 +29,9 @@ MKDIR %BUILD_DIR%\pg_probackup || GOTO :ERROR
 MKDIR %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSION% || GOTO :ERROR
 
 CD /D %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSION% || GOTO :ERROR
-wget --no-check-certificate %PROBACKUP_URL% -O %DOWNLOADS_DIR%\pg_probackup-%PROBACKUP_VERSION%.tar.bz2 || GOTO :ERROR
+
+IF NOT EXISTS %DOWNLOADS_DIR%\pg_probackup-%PROBACKUP_VERSION%.tar.bz2 (
+wget --no-check-certificate %PROBACKUP_URL% -O %DOWNLOADS_DIR%\pg_probackup-%PROBACKUP_VERSION%.tar.bz2 || GOTO :ERROR )
 
 tar xf %DOWNLOADS_DIR%\pg_probackup-%PROBACKUP_VERSION%.tar.bz2 -C %BUILD_UDIR%/pg_probackup || GOTO :ERROR
 CD /D %BUILD_DIR%\pg_probackup\*%PROBACKUP_VERSION%* || GOTO :ERROR
