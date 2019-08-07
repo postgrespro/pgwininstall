@@ -21,11 +21,13 @@ MKDIR %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSIO
 
 CD /D %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSION% || GOTO :ERROR
 
-wget --no-check-certificate %PROBACKUP_URL% -O %DOWNLOADS_DIR%\pg_probackup-%PROBACKUP_VERSION%.tar.bz2 || GOTO :ERROR
-CD /D %DOWNLOADS_DIR% || GOTO :ERROR
-tar xf pg_probackup-%PROBACKUP_VERSION%.tar.bz2 -C %BUILD_UDIR%/pg_probackup || GOTO :ERROR
+rem wget --no-check-certificate %PROBACKUP_URL% -O %DOWNLOADS_DIR%\pg_probackup-%PROBACKUP_VERSION%.tar.bz2 || GOTO :ERROR
+rem CD /D %DOWNLOADS_DIR% || GOTO :ERROR
+rem tar xf pg_probackup-%PROBACKUP_VERSION%.tar.bz2 -C %BUILD_UDIR%/pg_probackup || GOTO :ERROR
 
-CD /D %BUILD_DIR%\pg_probackup\*%PROBACKUP_VERSION%* || GOTO :ERROR
+git clone https://github.com/postgrespro/pg_probackup .
+
+rem CD /D %BUILD_DIR%\pg_probackup\*%PROBACKUP_VERSION%* || GOTO :ERROR
 
 gen_probackup_project.pl %BUILD_DIR%\postgresql\postgresql-%PGVER%
 
