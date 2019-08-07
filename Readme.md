@@ -42,4 +42,5 @@ If you want to use GIT:
 You can specify several environmental variables depending on desirable result:
 
 * PROBACKUP_VERSION=[2.1.3/2.1.5] - pg_probackup full version
-
+* PROBACKUP_EDITION=[vanilla/std] -- fork to build probackup for, default 'vanilla'
+* PROBACKUP_PATCH_POSTGRESQL=[YES/NO] -- apply probackup specific patches, default NO
