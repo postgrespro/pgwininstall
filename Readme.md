@@ -42,5 +42,23 @@ If you want to use GIT:
 You can specify several environmental variables depending on desirable result:
 
 * PROBACKUP_VERSION=[2.1.3/2.1.5] - pg_probackup full version
-* PROBACKUP_EDITION=[vanilla/std] -- fork to build probackup for, default 'vanilla'
+* PROBACKUP_EDITION=[vanilla/std/enterprise] -- fork to build probackup for, default 'vanilla'
 * PROBACKUP_PATCH_POSTGRESQL=[YES/NO] -- apply probackup specific patches, default NO
+
+To build pg_probackup installer for vanilla PostgreSQL, run:
+
+SET SDK=MSVC2013
+SET PROBACKUP_VERSION=2.1.5
+SET PG_MAJOR_VERSION = 11
+SET PG_PATCH_VERSION = 4
+SET PROBACKUP_EDITION=vanilla
+
+To build pg_probackup installer for PostgresPro Standart, run:
+
+SET SDK=MSVC2013
+SET PROBACKUP_VERSION=2.1.5
+SET PG_MAJOR_VERSION = 11
+SET PG_PATCH_VERSION = 4
+SET PROBACKUP_EDITION=std
+SET GIT_PATH=https://git.postgrespro.ru/pgpro-dev/postgrespro.git
+SET GIT_BRANCH=PGPRO11_4_1

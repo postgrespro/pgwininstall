@@ -3,7 +3,7 @@
 <?include Variables.wxi?>
   <!-- Product details -->
 
-<Product Id="$(var.ProductCode)"
+<Product Id="*"
     Name="$(var.APPNAME) $(var.APPVERSION) for $(var.PG_DEF_BRANDING)" 
     Language="1049" 
     Version="$(var.APPVERSION)" 
