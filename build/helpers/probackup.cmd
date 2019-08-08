@@ -1,7 +1,6 @@
 CALL %ROOT%\build\helpers\setvars.cmd
 
 SET PROBACKUP_URL=https://github.com/postgrespro/pg_probackup/tarball/%PROBACKUP_VERSION%
-SET BIN_DIR=%BUILD_DIR%\pg_probackup_%PG_MAJOR_VERSION%_%PROBACKUP_VERSION%_%ARCH%
 SET PRODUCT_NAME=""
 
 IF %PROBACKUP_EDITION% == vanilla (
@@ -16,6 +15,8 @@ IF %PRODUCT_NAME% == "" (
 	ECHO Invalid PROBACKUP_EDITION: %PROBACKUP_EDITION%
 	GOTO :ERROR
 )
+
+SET BIN_DIR=%BUILD_DIR%\pg_probackup_%PROBACKUP_EDITION%_%PG_MAJOR_VERSION%_%PROBACKUP_VERSION%_%ARCH%
 
 echo Download sources ...
 

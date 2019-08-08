@@ -3,7 +3,6 @@ CALL %ROOT%\build\helpers\setvars.cmd
 echo.
 echo Building PG_PROBACKUP Installer...
 
-SET BIN_DIR=%BUILD_DIR%\pg_probackup_%PG_MAJOR_VERSION%_%PROBACKUP_VERSION%_%ARCH%
 SET WIXDIR=C:\Program Files (x86)\WiX Toolset v3.11\bin
 SET PRODUCT_NAME=""
 
@@ -23,7 +22,7 @@ IF %PRODUCT_NAME% == "" (
 )
 
 SET PG_REG_KEY=SOFTWARE\Postgres Professional\%ARCH%\%PRODUCT_NAME%\%PG_MAJOR_VERSION%\Installations\postgresql-%PG_MAJOR_VERSION%
-
+SET BIN_DIR=%BUILD_DIR%\pg_probackup_%PROBACKUP_EDITION%_%PG_MAJOR_VERSION%_%PROBACKUP_VERSION%_%ARCH%
 
 rm -rf %BUILD_DIR%\pg_probackup\installer || GOTO :ERROR
 MKDIR %BUILD_DIR%\pg_probackup\installer
