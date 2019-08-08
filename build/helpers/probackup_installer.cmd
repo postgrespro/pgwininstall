@@ -26,10 +26,11 @@ IF %PRODUCT_NAME% == "" (
 
 
 rm -rf %BUILD_DIR%\pg_probackup\installer || GOTO :ERROR
+MKDIR %BUILD_DIR%\pg_probackup\installer
 
 CD /D %ROOT%\wix
 cp -av pg_probackup/* %BUILD_DIR%\pg_probackup\installer || GOTO :ERROR
-CD /D %BUILD_DIR%\pg_probackup\installer || GOTO :ERROR
+CD /D %BUILD_DIR%\pg_probackup\installer
 
 echo.
 echo Building Full Installer...
