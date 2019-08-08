@@ -20,9 +20,11 @@ GOTO :NOLOAD
 :BUILD_POSTGRESQL
 TITLE Building PostgreSQL...
 CD /D %DOWNLOADS_DIR%
+
 IF "%GIT_PATH%"=="" (
 SET GIT_PATH=git://git.postgresql.org/git/postgresql.git
 )
+
 IF NOT "%GIT_BRANCH%"=="" (
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
@@ -37,6 +39,7 @@ rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
+
 :NOTAR
 IF %ONE_C% == YES (
   IF %HAVE_PGURL% == 1 SET PGTARNAME=postgrespro-1c
@@ -84,9 +87,6 @@ IF %HAVE_PGURL% == 0 (
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 
-REM IF %ONE_C% == YES (
-REM   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
-REM )
 SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
 
 cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR

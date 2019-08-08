@@ -3,13 +3,29 @@ CALL %ROOT%\build\helpers\setvars.cmd
 echo.
 echo Building PG_PROBACKUP Installer...
 
-SET PRODUCT_NAME=PostgreSQL
 SET BIN_DIR=%BUILD_DIR%\pg_probackup_%PG_MAJOR_VERSION%_%PROBACKUP_VERSION%_%ARCH%
 SET WIXDIR=C:\Program Files (x86)\WiX Toolset v3.11\bin
-SET PG_DEF_BRANDING=PostgreSQL%PG_MAJOR_VERSION%
 SET PG_REG_KEY=SOFTWARE\Postgres Professional\%ARCH%\%PRODUCT_NAME%\%PG_MAJOR_VERSION%\Installations\postgresql-%PG_MAJOR_VERSION%
 
-CD /D %ROOT%\wix\pg_probackup || GOTO :ERROR
+IF %PROBACKUP_EDITION% == vanilla (
+   SET PRODUCT_NAME=PostgreSQL
+   SET PG_DEF_BRANDING=PostgreSQL%PG_MAJOR_VERSION%
+   SET PG_REG_KEY=SOFTWARE\Postgres Professional\%ARCH%\%PRODUCT_NAME%\%PG_MAJOR_VERSION%\Installations\postgresql-%PG_MAJOR_VERSION%
+)
+ELSE IF %PROBACKUP_EDITION% == std (
+  SET PRODUCT_NAME=PostgresPro
+  SET PG_DEF_BRANDING=PostgresPro%PG_MAJOR_VERSION%
+  SET PG_REG_KEY=SOFTWARE\Postgres Professional\%ARCH%\%PRODUCT_NAME%\%PG_MAJOR_VERSION%\Installations\postgresql-%PG_MAJOR_VERSION%
+)
+ELSE (
+	ECHO Invalid PROBACKUP_EDITION: %PROBACKUP_EDITION%
+	GOTO :ERROR
+)
+
+
+rm -rf %BUILD_DIR%\pg_probackup\installer || GOTO :ERROR
+cp -av %ROOT%\wix\pg_probackup\* %BUILD_DIR%\pg_probackup\installer || GOTO :ERROR
+CD /D %BUILD_DIR%\pg_probackup\installer || GOTO :ERROR
 
 echo.
 echo Building Full Installer...
@@ -26,10 +42,12 @@ perl genfilelist.pl %BIN_DIR%/*.* Files.wxs
 >>Files.wxs  ECHO ^<^/Fragment^>
 >>Files.wxs  ECHO ^<^/Wix^>
 "%WIXDIR%\candle" -nologo  -dAPPVERSION="%PROBACKUP_VERSION%" -dPG_REG_KEY="%PG_REG_KEY%" -dPG_DEF_BRANDING="%PG_DEF_BRANDING%" Product_separate.wxs Files.wxs || goto :ERROR
-                                                                                                      
+
 SET INS_FILE=pg-probackup-%PROBACKUP_EDITION%-%PG_MAJOR_VERSION%-%PROBACKUP_VERSION%-standalone-en.msi
 
 "%WIXDIR%\light" -sice:ICE03 -sice:ICE25 -sice:ICE82 -sw1101 -nologo -ext WixUIExtension -cultures:en-us -o %INS_FILE% Files.wixobj Product_separate.wixobj || goto :ERROR
+
+cp -av pg-probackup-%PROBACKUP_EDITION%-%PG_MAJOR_VERSION%-%PROBACKUP_VERSION%-standalone-en.msi %BUILD_DIR%\installers\ || goto :ERROR
 
 goto :DONE
 
