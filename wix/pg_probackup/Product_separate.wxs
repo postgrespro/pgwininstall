@@ -4,10 +4,10 @@
   <!-- Product details -->
 
 <Product Id="$(var.ProductCode)"
-    Name="$(var.APPNAME) $(var.PROBACKUP_VERSION) for $(var.PG_DEF_BRANDING)" 
+    Name="$(var.APPNAME) $(var.APPVERSION) for $(var.PG_DEF_BRANDING)" 
     Language="1049" 
-    Version="$(var.PROBACKUP_VERSION)" 
-    Manufacturer="$(var.PROBACKUP_VERSION)" 
+    Version="$(var.APPVERSION)" 
+    Manufacturer="$(var.APPVENDOR)" 
     UpgradeCode="$(var.UpgradeCode)" >
     
     <!-- Package details -->
@@ -79,15 +79,15 @@
 
 <!--
    <Upgrade Id="$(var.UpgradeCode)">
-      <UpgradeVersion Minimum="$(var.PROBACKUP_VERSION)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
-      <UpgradeVersion Minimum="0.0.1" IncludeMinimum="yes" Maximum="$(var.PROBACKUP_VERSION)" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
+      <UpgradeVersion Minimum="$(var.APPVERSION)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
+      <UpgradeVersion Minimum="0.0.1" IncludeMinimum="yes" Maximum="$(var.APPVERSION)" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
    <UpgradeVersion Minimum="1.0.0" IncludeMinimum="yes" Maximum="10.0.0" IncludeMaximum="yes" Property="OLDERVERSIONBEINGUPGRADED" />
 
 -->
 
    <!--
-      <UpgradeVersion Property="UPGRADE" OnlyDetect="yes" Maximum="$(var.PROBACKUP_VERSION)" />
-      <UpgradeVersion Property="DOWNGRADE" OnlyDetect="yes" Minimum="$(var.PROBACKUP_VERSION)" IncludeMinimum="no" />
+      <UpgradeVersion Property="UPGRADE" OnlyDetect="yes" Maximum="$(var.APPVERSION)" />
+      <UpgradeVersion Property="DOWNGRADE" OnlyDetect="yes" Minimum="$(var.APPVERSION)" IncludeMinimum="no" />
       <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" MigrateFeatures="yes" Minimum="0.0.0" />
 -->
    <!--
