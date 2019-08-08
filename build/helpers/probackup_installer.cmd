@@ -1,3 +1,5 @@
+CALL %ROOT%\build\helpers\setvars.cmd
+
 echo.
 echo Building PG_PROBACKUP Installer...
 
