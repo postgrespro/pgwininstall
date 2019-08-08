@@ -26,18 +26,18 @@ SET GIT_PATH=git://git.postgresql.org/git/postgresql.git
 )
 
 IF NOT "%GIT_BRANCH%"=="" (
-rm -rf %BUILD_DIR%\postgresql
-MKDIR %BUILD_DIR%\postgresql
-MKDIR %BUILD_DIR%\postgresql\postgresql-%PGVER%
-git clone -b %GIT_BRANCH% %GIT_PATH% %BUILD_DIR%\postgresql\postgresql-%PGVER%
+rm -rf %BUILD_DIR%\postgresql || GOTO :ERROR
+MKDIR %BUILD_DIR%\postgresql || GOTO :ERROR
+MKDIR %BUILD_DIR%\postgresql\postgresql-%PGVER% || GOTO :ERROR
+git clone -b %GIT_BRANCH% %GIT_PATH% %BUILD_DIR%\postgresql\postgresql-%PGVER% || GOTO :ERROR
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 GOTO :NOTAR
 )
 wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
-rm -rf %BUILD_DIR%\postgresql
-MKDIR %BUILD_DIR%\postgresql
-tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql
+rm -rf %BUILD_DIR%\postgresql || GOTO :ERROR
+MKDIR %BUILD_DIR%\postgresql || GOTO :ERROR
+tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql || GOTO :ERROR
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 :NOTAR
