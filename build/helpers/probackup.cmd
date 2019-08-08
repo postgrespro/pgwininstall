@@ -2,14 +2,17 @@ CALL %ROOT%\build\helpers\setvars.cmd
 
 SET PROBACKUP_URL=https://github.com/postgrespro/pg_probackup/tarball/%PROBACKUP_VERSION%
 SET BIN_DIR=%BUILD_DIR%\pg_probackup_%PG_MAJOR_VERSION%_%PROBACKUP_VERSION%_%ARCH%
+SET PRODUCT_NAME=""
 
 IF %PROBACKUP_EDITION% == vanilla (
    SET PRODUCT_NAME=PostgreSQL
 )
-ELSE IF %PROBACKUP_EDITION% == std (
+
+IF %PROBACKUP_EDITION% == std (
   SET PRODUCT_NAME=PostgresPro
 )
-ELSE (
+
+IF %PRODUCT_NAME% == "" (
 	ECHO Invalid PROBACKUP_EDITION: %PROBACKUP_EDITION%
 	GOTO :ERROR
 )

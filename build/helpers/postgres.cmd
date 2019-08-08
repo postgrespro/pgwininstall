@@ -29,7 +29,7 @@ IF NOT "%GIT_BRANCH%"=="" (
 rm -rf %BUILD_DIR%\postgresql || GOTO :ERROR
 MKDIR %BUILD_DIR%\postgresql || GOTO :ERROR
 MKDIR %BUILD_DIR%\postgresql\postgresql-%PGVER% || GOTO :ERROR
-git clone -b %GIT_BRANCH% %GIT_PATH% %BUILD_DIR%\postgresql\postgresql-%PGVER% || GOTO :ERROR
+git clone --depth=1 -b %GIT_BRANCH% %GIT_PATH% %BUILD_DIR%\postgresql\postgresql-%PGVER% || GOTO :ERROR
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 GOTO :NOTAR
