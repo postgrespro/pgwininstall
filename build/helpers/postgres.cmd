@@ -54,16 +54,6 @@ IF %ONE_C% == YES (
 
 :DONE_1C_PATCH
 
-IF %HAVE_PGURL% == 0 (
-  cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
-  IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
-  FOR /F %%I IN (series) do (
-    ECHO %%I
-    cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/%%I .
-    patch -p1 < %%I || GOTO :ERROR
-  )
-)
-
 :DONE_POSTGRESQL_PATCH
 >src\tools\msvc\config.pl  ECHO use strict;
 >>src\tools\msvc\config.pl ECHO use warnings;
