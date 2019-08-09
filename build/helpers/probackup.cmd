@@ -26,9 +26,9 @@ MKDIR %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSIO
 
 CD /D %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSION% || GOTO :ERROR
 
-git clone https://github.com/postgrespro/pg_probackup .
+git clone https://github.com/postgrespro/pg_probackup . || GOTO :ERROR
 
-gen_probackup_project.pl %BUILD_DIR%\postgresql\postgresql-%PGVER%
+perl gen_probackup_project.pl %BUILD_DIR%\postgresql\postgresql-%PGVER% || GOTO :ERROR
 
 rm -rf %BIN_DIR% || GOTO :ERROR
 MKDIR %BIN_DIR% || GOTO :ERROR
