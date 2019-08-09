@@ -150,6 +150,8 @@ REM remove python3 extensions
 rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/share/extension/*python3* || GOTO :ERROR
 rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/lib/*python3* || GOTO :ERROR
 
+GOTO :DONE
+
 SET WGET=wget --no-check-certificate
 
 rem download help sources
