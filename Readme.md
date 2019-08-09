@@ -47,14 +47,17 @@ You can specify several environmental variables depending on desirable result:
 
 To build pg_probackup installer for vanilla PostgreSQL, run:
 
+```
 SET SDK=MSVC2013
 SET PROBACKUP_VERSION=2.1.5
 SET PG_MAJOR_VERSION=11
 SET PG_PATCH_VERSION=4
 SET PROBACKUP_EDITION=vanilla
+```
 
 To build pg_probackup installer for PostgresPro Standart, run:
 
+```
 SET SDK=MSVC2013
 SET PROBACKUP_VERSION=2.1.5
 SET PG_MAJOR_VERSION=11
@@ -62,3 +65,4 @@ SET PG_PATCH_VERSION=4
 SET PROBACKUP_EDITION=std
 SET GIT_PATH=https://git.postgrespro.ru/pgpro-dev/postgrespro.git
 SET GIT_BRANCH=PGPRO11_4_1
+```
