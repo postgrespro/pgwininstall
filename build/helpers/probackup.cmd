@@ -27,7 +27,7 @@ MKDIR %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSIO
 CD /D %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSION% || GOTO :ERROR
 
 git clone https://github.com/postgrespro/pg_probackup . || GOTO :ERROR
-git checkout %PROBACKUP_VERSION%
+git checkout %PROBACKUP_VERSION% || GOTO :ERROR
 
 IF NOT "%GIT_COMMIT%"=="" (
 	git checkout %GIT_COMMIT% || GOTO :ERROR
