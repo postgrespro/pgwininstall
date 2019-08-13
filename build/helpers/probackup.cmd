@@ -28,6 +28,11 @@ CD /D %BUILD_DIR%\pg_probackup\pg_probackup-%PG_MAJOR_VERSION%-%PROBACKUP_VERSIO
 
 git clone https://github.com/postgrespro/pg_probackup . || GOTO :ERROR
 
+IF NOT "%GIT_COMMIT%"=="" (
+	git checkout %GIT_COMMIT% || GOTO :ERROR
+)
+
+
 perl gen_probackup_project.pl %BUILD_DIR%\postgresql\postgresql-%PGVER% || GOTO :ERROR
 
 rm -rf %BIN_DIR% || GOTO :ERROR
