@@ -6,7 +6,7 @@ IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
   GOTO :BUILD_ALL
 ) ELSE (
   ECHO "You need to build dependencies first!"
-  EXIT /B 1 || GOTO :ERROR
+  GOTO :ERROR
 )
 
 :BUILD_ALL
