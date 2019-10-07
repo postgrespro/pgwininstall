@@ -113,6 +113,10 @@ IF "%PG_MAJOR_VERSION%" == "9.6" (
     cat server.files > allserver.files
 	type client.files > allclient.files
 )
+IF "%PG_MAJOR_VERSION%" == "12" (
+    sed "s/pg_verify_checksums/pg_checksums/" allserver.files > allserver-12.files
+    mv allserver-12.files allserver.files
+)
 
 rem expand pattern lists to actual file lists
 %PYTHON64_PATH%/python %ROOT%/build/helpers/genlists.py %PG_INS_SOURCE_DIR% allclient.files devel.files plperl.files plpython2.files plpython3.files unneeded.files allserver.files || GOTO :ERROR
