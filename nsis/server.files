@@ -12,7 +12,7 @@
 ./bin/pg_test_timing.*
 ./bin/pg_upgrade.*
 ./bin/pg_waldump.*
-./bin/pg_verify_checksums.*
+./bin/pg_*checksums.*
 ./bin/postgres.*
 ./bin/postmaster.*
 ./bin/zic.*
