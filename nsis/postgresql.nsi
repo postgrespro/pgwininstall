@@ -933,6 +933,17 @@ Section $(componentServer) sec1
   ${endif}
   FileClose $LogFile ;Closes the filled file
 
+
+  AccessControl::DisableFileInheritance "$DATA_DIR"
+  AccessControl::RevokeOnFile "$DATA_DIR" "(BU)" "GenericWrite + GenericRead"
+  AccessControl::RevokeOnFile "$DATA_DIR" "(AU)" "GenericWrite + GenericRead"
+  AccessControl::RevokeOnFile "$DATA_DIR" "(DU)" "GenericWrite + GenericRead"
+
+  push "$INSTDIR"
+  call createAccessForFolder
+
+
+
 SectionEnd
 
 Section $(componentDeveloper) secDev
@@ -2509,3 +2520,20 @@ Function un.onInit
   ${endif}
 
 FunctionEnd
+
+Function createAccessForFolder
+         pop $0
+         AccessControl::DisableFileInheritance "$0"
+         AccessControl::RevokeOnFile "$0" "(BU)" "GenericWrite"
+         AccessControl::RevokeOnFile "$0" "(AU)" "GenericWrite"
+         AccessControl::RevokeOnFile "$0" "(DU)" "GenericWrite"
+         AccessControl::GrantOnFile "$0" "(BU)" "GenericRead + GenericExecute"
+         ${if} ${AtLeastWin8}
+               ;ALL_APP_PACKAGES (S-1-15-2-1)
+               AccessControl::GrantOnFile "$0" "(S-1-15-2-1)" "GenericRead + GenericExecute"
+               ;The SID for "ALL RESTRICTED APPLICATION PACKAGES" is S-1-15-2-2
+               AccessControl::GrantOnFile "$0" "(S-1-15-2-2)" "GenericRead + GenericExecute"
+         ${endif}
+
+FunctionEnd
+
