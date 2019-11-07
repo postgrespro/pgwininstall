@@ -769,11 +769,13 @@ Section $(componentServer) sec1
   AccessControl::GrantOnFile "$DATA_DIR\postgresql.conf" "$loggedInUserShort" "FullAccess"
   Pop $0 ;"ok" or "error" + error details
 
+/*
   DetailPrint "GRANT FullAccess ON $INSTDIR\scripts TO $loggedInUser"
   AccessControl::GrantOnFile "$INSTDIR\scripts" "$loggedInUser" "FullAccess"
   DetailPrint "GRANT GenericRead + GenericExecute ON $INSTDIR\scripts\pgpro_upgrade.cmd TO $loggedInUser"
   AccessControl::GrantOnFile "$INSTDIR\scripts\pgpro_upgrade.cmd" "$loggedInUser" "GenericRead + GenericExecute"
   Pop $0 ;"ok" or "error" + error details
+*/
   
   ${if} $isDataDirExist == 1
     ; there exist data directory. We need to stop service,
