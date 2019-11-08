@@ -1,5 +1,5 @@
 REM LIBRARY VERSIONS
-SET ICONV_VER=1.14
+SET ICONV_VER=1.15
 SET XSLT_VER=1.1.29
 SET ZLIB_VER=1.2.11
 SET XML_VER=2.9.4
@@ -57,6 +57,14 @@ IF %SDK% == MSVC2015 (
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" x86 || GOTO :ERROR
   ECHO ON
   IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" amd64 || GOTO :ERROR
+  ECHO ON
+)
+IF %SDK% == MSVC2017 (
+  SET REDIST_YEAR=2017
+  SET PlatformToolset=v141
+  IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
+  ECHO ON
+  IF %ARCH% == X64 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 || GOTO :ERROR
   ECHO ON
 )
 

@@ -51,6 +51,12 @@ IF %ONE_C% == YES (
 
 :DONE_1C_PATCH
 
+IF %SDK% == MSVC2017 (
+  cp -va %ROOT%/patches/postgresql/2017.patch .
+  patch -p1 < 2017.patch || GOTO :ERROR
+)
+
+
 IF %HAVE_PGURL% == 0 (
   cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
   IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
