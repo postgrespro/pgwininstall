@@ -192,6 +192,7 @@ SET WGET=wget -N --no-check-certificate
 rem download help sources
 CD /D %DOWNLOADS_DIR%
 SET DOCURL=http://repo.l.postgrespro.ru/doc
+if "%BUILD_TYPE%" == "dev" SET DOCURL=http://repo.l.postgrespro.ru/doc/dev
 
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
