@@ -1,5 +1,4 @@
 CALL %ROOT%\build\helpers\setvars.cmd
-
 IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
   7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
   REM Go to last build
@@ -60,6 +59,12 @@ if "%PRODUCT_NAME%" == "PostgreSQL" (
     patch -p1 < %%I || GOTO :ERROR
   )
 )
+
+IF %SDK% == MSVC2017 (
+  cp -va %ROOT%/patches/postgresql/2017.patch .
+  patch -p1 < 2017.patch || GOTO :ERROR
+)
+
 
 :DONE_POSTGRESQL_PATCH
 >src\tools\msvc\config.pl  ECHO use strict;
