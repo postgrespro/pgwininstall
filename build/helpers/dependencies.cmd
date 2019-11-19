@@ -10,6 +10,13 @@ rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
 
+IF %SDK% == MSVC2015 (
+SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
+)
+IF %SDK% == MSVC2017 (
+SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
+)
+
 REM TO-DO: overwrite to build rules
 :DOWNLOAD_MSYS_UTILS
 TITLE Download msys utils...
@@ -27,8 +34,8 @@ tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
 patch -f -p0 < libiconv.patch || GOTO :ERROR
-IF %ARCH% == X64 msbuild libiconv.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% || GOTO :ERROR
-IF %ARCH% == X86 msbuild libiconv.vcxproj /m /p:Configuration=Release /p:PlatformToolset=%PlatformToolset% /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% || GOTO :ERROR
+IF %ARCH% == X64 msbuild libiconv.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X86 msbuild libiconv.vcxproj /m /p:Configuration=Release /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\iconv || GOTO :ERROR
 cp -av iconv.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
 cp -av config.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
@@ -74,8 +81,8 @@ IF %ARCH% == X64 sed -i 's/Win32/x64/g' ossp_uuid.sln || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' ossp_uuid\ossp_uuid.vcxproj || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' example\example.vcxproj || GOTO :ERROR
 IF %ARCH% == X64 sed -i 's/Win32/x64/g' uuid_cli\uuid_cli.vcxproj || GOTO :ERROR
-IF %ARCH% == X64 msbuild ossp_uuid.sln /m /p:Configuration=Release /p:Platform=x64 /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% || GOTO :ERROR
-IF %ARCH% == X86 msbuild ossp_uuid.sln /m /p:Configuration=Release /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% || GOTO :ERROR
+IF %ARCH% == X64 msbuild ossp_uuid.sln /m /p:Configuration=Release /p:Platform=x64 || GOTO :ERROR
+IF %ARCH% == X86 msbuild ossp_uuid.sln /m /p:Configuration=Release || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\uuid\lib
 cp -av include %DEPENDENCIES_BIN_DIR%\uuid || GOTO :ERROR
 IF %ARCH% == X64 cp -av x64\Release\ossp_uuid.lib %DEPENDENCIES_BIN_DIR%\uuid\lib\uuid.lib || GOTO :ERROR
@@ -169,8 +176,8 @@ tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\gettext-*
 cp -v %ROOT%/patches/gettext/gettext-%GETTEXT_VER%-%SDK%.patch gettext.patch
 patch -f -p0 < gettext.patch || GOTO :ERROR
-IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% /p:WindowsTargetPlatformVersion=%WindowsSDKVersion%  || GOTO :ERROR
-IF %ARCH% == X86 msbuild libintl.vcxproj /m /p:Configuration=Release /p:PlatformToolset=%PlatformToolset% /p:WindowsTargetPlatformVersion=%WindowsSDKVersion%  || GOTO :ERROR
+IF %ARCH% == X64 msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X86 msbuild libintl.vcxproj /m /p:Configuration=Release /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl\lib %DEPENDENCIES_BIN_DIR%\libintl\include
 cp -v Release*/*.dll  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR
 cp -v Release*/*.lib  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR
@@ -202,8 +209,8 @@ rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
 7z x icu4c-56_1-src.zip -o%DEPENDENCIES_SRC_DIR% -y
 CD /D %DEPENDENCIES_SRC_DIR%\icu
-IF %ARCH% == X86 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% || GOTO :ERROR
-IF %ARCH% == X64 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% || GOTO :ERROR
+IF %ARCH% == X86 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %ARCH% == X64 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=x64 /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 (
   cp -va %DEPENDENCIES_SRC_DIR%\icu\bin64 %DEPENDENCIES_BIN_DIR%\icu\bin || GOTO :ERROR
   cp -va %DEPENDENCIES_SRC_DIR%\icu\lib64 %DEPENDENCIES_BIN_DIR%\icu\lib || GOTO :ERROR

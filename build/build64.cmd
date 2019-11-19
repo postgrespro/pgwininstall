@@ -1,11 +1,11 @@
 SET ARCH=X64
 SET SDK=MSVC2017
 SET PG_MAJOR_VERSION=12
-SET PG_PATCH_VERSION=0
-SET PRODUCT_NAME=PostgreSQL
-rem SET PRODUCT_NAME=PostgreSQL 1C
-rem SET ONE_C=YES
-rem SET PGURL=http://repo.postgrespro.ru/1c-10-beta/src/postgrespro-1c-10.3.tar.bz2
+SET PG_PATCH_VERSION=1
+rem SET PRODUCT_NAME=PostgreSQL
+SET PRODUCT_NAME=PostgreSQL 1C
+SET ONE_C=YES
+SET PGURL=http://localrepo.l.postgrespro.ru/dev/src/postgresql-%PG_MAJOR_VERSION%.%PG_PATCH_VERSION%.tar.bz2
 SET PERL5LIB=.
 SET MSBFLAGS=/m
 call run.cmd %1
