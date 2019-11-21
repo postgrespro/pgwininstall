@@ -10,15 +10,17 @@ rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
 
-if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
-if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
-
 IF %SDK% == MSVC2015 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
 IF %SDK% == MSVC2017 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
+
+
+if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
+if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
+
 
 :ZSTD
 ECHO ON
