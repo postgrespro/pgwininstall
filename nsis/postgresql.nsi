@@ -26,6 +26,7 @@
 !insertmacro VersionCompare
 ;--------------------------------
 !define LANGFILE_LANGDLL_FMT "%ENGNAME%"
+!define PG_REG_KEY_FOR_PGADIN "SOFTWARE\PostgreSQL\Services\"
 ;General
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "${BUILD_DIR}\installers\${PRODUCT_NAME}_${PG_DEF_VERSION}_${PG_INS_SUFFIX}"
@@ -1263,6 +1264,15 @@ Function WriteInstallOptions
   WriteRegStr HKLM "${PG_REG_SERVICE_KEY}" "Display Name" $Branding_text
   WriteRegStr HKLM "${PG_REG_SERVICE_KEY}" "Product Code" $ServiceID_text
   WriteRegStr HKLM "${PG_REG_SERVICE_KEY}" "Service Account" $ServiceAccount_text
+
+  ;for pgAdmin
+  WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Data Directory" $DATA_DIR
+  WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Database Superuser" $UserName_text
+  WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Display Name" $Branding_text
+  WriteRegDWORD HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Port" $TextPort_text
+  WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Product Code" $ServiceID_text
+  WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Service Account" $ServiceAccount_text
+
 FunctionEnd
 
 Function un.DeleteInstallOptions
@@ -1305,6 +1315,15 @@ Function un.DeleteInstallOptions
 	DeleteRegKey /ifempty HKLM "${PG_OLD_REG_KEY}"
   	DeleteRegKey /ifempty HKLM "${PG_OLD_REG_SERVICE_KEY}"
   ${endif}
+  ;for pgAdmin
+  DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Data Directory"
+  DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Database Superuser"
+  DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Display Name"
+  DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Port"
+  DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Product Code"
+  DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Service Account"
+  DeleteRegKey /ifempty HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text"
+
 FunctionEnd
 
 Function un.ChecExistInstall
