@@ -692,6 +692,7 @@ Section $(componentServer) sec1
                FileWrite $0 "online_analyze.local_tracking = 'on'$\r$\n"
                FileWrite $0 "plantuner.fix_empty_table = 'on'  $\r$\n"
                FileWrite $0 "online_analyze.enable = on$\r$\n"
+               FileWrite $0 "lc_messages = 'en_EN.utf-8'$\r$\n"
                FileClose $0
         ${else}
                ClearErrors
@@ -1268,7 +1269,6 @@ Function WriteInstallOptions
   WriteRegStr HKLM "${PG_REG_SERVICE_KEY}" "Service Account" $ServiceAccount_text
 
   ;for pgAdmin
-  ;MessageBox MB_OK|MB_ICONINFORMATION "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text"
   WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Data Directory" $DATA_DIR
   WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Database Superuser" $UserName_text
   WriteRegStr HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Display Name" $Branding_text
@@ -1319,7 +1319,6 @@ Function un.DeleteInstallOptions
   	DeleteRegKey /ifempty HKLM "${PG_OLD_REG_SERVICE_KEY}"
   ${endif}
   ;for pgAdmin
-  ;MessageBox MB_OK|MB_ICONINFORMATION "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text"
   DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Data Directory"
   DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Database Superuser"
   DeleteRegValue HKLM "${PG_REG_KEY_FOR_PGADIN}$ServiceID_text" "Display Name"
