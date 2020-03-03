@@ -14,7 +14,7 @@
 	<!-- Id ="c5311991-bf45-4bde-b5d0-1212c13b160e" -->
 	<!-- Id ="88aa1355-9eb8-422c-ac4f-8ddce5ddec26" -->
 
- <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"
+ <Package InstallerVersion="405" Compressed="yes" InstallScope="perMachine"
 	Keywords="$(var.APPKEYWORDS)"
 	Comments="$(var.APPCOMMENTS)"
 	Manufacturer="$(var.APPVENDOR)"
@@ -42,9 +42,12 @@
 			</Directory>
 		</Directory>
 	</Directory>
+	<Merge Id="VCRedist" SourceFile="C:\Program Files (x86)\Common Files\Merge Modules\Microsoft_VC120_CRT_x64.msm"  DiskId="1" Language="0"/>
 </Directory>
 
-
+<Feature Id="VCRedist" Title="Visual C++ 2013 Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+    <MergeRef Id="VCRedist"/>
+</Feature>
 
 <!-- Features -->
       <Feature Id="base" Title="$(var.APPNAME) - $(var.APPCOMMENTS)" Level="1" Description="$(var.APPDESCRIPTION)" Display="expand"  AllowAdvertise="no" Absent="disallow">
