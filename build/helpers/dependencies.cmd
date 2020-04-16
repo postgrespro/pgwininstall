@@ -288,10 +288,11 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_ICU
 TITLE Building icu...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip
+rem wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip
+wget --no-check-certificate -c https://github.com/unicode-org/icu/releases/download/release-56-2/icu4c-56_2-src.zip -O icu4c-56_2-src.zip
 rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
-7z x icu4c-56_1-src.zip -o%DEPENDENCIES_SRC_DIR% -y
+7z x icu4c-56_2-src.zip -o%DEPENDENCIES_SRC_DIR% -y
 CD /D %DEPENDENCIES_SRC_DIR%\icu
 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 (
