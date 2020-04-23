@@ -1,5 +1,4 @@
 CALL %ROOT%\build\helpers\setvars.cmd
-
 IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
   7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
   REM Go to last build
@@ -60,6 +59,12 @@ if "%PRODUCT_NAME%" == "PostgreSQL" (
     patch -p1 < %%I || GOTO :ERROR
   )
 )
+
+IF %SDK% == MSVC2017 (
+  cp -va %ROOT%/patches/postgresql/2017.patch .
+  patch -p1 < 2017.patch || GOTO :ERROR
+)
+
 
 :DONE_POSTGRESQL_PATCH
 >src\tools\msvc\config.pl  ECHO use strict;
@@ -192,6 +197,7 @@ SET WGET=wget -N --no-check-certificate
 rem download help sources
 CD /D %DOWNLOADS_DIR%
 SET DOCURL=http://repo.l.postgrespro.ru/doc
+if "%BUILD_TYPE%" == "dev" SET DOCURL=http://repo.l.postgrespro.ru/doc/dev
 
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-en.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresPro" %WGET% -O help-sources-ru.zip %DOCURL%/pgpro/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR

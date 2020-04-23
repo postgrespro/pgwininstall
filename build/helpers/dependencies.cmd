@@ -10,13 +10,22 @@ rm -rf %DEPENDENCIES_SRC_DIR%
 MKDIR %DEPENDENCIES_SRC_DIR%
 MKDIR %DOWNLOADS_DIR%
 
+IF %SDK% == MSVC2015 (
+SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
+)
+IF %SDK% == MSVC2017 (
+SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
+)
+
+
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
 
 
 :ZSTD
+ECHO ON
 TITLE "Building libzstd"
-set ZSTD_RELEASE=1.1.0
+IF "ZSTD_RELEASE" == "" set ZSTD_RELEASE=1.1.0
 CD /D %DOWNLOADS_DIR%
 wget -O zstd-%ZSTD_RELEASE%.zip --no-check-certificate -c https://github.com/facebook/zstd/archive/v%ZSTD_RELEASE%.zip
 rm -rf %DEPENDENCIES_SRC_DIR%/zstd-%ZSTD_RELEASE%
@@ -24,13 +33,23 @@ MKDIR %DEPENDENCIES_SRC_DIR%\zstd-%ZSTD_RELEASE%
 CD /D %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\zstd-%ZSTD_RELEASE%.zip
 CD zstd-%ZSTD_RELEASE%
+IF %SDK% == MSVC2017 (
+CD build/VS2010
+rem call "./../VS_Scripts/build.VS%REDIST_YEAR%.cmd" || GOTO :ERROR
+rem call "./../VS_Scripts/build.generic.cmd" VS2017 x64 Release v141 || GOTO :ERROR
+msbuild zstd.sln /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+CD ../..
+)ELSE (
 call build/VS_Scripts/build.VS%REDIST_YEAR%.cmd || GOTO :ERROR
+)
 MKDIR %DEPENDENCIES_BIN_DIR%\zstd
 cp lib\zstd.h %DEPENDENCIES_BIN_DIR%\zstd
 if %ARCH% == X86 (
 	cp -va build/VS_Scripts/BIN/Release/Win32/zstdlib_x86* %DEPENDENCIES_BIN_DIR%\zstd
 ) else (
 	cp -va build/VS_Scripts/BIN/Release/x64/zstdlib_x64* %DEPENDENCIES_BIN_DIR%\zstd
+	cp -va build/VS2010/bin/x64_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd
+	cp -va build/VS2010/bin/x64/Release/zstdlib_x64* %DEPENDENCIES_BIN_DIR%\zstd
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zstd
 
@@ -99,7 +118,7 @@ tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
 patch -f -p0 < libiconv.patch || GOTO :ERROR
-msbuild libiconv.vcxproj /m /p:Configuration=Release /p:Platform=%Platform%  /p:PlatformToolset=%PlatformToolset%|| GOTO :ERROR
+msbuild libiconv.vcxproj /m /p:Configuration=Release /p:Platform=%Platform%  /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\iconv || GOTO :ERROR
 cp -av iconv.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
 cp -av config.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
@@ -242,7 +261,7 @@ tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\gettext-*
 cp -v %ROOT%/patches/gettext/gettext-%GETTEXT_VER%-%SDK%.patch gettext.patch
 patch -f -p0 < gettext.patch || GOTO :ERROR
-msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset%  || GOTO :ERROR
+msbuild libintl.vcxproj /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl\lib %DEPENDENCIES_BIN_DIR%\libintl\include
 cp -v Release*/*.dll  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR
 cp -v Release*/*.lib  %DEPENDENCIES_BIN_DIR%\libintl\lib || GOTO :ERROR

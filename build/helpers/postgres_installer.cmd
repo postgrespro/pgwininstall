@@ -26,6 +26,14 @@ wget -c https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4
 wget -c https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x64.exe -O "%BUILD_DIR%\vcredist\vcredist_x64_2015.exe" || GOTO :ERROR
 )
 
+IF %REDIST_YEAR% == 2017 (
+rem wget -c https://download.visualstudio.microsoft.com/download/pr/11100229/78c1e864d806e36f6035d80a0e80399e/VC_redist.x86.exe -O "%BUILD_DIR%\vcredist\vcredist_x86_2017.exe" || GOTO :ERROR
+rem wget -c https://download.visualstudio.microsoft.com/download/pr/11100230/15ccb3f02745c7b206ad10373cbca89b/VC_redist.x64.exe -O "%BUILD_DIR%\vcredist\vcredist_x64_2017.exe" || GOTO :ERROR
+rem VCToolsRedistDir=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\
+cp "%VCToolsRedistDir%vc_redist.x86.exe" "%BUILD_DIR%\vcredist\vcredist_x86_2017.exe"
+cp "%VCToolsRedistDir%vc_redist.x64.exe" "%BUILD_DIR%\vcredist\vcredist_x64_2017.exe"
+)
+
 REM Make directory for installers
 MKDIR "%BUILD_DIR%\installers"
 
