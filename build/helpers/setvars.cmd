@@ -74,11 +74,14 @@ ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
   SET PG_DEF_VERSION=%PG_MAJOR_VERSION%%PG_PATCH_VERSION%
 )
 
+if "%BUILD_TYPE%"=="" SET BUILD_TYPE=dev
 SET PGVER=%PG_DEF_VERSION%
 IF "%PGURL%"=="" (
    IF "%PRODUCT_NAME%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
    IF "%PRODUCT_NAME%"=="PostgreSQL" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
-   IF "%PRODUCT_NAME%"=="PostgresPro" SET PGURL="http://repo.l.postgrespro.ru/pgpro-%PG_MAJOR_VERSION%-beta/src/postgrespro-standard-%PGVER%.tar.bz2"
+   IF "%PRODUCT_NAME%"=="PostgresPro" SET
+   PGURL="http://localrepo.l.postgrespro.ru/%BUILD_TYPE%/src/postgrespro-standard-%PGVER%.tar.bz2"
+   IF "%PRODUCT_NAME%"=="PostgresProEnterprise" SET PGURL="http://localrepo.l.postgrespro.ru/%BUILD_TYPE%/src/postgrespro-enterprise-%PGVER%.tar.bz2"
 )
 
 REM Set useful directories paths so they're used in scripts
