@@ -16,7 +16,11 @@ SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 IF %SDK% == MSVC2017 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
+IF %SDK% == MSVC2019 (
+SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
+)
 
+rem GOTO :BUILD_ICONV
 
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
@@ -33,15 +37,25 @@ MKDIR %DEPENDENCIES_SRC_DIR%\zstd-%ZSTD_RELEASE%
 CD /D %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\zstd-%ZSTD_RELEASE%.zip
 CD zstd-%ZSTD_RELEASE%
+
 IF %SDK% == MSVC2017 (
+CD build/VS2010
+msbuild zstd.sln /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+CD ../..
+GOTO :ENDZSTD
+)
+
+IF %SDK% == MSVC2019 (
 CD build/VS2010
 rem call "./../VS_Scripts/build.VS%REDIST_YEAR%.cmd" || GOTO :ERROR
 rem call "./../VS_Scripts/build.generic.cmd" VS2017 x64 Release v141 || GOTO :ERROR
 msbuild zstd.sln /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 CD ../..
-)ELSE (
-call build/VS_Scripts/build.VS%REDIST_YEAR%.cmd || GOTO :ERROR
+GOTO :ENDZSTD
 )
+call build/VS_Scripts/build.VS%REDIST_YEAR%.cmd || GOTO :ERROR
+
+:ENDZSTD
 MKDIR %DEPENDENCIES_BIN_DIR%\zstd
 cp lib\zstd.h %DEPENDENCIES_BIN_DIR%\zstd
 if %ARCH% == X86 (
@@ -117,8 +131,11 @@ MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
+echo on
 patch -f -p0 < libiconv.patch || GOTO :ERROR
+
 msbuild libiconv.vcxproj /m /p:Configuration=Release /p:Platform=%Platform%  /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+
 cp -av include %DEPENDENCIES_BIN_DIR%\iconv || GOTO :ERROR
 cp -av iconv.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
 cp -av config.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR

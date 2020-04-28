@@ -64,6 +64,10 @@ IF %SDK% == MSVC2017 (
   cp -va %ROOT%/patches/postgresql/2017.patch .
   patch -p1 < 2017.patch || GOTO :ERROR
 )
+IF %SDK% == MSVC2019 (
+  cp -va %ROOT%/patches/postgresql/2017.patch .
+  patch -p1 < 2017.patch || GOTO :ERROR
+)
 
 
 :DONE_POSTGRESQL_PATCH

@@ -34,6 +34,11 @@ cp "%VCToolsRedistDir%vc_redist.x86.exe" "%BUILD_DIR%\vcredist\vcredist_x86_2017
 cp "%VCToolsRedistDir%vc_redist.x64.exe" "%BUILD_DIR%\vcredist\vcredist_x64_2017.exe"
 )
 
+IF %REDIST_YEAR% == 2019 (
+cp "%VCToolsRedistDir%vc_redist.x86.exe" "%BUILD_DIR%\vcredist\vcredist_x86_2019.exe"
+cp "%VCToolsRedistDir%vc_redist.x64.exe" "%BUILD_DIR%\vcredist\vcredist_x64_2019.exe"
+)
+
 REM Make directory for installers
 MKDIR "%BUILD_DIR%\installers"
 
