@@ -27,7 +27,6 @@ if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
 
 
 :ZSTD
-ECHO ON
 TITLE "Building libzstd"
 IF "ZSTD_RELEASE" == "" set ZSTD_RELEASE=1.1.0
 CD /D %DOWNLOADS_DIR%
@@ -131,7 +130,7 @@ MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libiconv-%ICONV_VER%*
 cp -v %ROOT%/patches/libiconv/libiconv-%ICONV_VER%-%SDK%.patch libiconv.patch
-echo on
+
 patch -f -p0 < libiconv.patch || GOTO :ERROR
 
 msbuild libiconv.vcxproj /m /p:Configuration=Release /p:Platform=%Platform%  /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR

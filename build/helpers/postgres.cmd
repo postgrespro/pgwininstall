@@ -200,11 +200,11 @@ SET WGET=wget -N --no-check-certificate
 
 rem download help sources
 CD /D %DOWNLOADS_DIR%
-SET DOCURL=http://localrepo.l.postgrespro.ru/%BUILD_TYPE%/doc
+rem SET DOCURL=http://localrepo.l.postgrespro.ru/%BUILD_TYPE%/doc
 rem cut tar.bz2 extension from PGURL
-SET HELPURL=%PGURL:0,-7%
-%WGET% -O help-sources-en.zip %prefix%.help.en.zip || GOTO :ERROR
-%WGET% -O help-sources-ru.zip %prefix%.help.ru.zip || GOTO :ERROR
+SET HELPURL=%PGURL:~0,-8%
+%WGET% -O help-sources-en.zip %HELPURL%.help.en.zip || GOTO :ERROR
+%WGET% -O help-sources-ru.zip %HELPURL%.help.ru.zip || GOTO :ERROR
 
 rem building help files
 CD /D %BUILD_DIR%\postgresql
