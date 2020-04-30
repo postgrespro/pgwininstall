@@ -20,7 +20,7 @@ IF %SDK% == MSVC2019 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
 
-rem GOTO :BUILD_ICONV
+rem GOTO :BUILD_OPENSSL
 
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
@@ -245,12 +245,19 @@ rm -rf %DEPENDENCIES_BIN_DIR%\openssl %DEPENDENCIES_SRC_DIR%\openssl-*
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl
 tar zxf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR%
 CD /D %DEPENDENCIES_SRC_DIR%\openssl-*
-IF %ARCH% == X86 perl Configure VC-WIN32 no-asm   || GOTO :ERROR
-IF %ARCH% == X64 perl Configure VC-WIN64A no-asm  || GOTO :ERROR
-IF %ARCH% == X86 call ms\do_ms
-IF %ARCH% == X64 call ms\do_win64a.bat
-set CL=/MP
-nmake -f ms\ntdll.mak || GOTO :ERROR
+IF %ARCH% == X86 perl Configure VC-WIN32 no-asm  --prefix=%DEPENDENCIES_BIN_DIR%\openssl\ --openssldir=%DEPENDENCIES_BIN_DIR%\openssldir\ || GOTO :ERROR
+IF %ARCH% == X64 perl Configure VC-WIN64A no-asm --prefix=%DEPENDENCIES_BIN_DIR%\openssl\ --openssldir=%DEPENDENCIES_BIN_DIR%\openssldir\ || GOTO :ERROR
+rem IF %ARCH% == X86 call ms\do_ms
+rem IF %ARCH% == X64 call ms\do_win64a.bat
+rem set CL=/MP
+rem nmake -f ms\ntdll.mak || GOTO :ERROR
+nmake || GOTO :ERROR
+TITLE Installing OpenSSL...
+nmake install || GOTO :ERROR
+CD /D %DOWNLOADS_DIR%
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\openssl -y
+GOTO :BUILD_GETTEXT
+
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl\lib
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl\include
 cp -av out32dll/* %DEPENDENCIES_BIN_DIR%\openssl\lib || GOTO :ERROR

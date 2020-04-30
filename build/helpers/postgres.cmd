@@ -164,13 +164,17 @@ cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.lib    %BUILD_DIR%\distr_%ARCH%_%PGV
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/bin/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+
+rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/openssl/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/openssl/bin/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" cp -va %DEPENDENCIES_BIN_DIR%/zstd/*.dll           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 REM Copy needed executables
-cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/less/*.exe           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 REM Copy libraries headers  to "include" directory for a God sake
@@ -186,7 +190,9 @@ cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/lib/libxml2.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*t.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*eay32.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*eay32.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/libssl.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/libcrypto.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib  || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/zdll.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/uuid/lib/uuid.lib %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 
