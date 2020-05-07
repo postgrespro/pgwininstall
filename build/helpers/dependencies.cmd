@@ -20,7 +20,7 @@ IF %SDK% == MSVC2019 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
 
-rem GOTO :BUILD_OPENSSL
+rem GOTO  :BUILD_XSLT
 
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
@@ -123,17 +123,16 @@ patch -f -p0 < libiconv.patch || GOTO :ERROR
 msbuild libiconv.vcxproj /m /p:Configuration=Release /p:Platform=%Platform%  /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 
 cp -av include %DEPENDENCIES_BIN_DIR%\iconv || GOTO :ERROR
-cp -av iconv.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
-cp -av config.h %DEPENDENCIES_BIN_DIR%\iconv\include || GOTO :ERROR
+cp -av iconv.h %DEPENDENCIES_BIN_DIR%\iconv\include
+cp -av config.h %DEPENDENCIES_BIN_DIR%\iconv\include
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv\lib
-cp -av Release*/*.dll %DEPENDENCIES_BIN_DIR%\iconv\lib || GOTO :ERROR
-cp -av Release*/libiconv.dll %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.dll || GOTO :ERROR
-cp -av Release*/*.lib %DEPENDENCIES_BIN_DIR%\iconv\lib || GOTO :ERROR
-cp -av Release*/libiconv.lib %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.lib || GOTO :ERROR
+cp -av %Platform%/Release*/*.dll %DEPENDENCIES_BIN_DIR%\iconv\lib || GOTO :ERROR
+cp -av %Platform%/Release*/libiconv.dll %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.dll || GOTO :ERROR
+cp -av %Platform%/Release*/*.lib %DEPENDENCIES_BIN_DIR%\iconv\lib || GOTO :ERROR
+cp -av %Platform%/Release*/libiconv.lib %DEPENDENCIES_BIN_DIR%\iconv\lib\iconv.lib || GOTO :ERROR
 cp -av lib %DEPENDENCIES_BIN_DIR%\iconv\libiconv || GOTO :ERROR
 CD /D %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\iconv
-
 
 :BUILD_ZLIB
 TITLE Building zlib...
@@ -222,7 +221,6 @@ cp -av lib %DEPENDENCIES_BIN_DIR%\libxslt || GOTO :ERROR
 cp -av include %DEPENDENCIES_BIN_DIR%\libxslt || GOTO :ERROR
 CD /D %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libxslt -y
-
 
 :BUILD_OPENSSL
 TITLE Building OpenSSL...
