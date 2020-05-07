@@ -28,7 +28,7 @@ if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
 
 :ZSTD
 TITLE "Building libzstd"
-IF "ZSTD_RELEASE" == "" set ZSTD_RELEASE=1.1.0
+IF "ZSTD_RELEASE" == "" set ZSTD_RELEASE=1.4.4
 CD /D %DOWNLOADS_DIR%
 wget -O zstd-%ZSTD_RELEASE%.zip --no-check-certificate -c https://github.com/facebook/zstd/archive/v%ZSTD_RELEASE%.zip
 rm -rf %DEPENDENCIES_SRC_DIR%/zstd-%ZSTD_RELEASE%
@@ -37,32 +37,19 @@ CD /D %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\zstd-%ZSTD_RELEASE%.zip
 CD zstd-%ZSTD_RELEASE%
 
-IF %SDK% == MSVC2017 (
 CD build/VS2010
-msbuild zstd.sln /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+msbuild zstd.sln /m /t:Clean,Build /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 CD ../..
-GOTO :ENDZSTD
-)
 
-IF %SDK% == MSVC2019 (
-CD build/VS2010
-rem call "./../VS_Scripts/build.VS%REDIST_YEAR%.cmd" || GOTO :ERROR
-rem call "./../VS_Scripts/build.generic.cmd" VS2017 x64 Release v141 || GOTO :ERROR
-msbuild zstd.sln /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
-CD ../..
-GOTO :ENDZSTD
-)
-call build/VS_Scripts/build.VS%REDIST_YEAR%.cmd || GOTO :ERROR
+rem Not working on 1.4.4, problem with /p:OutDir: fatal error LNK1181: cannot open input file 'libzstd.lib' for fullbench-dll.vcxproj
+rem call build/VS_Scripts/build.VS%REDIST_YEAR%.cmd || GOTO :ERROR
 
-:ENDZSTD
 MKDIR %DEPENDENCIES_BIN_DIR%\zstd
 cp lib\zstd.h %DEPENDENCIES_BIN_DIR%\zstd
 if %ARCH% == X86 (
-	cp -va build/VS_Scripts/BIN/Release/Win32/zstdlib_x86* %DEPENDENCIES_BIN_DIR%\zstd
+	cp -va build/VS2010/bin/Win32_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd
 ) else (
-	cp -va build/VS_Scripts/BIN/Release/x64/zstdlib_x64* %DEPENDENCIES_BIN_DIR%\zstd
 	cp -va build/VS2010/bin/x64_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd
-	cp -va build/VS2010/bin/x64/Release/zstdlib_x64* %DEPENDENCIES_BIN_DIR%\zstd
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zstd
 
