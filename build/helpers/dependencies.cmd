@@ -210,6 +210,13 @@ wget -c http://repo.postgrespro.ru/depends/libxslt-%XSLT_VER%.tar.gz -O libxslt-
 rm -rf %DEPENDENCIES_BIN_DIR%\libxslt %DEPENDENCIES_SRC_DIR%\libxslt-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxslt
 tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
+
+IF EXIST %ROOT%/patches/libxslt/libxslt-%XSLT_VER%.patch (
+CD /D %DEPENDENCIES_SRC_DIR%\libxslt-%XSLT_VER%*
+cp -v %ROOT%/patches/libxslt/libxslt-%XSLT_VER%.patch libxslt.patch
+patch -f -p1 < libxslt.patch || GOTO :ERROR
+)
+
 CD /D %DEPENDENCIES_SRC_DIR%\libxslt-*\win32
 cscript configure.js compiler=msvc zlib=yes iconv=yes include=%DEPENDENCIES_BIN_DIR%\iconv\include;%DEPENDENCIES_BIN_DIR%\libxml2\include;%DEPENDENCIES_BIN_DIR%\zlib\include lib=%DEPENDENCIES_BIN_DIR%\iconv\lib;%DEPENDENCIES_BIN_DIR%\libxml2\lib;%DEPENDENCIES_BIN_DIR%\zlib\lib
 sed -i /NOWIN98/d Makefile.msvc
