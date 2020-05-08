@@ -154,16 +154,17 @@ rem now actually copy DLLs of dependencies into our bindir
 
 SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
 
-SET PRO_BACKUP=%BUILD_DIR%\postgresql\*%PGVER%*\Release\pg_probackup\pg_probackup.exe
-SET PRO_BACKUP=%PRO_BACKUP:\=/%
+rem SET PRO_BACKUP=%BUILD_DIR%\postgresql\*%PGVER%*\Release\pg_probackup\pg_probackup.exe
+rem SET PRO_BACKUP=%PRO_BACKUP:\=/%
 
-cp -va %PRO_BACKUP% %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
+rem cp -va %PRO_BACKUP% %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
 
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/lib/*.lib    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\lib || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/iconv/lib/*.dll      %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/libxml2/bin/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/libxslt/lib/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin
+cp -va %DEPENDENCIES_BIN_DIR%/libxslt/bin/*.dll    %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
