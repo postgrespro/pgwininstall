@@ -20,7 +20,7 @@ IF %SDK% == MSVC2019 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
 
-rem GOTO  :BUILD_XSLT
+rem GOTO :BUILD_GETTEXT
 
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
@@ -268,8 +268,8 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_GETTEXT
 TITLE Building gettext...
 CD /D %DOWNLOADS_DIR%
-REM wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
-wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
+wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
+rem wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libintl %DEPENDENCIES_SRC_DIR%\gettext-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
 tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
