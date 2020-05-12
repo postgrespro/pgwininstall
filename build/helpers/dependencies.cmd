@@ -30,12 +30,14 @@ if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
 TITLE "Building libzstd"
 IF "ZSTD_RELEASE" == "" set ZSTD_RELEASE=1.4.4
 CD /D %DOWNLOADS_DIR%
-wget -O zstd-%ZSTD_RELEASE%.zip --no-check-certificate -c https://github.com/facebook/zstd/archive/v%ZSTD_RELEASE%.zip
+rem wget -O zstd-%ZSTD_RELEASE%.zip --no-check-certificate -c https://github.com/facebook/zstd/archive/v%ZSTD_RELEASE%.zip
+
+wget -O zstd-%ZSTD_RELEASE%.tar.gz --no-check-certificate -c http://repo.postgrespro.ru/depends/zstd-%ZSTD_RELEASE%.tar.gz
 rm -rf %DEPENDENCIES_SRC_DIR%/zstd-%ZSTD_RELEASE%
 MKDIR %DEPENDENCIES_SRC_DIR%\zstd-%ZSTD_RELEASE%
-CD /D %DEPENDENCIES_SRC_DIR%
-7z x %DOWNLOADS_DIR%\zstd-%ZSTD_RELEASE%.zip
-CD zstd-%ZSTD_RELEASE%
+rem  7z x %DOWNLOADS_DIR%\zstd-%ZSTD_RELEASE%.zip
+tar xf zstd-%ZSTD_RELEASE%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
+CD %DEPENDENCIES_SRC_DIR%\zstd-%ZSTD_RELEASE%
 
 CD build/VS2010
 msbuild zstd.sln /m /t:Clean,Build /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
@@ -59,7 +61,7 @@ REM TO-DO: overwrite to build rules
 :DOWNLOAD_MSYS_UTILS
 TITLE Download msys utils...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/mingw_min/min_msys_X86.zip -O min_msys_%ARCH%.zip
 
 :BUILD_LESS
 TITLE "Building less"
@@ -86,7 +88,8 @@ cp -va *.exe %DEPENDENCIES_BIN_DIR%\less
 TITLE Build winlibedit
 CD /D %DOWNLOADS_DIR%
 REM wget --no-check-certificate -c http://downloads.sourceforge.net/project/mingweditline/wineditline-%EDITLINE_VER%.zip
-wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/wineditline-%EDITLINE_VER%.zip
+rem wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/wineditline-%EDITLINE_VER%.zip
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/wineditline-%EDITLINE_VER%.zip
 CD /D %DEPENDENCIES_SRC_DIR%
 7z x %DOWNLOADS_DIR%\wineditline-%EDITLINE_VER%.zip
 CD /D wineditline-%EDITLINE_VER%\src
@@ -110,8 +113,8 @@ COPY editline\readline.h %DEPENDENCIES_BIN_DIR%\wineditline\include\editline
 :BUILD_ICONV
 TITLE Building iconv...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
-rem wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+rem wget --no-check-certificate -c http://ftp.gnu.org/gnu/libiconv/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/libiconv-%ICONV_VER%.tar.gz -O libiconv-%ICONV_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\iconv %DEPENDENCIES_SRC_DIR%\libiconv-*
 MKDIR %DEPENDENCIES_BIN_DIR%\iconv
 tar xf libiconv-%ICONV_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -156,7 +159,8 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_UUID
 TITLE Building uuid...
 CD /D %DOWNLOADS_DIR%
-wget -c http://netcologne.dl.sourceforge.net/project/osspuuidwin32/src/ossp_uuid_1.6.2_win32_source_120608.7z -O ossp_uuid_1.6.2_win32_source_120608.7z
+rem wget -c http://netcologne.dl.sourceforge.net/project/osspuuidwin32/src/ossp_uuid_1.6.2_win32_source_120608.7z -O ossp_uuid_1.6.2_win32_source_120608.7z
+wget -c http://repo.postgrespro.ru/depends/ossp_uuid_1.6.2_win32_source_120608.7z -O ossp_uuid_1.6.2_win32_source_120608.7z
 rm -rf %DEPENDENCIES_BIN_DIR%\uuid %DEPENDENCIES_SRC_DIR%\ossp_uuid
 MKDIR %DEPENDENCIES_BIN_DIR%\uuid
 7z x %DOWNLOADS_DIR%\ossp_uuid_1.6.2_win32_source_120608.7z -o%DEPENDENCIES_SRC_DIR%\ -y || GOTO :ERROR
@@ -232,7 +236,9 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_OPENSSL
 TITLE Building OpenSSL...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
+rem wget --no-check-certificate -c https://www.openssl.org/source/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/openssl-%OPENSSL_VER%.tar.gz -O openssl-%OPENSSL_VER%.tar.gz
+
 rm -rf %DEPENDENCIES_BIN_DIR%\openssl %DEPENDENCIES_SRC_DIR%\openssl-*
 MKDIR %DEPENDENCIES_BIN_DIR%\openssl
 tar zxf openssl-%OPENSSL_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR%
@@ -268,8 +274,8 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_GETTEXT
 TITLE Building gettext...
 CD /D %DOWNLOADS_DIR%
-wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
-rem wget --no-check-certificate -c http://repo.l.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
+rem wget --no-check-certificate -c http://ftp.gnu.org/gnu/gettext/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/gettext-%GETTEXT_VER%.tar.gz -O gettext-%GETTEXT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libintl %DEPENDENCIES_SRC_DIR%\gettext-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libintl
 tar xf gettext-%GETTEXT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
@@ -286,7 +292,8 @@ MKDIR %DEPENDENCIES_BIN_DIR%\libintl\bin
 CD /D %DOWNLOADS_DIR%
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\libintl -y
 
-
+rem LIBSSH2 not used for PostgresPro
+GOTO :BUILD_ICU
 :BUILD_LIBSSH2
 TITLE Building libssh2...
 CD /D %DOWNLOADS_DIR%
@@ -304,10 +311,11 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building icu...
 CD /D %DOWNLOADS_DIR%
 rem wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip
-wget --no-check-certificate -c https://github.com/unicode-org/icu/releases/download/release-56-2/icu4c-56_2-src.zip -O icu4c-56_2-src.zip
+rem wget --no-check-certificate -c https://github.com/unicode-org/icu/releases/download/release-56-2/icu4c-56_2-src.zip -O icu4c-56_2-src.zip
+wget --no-check-certificate -c http://repo.postgrespro.ru/depends/icu4c-%ICU_VER%-src.zip -O icu4c-%ICU_VER%-src.zip
 rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
-7z x icu4c-56_2-src.zip -o%DEPENDENCIES_SRC_DIR% -y
+7z x icu4c-%ICU_VER%-src.zip -o%DEPENDENCIES_SRC_DIR% -y
 CD /D %DEPENDENCIES_SRC_DIR%\icu
 msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 IF %ARCH% == X64 (
