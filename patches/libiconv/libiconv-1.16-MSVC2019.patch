@@ -1158,7 +1158,7 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +#endif /* _LIBICONV_H */
 --- libiconv.vcxproj	1970-01-01 03:00:00.000000000 +0300
 +++ origin/libiconv.vcxproj	2015-10-05 17:07:03.038087288 +0300
-@@ -0,0 +1,374 @@
+@@ -0,0 +1,382 @@
 +﻿<?xml version="1.0" encoding="utf-8"?>
 +<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 +  <ItemGroup Label="ProjectConfigurations">
@@ -1188,24 +1188,32 @@ diff -ruN libiconv.vcxproj origin/libiconv.vcxproj
 +  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <UseDebugLibraries>true</UseDebugLibraries>
-+    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v120</PlatformToolset>
++    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
++    <IntDir>$(Platform)\$(Configuration)\</IntDir>
 +  </PropertyGroup>
 +  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <UseDebugLibraries>true</UseDebugLibraries>
-+    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v120</PlatformToolset>
++    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
++    <IntDir>$(Platform)\$(Configuration)\</IntDir>
 +  </PropertyGroup>
 +  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <UseDebugLibraries>false</UseDebugLibraries>
-+    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v120</PlatformToolset>
 +    <WholeProgramOptimization>true</WholeProgramOptimization>
++    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
++    <IntDir>$(Platform)\$(Configuration)\</IntDir>
 +  </PropertyGroup>
 +  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
 +    <ConfigurationType>DynamicLibrary</ConfigurationType>
 +    <UseDebugLibraries>false</UseDebugLibraries>
-+    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v120</PlatformToolset>
 +    <WholeProgramOptimization>true</WholeProgramOptimization>
++    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
++    <IntDir>$(Platform)\$(Configuration)\</IntDir>
 +  </PropertyGroup>
 +  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
 +  <ImportGroup Label="ExtensionSettings">
