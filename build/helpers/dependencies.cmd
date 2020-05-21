@@ -20,7 +20,7 @@ IF %SDK% == MSVC2019 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
 
-rem GOTO :BUILD_GETTEXT
+rem GOTO :BUILD_ICONV
 
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD

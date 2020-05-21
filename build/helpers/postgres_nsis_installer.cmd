@@ -20,25 +20,33 @@ REM The OLD_* variables used for upgrade from old installers, which was built wi
 SET OLD_PRODUCT_DIR_REGKEY=SOFTWARE\%COMPANY_NAME%\%ARCH%\%PG_MAJOR_VERSION%
 SET OLD_PREV_PRODUCT_DIR_REGKEY=SOFTWARE\%COMPANY_NAME%\%ARCH%\%PG_PREV_MAJOR_VERSION%
 
-REM Set Service-Id
-SET PG_DEF_SERVICEID="postgresql-%ARCH%-%PG_MAJOR_VERSION%"
-IF "%PRODUCT_NAME%" == "PostgreSQL" SET PG_DEF_SERVICEID="postgresql-%ARCH%-%PG_MAJOR_VERSION%"
-IF "%PRODUCT_NAME%" == "PostgresPro" SET PG_DEF_SERVICEID="postgrespro-%ARCH%-%PG_MAJOR_VERSION%"
-IF "%PRODUCT_NAME%" == "PostgresProEnterprise" SET PG_DEF_SERVICEID="postgrespro-enterprise-%ARCH%-%PG_MAJOR_VERSION%"
-
 IF %ARCH% == X86 (
 	SET BITS=32bit
 ) else (
 	SET BITS=64bit
 )
+
+REM Set Service-Id
+SET PG_DEF_SERVICEID="postgresql-%ARCH%-%PG_MAJOR_VERSION%"
+IF "%PRODUCT_NAME%" == "PostgreSQL" (
+ SET PG_DEF_SERVICEID="postgresql-%ARCH%-%PG_MAJOR_VERSION%"
+ IF %BITS%==32bit SET PG_DEF_SERVICEID=postgresql-%PG_MAJOR_VERSION%-%BITS%
+)
+IF "%PRODUCT_NAME%" == "PostgresPro" SET PG_DEF_SERVICEID="postgrespro-%ARCH%-%PG_MAJOR_VERSION%"
+IF "%PRODUCT_NAME%" == "PostgresProEnterprise" SET PG_DEF_SERVICEID="postgrespro-enterprise-%ARCH%-%PG_MAJOR_VERSION%"
+
+
 IF %ONE_C% == YES (
-  SET PRODUCT_NAME=PostgresPro 1C
-  SET PG_DEF_SERVICEID="postgrespro-1C-${PRODUCT_VERSION}"
+  SET PRODUCT_NAME=PostgreSQL 1C
+  rem SET PG_DEF_SERVICEID="postgrespro-1C-${PRODUCT_VERSION}"
+  IF %BITS%==32bit SET PG_DEF_SERVICEID=postgresql-1c-%PG_MAJOR_VERSION%-%BITS%
+  IF %BITS%==64bit SET PG_DEF_SERVICEID=postgresql-1c-%PG_MAJOR_VERSION%
   SET PG_INS_SUFFIX="%ARCH%bit_1C_Setup.exe"
   SET PG_REG_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Installations\postgresql-${PRODUCT_VERSION}"
   SET PG_REG_SERVICE_KEY="Software\Postgres Professional\${PRODUCT_NAME}\Services\postgresql-${PRODUCT_VERSION}"
   SET PRODUCT_DIR_REGKEY="Software\Postgres Professional\${PRODUCT_NAME}\${PRODUCT_VERSION}"
   SET PRODUCT_VERSION="%PG_MAJOR_VERSION%"
+  SET WITH_1C="TRUE"
 ) ELSE (
   SET PG_INS_SUFFIX="%BITS%_Setup.exe"
   SET PRODUCT_VERSION="%PG_MAJOR_VERSION% (%BITS%)"
@@ -50,6 +58,7 @@ IF %ONE_C% == YES (
   SET PG_OLD_REG_SERVICE_KEY="%OLD_PRODUCT_DIR_REGKEY%\Services\postgresql-%PG_MAJOR_VERSION%"
   SET PG_OLD_PREV_REG_KEY="%OLD_PREV_PRODUCT_DIR_REGKEY%\Installations\postgresql-%PG_PREV_MAJOR_VERSION%"
   SET PG_OLD_PREV_REG_SERVICE_KEY="%OLD_PREV_PRODUCT_DIR_REGKEY%\Services\postgresql-%PG_PREV_MAJOR_VERSION%"
+  SET WITH_1C="FALSE"
 )
 
 SET PG_DEF_PORT="%DEFAULT_PORT%"
@@ -88,6 +97,7 @@ REM PostgreSQL Section
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SUFFIX %PG_INS_SUFFIX%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define PG_INS_SOURCE_DIR %PG_INS_SOURCE_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define REDIST_YEAR %REDIST_YEAR%
+>>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define WITH_1C %WITH_1C%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define BUILD_DIR %BUILD_DIR%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !define SDK %SDK%
 >>%NSIS_RES_DIR%\postgres.def.nsh ECHO !addplugindir Plugins
