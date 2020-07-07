@@ -1,0 +1,49 @@
+diff --git a/src/pl/plperl/plperl.c b/src/pl/plperl/plperl.c
+index 2db13d30308..d2787b50beb 100644
+--- a/src/pl/plperl/plperl.c
++++ b/src/pl/plperl/plperl.c
+@@ -300,8 +300,12 @@ static OP  *pp_require_safe(pTHX);
+ static void activate_interpreter(plperl_interp_desc *interp_desc);
+ 
+ #ifdef WIN32
++#if PERL_VERSION >= 28
++#define setlocale_perl(a,b)  Perl_setlocale(a,b)
++#else
+ static char *setlocale_perl(int category, char *locale);
+ #endif
++#endif
+ 
+ /*
+  * Decrement the refcount of the given SV within the active Perl interpreter
+@@ -4159,6 +4163,7 @@ plperl_inline_callback(void *arg)
+  * (needed because of the calls to new_*())
+  */
+ #ifdef WIN32
++#if PERL_VERSION < 28
+ static char *
+ setlocale_perl(int category, char *locale)
+ {
+@@ -4226,5 +4231,6 @@ setlocale_perl(int category, char *locale)
+ 
+ 	return RETVAL;
+ }
++#endif 							/* PERL_VERSION < 28 */
+ 
+ #endif							/* WIN32 */
+diff --git a/src/pl/plperl/plperl.h b/src/pl/plperl/plperl.h
+index 3748158a86d..0044983ed1b 100644
+--- a/src/pl/plperl/plperl.h
++++ b/src/pl/plperl/plperl.h
+@@ -51,11 +51,11 @@
+  */
+ #ifdef _MSC_VER
+ #define __inline__ inline
++#define __builtin_expect(a, b)  (a == b)
+ #ifdef isnan
+ #undef isnan
+ #endif
+ #endif
+-
+ /*
+  * Regarding bool, both PostgreSQL and Perl might use stdbool.h or not,
+  * depending on configuration.  If both agree, things are relatively harmless.

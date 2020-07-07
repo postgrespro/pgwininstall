@@ -22,6 +22,7 @@ CD /D %DOWNLOADS_DIR%
 IF "%GIT_PATH%"=="" (
 SET GIT_PATH=git://git.postgresql.org/git/postgresql.git 
 )
+
 IF NOT "%GIT_BRANCH%"=="" (
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
@@ -48,7 +49,6 @@ IF %ONE_C% == YES (
   )
 )
 
-
 if "%PRODUCT_NAME%" == "PostgreSQL" (
    cp -va %ROOT%/patches/postgresql/%PG_MAJOR_VERSION%/series .
    IF NOT EXIST series GOTO :DONE_POSTGRESQL_PATCH
@@ -59,17 +59,26 @@ if "%PRODUCT_NAME%" == "PostgreSQL" (
   )
 )
 
-IF %SDK% == MSVC2017 (
-  cp -va %ROOT%/patches/postgresql/2017.patch .
-  patch -p1 < 2017.patch || GOTO :ERROR
-)
-IF %SDK% == MSVC2019 (
-  cp -va %ROOT%/patches/postgresql/2017.patch .
-  patch -p1 < 2017.patch || GOTO :ERROR
-)
-
-
 :DONE_POSTGRESQL_PATCH
+IF "%SDK%" == "MSVC2017" (
+  cp -va %ROOT%/patches/postgresql/2017.patch .
+  patch -p1 < 2017.patch || GOTO :ERROR
+
+  rem cp -va %ROOT%/patches/postgresql/perl.5.30.patch .
+  rem patch -p1 < perl.5.30.patch || GOTO :ERROR
+
+)
+
+IF "%SDK%" == "MSVC2019" (
+  cp -va %ROOT%/patches/postgresql/2017.patch .
+  patch -p1 < 2017.patch || GOTO :ERROR
+
+  rem cp -va %ROOT%/patches/postgresql/perl.5.30.patch .
+  rem patch -p1 < perl.5.30.patch || GOTO :ERROR
+
+)
+
+
 >src\tools\msvc\config.pl  ECHO use strict;
 >>src\tools\msvc\config.pl ECHO use warnings;
 >>src\tools\msvc\config.pl ECHO our $config = {
