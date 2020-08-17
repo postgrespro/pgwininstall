@@ -1,12 +1,17 @@
 REM LIBRARY VERSIONS
-SET ICONV_VER=1.15
-SET XSLT_VER=1.1.29
+SET ICONV_VER=1.16
+SET XSLT_VER=1.1.32
 SET ZLIB_VER=1.2.11
-SET XML_VER=2.9.4
-SET OPENSSL_VER=1.0.2n
-SET GETTEXT_VER=0.19.8
+SET XML_VER=2.9.9
+rem SET OPENSSL_VER=1.0.2n
+SET OPENSSL_VER=1.1.1g
+SET GETTEXT_VER=0.20.2
 SET LIBSSH2_VER=1.6.0
 SET WXWIDGETS_VER=3.0.2
+SET EDITLINE_VER=2.205
+SET ZSTD_RELEASE=1.4.4
+rem SET ICU_VER=67_1
+SET ICU_VER=56_2
 
 REM Path vars
 SET PERL32_PATH=C:\Perl
@@ -17,28 +22,25 @@ SET PYTHON32_PATH=C:\Python27x86
 SET PYTHON64_PATH=C:\Python27x64
 SET ZIP_PATH=C:\Program Files\7-Zip;C:\Program Files (x86)\7-Zip
 SET NSIS_PATH=C:\Program Files (x86)\NSIS
-SET MSYS2_PATH=C:\msys64\mingw32\bin;C:\msys64\mingw64\bin;C:\msys32\usr\bin;C:\msys64\usr\bin
+SET MSYS2_PATH=C:\msys64\usr\bin
 SET PATH=%PATH%;%ZIP_PATH%;%MSYS2_PATH%;%NSIS_PATH%
 SET PERL5LIB=.
 
-IF EXIST "%PERL32_BIN%" SET PATH=%PERL32_BIN%;%PATH%
-IF EXIST "%PERL64_BIN%" SET PATH=%PERL64_BIN%;%PATH%
-IF EXIST "%PERL32_BIN%" SET PERL_EXE=%PERL32_BIN%\perl
-IF EXIST "%PERL64_BIN%" SET PERL_EXE=%PERL64_BIN%\perl
+IF %ARCH% == X86 SET PATH=%PERL32_BIN%;%PATH%
+IF %ARCH% == X86 SET PERL_EXE=%PERL32_BIN%\perl.exe
+IF %ARCH% == X86 GOTO :NOT64
 
+IF EXIST "%PERL64_BIN%" SET PATH=%PERL64_BIN%;%PATH%
+IF EXIST "%PERL64_BIN%" SET PERL_EXE=%PERL64_BIN%\perl.exe
+
+:NOT64
+
+IF %ARCH% == X86 SET Platform=Win32
+IF %ARCH% == X64 SET Platform=X64
 IF %SDK% == SDK71 (
   SET REDIST_YEAR=2010
   SET PlatformToolset=v100
-  CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /%ARCH% || GOTO :ERROR
-  ECHO ON
-)
-
-IF %SDK% == MSVC2010 (
-  SET REDIST_YEAR=2010
-  SET PlatformToolset=v100
-  IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall" x86 || GOTO :ERROR
-  ECHO ON
-  IF %ARCH% == X64 CALL "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall" amd64 || GOTO :ERROR
+  CALL "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv" /xp /%ARCH% || GOTO :ERROR
   ECHO ON
 )
 
@@ -65,8 +67,19 @@ IF %SDK% == MSVC2017 (
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
   ECHO ON
   IF %ARCH% == X64 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 || GOTO :ERROR
-  ECHO ON
 )
+IF %SDK% == MSVC2019 (
+  SET REDIST_YEAR=2019
+  SET PlatformToolset=v142
+  IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
+  ECHO ON
+  IF %ARCH% == X64 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 || GOTO :ERROR
+)
+
+rem vcvarsall of VS 2019 rewrite this variable
+IF %ARCH% == X86 SET Platform=Win32
+IF %ARCH% == X64 SET Platform=X64
+
 
 REM As we use Msys2 for build we need to install useful packages we will use
 @ECHO "Current PATH is:"
@@ -79,12 +92,24 @@ ECHO %PG_PATCH_VERSION% | grep "^[0-9]." > nul && (
   SET PG_DEF_VERSION=%PG_MAJOR_VERSION%%PG_PATCH_VERSION%
 )
 
+IF "%ISDEV%"=="1" SET BUILD_TYPE=dev
+IF "%ISDEV%"=="0" SET BUILD_TYPE=stable
+
+if "%BUILD_TYPE%"=="" SET BUILD_TYPE=dev
+
 SET PGVER=%PG_DEF_VERSION%
 SET PGTARNAME=postgresql
 SET HAVE_PGURL=1
 IF "%PGURL%"=="" SET HAVE_PGURL=0
 IF "%PGURL%"=="" SET PGURL="https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2"
 
+
+IF "%PGURL%"=="" (
+   IF "%PRODUCT_NAME%"=="" SET PGURL=https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2
+   IF "%PRODUCT_NAME%"=="PostgreSQL" SET PGURL=https://ftp.postgresql.org/pub/source/v%PGVER%/postgresql-%PGVER%.tar.bz2
+   IF "%PRODUCT_NAME%"=="PostgresPro" SET PGURL=http://localrepo.l.postgrespro.ru/%BUILD_TYPE%/src/postgrespro-standard-%PGVER%.tar.bz2
+   IF "%PRODUCT_NAME%"=="PostgresProEnterprise" SET PGURL=http://localrepo.l.postgrespro.ru/%BUILD_TYPE%/src/postgrespro-enterprise-%PGVER%.tar.bz2
+)
 REM Set useful directories paths so they're used in scripts
 SET BUILD_DIR=%ROOT%\builddir
 SET DEPENDENCIES_SRC_DIR=%BUILD_DIR%\dependencies_src
@@ -109,4 +134,5 @@ if "%PG_MAJOR_VERSION%" == "9.5" SET HAVE_PGSQL_DOC=1
 if "%PG_MAJOR_VERSION%" == "9.6" SET HAVE_PGSQL_DOC=1
 if "%PG_MAJOR_VERSION%" == "10"  SET HAVE_PGSQL_DOC=1
 if "%PG_MAJOR_VERSION%" == "11"  SET HAVE_PGSQL_DOC=1
+if "%PG_MAJOR_VERSION%" == "12"  SET HAVE_PGSQL_DOC=1
 :NO_PGSQL_DOC

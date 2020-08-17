@@ -1,5 +1,5 @@
 CALL %ROOT%\build\helpers\setvars.cmd
-
+echo on
 IF EXIST %DOWNLOADS_DIR%\%DEPS_ZIP% (
   7z x %DOWNLOADS_DIR%\%DEPS_ZIP% -o%DEPENDENCIES_BIN_DIR% -y
   REM Go to last build
@@ -35,7 +35,7 @@ GOTO :NOTAR
 wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
-tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql
+%MSYS2_PATH%\tar xf postgresql-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 :NOTAR
 IF %ONE_C% == YES (
@@ -86,7 +86,7 @@ IF %HAVE_PGURL% == 0 (
 >>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_BIN_DIR%\libintl',
 >>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
 IF %SDK% == SDK71 GOTO :DISABLE_PERL
-IF %ARCH% == X86  GOTO :DISABLE_PERL
+IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',   )
 IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
 GOTO :PERL_CONF_DONE
 :DISABLE_PERL
@@ -107,6 +107,7 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 REM IF %ONE_C% == YES (
 REM   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
 REM )
+
 SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
 
 cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR

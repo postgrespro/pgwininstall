@@ -1,10 +1,10 @@
 diff --git a/src/include/port.h b/src/include/port.h
-index 9fc79f4..98846ea 100644
+index 88603c4def9..3530aa386df 100644
 --- a/src/include/port.h
 +++ b/src/include/port.h
-@@ -468,4 +468,38 @@ extern char *escape_single_quotes_ascii(const char *src);
- /* port/wait_error.c */
- extern char *wait_result_to_str(int exit_status);
+@@ -17,6 +17,41 @@
+ #include <netdb.h>
+ #include <pwd.h>
  
 +#if _MSC_VER > 1800
 +	//From VS2012.
@@ -40,4 +40,7 @@ index 9fc79f4..98846ea 100644
 +	} threadlocinfo;
 +#endif
 +
- #endif   /* PG_PORT_H */
++
+ /*
+  * Windows has enough specialized port stuff that we push most of it off
+  * into another file.

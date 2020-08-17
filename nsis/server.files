@@ -16,6 +16,7 @@
 ./bin/postgres.*
 ./bin/postmaster.*
 ./bin/zic.*
+./bin/pg_verifybackup.*
 ./doc/extension/*.example
 ./doc/buildinfo.txt
 ./lib/*.dll
