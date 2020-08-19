@@ -115,8 +115,9 @@ cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
 :NOLOAD
-IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc;.
-IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
+REM IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc;.
+REM IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
+SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
 
 %PERL_EXE% src\tools\msvc\build.pl || GOTO :ERROR
 
