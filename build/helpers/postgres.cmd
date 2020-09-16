@@ -35,7 +35,7 @@ GOTO :NOTAR
 wget --no-check-certificate %PGURL% -O postgresql-%PGVER%.tar.bz2 || GOTO :ERROR
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
-tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql || GOTO :ERROR
+%MSYS2_PATH%\tar xf postgres*-%PGVER%.tar.bz2 -C %BUILD_UDIR%/postgresql || GOTO :ERROR
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 
 :NOTAR

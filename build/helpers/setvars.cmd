@@ -21,7 +21,8 @@ SET PYTHON32_PATH=C:\Python27x86
 SET PYTHON64_PATH=C:\Python27x64
 SET ZIP_PATH=C:\Program Files\7-Zip;C:\Program Files (x86)\7-Zip
 SET NSIS_PATH=C:\Program Files (x86)\NSIS
-SET MSYS2_PATH=C:\msys32\usr\bin;C:\msys64\usr\bin
+SET MSYS2_PATH=C:\msys32\usr\bin
+rem ;C:\msys64\usr\bin
 SET PATH=%PATH%;%ZIP_PATH%;%MSYS2_PATH%;%NSIS_PATH%
 SET PERL5LIB=.
 
@@ -30,8 +31,6 @@ IF EXIST "%PERL32_BIN%" SET PERL_EXE=%PERL32_BIN%\perl
 IF EXIST "%PERL64_BIN%" SET PATH=%PERL64_BIN%;%PATH%
 IF EXIST "%PERL64_BIN%" SET PERL_EXE=%PERL64_BIN%\perl
 
-IF %ARCH% == X86 SET Platform=Win32
-IF %ARCH% == X64 SET Platform=X64
 IF %SDK% == SDK71 (
   SET REDIST_YEAR=2010
   SET PlatformToolset=v100
@@ -70,6 +69,10 @@ IF %SDK% == MSVC2019 (
   ECHO ON
   IF %ARCH% == X64 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 || GOTO :ERROR
 )
+
+rem vcvarsall of VS 2019 rewrite this variable
+IF %ARCH% == X86 SET Platform=Win32
+IF %ARCH% == X64 SET Platform=X64
 
 
 REM As we use Msys2 for build we need to install useful packages we will use
