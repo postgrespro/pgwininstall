@@ -93,7 +93,8 @@ IF "%SDK%" == "MSVC2019" (
 >>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_BIN_DIR%\libintl',
 >>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
 IF %SDK% == SDK71 GOTO :DISABLE_PERL
-IF %ARCH% == X86  GOTO :DISABLE_PERL
+rem IF %ARCH% == X86  GOTO :DISABLE_PERL
+IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',   )
 IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
 GOTO :PERL_CONF_DONE
 :DISABLE_PERL
@@ -117,6 +118,8 @@ IF "%WITHTAPTESTS%" == "1" >>src\tools\msvc\config.pl ECHO tap_tests ^=^> 1,
 
 rem Setting pager
 >>src\include\pg_config.h.win32 ECHO #define DEFAULT_PAGER "less -XE"
+
+
 
 IF %ONE_C% == YES (
   mv -v contrib\fulleq\fulleq.sql.in.in contrib\fulleq\fulleq.sql.in || GOTO :ERROR
@@ -151,8 +154,8 @@ rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/lib/test_* || GOTO :ERROR
 rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/symbols/test_* || GOTO :ERROR
 
 REM remove python3 extensions
-rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/share/extension/*python3* || GOTO :ERROR
-rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/lib/*python3* || GOTO :ERROR
+rem rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/share/extension/*python3* || GOTO :ERROR
+rem rm -rf %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/lib/*python3* || GOTO :ERROR
 
 REM remove test binaries
 rm -f %BUILD_UDIR%/distr_%ARCH%_%PGVER%/postgresql/bin/test_plan_lru.exe || GOTO :ERROR
