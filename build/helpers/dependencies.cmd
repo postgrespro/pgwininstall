@@ -21,6 +21,7 @@ SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
 
 rem GOTO :BUILD_ICONV
+rem GOTO :BUILD_ICU
 
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
@@ -310,14 +311,18 @@ CD /D %DOWNLOADS_DIR%
 :BUILD_ICU
 TITLE Building icu...
 CD /D %DOWNLOADS_DIR%
-rem wget --no-check-certificate -c http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-src.zip -O icu4c-56_1-src.zip
 rem wget --no-check-certificate -c https://github.com/unicode-org/icu/releases/download/release-56-2/icu4c-56_2-src.zip -O icu4c-56_2-src.zip
 wget --no-check-certificate -c http://repo.postgrespro.ru/depends/icu4c-%ICU_VER%-src.zip -O icu4c-%ICU_VER%-src.zip
 rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
 MKDIR %DEPENDENCIES_BIN_DIR%\icu
 7z x icu4c-%ICU_VER%-src.zip -o%DEPENDENCIES_SRC_DIR% -y
 CD /D %DEPENDENCIES_SRC_DIR%\icu
-msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+IF %SDK% == MSVC2013 (
+  msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
+) ELSE (
+  msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset%  /p:WindowsTargetPlatformVersion=10.0 /p:SkipUWP=true || GOTO :ERROR
+)
+
 IF %ARCH% == X64 (
   cp -va %DEPENDENCIES_SRC_DIR%\icu\bin64 %DEPENDENCIES_BIN_DIR%\icu\bin || GOTO :ERROR
   cp -va %DEPENDENCIES_SRC_DIR%\icu\lib64 %DEPENDENCIES_BIN_DIR%\icu\lib || GOTO :ERROR

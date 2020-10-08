@@ -52,6 +52,7 @@ IF %SDK% == MSVC2013 (
 )
 
 IF %SDK% == MSVC2015 (
+  SET ICU_VER=67_1
   SET REDIST_YEAR=2015
   SET PlatformToolset=v140
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" x86 || GOTO :ERROR
@@ -60,6 +61,7 @@ IF %SDK% == MSVC2015 (
   ECHO ON
 )
 IF %SDK% == MSVC2017 (
+  SET ICU_VER=67_1
   SET REDIST_YEAR=2017
   SET PlatformToolset=v141
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
@@ -67,6 +69,7 @@ IF %SDK% == MSVC2017 (
   IF %ARCH% == X64 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 || GOTO :ERROR
 )
 IF %SDK% == MSVC2019 (
+  SET ICU_VER=67_1
   SET REDIST_YEAR=2019
   SET PlatformToolset=v142
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
