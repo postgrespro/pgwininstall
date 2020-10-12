@@ -113,7 +113,7 @@ IF "%PG_MAJOR_VERSION%" == "9.6" (
     cat server.files > allserver.files
 	type client.files > allclient.files
 )
-IF "%PG_MAJOR_VERSION%" == "12" (
+IF %PG_MAJOR_VERSION% GEQ 12 (
     sed "s/pg_verify_checksums/pg_checksums/" allserver.files > allserver-12.files
     mv allserver-12.files allserver.files
 )
