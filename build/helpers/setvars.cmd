@@ -74,6 +74,8 @@ IF %SDK% == MSVC2019 (
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
   ECHO ON
   IF %ARCH% == X64 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 || GOTO :ERROR
+  SET PYTHON32_PATH=C:\Python38x86
+  SET PYTHON64_PATH=C:\Python38x64
 )
 
 rem vcvarsall of VS 2019 rewrite this variable
