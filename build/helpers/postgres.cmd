@@ -186,12 +186,8 @@ rem download help sources
 CD /D %DOWNLOADS_DIR%
 SET DOCURL=http://repo.postgrespro.ru/doc
 
-IF %HAVE_PGSQL_DOC% == 1 (
-   if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-en.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
-   if "%PRODUCT_NAME%" == "PostgreSQL"  %WGET% -O help-sources-ru.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
-) ELSE (
-     GOTO :NO_HELP_SOURCES
-)
+%WGET% -O help-sources-en.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/en/help-sources.zip || GOTO :ERROR
+%WGET% -O help-sources-ru.zip %DOCURL%/pgsql/%PG_MAJOR_VERSION%/ru/help-sources.zip || GOTO :ERROR
 
 rem building help files
 CD /D %BUILD_DIR%\postgresql
@@ -209,7 +205,6 @@ CD help-en
 "C:\Program Files (x86)\HTML Help Workshop\hhc" htmlhelp.hhp
 cp htmlhelp.chm %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\doc\postgresql-en.chm || GOTO :ERROR
 
-:NO_HELP_SOURCES
 7z a -r %DOWNLOADS_DIR%\pgsql_%ARCH%_%PGVER%.zip %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql || GOTO :ERROR
 
 GOTO :DONE

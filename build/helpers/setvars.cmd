@@ -128,13 +128,3 @@ REM Magic to set root directory of those scripts (Where Readme.md lies)
 
 REM Let's use MP for nmake for parallel build
 SET CL=/MP
-
-SET HAVE_PGSQL_DOC=0
-
-if "%PRODUCT_NAME%" == "PostgreSQL 1C" GOTO :NO_PGSQL_DOC
-if "%PG_MAJOR_VERSION%" == "9.5" SET HAVE_PGSQL_DOC=1
-if "%PG_MAJOR_VERSION%" == "9.6" SET HAVE_PGSQL_DOC=1
-if "%PG_MAJOR_VERSION%" == "10"  SET HAVE_PGSQL_DOC=1
-if "%PG_MAJOR_VERSION%" == "11"  SET HAVE_PGSQL_DOC=1
-if "%PG_MAJOR_VERSION%" == "12"  SET HAVE_PGSQL_DOC=1
-:NO_PGSQL_DOC
