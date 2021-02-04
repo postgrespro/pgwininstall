@@ -29,7 +29,7 @@ if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
 
 :ZSTD
 TITLE "Building libzstd"
-IF "ZSTD_RELEASE" == "" set ZSTD_RELEASE=1.4.4
+IF "%ZSTD_RELEASE%" == "" set ZSTD_RELEASE=1.4.4
 CD /D %DOWNLOADS_DIR%
 rem wget -O zstd-%ZSTD_RELEASE%.zip --no-check-certificate -c https://github.com/facebook/zstd/archive/v%ZSTD_RELEASE%.zip
 
@@ -55,6 +55,30 @@ if %ARCH% == X86 (
 	cp -va build/VS2010/bin/x64_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zstd
+
+:LZ4
+TITLE "Building lz4"
+IF "%LZ4_RELEASE%" == "" set LZ4_RELEASE=1.9.3
+CD /D %DOWNLOADS_DIR%
+wget -O lz4-%LZ4_RELEASE%.tar.gz --no-check-certificate -c http://repo.postgrespro.ru/depends/lz4-%LZ4_RELEASE%.tar.gz
+rm -rf %DEPENDENCIES_SRC_DIR%/lz4-%LZ4_RELEASE%
+MKDIR %DEPENDENCIES_SRC_DIR%\lz4-%LZ4_RELEASE%
+tar xf lz4-%LZ4_RELEASE%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
+CD %DEPENDENCIES_SRC_DIR%\lz4-%LZ4_RELEASE%
+CD build/VS2017
+SET INCLUDE=%DEPENDENCIES_SRC_DIR%\lz4-%LZ4_RELEASE%\lib;%DEPENDENCIES_SRC_DIR%\lz4-%LZ4_RELEASE%\programs;%INCLUDE%
+rem set UseEnv=true for using INCLUDE variable
+msbuild lz4.sln /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset%  /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% /p:RunCodeAnalysis=false /p:UseEnv=true || GOTO :ERROR
+CD ../..
+
+MKDIR %DEPENDENCIES_BIN_DIR%\lz4
+cp lib\lz4.h %DEPENDENCIES_BIN_DIR%\lz4
+if %ARCH% == X86 (
+	cp -va build/VS2017/bin/Win32_Release/liblz4* %DEPENDENCIES_BIN_DIR%\lz4
+) else (
+	cp -va build/VS2017/bin/x64_Release/liblz4* %DEPENDENCIES_BIN_DIR%\lz4
+)
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\lz4
 
 :SKIP_ZSTD
 
@@ -320,7 +344,7 @@ CD /D %DEPENDENCIES_SRC_DIR%\icu
 IF %SDK% == MSVC2013 (
   msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 ) ELSE (
-  msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset%  /p:WindowsTargetPlatformVersion=10.0 /p:SkipUWP=true || GOTO :ERROR
+  msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset%  /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% /p:SkipUWP=true || GOTO :ERROR
 )
 
 IF %ARCH% == X64 (
