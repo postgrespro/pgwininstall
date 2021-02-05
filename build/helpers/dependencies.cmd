@@ -72,11 +72,13 @@ msbuild lz4.sln /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%
 CD ../..
 
 MKDIR %DEPENDENCIES_BIN_DIR%\lz4
-cp lib\lz4.h %DEPENDENCIES_BIN_DIR%\lz4
+MKDIR %DEPENDENCIES_BIN_DIR%\lz4\include
+MKDIR %DEPENDENCIES_BIN_DIR%\lz4\lib
+cp lib\lz4.h %DEPENDENCIES_BIN_DIR%\lz4\include
 if %ARCH% == X86 (
-	cp -va build/VS2017/bin/Win32_Release/liblz4* %DEPENDENCIES_BIN_DIR%\lz4
+	cp -va build/VS2017/bin/Win32_Release/liblz4* %DEPENDENCIES_BIN_DIR%\lz4\lib
 ) else (
-	cp -va build/VS2017/bin/x64_Release/liblz4* %DEPENDENCIES_BIN_DIR%\lz4
+	cp -va build/VS2017/bin/x64_Release/liblz4* %DEPENDENCIES_BIN_DIR%\lz4\lib
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\lz4
 
