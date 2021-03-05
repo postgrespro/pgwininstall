@@ -68,7 +68,7 @@ CD %DEPENDENCIES_SRC_DIR%\lz4-%LZ4_RELEASE%
 CD build/VS2017
 SET INCLUDE=%DEPENDENCIES_SRC_DIR%\lz4-%LZ4_RELEASE%\lib;%DEPENDENCIES_SRC_DIR%\lz4-%LZ4_RELEASE%\programs;%INCLUDE%
 rem set UseEnv=true for using INCLUDE variable
-msbuild lz4.sln /m /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=%PlatformToolset%  /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% /p:RunCodeAnalysis=false /p:UseEnv=true || GOTO :ERROR
+msbuild lz4.sln /m /p:Configuration=Release /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset%  /p:WindowsTargetPlatformVersion=%WindowsSDKVersion% /p:RunCodeAnalysis=false /p:UseEnv=true || GOTO :ERROR
 CD ../..
 
 MKDIR %DEPENDENCIES_BIN_DIR%\lz4
