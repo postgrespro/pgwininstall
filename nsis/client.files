@@ -4,6 +4,7 @@
 ./bin/createuser.*
 ./bin/dropdb.*
 ./bin/dropuser.*
+./bin/pg_amcheck.*
 ./bin/pg_basebackup.*
 ./bin/pgbench.*
 ./bin/pg_dump.*

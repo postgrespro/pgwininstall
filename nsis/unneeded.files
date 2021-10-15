@@ -1,3 +1,4 @@
+./bin/libpq_pipeline.exe
 ./bin/pg_regress*.exe
 ./bin/pg_isolation_regress.exe
 ./bin/isolationtester.exe
