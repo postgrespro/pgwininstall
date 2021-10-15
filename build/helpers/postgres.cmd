@@ -86,6 +86,7 @@ IF %HAVE_PGURL% == 0 (
 >>src\tools\msvc\config.pl ECHO nls     ^=^> '%DEPENDENCIES_BIN_DIR%\libintl',
 >>src\tools\msvc\config.pl ECHO tcl     ^=^> undef,
 IF %SDK% == SDK71 GOTO :DISABLE_PERL
+IF %ARCH% == X86 GOTO :DISABLE_PERL
 IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL32_PATH%',   )
 IF %ARCH% == X64 (>>src\tools\msvc\config.pl ECHO perl    ^=^> '%PERL64_PATH%',   )
 GOTO :PERL_CONF_DONE
@@ -114,8 +115,9 @@ cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
 
 :NOLOAD
-IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc;.
-IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
+REM IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc;.
+REM IF %ARCH% == X64 SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
+SET PERL5LIB=%PERL64_PATH%\lib;src\tools\msvc;.
 
 %PERL_EXE% src\tools\msvc\build.pl || GOTO :ERROR
 

@@ -104,6 +104,12 @@ rem Genarate file lists
 rem Remove old filelists first
 rm -f *_list.nsi
 rem tune pattern lists to major version and product
+
+IF %PG_MAJOR_VERSION% LEQ 13 (
+    sed "s/pg_amcheck//" client.files > client-14.files
+    mv client-14.files client.files
+)
+
 IF "%PG_MAJOR_VERSION%" == "9.6" (
 	sed "s/wal/xlog/" server.files > allserver.files
 	sed  "s/wal/xlog/" client.files > allclient.files
