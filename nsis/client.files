@@ -25,3 +25,13 @@
 ./doc/postgresql-ru.chm
 ./share/locale/*/libpq*.mo
 ./share/locale/*/pgscripts*.mo
+${if pg_major >= 13}
+./bin/pg_verifybackup.*
+./share/locale/*/LC_MESSAGES/pg_verifybackup*.mo
+${endif}
+${if pg_major >= 14}
+./bin/pg_amcheck.*
+./share/locale/*/LC_MESSAGES/pg_amcheck*.mo
+./bin/libpq_pipeline.*
+./share/locale/*/LC_MESSAGES/libpq_pipeline*.mo
+${endif}

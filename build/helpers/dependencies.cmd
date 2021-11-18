@@ -336,13 +336,15 @@ CD /D %DOWNLOADS_DIR%
 
 :BUILD_ICU
 TITLE Building icu...
+echo on
 CD /D %DOWNLOADS_DIR%
 rem wget --no-check-certificate -c https://github.com/unicode-org/icu/releases/download/release-56-2/icu4c-56_2-src.zip -O icu4c-56_2-src.zip
 wget --no-check-certificate -c http://repo.postgrespro.ru/depends/icu4c-%ICU_VER%-src.zip -O icu4c-%ICU_VER%-src.zip
-rm -rf %DEPENDENCIES_BIN_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu
-MKDIR %DEPENDENCIES_BIN_DIR%\icu
+rm -rf %DEPENDENCIES_BIN_DIR%\icu%ICU_VER% %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%
+MKDIR %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%
 7z x icu4c-%ICU_VER%-src.zip -o%DEPENDENCIES_SRC_DIR% -y
-CD /D %DEPENDENCIES_SRC_DIR%\icu
+mv %DEPENDENCIES_SRC_DIR%\icu %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%
+CD /D %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%
 IF %SDK% == MSVC2013 (
   msbuild source\allinone\allinone.sln /m /p:Configuration="Release" /p:Platform=%Platform% /p:PlatformToolset=%PlatformToolset% || GOTO :ERROR
 ) ELSE (
@@ -350,16 +352,21 @@ IF %SDK% == MSVC2013 (
 )
 
 IF %ARCH% == X64 (
-  cp -va %DEPENDENCIES_SRC_DIR%\icu\bin64 %DEPENDENCIES_BIN_DIR%\icu\bin || GOTO :ERROR
-  cp -va %DEPENDENCIES_SRC_DIR%\icu\lib64 %DEPENDENCIES_BIN_DIR%\icu\lib || GOTO :ERROR
-  cp -va %DEPENDENCIES_SRC_DIR%\icu\lib64 %DEPENDENCIES_BIN_DIR%\icu\lib64 || GOTO :ERROR
+  cp -va %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%\bin64 %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%\bin || GOTO :ERROR
+  cp -va %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%\lib64 %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%\lib || GOTO :ERROR
+  cp -va %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%\lib64 %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%\lib64 || GOTO :ERROR
 ) ELSE (
-  cp -va %DEPENDENCIES_SRC_DIR%\icu\bin %DEPENDENCIES_BIN_DIR%\icu\bin || GOTO :ERROR
-  cp -va %DEPENDENCIES_SRC_DIR%\icu\lib %DEPENDENCIES_BIN_DIR%\icu\lib || GOTO :ERROR
+  cp -va %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%\bin %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%\bin || GOTO :ERROR
+  cp -va %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%\lib %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%\lib || GOTO :ERROR
 )
-cp -va %DEPENDENCIES_SRC_DIR%\icu\include %DEPENDENCIES_BIN_DIR%\icu\include || GOTO :ERROR
+cp -va %DEPENDENCIES_SRC_DIR%\icu%ICU_VER%\include %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%\include || GOTO :ERROR
 CD /D %DOWNLOADS_DIR%
-7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\icu
+7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\icu%ICU_VER%
+
+IF "%ICU_VER%" NEQ "56_2" (
+SET ICU_VER=56_2
+goto :BUILD_ICU
+)
 
 REM If everything is compiled OK go to DONE
 GOTO :DONE

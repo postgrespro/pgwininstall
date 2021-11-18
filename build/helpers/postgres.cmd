@@ -27,7 +27,8 @@ IF NOT "%GIT_BRANCH%"=="" (
 rm -rf %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql
 MKDIR %BUILD_DIR%\postgresql\postgresql-%PGVER%
-git clone --depth 1 -b %GIT_BRANCH% %GIT_PATH% %BUILD_DIR%\postgresql\postgresql-%PGVER% 
+git clone -b %GIT_BRANCH% %GIT_PATH% %BUILD_DIR%\postgresql\postgresql-%PGVER% 
+rem --depth 1 to save traffic
 CD /D %BUILD_DIR%\postgresql\*%PGVER%* || GOTO :ERROR
 GOTO :NOTAR
 )
@@ -62,7 +63,7 @@ if "%PRODUCT_NAME%" == "PostgreSQL" (
 :DONE_POSTGRESQL_PATCH
 IF "%SDK%" == "MSVC2017" (
   cp -va %ROOT%/patches/postgresql/2017.patch .
-  patch -p1 < 2017.patch || GOTO :ERROR
+  rem patch -p1 < 2017.patch || GOTO :ERROR
 
   rem cp -va %ROOT%/patches/postgresql/perl.5.30.patch .
   rem patch -p1 < perl.5.30.patch || GOTO :ERROR
@@ -71,13 +72,15 @@ IF "%SDK%" == "MSVC2017" (
 
 IF "%SDK%" == "MSVC2019" (
   cp -va %ROOT%/patches/postgresql/2017.patch .
-  patch -p1 < 2017.patch || GOTO :ERROR
+  rem patch -p1 < 2017.patch || GOTO :ERROR
 
   rem cp -va %ROOT%/patches/postgresql/perl.5.30.patch .
   rem patch -p1 < perl.5.30.patch || GOTO :ERROR
 
 )
 
+IF "%PG_MAJOR_VERSION%" LSS "13" SET ICU_VER=56_2
+IF "%PG_MAJOR_VERSION%" == "9.6" SET ICU_VER=56_2
 
 >src\tools\msvc\config.pl  ECHO use strict;
 >>src\tools\msvc\config.pl ECHO use warnings;
@@ -109,7 +112,8 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 >>src\tools\msvc\config.pl ECHO iconv   ^=^> '%DEPENDENCIES_BIN_DIR%\iconv',
 >>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_BIN_DIR%\zlib',
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" >>src\tools\msvc\config.pl ECHO zstd    ^=^> '%DEPENDENCIES_BIN_DIR%\zstd',
->>src\tools\msvc\config.pl ECHO icu     ^=^> '%DEPENDENCIES_BIN_DIR%\icu',
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" >>src\tools\msvc\config.pl ECHO lz4    ^=^> '%DEPENDENCIES_BIN_DIR%\lz4',
+>>src\tools\msvc\config.pl ECHO icu     ^=^> '%DEPENDENCIES_BIN_DIR%\icu%ICU_VER%',
 IF "%WITHTAPTESTS%" == "1" >>src\tools\msvc\config.pl ECHO tap_tests ^=^> 1,
 >>src\tools\msvc\config.pl ECHO libedit ^=^> '%DEPENDENCIES_BIN_DIR%\wineditline'
 
@@ -184,7 +188,8 @@ cp -va %DEPENDENCIES_BIN_DIR%/openssl/bin/openssl.exe %BUILD_DIR%\distr_%ARCH%_%
 
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 if "%PRODUCT_NAME%" == "PostgresProEnterprise" cp -va %DEPENDENCIES_BIN_DIR%/zstd/*.dll           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+if "%PRODUCT_NAME%" == "PostgresProEnterprise" cp -va %DEPENDENCIES_BIN_DIR%/lz4/lib/*.dll           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/icu%ICU_VER%/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 REM Copy needed executables
 rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/less/*.exe           %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
