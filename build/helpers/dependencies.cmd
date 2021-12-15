@@ -56,6 +56,8 @@ if %ARCH% == X86 (
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zstd
 
+:SKIP_ZSTD
+
 :LZ4
 TITLE "Building lz4"
 IF "%LZ4_RELEASE%" == "" set LZ4_RELEASE=1.9.3
@@ -74,7 +76,7 @@ CD ../..
 MKDIR %DEPENDENCIES_BIN_DIR%\lz4
 MKDIR %DEPENDENCIES_BIN_DIR%\lz4\include
 MKDIR %DEPENDENCIES_BIN_DIR%\lz4\lib
-cp lib\lz4.h %DEPENDENCIES_BIN_DIR%\lz4\include
+cp lib/*.h %DEPENDENCIES_BIN_DIR%\lz4\include
 if %ARCH% == X86 (
 	cp -va build/VS2017/bin/Win32_Release/liblz4* %DEPENDENCIES_BIN_DIR%\lz4\lib
 ) else (
@@ -82,9 +84,8 @@ if %ARCH% == X86 (
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\lz4
 
-:SKIP_ZSTD
-
 REM TO-DO: overwrite to build rules
+
 :DOWNLOAD_MSYS_UTILS
 TITLE Download msys utils...
 CD /D %DOWNLOADS_DIR%
