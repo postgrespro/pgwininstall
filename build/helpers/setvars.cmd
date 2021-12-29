@@ -19,7 +19,8 @@ SET PERL64_PATH=C:\Perl64
 SET PERL32_BIN=%PERL32_PATH%\bin
 SET PERL64_BIN=%PERL64_PATH%\bin
 SET PYTHON32_PATH=C:\Python27x86
-SET PYTHON64_PATH=C:\Python27x64
+rem SET PYTHON64_PATH=C:\Python27x64
+SET PYTHON64_PATH=C:\Python310
 SET ZIP_PATH=C:\Program Files\7-Zip;C:\Program Files (x86)\7-Zip
 SET NSIS_PATH=C:\Program Files (x86)\NSIS
 SET MSYS2_PATH=C:\msys64\usr\bin
@@ -76,6 +77,15 @@ IF %SDK% == MSVC2019 (
   IF %ARCH% == X86 CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
   ECHO ON
   IF %ARCH% == X64 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64 || GOTO :ERROR
+)
+IF %SDK% == MSVC2022 (
+  SET ICU_VER=67_1
+  SET REDIST_YEAR=2022
+  SET PlatformToolset=v143
+  IF %ARCH% == X86 CALL "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86 || GOTO :ERROR
+  ECHO ON
+  IF %ARCH% == X64 call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"  amd64 || GOTO :ERROR
+  SET PlatformToolset=v143
 )
 
 rem vcvarsall of VS 2019 rewrite this variable

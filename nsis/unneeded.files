@@ -4,3 +4,4 @@
 ./doc/contrib/README*
 ./doc/extension/README*
 ./share/locale/*/LC_MESSAGES/pltcl-*.mo
+./bin/corrupt_icu_version.exe

@@ -19,6 +19,9 @@ SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 IF %SDK% == MSVC2019 (
 SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 )
+IF %SDK% == MSVC2022 (
+SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
+)
 
 rem GOTO :BUILD_ICONV
 rem GOTO :BUILD_ICU
