@@ -101,7 +101,7 @@ IF %ARCH% == X86 (>>src\tools\msvc\config.pl ECHO python  ^=^> '%PYTHON32_PATH%'
 >>src\tools\msvc\config.pl ECHO xslt    ^=^> '%DEPENDENCIES_BIN_DIR%\libxslt',
 >>src\tools\msvc\config.pl ECHO iconv   ^=^> '%DEPENDENCIES_BIN_DIR%\iconv',
 >>src\tools\msvc\config.pl ECHO zlib    ^=^> '%DEPENDENCIES_BIN_DIR%\zlib',
->>src\tools\msvc\config.pl ECHO icu     ^=^> '%DEPENDENCIES_BIN_DIR%\icu'
+>>src\tools\msvc\config.pl ECHO icu     ^=^> '%DEPENDENCIES_BIN_DIR%\icu%ICU_VER%'
 >>src\tools\msvc\config.pl ECHO ^};
 >>src\tools\msvc\config.pl ECHO 1^;
 
@@ -111,8 +111,8 @@ REM )
 
 SET DEPENDENCIES_BIN_DIR=%DEPENDENCIES_BIN_DIR:\=/%
 
-cp -va %DEPENDENCIES_BIN_DIR%/icu/include/* src\include\ || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/icu/lib/*     . || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/icu%ICU_VER%/include/* src\include\ || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/icu%ICU_VER%/lib/*     . || GOTO :ERROR
 
 :NOLOAD
 REM IF %ARCH% == X86 SET PERL5LIB=%PERL32_PATH%\lib;src\tools\msvc;.
@@ -146,7 +146,7 @@ rem cp -va %DEPENDENCIES_BIN_DIR%/openssl/lib/VC/*.dll %BUILD_DIR%\distr_%ARCH%_
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/bin/*.dll %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/openssl/bin/openssl.exe %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 cp -va %DEPENDENCIES_BIN_DIR%/zlib/lib/*.dll       %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
-cp -va %DEPENDENCIES_BIN_DIR%/icu/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
+cp -va %DEPENDENCIES_BIN_DIR%/icu%ICU_VER%/bin/*.dll        %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\bin || GOTO :ERROR
 
 REM Copy libraries headers to "include" directory for a God sake
 cp -va %DEPENDENCIES_BIN_DIR%/libintl/include/*  %BUILD_DIR%\distr_%ARCH%_%PGVER%\postgresql\include || GOTO :ERROR
