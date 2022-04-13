@@ -50,12 +50,18 @@ CD ../..
 rem Not working on 1.4.4, problem with /p:OutDir: fatal error LNK1181: cannot open input file 'libzstd.lib' for fullbench-dll.vcxproj
 rem call build/VS_Scripts/build.VS%REDIST_YEAR%.cmd || GOTO :ERROR
 
+
 MKDIR %DEPENDENCIES_BIN_DIR%\zstd
 cp lib\zstd.h %DEPENDENCIES_BIN_DIR%\zstd
+MKDIR %DEPENDENCIES_BIN_DIR%\zstd\include
+MKDIR %DEPENDENCIES_BIN_DIR%\zstd\lib
+cp lib\zstd.h %DEPENDENCIES_BIN_DIR%\zstd\include
 if %ARCH% == X86 (
 	cp -va build/VS2010/bin/Win32_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd
+	cp -va build/VS2010/bin/Win32_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd\lib
 ) else (
 	cp -va build/VS2010/bin/x64_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd
+	cp -va build/VS2010/bin/x64_Release/libzstd* %DEPENDENCIES_BIN_DIR%\zstd\lib
 )
 7z a -r %DOWNLOADS_DIR%\%DEPS_ZIP% %DEPENDENCIES_BIN_DIR%\zstd
 
