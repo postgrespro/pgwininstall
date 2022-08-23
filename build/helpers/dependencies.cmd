@@ -25,7 +25,6 @@ SET WindowsTargetPlatformVersion=%WindowsSDKVersion%
 
 rem GOTO :BUILD_ICONV
 rem GOTO :BUILD_ICU
-
 if "%PRODUCT_NAME%" == "PostgreSQL"  goto :SKIP_ZSTD
 if "%PRODUCT_NAME%" == "PostgresPro" goto :SKIP_ZSTD
 
@@ -220,9 +219,11 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building xml...
 CD /D %DOWNLOADS_DIR%
 REM wget -c ftp://xmlsoft.org/libxml2/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
-wget -c http://repo.postgrespro.ru/depends/libxml2-%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
+wget -c http://repo.postgrespro.ru/depends/libxml2-v%XML_VER%.tar.gz -O libxml2-%XML_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxml2 %DEPENDENCIES_SRC_DIR%\libxml2-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxml2
+rem  problem with symlink on first tar run : /ambig_name-class.rng: Cannot create symlink to "tutorA.rng"
+tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% 
 tar xf libxml2-%XML_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR
 CD /D %DEPENDENCIES_SRC_DIR%\libxml2-*
 rem libxml2 2.9.7 doesn't need this patch
@@ -247,7 +248,7 @@ CD /D %DOWNLOADS_DIR%
 TITLE Building xslt...
 CD /D %DOWNLOADS_DIR%
 REM wget -c ftp://xmlsoft.org/libxslt/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
-wget -c http://repo.postgrespro.ru/depends/libxslt-%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
+wget -c http://repo.postgrespro.ru/depends/libxslt-v%XSLT_VER%.tar.gz -O libxslt-%XSLT_VER%.tar.gz
 rm -rf %DEPENDENCIES_BIN_DIR%\libxslt %DEPENDENCIES_SRC_DIR%\libxslt-*
 MKDIR %DEPENDENCIES_BIN_DIR%\libxslt
 tar xf libxslt-%XSLT_VER%.tar.gz -C %DEPENDENCIES_SRC_UDIR% || GOTO :ERROR

@@ -2,7 +2,7 @@
 ; Written by Postgres Professional, Postgrespro.ru
 ; used plugins: AccessControl, UserMgr,
 ; and AddToPath plugin was created by Victor Spirin for this project
-
+Unicode False
 !addplugindir Plugins
 !include "postgres.def.nsh"
 ;--------------------------------
